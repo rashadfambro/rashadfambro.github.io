@@ -48,7 +48,7 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R05 | Offers | $150 referral, $750 assessment credit, $1,699 Launch Bundle, $5,999 Hotel Operations Bundle |
 | R06 | Holiday sale | Banner and 10% prices ($675) during the sale; hidden and regular prices after Jan 31, 2027 |
 | R07 | Sale math | ChatDesk $1,000 → $900 and $29 → $26/mo during sale |
-| R08 | Buy flow | Every Buy button opens checkout; Essentials/Growth/Pro tier choice updates price; installments only for $1,000+; validation; order fallback to owner email with tier, plan and method; nothing charged |
+| R08 | Buy flow | Every Buy button opens checkout; PayPal (default) or Square; Essentials/Growth/Pro tier choice updates price; installments only for $1,000+; validation; order fallback to owner email with tier, plan and method; nothing charged |
 | R09 | Payment plans | Shown in pricing note and FAQ |
 | R10 | Demo lab | All 7 demos (incl. housekeeping) triage and approve |
 | R11 | Industry links | All 23 `#for-…` links personalize headline and preselect industry |
@@ -59,7 +59,7 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R16 | Project request builder | 4 steps, validation, summary, send panel to owner |
 | R17 | Owner email | CONFIG and contact card use rashadfambro@gmail.com |
 | R18 | Internal links | Every relative link and #anchor resolves on every page |
-| R19 | Website QR | Website tab selected by default with save message; QR renders (online) or falls back (offline) |
+| R19 | Website QR | Website tab selected by default; static QR codes (website, contact card, LinkedIn) render instantly with no CDN; verified to decode |
 | R20 | Save this site | Button works without errors |
 | R21 | Meta tags | Canonical on public pages; staging pages noindex with ribbon; production pages indexable |
 | R22 | robots.txt | Blocks /staging/ and /tools/, lists sitemap |
@@ -74,6 +74,10 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R32 | Product prices | RewardsDesk $750, ReviewDesk $150, SocialDesk $750, LeadDesk $1,000, IntakeDesk $1,250, ComplianceDesk $2,500 |
 | R33 | Home & back to top | Home is the first nav item; floating Top button appears after scrolling and returns to the top; Home does the same |
 | R34 | Subpage navigation | Product guide and industry pages have a Home link and a working Top button |
+| R35 | No-script defaults | Without JavaScript (crawlers, link previews): no “0 requests”/“$0”, calculator shows real defaults, QR present, benchmark stats shown |
+| R36 | Booking | Calendly audit link in CONFIG, audit section, contact section and chat |
+| R37 | How I Deliver | Section explains single point of contact, AI-assisted delivery reviewed by Rashad, testing and support (no “agent” jargon) |
+| R38 | FAQ copy | No seasonal sale sentence in the FAQ |
 | R27 | Staging parity | After a promote, staging and production are identical (run with REQUIRE_SYNC=1) |
 
 ## Latest runs (Nov 13, 2026)

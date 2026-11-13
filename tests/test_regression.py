@@ -121,7 +121,8 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     pg.fill("#buy_name", "Pat Buyer"); pg.fill("#buy_biz", "Pat Co"); pg.fill("#buy_email", "pat@example.com")
     pg.click("#buyGo")
     assert "checkbox" in pg.inner_text("#buyErr")
-    assert pg.locator("input[name=method]").count() == 1   # PayPal only
+    assert pg.locator("input[name=method]").count() == 2   # PayPal (default) + Square
+    assert pg.is_checked("input[name=method][value='PayPal']")
     pg.check("#buy_ok"); pg.check("input[name=plan][value='3 monthly payments']"); pg.check("input[name=method][value='PayPal']")
     pg.click("#buyGo")
     pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=10000)
@@ -180,7 +181,7 @@ def test_R12_industry_chips_and_try_buttons(home):
     ("tell me about the founding client program", ["25% off", "testimonial"]),
     ("Do you meet in person?", ["on-site", "travel"]),
     ("do you offer payment plans?", ["3 interest-free"]),
-    ("can I buy online?", ["PayPal"]),
+    ("can I buy online?", ["PayPal", "Square"]),
     ("can you set up a loyalty rewards program?", ["RewardsDesk"]),
     ("do you build chatbots?", ["ChatDesk"]),
     ("is there a free trial?", ["14-day trial", "license key"]),
@@ -278,13 +279,12 @@ def test_R18_internal_links_resolve():
 def test_R19_qr_defaults_to_website(home):
     pg = home.page
     assert pg.get_attribute("#qrTabs [data-qr='site']", "aria-pressed") == "true"
-    # the QR library loads from a CDN; offline it falls back to a message after a few seconds
-    pg.wait_for_function("() => document.querySelector('#qr svg') || /unavailable/.test(document.getElementById('qr').innerText)", timeout=15000)
     assert "save this website" in pg.inner_text("#qrNote")
-    if ONLINE:
-        assert pg.locator("#qr svg").count() == 1
-    else:
-        assert pg.locator("#qr svg").count() == 1 or "unavailable" in pg.inner_text("#qr")
+    assert pg.locator("#qr svg").count() == 1          # static QR, no CDN needed
+    for k in ["vcard", "linkedin", "site"]:
+        pg.click(f"#qrTabs [data-qr='{k}']")
+        assert pg.locator("#qr svg").count() == 1, k
+    assert "Loading QR" not in pg.content() and "cdnjs" not in pg.content()
 
 
 def test_R20_save_site_button(home):
@@ -420,3 +420,39 @@ def test_R34_subpage_home_and_top(make_page, base_url, path):
     assert pg.is_visible("#toTop")
     pg.click("#toTop"); pg.wait_for_function("window.scrollY < 5", timeout=5000)
     assert w.errors == []
+
+
+# ---------------- v8: email review fixes, booking, delivery ----------------
+def test_R35_meaningful_defaults_without_interaction(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.route("**/*.js", lambda r: r.abort())       # simulate crawlers / link previews (no scripts)
+    pg.goto(base_url + "index.html")
+    html = pg.content()
+    assert "requests handled" not in html and ">0 hrs<" not in html
+    assert "$21,868" in pg.inner_text("#roiTotal") and "47" == pg.inner_text("#roiHours").strip()
+    assert "Loading QR" not in html and pg.locator("#qr svg").count() == 1
+    foot = pg.inner_text(".board-foot")
+    for x in ["<2 min", "100%", "2–6 wk"]:
+        assert x in foot, x
+
+
+def test_R36_booking_links(home):
+    pg = home.page
+    assert pg.evaluate("CONFIG.calendarUrl") == "https://calendly.com/rashadfambro/free-workflow-audit"
+    links = pg.eval_on_selector_all("a[data-cfg-href='calendarUrl']", "els => els.map(e => e.href)")
+    assert len(links) >= 2 and all(l == "https://calendly.com/rashadfambro/free-workflow-audit" for l in links)
+    pg.click("#chatFab")
+    assert "pick a time" in chat(pg, "can I talk to Rashad?")
+    assert pg.locator(".cmsg.bot").last.locator("a").first.get_attribute("href") == "https://calendly.com/rashadfambro/free-workflow-audit"
+
+
+def test_R37_how_i_deliver_section(home):
+    t = home.page.inner_text("#delivery")
+    for x in ["Single Point of Contact", "AI-Assisted", "Tested Before It Ships", "reviewed by me"]:
+        assert x.lower() in t.lower(), x
+    assert "agent" not in t.lower()
+
+
+def test_R38_faq_no_seasonal_copy(home):
+    faq = home.page.inner_text("#faq")
+    assert "Holiday" not in faq
