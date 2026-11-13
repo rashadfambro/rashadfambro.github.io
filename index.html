@@ -158,6 +158,9 @@ h3{font-size:1.12rem;line-height:1.3}
 .prod ul{margin:4px 0 8px;padding-left:18px;color:#d5dfea;font-size:.87rem}
 .prod .row{margin-top:auto}
 .prod .btn-line{background:transparent;color:#fff;border-color:#4a6283}
+.prod.wide{grid-column:1/-1;background:linear-gradient(120deg,#17304f,#1d3a63);border-color:#4b74a6}
+.prod.wide ul{columns:2;column-gap:28px}
+@media(max-width:620px){.prod.wide ul{columns:1}}
 
 /* industries */
 .focus-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:34px}
@@ -403,7 +406,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
   <div class="wrap topbar">
     <a class="brand" href="#top" aria-label="Rashad Fambro, home">
       <span class="mark" aria-hidden="true">RF</span>
-      <span><b data-cfg="businessName">Rashad Fambro Consulting</b><small>Software Solutions · Automation</small></span>
+      <span><b data-cfg="businessName">Rashad Fambro Consulting</b><small>Software Solutions · Automation &amp; AI</small></span>
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav class="nav" id="nav" aria-label="Main">
@@ -418,8 +421,8 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <p class="eyebrow">Software Solutions Consultant · Automation &amp; Business Tools</p>
-      <h1>Less busywork.<br><em>More time for customers.</em></h1>
+      <p class="eyebrow">Software Solutions Consultant · Automation &amp; AI</p>
+      <h1>Less Busywork.<br><em>More Time for Customers.</em></h1>
       <p class="lede">I help businesses cut the repetitive work that slows their teams down — with workflow automation, smarter software, and custom tools built around how you already operate — including AI where it genuinely helps, always with your team in control. Start with one workflow, prove the time savings, then grow from there.</p>
       <div class="row" style="margin-top:28px">
         <a class="btn btn-primary" href="#audit">Get a free workflow audit →</a>
@@ -427,7 +430,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
         <button class="btn btn-ghost" type="button" data-open-chat="">Ask a question</button>
       </div>
       <ul class="hero-points">
-        <li>17 years in software &amp; IT</li><li>Your team approves anything customer-facing</li><li>Pilots in weeks, not months</li>
+        <li>17 years building solutions with customers</li><li>Your team approves anything customer-facing</li><li>Pilots in weeks, not months</li>
       </ul>
     </div>
     <div class="board" aria-label="Animated example of an automated workflow">
@@ -469,7 +472,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
       <ul>
         <li><b>Former</b> Director of Quality Assurance, healthcare technology</li>
         <li><b>Degree</b> B.S. Software Engineering</li>
-        <li><b>Works</b> Remotely with clients across the US</li>
+        <li><b>Works</b> Remotely with clients worldwide</li>
         <li><b>Focus</b> Automation, business software, MVPs, launch &amp; support</li>
       </ul>
       <div class="row">
@@ -479,17 +482,17 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
     </aside>
     <div>
       <p class="eyebrow"><span class="n">01</span> About me</p>
-      <h2>Enterprise software experience, sized for your business.</h2>
-      <p class="lede" style="margin-top:18px">I’m Rashad Fambro. For 17 years I’ve built, tested, and launched software for companies in healthcare, finance, restaurants, retail, and defense — most recently as a Director of Quality Assurance leading 50+ engineers who supported 80+ client organizations. Now I bring that same discipline to small and mid-sized businesses that want modern automation without the risk, jargon, or enterprise price tag.</p>
+      <h2>Customer-First Software Experience, Sized for Your Business</h2>
+      <p class="lede" style="margin-top:18px">I’m Rashad Fambro. For 17 years I’ve worked directly with customers to understand their problems and deliver software that solves them — across healthcare, finance, restaurants, retail, and defense. Most recently, as a Director of Quality Assurance, I led 50+ engineers supporting 80+ client organizations. Today I bring that same customer-first approach to businesses that want modern automation and AI without the risk, jargon, or enterprise price tag.</p>
       <ol class="timeline">
-        <li><h4>Director, Quality Assurance</h4><p class="co">Healthcare analytics software company · 6 years</p><p>Grew a 12-person QA team to 50+ across 4 countries, managed a multi-million-dollar resource budget, and cut regression testing time 35% while lowering production incidents.</p></li>
-        <li><h4>Test Manager</h4><p class="co">Benefits &amp; enrollment software company · 7 years</p><p>Launched open-enrollment systems for employer groups of 10,000–150,000 employees and major insurance carriers, working directly with client teams in HIPAA-regulated environments.</p></li>
+        <li><h4>Director, Quality Assurance</h4><p class="co">Healthcare analytics software company · 6 years</p><p>Grew a 12-person QA team to 50+ across 4 countries supporting 80+ clients, partnered with client teams on launches and production support, managed a multi-million-dollar resource budget, and cut regression testing time 35% while lowering production incidents.</p></li>
+        <li><h4>Test Manager</h4><p class="co">Benefits &amp; enrollment software company · 7 years</p><p>Delivered open enrollment and healthcare benefits management software used by millions of people — launching systems for employer groups of 10,000–150,000 employees and some of the largest insurance carriers, while working directly with client teams in HIPAA-regulated environments.</p></li>
         <li><h4>QA Architect &amp; Engineer</h4><p class="co">Retail media, restaurant technology, defense &amp; retail software</p><p>Led global test automation for retail media, tested restaurant point-of-sale systems and credit card certification, verified military communications systems, and shipped inventory apps used in 3,500 stores.</p></li>
       </ol>
       <div class="values">
-        <div class="card"><h4>I test before I ship</h4><p>Every tool is tested with your real scenarios before your team relies on it. That’s been my job for 17 years.</p></div>
-        <div class="card"><h4>I speak ops and tech</h4><p>I translate between the people doing the work and the software that supports them — no jargon required.</p></div>
-        <div class="card"><h4>I handle data carefully</h4><p>Years in regulated healthcare taught me to collect only what’s needed and keep people in control.</p></div>
+        <div class="card"><h4>I Test Before I Ship</h4><p>Every tool is tested with your real scenarios before your team relies on it. That’s been my job for 17 years.</p></div>
+        <div class="card"><h4>Customer-Facing and Technical</h4><p>I’ve spent my career working directly with customers and alongside engineering teams — turning real business needs into software that works.</p></div>
+        <div class="card"><h4>I Handle Data Carefully</h4><p>Years in regulated healthcare taught me to collect only what’s needed and keep people in control.</p></div>
       </div>
       <div class="tags" aria-label="Industry experience"><span>Healthcare technology</span><span>Finance &amp; payments</span><span>Restaurant POS</span><span>Retail &amp; retail media</span><span>Defense communications</span></div>
     </div>
@@ -500,16 +503,16 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="solutions">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">02</span> Solutions</p><h2>What I build and set up for you.</h2></div>
+      <div><p class="eyebrow"><span class="n">02</span> Solutions</p><h2>What I Build and Set Up for You</h2></div>
       <p class="lede">Every engagement starts with the work that costs you the most time or the most customers. Then we pick the simplest tool that fixes it — sometimes that’s software you already pay for.</p>
     </div>
     <div class="sol-grid">
-      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></div><h3>Smart intake &amp; assistants</h3><p>Capture calls, texts, emails, and web forms in one place. Requests are sorted, summarized, and replies drafted — with AI where it fits — and your staff approves.</p><ul><li>Inquiry &amp; request triage</li><li>Drafted replies and follow-ups</li><li>FAQ and after-hours assistants</li></ul></article>
-      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H14a4 4 0 0 1 4 4v5.5"/></svg></div><h3>Workflow automation</h3><p>Automatic routing, reminders, status updates, and handoffs between the tools you use — with approval steps where they matter.</p><ul><li>Reminders &amp; no-show reduction</li><li>Task routing by team or shift</li><li>Form → spreadsheet → alert flows</li></ul></article>
-      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M7 9l3 2-3 2M12 13h4"/></svg></div><h3>Custom MVPs &amp; internal tools</h3><p>When off-the-shelf software doesn’t fit, I build a focused minimum viable product you can test with real users in weeks.</p><ul><li>Dashboards &amp; staff portals</li><li>Client or resident-facing apps</li><li>Prototype → pilot → launch</li></ul></article>
-      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/></svg></div><h3>Software selection &amp; integration</h3><p>Choose, configure, and connect cloud software for scheduling, CRM, ticketing, and payments — so data stops living in five places.</p><ul><li>Tool comparisons in plain English</li><li>Setup, migration &amp; connections</li><li>Cancel what you don’t need</li></ul></article>
-      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Dashboards &amp; reporting</h3><p>See response times, open requests, bookings, and lead conversion at a glance — the numbers that show whether a change is working.</p><ul><li>Owner &amp; manager dashboards</li><li>Weekly automated reports</li><li>Before/after time-savings tracking</li></ul></article>
-      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V7z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3>Testing, training &amp; support</h3><p>My specialty. Your team tests real scenarios before launch, gets trained, and has a clear owner and support plan afterward.</p><ul><li>User acceptance testing (UAT)</li><li>Staff training &amp; quick guides</li><li>Monthly care &amp; improvement plans</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></div><h3>Smart Intake &amp; Assistants</h3><p>Capture calls, texts, emails, and web forms in one place. Requests are sorted, summarized, and replies drafted — with AI where it fits — and your staff approves.</p><ul><li>Inquiry &amp; request triage</li><li>Drafted replies and follow-ups</li><li>FAQ and after-hours assistants</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H14a4 4 0 0 1 4 4v5.5"/></svg></div><h3>Workflow Automation</h3><p>Automatic routing, reminders, status updates, and handoffs between the tools you use — with approval steps where they matter.</p><ul><li>Reminders &amp; no-show reduction</li><li>Task routing by team or shift</li><li>Form → spreadsheet → alert flows</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M7 9l3 2-3 2M12 13h4"/></svg></div><h3>Custom MVPs &amp; Internal Tools</h3><p>When off-the-shelf software doesn’t fit, I build a focused minimum viable product you can test with real users in weeks.</p><ul><li>Dashboards &amp; staff portals</li><li>Client or resident-facing apps</li><li>Prototype → pilot → launch</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/></svg></div><h3>Software Selection &amp; Integration</h3><p>Choose, configure, and connect cloud software for scheduling, CRM, ticketing, and payments — so data stops living in five places.</p><ul><li>Tool comparisons in plain English</li><li>Setup, migration &amp; connections</li><li>Cancel what you don’t need</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Dashboards &amp; Reporting</h3><p>See response times, open requests, bookings, and lead conversion at a glance — the numbers that show whether a change is working.</p><ul><li>Owner &amp; manager dashboards</li><li>Weekly automated reports</li><li>Before/after time-savings tracking</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V7z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3>Testing, Training &amp; Support</h3><p>My specialty. Your team tests real scenarios before launch, gets trained, and has a clear owner and support plan afterward.</p><ul><li>User acceptance testing (UAT)</li><li>Staff training &amp; quick guides</li><li>Monthly care &amp; improvement plans</li></ul></article>
     </div>
   </div>
 </section>
@@ -518,7 +521,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section dark" id="products">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">03</span> Products</p><h2>The Desk suite: ready-to-adapt MVPs.</h2></div>
+      <div><p class="eyebrow"><span class="n">03</span> Products</p><h2>The Desk Suite: Ready-to-Adapt MVPs</h2></div>
       <p class="lede">Each product is a working prototype I tailor to your business, so you’re not paying to start from scratch. Try any of them in the demo lab below — all demos use fictional data.</p>
     </div>
     <div class="prod-grid" id="prodGrid"></div>
@@ -529,12 +532,12 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="industries">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">04</span> Industries</p><h2>Built for businesses that serve people.</h2></div>
+      <div><p class="eyebrow"><span class="n">04</span> Industries</p><h2>Built for Businesses That Serve People</h2></div>
       <p class="lede">My first focus is hospitality and property management — but the same problems (missed messages, manual scheduling, slow follow-up) show up in almost every small business.</p>
     </div>
     <p class="eyebrow">Current focus · Property &amp; hospitality</p>
     <div class="focus-grid">
-      <article class="card focus"><span class="chip">Property</span><h3>Apartment communities</h3><ul><li>Maintenance intake &amp; triage</li><li>Vendor dispatch &amp; resident updates</li><li>Leasing inquiry follow-up</li><li>Renewal &amp; inspection reminders</li></ul></article>
+      <article class="card focus"><span class="chip">Property</span><h3>Apartment Communities</h3><ul><li>Maintenance intake &amp; triage</li><li>Vendor dispatch &amp; resident updates</li><li>Leasing inquiry follow-up</li><li>Renewal &amp; inspection reminders</li></ul></article>
       <article class="card focus"><span class="chip">Hospitality</span><h3>Hotels</h3><ul><li>Guest requests routed to departments</li><li>Shift-change handoff boards</li><li>Review response drafting</li><li>Group &amp; event inquiry tracking</li></ul></article>
       <article class="card focus"><span class="chip">Hospitality</span><h3>Resorts</h3><ul><li>Activity &amp; amenity bookings</li><li>Pre-arrival guest messaging</li><li>Housekeeping &amp; maintenance queues</li><li>Upsell offers staff can approve</li></ul></article>
       <article class="card focus"><span class="chip">Vacation ownership</span><h3>Timeshares</h3><ul><li>Owner &amp; member service requests</li><li>Reservation &amp; exchange questions</li><li>Owner communication campaigns</li><li>Sales tour scheduling &amp; follow-up</li></ul></article>
@@ -551,7 +554,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="demos">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">05</span> Demo lab</p><h2>Try it with your own message.</h2></div>
+      <div><p class="eyebrow"><span class="n">05</span> Demo lab</p><h2>Try It With Your Own Message</h2></div>
       <p class="lede">Pick a product, edit the incoming message — or type something your customers actually send — and watch it get sorted, routed, and drafted for your team to approve.</p>
     </div>
     <div class="lab">
@@ -595,7 +598,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="roi">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">06</span> Savings estimator</p><h2>What is busywork costing you?</h2></div>
+      <div><p class="eyebrow"><span class="n">06</span> Savings estimator</p><h2>What Is Busywork Costing You?</h2></div>
       <p class="lede">Move the sliders to estimate the time and money tied up in repetitive tasks. We’ll measure the real numbers together in your free audit.</p>
     </div>
     <div class="roi">
@@ -627,19 +630,19 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
   <div class="wrap audit-grid">
     <div>
       <p class="eyebrow"><span class="n">07</span> Free workflow audit</p>
-      <h2>Bring one task that keeps eating your time.</h2>
+      <h2>Bring One Task That Keeps Eating Your Time</h2>
       <p class="lede" style="margin-top:16px">In a free 30-minute call, we walk through one recurring workflow with the person who owns it. No software purchase, no obligation.</p>
       <ol class="gets">
-        <li><div><b>Where time gets lost</b><span>A simple map of the workflow and its biggest bottleneck.</span></div></li>
-        <li><div><b>What to fix first</b><span>One practical change — often using software you already have.</span></div></li>
-        <li><div><b>How to measure it</b><span>A starting number: minutes per request, time to first reply, or bookings won.</span></div></li>
-        <li><div><b>A one-page summary</b><span>Yours to keep, whether you hire me or not. Delivered within 3 business days.</span></div></li>
+        <li><div><b>Where Time Gets Lost</b><span>A simple map of the workflow and its biggest bottleneck.</span></div></li>
+        <li><div><b>What to Fix First</b><span>One practical change — often using software you already have.</span></div></li>
+        <li><div><b>How to Measure It</b><span>A starting number: minutes per request, time to first reply, or bookings won.</span></div></li>
+        <li><div><b>A One-Page Summary</b><span>Yours to keep, whether you hire me or not. Delivered within 3 business days.</span></div></li>
       </ol>
       <p class="hint">Good places to start: maintenance requests, guest messages, booking reminders, quote follow-ups, client intake, approvals.</p>
     </div>
     <form class="card" id="auditForm" novalidate>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <h3 style="font:500 1.6rem var(--serif);margin-bottom:4px">Request your free audit</h3>
+      <h3 style="font:500 1.6rem var(--serif);margin-bottom:4px">Request Your Free Audit</h3>
       <p class="hint" style="margin:0 0 18px">Takes about 2 minutes. Please don’t include passwords, payment details, or private customer or patient information.</p>
       <div class="form-grid">
         <div class="f"><label for="a_name">Your name <span class="req">*</span></label><input id="a_name" name="Name" required autocomplete="name"></div>
@@ -654,7 +657,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
       </div>
       <div class="row" style="margin-top:18px"><button class="btn btn-dark" type="submit">Request free audit →</button><span class="hint" id="auditErr" role="alert" style="color:#b42318;margin:0"></span></div>
       <div class="result" id="auditResult" hidden>
-        <h4>Almost done — send your request</h4>
+        <h4>Almost Done — Send Your Request</h4>
         <p class="hint" style="margin:0" id="auditResultNote">Your request is ready. Open it in your email app, or copy it and send it to <b data-cfg="email">rashadfambro@gmail.com</b>.</p>
         <pre id="auditText"></pre>
         <div class="row">
@@ -671,17 +674,17 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section dark" id="process">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">08</span> How we work together</p><h2>From first call to launch, in plain steps.</h2></div>
+      <div><p class="eyebrow"><span class="n">08</span> How we work together</p><h2>From First Call to Launch, in Plain Steps</h2></div>
       <p class="lede">You always know what happens next, what it costs, and who owns it. You decide what runs automatically and what needs a person’s approval.</p>
     </div>
     <ol class="proc">
-      <li><h3>Discovery call</h3><p>Free 30-minute conversation about your goals and the workflow that hurts most.</p><span class="when">Free · Day 1</span></li>
-      <li><h3>Workflow audit</h3><p>I map the process, find the bottleneck, and send a one-page summary.</p><span class="when">Free · 3 days</span></li>
+      <li><h3>Discovery Call</h3><p>Free 30-minute conversation about your goals and the workflow that hurts most.</p><span class="when">Free · Day 1</span></li>
+      <li><h3>Workflow Audit</h3><p>I map the process, find the bottleneck, and send a one-page summary.</p><span class="when">Free · 3 days</span></li>
       <li><h3>Proposal</h3><p>A fixed-price proposal with scope, timeline, success measures, and options.</p><span class="when">Within 1 week</span></li>
-      <li><h3>Agreement &amp; kickoff</h3><p>Sign electronically, pay the deposit, and we schedule kickoff with your team.</p><span class="when">E-sign · Deposit</span></li>
-      <li><h3>Build the pilot</h3><p>I set up or build a focused version, with weekly check-ins and demos.</p><span class="when">2–6 weeks</span></li>
-      <li><h3>Test with your team</h3><p>Your staff runs real scenarios (user acceptance testing) and signs off.</p><span class="when">1–2 weeks</span></li>
-      <li><h3>Launch &amp; support</h3><p>Go live with training, a clear owner, and a 30-day check on results.</p><span class="when">Ongoing</span></li>
+      <li><h3>Agreement &amp; Kickoff</h3><p>Sign electronically, pay the deposit, and we schedule kickoff with your team.</p><span class="when">E-sign · Deposit</span></li>
+      <li><h3>Build the Pilot</h3><p>I set up or build a focused version, with weekly check-ins and demos.</p><span class="when">2–6 weeks</span></li>
+      <li><h3>Test With Your Team</h3><p>Your staff runs real scenarios (user acceptance testing) and signs off.</p><span class="when">1–2 weeks</span></li>
+      <li><h3>Launch &amp; Support</h3><p>Go live with training, a clear owner, and a 30-day check on results.</p><span class="when">Ongoing</span></li>
     </ol>
   </div>
 </section>
@@ -690,14 +693,14 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="pricing">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">09</span> Packages</p><h2>Clear options. Fixed quotes. No surprises.</h2></div>
+      <div><p class="eyebrow"><span class="n">09</span> Packages</p><h2>Clear Options. Fixed Quotes. No Surprises.</h2></div>
       <p class="lede">Every project gets a written, fixed-price quote before any work starts. Most clients begin with an assessment or a single pilot.</p>
     </div>
     <div class="pkg-grid" id="pkgGrid"></div>
     <div class="founding" id="founding">
       <div>
         <p class="eyebrow">Founding client program</p>
-        <h3>Be one of my first clients — and get more for it.</h3>
+        <h3>Be One of My First Clients — and Get More for It</h3>
         <p>I’m taking on a small group of founding clients in property management, hospitality, and local services.</p>
         <ul><li>Founding-client rate on your first pilot</li><li>Priority scheduling and direct access to me</li><li>In return: honest feedback and, if you’re happy, a short case study</li></ul>
       </div>
@@ -710,18 +713,18 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="start">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">10</span> Start a project</p><h2>Ready to move forward? Request your proposal.</h2></div>
+      <div><p class="eyebrow"><span class="n">10</span> Start a project</p><h2>Ready to Move Forward? Request Your Proposal</h2></div>
       <p class="lede">Answer four quick questions. I’ll reply within one business day with next steps, a proposal, and an agreement you can sign electronically.</p>
     </div>
     <div class="builder">
       <ol class="b-steps" id="bSteps"><li class="on"><i>1</i>Package</li><li><i>2</i>Your business</li><li><i>3</i>Timeline</li><li><i>4</i>Review &amp; send</li></ol>
       <form class="b-body" id="builder" novalidate>
         <fieldset class="bstep" data-step="0" style="border:0;padding:0;margin:0">
-          <legend><h3 style="font:500 1.5rem var(--serif)">Which package fits best?</h3></legend>
+          <legend><h3 style="font:500 1.5rem var(--serif)">Which Package Fits Best?</h3></legend>
           <div class="opts" id="bPkgs"></div>
         </fieldset>
         <fieldset class="bstep" data-step="1" hidden style="border:0;padding:0;margin:0">
-          <legend><h3 style="font:500 1.5rem var(--serif)">Tell me about your business</h3></legend>
+          <legend><h3 style="font:500 1.5rem var(--serif)">Tell Me About Your Business</h3></legend>
           <div class="form-grid" style="margin-top:14px">
             <div class="f"><label for="b_name">Your name <span class="req">*</span></label><input id="b_name" required autocomplete="name"></div>
             <div class="f"><label for="b_biz">Business name <span class="req">*</span></label><input id="b_biz" required autocomplete="organization"></div>
@@ -731,7 +734,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
           </div>
         </fieldset>
         <fieldset class="bstep" data-step="2" hidden style="border:0;padding:0;margin:0">
-          <legend><h3 style="font:500 1.5rem var(--serif)">When would you like to start?</h3></legend>
+          <legend><h3 style="font:500 1.5rem var(--serif)">When Would You Like to Start?</h3></legend>
           <div class="opts">
             <div class="opt"><input type="radio" name="when" id="w1" value="As soon as possible" checked><label for="w1"><b>As soon as possible</b><span>Ready to kick off this month</span></label></div>
             <div class="opt"><input type="radio" name="when" id="w2" value="In 1–2 months"><label for="w2"><b>In 1–2 months</b><span>Planning ahead</span></label></div>
@@ -742,7 +745,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
           <label style="display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:.92rem"><input type="checkbox" id="b_found" style="margin-top:4px"> I’d like to be considered for the founding client program.</label>
         </fieldset>
         <fieldset class="bstep" data-step="3" hidden style="border:0;padding:0;margin:0">
-          <legend><h3 style="font:500 1.5rem var(--serif)">Review your request</h3></legend>
+          <legend><h3 style="font:500 1.5rem var(--serif)">Review Your Request</h3></legend>
           <div class="summary" style="margin-top:14px"><dl id="bSummary"></dl></div>
           <p class="hint" style="font-weight:700;color:var(--ink);margin-top:16px">What happens after you send this</p>
           <ol class="terms">
@@ -753,7 +756,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
           </ol>
           <p class="hint">Sending this request doesn’t commit you to anything. Final terms are in the written agreement.</p>
           <div class="result" id="bResult" hidden>
-            <h4>Your request is ready to send</h4>
+            <h4>Your Request Is Ready to Send</h4>
             <p class="hint" style="margin:0">Open it in your email app, or copy it and send it to <b data-cfg="email">rashadfambro@gmail.com</b>.</p>
             <pre id="bText"></pre>
             <div class="row"><a class="btn btn-primary btn-sm" id="bMail" href="#">Open email draft</a><button class="btn btn-line btn-sm" type="button" id="bCopy">Copy request</button></div>
@@ -773,14 +776,14 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="trust">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">11</span> How I use AI</p><h2>Smart tools that support your people — never replace their judgment.</h2></div>
+      <div><p class="eyebrow"><span class="n">11</span> How I use AI</p><h2>Smart Tools That Support Your People — Never Replace Their Judgment</h2></div>
       <p class="lede">Some of my solutions use AI for tasks like sorting requests or drafting replies. I’m upfront about where it’s used, and these are the rules I build by.</p>
     </div>
     <div class="trust-grid">
-      <div class="card"><span class="chip live">Rule 1</span><h3>A person approves what matters</h3><p>Prices, promises, refunds, legal or medical answers, and anything sensitive go to your staff before they go out.</p></div>
-      <div class="card"><span class="chip live">Rule 2</span><h3>Only the data you need</h3><p>We collect the minimum information to do the job and keep private details out of AI tools unless you’ve approved it.</p></div>
-      <div class="card"><span class="chip live">Rule 3</span><h3>Your accounts, your data</h3><p>Tools are set up in your business’s accounts so you keep ownership and access — even if we stop working together.</p></div>
-      <div class="card"><span class="chip live">Rule 4</span><h3>Tested and reversible</h3><p>Every change is tested with your team first and has a manual fallback, so nothing breaks your day.</p></div>
+      <div class="card"><span class="chip live">Rule 1</span><h3>A Person Approves What Matters</h3><p>Prices, promises, refunds, legal or medical answers, and anything sensitive go to your staff before they go out.</p></div>
+      <div class="card"><span class="chip live">Rule 2</span><h3>Only the Data You Need</h3><p>We collect the minimum information to do the job and keep private details out of AI tools unless you’ve approved it.</p></div>
+      <div class="card"><span class="chip live">Rule 3</span><h3>Your Accounts, Your Data</h3><p>Tools are set up in your business’s accounts so you keep ownership and access — even if we stop working together.</p></div>
+      <div class="card"><span class="chip live">Rule 4</span><h3>Tested and Reversible</h3><p>Every change is tested with your team first and has a manual fallback, so nothing breaks your day.</p></div>
     </div>
   </div>
 </section>
@@ -789,15 +792,15 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="faq">
   <div class="wrap">
     <p class="eyebrow"><span class="n">12</span> Questions</p>
-    <h2 style="margin-bottom:28px">Common questions</h2>
+    <h2 style="margin-bottom:28px">Common Questions</h2>
     <div class="faq">
-      <details><summary>Do I need to be “techy” to work with you?</summary><p>No. I explain everything in plain language and set things up so your staff can use them with a short training session. You focus on running the business.</p></details>
-      <details><summary>Will I have to replace the software I already use?</summary><p>Usually not. I start with the tools you already pay for and connect or extend them. I only recommend new software when it clearly saves more than it costs.</p></details>
-      <details><summary>How much does a project cost?</summary><p>Every project gets a fixed, written quote after the free audit. Smaller automations cost far less than a custom MVP. Founding clients receive a reduced rate on their first pilot.</p></details>
-      <details><summary>How long until we see results?</summary><p>Most pilots launch in 2–6 weeks. We agree on a starting measure up front, like response time or staff minutes per request, so you can see the difference.</p></details>
-      <details><summary>Is AI safe for my customers’ information?</summary><p>We decide together what data the tools can see. Sensitive actions require staff approval, and I keep private information out of AI tools unless you’ve approved how it’s handled. For regulated businesses like dental or legal offices, we review your obligations before anything is built.</p></details>
-      <details><summary>Do you work with businesses outside hospitality and property?</summary><p>Yes — salons, barbershops, spas, restaurants, contractors, real estate, law and dental offices, retail, and more. If your team repeats the same tasks every day, there’s likely something worth automating.</p></details>
-      <details><summary>What happens after launch?</summary><p>You get a 30-day results check included, plus the option of a monthly care plan for support, updates, and new improvements.</p></details>
+      <details><summary>Do I Need to Be “Techy” to Work With You?</summary><p>No. I explain everything in plain language and set things up so your staff can use them with a short training session. You focus on running the business.</p></details>
+      <details><summary>Will I Have to Replace the Software I Already Use?</summary><p>Usually not. I start with the tools you already pay for and connect or extend them. I only recommend new software when it clearly saves more than it costs.</p></details>
+      <details><summary>How Much Does a Project Cost?</summary><p>Every project gets a fixed, written quote after the free audit. Smaller automations cost far less than a custom MVP. Founding clients receive a reduced rate on their first pilot.</p></details>
+      <details><summary>How Long Until We See Results?</summary><p>Most pilots launch in 2–6 weeks. We agree on a starting measure up front, like response time or staff minutes per request, so you can see the difference.</p></details>
+      <details><summary>Is AI Safe for My Customers’ Information?</summary><p>We decide together what data the tools can see. Sensitive actions require staff approval, and I keep private information out of AI tools unless you’ve approved how it’s handled. For regulated businesses like dental or legal offices, we review your obligations before anything is built.</p></details>
+      <details><summary>Do You Work With Businesses Outside Hospitality and Property?</summary><p>Yes — salons, barbershops, spas, restaurants, contractors, real estate, law and dental offices, retail, and more. If your team repeats the same tasks every day, there’s likely something worth automating.</p></details>
+      <details><summary>What Happens After Launch?</summary><p>You get a 30-day results check included, plus the option of a monthly care plan for support, updates, and new improvements.</p></details>
     </div>
   </div>
 </section>
@@ -807,7 +810,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
   <div class="wrap contact-grid">
     <div>
       <p class="eyebrow"><span class="n">13</span> Get in touch</p>
-      <h2>What would you like to make easier?</h2>
+      <h2>What Would You Like to Make Easier?</h2>
       <p class="lede" style="margin-top:16px">Tell me about a single task that keeps slowing your team down, or several tools that need to work together. Scan the code to save my contact details to your phone.</p>
       <div class="row" style="margin-top:26px">
         <a class="btn btn-primary" href="#audit">Request a free audit →</a>
@@ -823,7 +826,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
           <li><b>Email</b><a id="vEmail" href="#" data-cfg="email">rashadfambro@gmail.com</a> <button class="linkbtn" data-copy="email">Copy</button></li>
           <li id="vPhoneRow" hidden><b>Phone</b><a id="vPhone" href="#"></a></li>
           <li><b>LinkedIn</b><a data-cfg-href="linkedin" href="https://www.linkedin.com/in/rashadfambro/" target="_blank" rel="noopener">in/rashadfambro</a></li>
-          <li><b>Serves</b>Clients across the US, remotely</li>
+          <li><b>Serves</b>Clients worldwide, remotely</li>
         </ul>
       </div>
       <div class="qr-box">
@@ -846,7 +849,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 
 <footer class="footer">
   <div class="wrap">
-    <span>© <span id="yr"></span> <span data-cfg="businessName">Rashad Fambro Consulting</span> · Software Solutions · Automation</span>
+    <span>© <span id="yr"></span> <span data-cfg="businessName">Rashad Fambro Consulting</span> · Software Solutions · Automation &amp; AI</span>
     <span><a href="#audit">Free audit</a> · <a href="#demos">Demos</a> · <a href="#contact">Contact</a> · <a href="#top">Back to top ↑</a></span>
   </div>
 </footer>
@@ -930,6 +933,7 @@ const heroSamples = [
 let hi=0, handled=137;
 const pipe=$$("#heroPipe li");
 function heroCycle(){
+  if(document.hidden) return;
   const s=heroSamples[hi%heroSamples.length];
   const m=$("#heroMsg"); m.style.opacity=0;
   setTimeout(()=>{ $("#heroSrc").textContent=s.src; $("#heroText").textContent=s.text; $("#heroSort").textContent=s.sort; $("#heroDraft").textContent=s.draft; m.style.opacity=1; },350);
@@ -944,37 +948,38 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(heroCyc
 
 /* ---------- products ---------- */
 const PRODUCTS = [
+  {id:"chat", wide:true, name:"ChatDesk", for:"Any business · website, text & social", status:"Live on this site", desc:"An AI chat assistant trained on your business. It answers common questions instantly, day or night, captures leads, books appointments, and hands conversations to your staff when a person is needed.", items:["Answers FAQs from your own policies, prices & hours","Captures leads and sends them to your inbox or CRM","Books appointments and hands off to staff","Clear automated-assistant disclosure and cost limits"]},
   {id:"property", name:"WorkOrderDesk", for:"Apartments · HOA · property managers", status:"Prototype", desc:"Maintenance requests from text, email, and web in one queue — triaged by urgency and routed to the right tech.", items:["Urgency triage & after-hours escalation","Vendor dispatch & entry permission","Automatic resident status updates"]},
   {id:"resort", name:"GuestDesk", for:"Hotels · resorts · timeshares", status:"Prototype", desc:"Guest and owner requests routed to front desk, housekeeping, maintenance, or concierge with shift-change visibility.", items:["Department routing & handoff board","Drafted guest replies for staff approval","Owner / member service requests"]},
-  {id:"salon", name:"BookDesk", for:"Nail salons · barbers · massage & spa", status:"Prototype", desc:"Turn texts and DMs into bookings, reduce no-shows with reminders, and fill gaps with rebooking offers.", items:["Booking requests → open slots","Reminders & waitlist fill-ins","Rebooking and review requests"]},
+  {id:"salon", name:"BookDesk", for:"Salons · barbers · spas · any appointment business", status:"Prototype", desc:"An AI booking assistant that answers booking requests by text, chat, or DM around the clock, offers real open times from your calendar, and books within your rules.", items:["24/7 booking by text, chat & social DMs","Works with your calendar or booking app","Reminders, deposits & no-show reduction","Waitlist fill-ins and automatic rebooking"]},
   {id:"service", name:"LeadDesk", for:"Contractors · real estate · restaurants", status:"Prototype", desc:"Every inquiry captured, assigned, and followed up — so quotes and showings don’t slip through the cracks.", items:["Lead capture from every channel","Quote & showing follow-up reminders","Pipeline view: inquiry → booked"]},
   {id:"intake", name:"IntakeDesk", for:"Law firms · dental offices · professional services", status:"Prototype", desc:"Structured client intake that collects missing information, flags deadlines, and keeps sensitive details off the open inbox.", items:["Guided intake & document checklists","Deadline and appointment flags","Privacy-first: staff reviews everything"]},
   {id:"compliance", name:"ComplianceDesk", for:"HUD-assisted housing · smoke shops · regulated retail", status:"Prototype", desc:"Recurring checklists, recertification reminders, and an audit trail so required tasks get done and documented.", items:["Recertification & inspection reminders","Checklists with sign-off history","Document collection tracking"]}
 ];
 $("#prodGrid").innerHTML = PRODUCTS.map(p=>`
-  <article class="prod">
+  <article class="prod${p.wide?" wide":""}">
     <div class="top"><span class="for">${esc(p.for)}</span><span class="chip live">${esc(p.status)}</span></div>
     <h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
     <ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
-    <div class="row"><a class="btn btn-primary btn-sm" href="#demos" data-open-demo="${p.id}">Try the demo</a><a class="btn btn-line btn-sm" href="#audit">Adapt it for me</a></div>
+    <div class="row">${p.id==="chat"?'<button type="button" class="btn btn-primary btn-sm" data-open-chat="">Try it now — chat with me</button>':`<a class="btn btn-primary btn-sm" href="#demos" data-open-demo="${p.id}">Try the demo</a>`}<a class="btn btn-line btn-sm" href="#audit">Adapt it for me</a></div>
   </article>`).join("");
 
 /* ---------- industries ---------- */
 const INDUSTRIES = [
-  {k:"apartments", n:"Apartment communities", demo:"property", pains:["Maintenance requests arrive by text, email, and phone","After-hours emergencies are hard to triage","Residents keep asking “any update?”"], wins:["One maintenance queue with urgency triage","Automatic resident status updates","Leasing inquiry follow-up reminders"]},
-  {k:"hotels", n:"Hotels & resorts", demo:"resort", pains:["Guest requests get lost between shifts","Front desk is buried in repeat questions","Slow replies hurt reviews"], wins:["Department routing with handoff board","Drafted replies staff approve in one click","Review response drafts"]},
+  {k:"apartments", n:"Apartment Communities", demo:"property", pains:["Maintenance requests arrive by text, email, and phone","After-hours emergencies are hard to triage","Residents keep asking “any update?”"], wins:["One maintenance queue with urgency triage","Automatic resident status updates","Leasing inquiry follow-up reminders"]},
+  {k:"hotels", n:"Hotels & Resorts", demo:"resort", pains:["Guest requests get lost between shifts","Front desk is buried in repeat questions","Slow replies hurt reviews"], wins:["Department routing with handoff board","Drafted replies staff approve in one click","Review response drafts"]},
   {k:"timeshare", n:"Timeshares", demo:"resort", pains:["High volume of owner questions","Reservation and exchange rules are complex","Tour no-shows waste sales time"], wins:["Owner request triage and FAQ assistant","Tour confirmation and reminder flows","Owner communication campaigns"]},
-  {k:"nails", n:"Nail salons", demo:"salon", pains:["Booking by DM and text all day","No-shows leave empty chairs","Hard to rebook regulars"], wins:["Booking requests turned into open slots","Reminder texts and waitlist fill-ins","Automatic rebooking nudges"]},
-  {k:"massage", n:"Massage & spa", demo:"salon", pains:["Intake forms on paper","Late cancellations","Package and gift card tracking"], wins:["Digital intake before the visit","Reminders with easy reschedule","Package balance tracking"]},
+  {k:"nails", n:"Nail Salons", demo:"salon", pains:["Booking by DM and text all day","No-shows leave empty chairs","Hard to rebook regulars"], wins:["Booking requests turned into open slots","Reminder texts and waitlist fill-ins","Automatic rebooking nudges"]},
+  {k:"massage", n:"Massage & Spa", demo:"salon", pains:["Intake forms on paper","Late cancellations","Package and gift card tracking"], wins:["Digital intake before the visit","Reminders with easy reschedule","Package balance tracking"]},
   {k:"barbers", n:"Barbershops", demo:"salon", pains:["Walk-in vs. appointment chaos","Phone rings mid-cut","Regulars drift away"], wins:["Live waitlist and booking link","Auto-replies with open times","“Time for a cut?” reminders"]},
-  {k:"smoke", n:"Smoke & vape shops", demo:"compliance", pains:["Inventory counts by hand","Age-verification and compliance logs","Reorder timing guesswork"], wins:["Low-stock alerts and reorder lists","Daily compliance checklists with sign-off","Sales dashboard by product"]},
+  {k:"smoke", n:"Smoke & Vape Shops", demo:"compliance", pains:["Inventory counts by hand","Age-verification and compliance logs","Reorder timing guesswork"], wins:["Low-stock alerts and reorder lists","Daily compliance checklists with sign-off","Sales dashboard by product"]},
   {k:"restaurants", n:"Restaurants", demo:"service", pains:["Catering and event inquiries go cold","Staff scheduling by group text","Reviews pile up unanswered"], wins:["Catering lead capture and follow-up","Shift swap requests in one place","Drafted review replies"]},
-  {k:"contractors", n:"Contractors & trades", demo:"service", pains:["Quotes sent but never followed up","Job details scattered across texts","Scheduling crews is manual"], wins:["Quote follow-up reminders","Job intake form with photos","Crew schedule and job status board"]},
-  {k:"realestate", n:"Real estate", demo:"service", pains:["Leads from many sites","Showing requests at all hours","Transaction checklists in email"], wins:["Instant lead response and assignment","Showing request scheduling","Transaction checklist tracker"]},
-  {k:"law", n:"Law firms", demo:"intake", pains:["Long intake calls for unqualified leads","Missing client documents","Deadline tracking by hand"], wins:["Guided intake that screens matters","Document request checklists","Deadline and court-date reminders"]},
-  {k:"dental", n:"Dental offices", demo:"intake", pains:["Phones swamped with scheduling","Unfilled cancellations","Recall reminders fall behind"], wins:["Appointment request triage","Cancellation waitlist fill-ins","Recall and treatment reminders"]},
-  {k:"hud", n:"HUD-assisted housing", demo:"compliance", pains:["Annual recertification deadlines","Inspection preparation","Document collection from residents"], wins:["Recertification reminder timeline","Inspection readiness checklists","Resident document tracker"]},
-  {k:"other", n:"Your business", demo:"service", pains:["The same questions every day","Work tracked in spreadsheets and texts","No clear view of what’s open"], wins:["One shared queue for requests","Automated reminders and handoffs","A simple owner dashboard"]}
+  {k:"contractors", n:"Contractors & Trades", demo:"service", pains:["Quotes sent but never followed up","Job details scattered across texts","Scheduling crews is manual"], wins:["Quote follow-up reminders","Job intake form with photos","Crew schedule and job status board"]},
+  {k:"realestate", n:"Real Estate", demo:"service", pains:["Leads from many sites","Showing requests at all hours","Transaction checklists in email"], wins:["Instant lead response and assignment","Showing request scheduling","Transaction checklist tracker"]},
+  {k:"law", n:"Law Firms", demo:"intake", pains:["Long intake calls for unqualified leads","Missing client documents","Deadline tracking by hand"], wins:["Guided intake that screens matters","Document request checklists","Deadline and court-date reminders"]},
+  {k:"dental", n:"Dental Offices", demo:"intake", pains:["Phones swamped with scheduling","Unfilled cancellations","Recall reminders fall behind"], wins:["Appointment request triage","Cancellation waitlist fill-ins","Recall and treatment reminders"]},
+  {k:"hud", n:"HUD-Assisted Housing", demo:"compliance", pains:["Annual recertification deadlines","Inspection preparation","Document collection from residents"], wins:["Recertification reminder timeline","Inspection readiness checklists","Resident document tracker"]},
+  {k:"other", n:"Your Business", demo:"chat", pains:["The same questions every day","Work tracked in spreadsheets and texts","No clear view of what’s open"], wins:["One shared queue for requests","Automated reminders and handoffs","A simple owner dashboard"]}
 ];
 const indChips=$("#indChips"), indPanel=$("#indPanel");
 indChips.innerHTML = INDUSTRIES.map((x,i)=>`<button type="button" data-ind="${x.k}" aria-pressed="${i===3}">${esc(x.n)}</button>`).join("");
@@ -982,15 +987,15 @@ function showInd(k){
   const x=INDUSTRIES.find(i=>i.k===k); const p=PRODUCTS.find(p=>p.id===x.demo);
   $$("#indChips button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ind===k));
   indPanel.innerHTML=`<span class="chip">Suggested product · ${esc(p.name)}</span><h3 style="margin-top:12px">${esc(x.n)}</h3>
-   <div class="cols"><div><h4>Where time gets lost</h4><ul>${x.pains.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>
-   <div><h4>Quick wins</h4><ul>${x.wins.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div></div>
-   <div class="row"><a class="btn btn-dark btn-sm" href="#demos" data-open-demo="${x.demo}">Try ${esc(p.name)}</a><a class="btn btn-line btn-sm" href="#audit" data-pre-ind="${esc(x.n)}">Free audit for ${esc(x.n.toLowerCase())}</a></div>`;
+   <div class="cols"><div><h4>Where Time Gets Lost</h4><ul>${x.pains.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>
+   <div><h4>Quick Wins</h4><ul>${x.wins.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div></div>
+   <div class="row">${x.demo==="chat"?`<button type="button" class="btn btn-dark btn-sm" data-open-chat="">Try ${esc(p.name)}</button>`:`<a class="btn btn-dark btn-sm" href="#demos" data-open-demo="${x.demo}">Try ${esc(p.name)}</a>`}<a class="btn btn-line btn-sm" href="#audit" data-pre-ind="${esc(x.n)}">Free audit for ${esc(x.n.toLowerCase())}</a></div>`;
 }
 indChips.addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) showInd(b.dataset.ind); });
 showInd("nails");
 
 /* industry selects */
-const indOptions = ["Apartment community / property management","Hotel","Resort","Timeshare / vacation ownership",...INDUSTRIES.slice(3,13).map(i=>i.n),"Other"];
+const indOptions = ["Apartment Community / Property Management","Hotel","Resort","Timeshare / Vacation Ownership",...INDUSTRIES.slice(3,13).map(i=>i.n),"Other"];
 ["#a_ind","#b_ind"].forEach(s=>{ $(s).innerHTML = `<option value="">Select…</option>` + indOptions.map(o=>`<option>${esc(o)}</option>`).join(""); });
 document.addEventListener("click",e=>{
   const a=e.target.closest("[data-pre-ind]"); if(!a) return;
@@ -1056,7 +1061,7 @@ function setDemo(k){
 }
 $("#labPick").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) setDemo(b.dataset.demo); });
 $("#labSamples").addEventListener("click",e=>{ const b=e.target.closest("[data-sample]"); if(b){ labInput.value=DEMOS[demoKey].samples[+b.dataset.sample]; resetDemo(); } });
-document.addEventListener("click",e=>{ const a=e.target.closest("[data-open-demo]"); if(a) setDemo(a.dataset.openDemo); });
+document.addEventListener("click",e=>{ const a=e.target.closest("[data-open-demo]"); if(a && DEMOS[a.dataset.openDemo]) setDemo(a.dataset.openDemo); });
 
 const DAYS=/\b(today|tonight|tomorrow|this (?:morning|afternoon|evening|week|weekend)|next (?:week|month|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|(?:mon|tues|wednes|thurs|fri|satur|sun)day|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.? \d{1,2}(?:st|nd|rd|th)?)\b/i;
 const TIMES=/\b((?:after|before|around|by|at)\s+(?:\d{1,2}(?::\d{2})?\s*(?:am|pm)?|noon)|\d{1,2}(?::\d{2})?\s*(?:am|pm)|morning|afternoon|evening)\b/i;
@@ -1322,21 +1327,21 @@ async function sendLead(form, data) {
    page greets that visitor with their industry pre-selected.
    ============================================================ */
 const LANDINGS = {
-  "for-apartments":   { who: "apartment communities", line: "Faster maintenance. Happier residents.", ind: "apartments", demo: "property", opt: "Apartment community / property management" },
-  "for-property-managers": { who: "property managers", line: "Every request tracked. Nothing lost.", ind: "apartments", demo: "property", opt: "Apartment community / property management" },
-  "for-hotels":       { who: "hotels", line: "Guest requests handled before they become reviews.", ind: "hotels", demo: "resort", opt: "Hotel" },
-  "for-resorts":      { who: "resorts", line: "More time for guests. Less time on handoffs.", ind: "hotels", demo: "resort", opt: "Resort" },
-  "for-timeshares":   { who: "timeshare & vacation ownership teams", line: "Owner questions answered faster.", ind: "timeshare", demo: "resort", opt: "Timeshare / vacation ownership" },
-  "for-salons":       { who: "nail salons", line: "Fuller chairs. Fewer no-shows.", ind: "nails", demo: "salon", opt: "Nail salons" },
-  "for-barbers":      { who: "barbershops", line: "Book more cuts without answering the phone mid-fade.", ind: "barbers", demo: "salon", opt: "Barbershops" },
-  "for-spas":         { who: "massage & spa businesses", line: "Booked, reminded, and rebooked automatically.", ind: "massage", demo: "salon", opt: "Massage & spa" },
-  "for-restaurants":  { who: "restaurants", line: "Catering leads that don’t go cold.", ind: "restaurants", demo: "service", opt: "Restaurants" },
-  "for-contractors":  { who: "contractors & trades", line: "Every quote followed up. More jobs booked.", ind: "contractors", demo: "service", opt: "Contractors & trades" },
-  "for-real-estate":  { who: "real estate teams", line: "Respond to every lead in minutes.", ind: "realestate", demo: "service", opt: "Real estate" },
-  "for-law-firms":    { who: "law firms", line: "Cleaner intake. Fewer missed details.", ind: "law", demo: "intake", opt: "Law firms" },
-  "for-dental":       { who: "dental offices", line: "Fewer phone calls. Fuller schedules.", ind: "dental", demo: "intake", opt: "Dental offices" },
-  "for-hud-housing":  { who: "HUD-assisted housing", line: "Recertifications on time, every time.", ind: "hud", demo: "compliance", opt: "HUD-assisted housing" },
-  "for-smoke-shops":  { who: "smoke & vape shops", line: "Inventory and compliance on autopilot.", ind: "smoke", demo: "compliance", opt: "Smoke & vape shops" }
+  "for-apartments":   { who: "apartment communities", line: "Faster Maintenance. Happier Residents.", ind: "apartments", demo: "property", opt: "Apartment Community / Property Management" },
+  "for-property-managers": { who: "property managers", line: "Every Request Tracked. Nothing Lost.", ind: "apartments", demo: "property", opt: "Apartment Community / Property Management" },
+  "for-hotels":       { who: "hotels", line: "Guest Requests Handled Before They Become Reviews.", ind: "hotels", demo: "resort", opt: "Hotel" },
+  "for-resorts":      { who: "resorts", line: "More Time for Guests. Less Time on Handoffs.", ind: "hotels", demo: "resort", opt: "Resort" },
+  "for-timeshares":   { who: "timeshare & vacation ownership teams", line: "Owner Questions Answered Faster.", ind: "timeshare", demo: "resort", opt: "Timeshare / Vacation Ownership" },
+  "for-salons":       { who: "nail salons", line: "Fuller Chairs. Fewer No-Shows.", ind: "nails", demo: "salon", opt: "Nail Salons" },
+  "for-barbers":      { who: "barbershops", line: "Book More Cuts Without Answering the Phone Mid-Fade.", ind: "barbers", demo: "salon", opt: "Barbershops" },
+  "for-spas":         { who: "massage & spa businesses", line: "Booked, Reminded, and Rebooked Automatically.", ind: "massage", demo: "salon", opt: "Massage & Spa" },
+  "for-restaurants":  { who: "restaurants", line: "Catering Leads That Don’t Go Cold.", ind: "restaurants", demo: "service", opt: "Restaurants" },
+  "for-contractors":  { who: "contractors & trades", line: "Every Quote Followed Up. More Jobs Booked.", ind: "contractors", demo: "service", opt: "Contractors & Trades" },
+  "for-real-estate":  { who: "real estate teams", line: "Respond to Every Lead in Minutes.", ind: "realestate", demo: "service", opt: "Real Estate" },
+  "for-law-firms":    { who: "law firms", line: "Cleaner Intake. Fewer Missed Details.", ind: "law", demo: "intake", opt: "Law Firms" },
+  "for-dental":       { who: "dental offices", line: "Fewer Phone Calls. Fuller Schedules.", ind: "dental", demo: "intake", opt: "Dental Offices" },
+  "for-hud-housing":  { who: "HUD-assisted housing", line: "Recertifications on Time, Every Time.", ind: "hud", demo: "compliance", opt: "HUD-Assisted Housing" },
+  "for-smoke-shops":  { who: "smoke & vape shops", line: "Inventory and Compliance on Autopilot.", ind: "smoke", demo: "compliance", opt: "Smoke & Vape Shops" }
 };
 function applyLanding() {
   const key = location.hash.slice(1);
@@ -1438,6 +1443,7 @@ function linkify(s) { return s.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" ta
 
 /* ---------- guided assistant ---------- */
 const KW = [
+  { id: "chat", re: /chat ?bot|ai assistant|virtual assistant|website chat|live chat|answer(ing)? (customer )?questions|faq/i, who: "businesses that get the same questions every day" },
   { id: "property", re: /apartment|property|tenant|resident|hoa|landlord|leasing|maintenance request|work order/i, who: "apartment and property teams" },
   { id: "resort", re: /hotel|resort|guest|timeshare|vacation|owner(s)? |front desk|housekeep|hospitality|motel|inn\b/i, who: "hotels, resorts and timeshares" },
   { id: "salon", re: /salon|nail|barber|massage|spa\b|stylist|lash|brow|beauty|no.?show/i, who: "salons, barbers and spas" },
@@ -1465,12 +1471,14 @@ async function localReply(t) {
   if (/yes,? apply|apply/.test(s)) return startCapture("founding", prod);
   if (/see packages|packages/.test(s)) { location.hash = "pricing"; return botSay("I’ve scrolled you to the packages. Anything I can clarify?", MAIN_CHIPS); }
   if (/demo|see the demos|try/.test(s)) {
-    const p = prod ? prod.id : (CHAT.lastProd || (chatContext.industry ? chatContext.industry.demo : "property"));
+    let p = prod ? prod.id : (CHAT.lastProd || (chatContext.industry ? chatContext.industry.demo : "property"));
+    if (!DEMOS[p]) return botSay("You’re already trying ChatDesk — this chat is the demo! For the other products, the demo lab lets you type a customer message and watch it get sorted.", ["Which product fits me?", "Book a free audit"]);
     setDemo(p); document.getElementById("demos").scrollIntoView({ behavior: "smooth" });
     return botSay(`I opened the <b>${esc(DEMOS[p].title)}</b> demo for you. Type a message your customers might send and click <b>Run triage</b>.`, ["Which product fits me?", "Book a free audit"]);
   }
   if (prod || /which product|fits me|recommend|what do you have|products?/.test(s)) {
     if (!prod) return botSay("Happy to help. What type of business are you in?", ["Apartments / property", "Hotel or resort", "Salon / barber / spa", "Contractor / real estate / restaurant", "Law or dental office", "HUD housing / retail"]);
+    if (prod.id === "chat") { CHAT.lastProd = "chat"; return botSay("That’s <b>ChatDesk</b> — and you’re using it right now. Rashad builds assistants like this for your business: trained on your services, hours and policies, capturing leads and booking appointments 24/7, with handoff to your staff. Want a free audit to see what yours would handle?", ["Book a free audit", "How much does it cost?"]); }
     const P = PRODUCTS.find(x => x.id === prod.id); CHAT.lastProd = prod.id;
     const long = t.split(/\s+/).length >= 8; if (long) CHAT.pendingNeed = t;
     return botSay(`For ${esc(prod.who)}, I’d start with <b>${esc(P.name)}</b>: ${esc(P.desc)}<br><br>Rashad adapts it to your tools and process. ${long ? "Want me to send what you described to Rashad so he can follow up?" : "Want to try the demo or book a free audit to see if it fits?"}`, long ? ["Yes, send it", "Try the demo", "How much does it cost?"] : ["Try the demo", "Book a free audit", "How much does it cost?"]);
@@ -1482,7 +1490,7 @@ async function localReply(t) {
   if (/\bai\b|chatgpt|robot|bot|replace|job|safe|privacy|data|secure|hipaa/.test(s))
     return botSay("Good question. Some solutions use AI for things like sorting requests or drafting replies, but <b>your staff approves anything customer-facing</b>, only the needed data is used, and everything runs in your own accounts. The goal is to free your team up, not replace them. (And yes — I’m an automated assistant myself.)", ["How does it work?", "Book a free audit"]);
   if (/who|experience|background|qualif|about/.test(s))
-    return botSay("Rashad has 17 years building, testing and launching software. He was a Director of Quality Assurance leading 50+ engineers across 4 countries, supporting 80+ client organizations, with experience in healthcare, finance, restaurants, retail and defense.", ["Which product fits me?", "Book a free audit"]);
+    return botSay("Rashad has spent 17 years working directly with customers and building the software that solves their problems. He was a Director of Quality Assurance leading 50+ engineers across 4 countries, supporting 80+ client organizations, with experience in healthcare, finance, restaurants, retail and defense.", ["Which product fits me?", "Book a free audit"]);
   if (/thank|thanks|great|awesome|cool|ok(ay)?$/.test(s))
     return botSay("You’re welcome! Anything else I can help with?", MAIN_CHIPS);
   // fallback: describe their problem → capture
