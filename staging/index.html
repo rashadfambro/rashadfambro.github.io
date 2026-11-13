@@ -756,7 +756,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         <div class="f"><label for="a_ind">Industry</label><select id="a_ind" name="Industry"></select></div>
         <div class="f"><label for="a_size">Team size</label><select id="a_size" name="Team size"><option>1–5</option><option>6–15</option><option>16–50</option><option>51–200</option><option>200+</option></select></div>
         <div class="f full"><label for="a_flow">Which workflow would you like to improve? <span class="req">*</span></label><textarea id="a_flow" name="Workflow" required placeholder="e.g., Residents text maintenance requests to three different people and some get lost."></textarea></div>
-        <div class="f"><label for="a_tools">Tools you use today</label><input id="a_tools" name="Current tools" placeholder="e.g., Yardi, Google Sheets, Square"></div>
+        <div class="f"><label for="a_tools">Tools you use today</label><input id="a_tools" name="Current tools" placeholder="e.g., Yardi, Google Sheets, QuickBooks"></div>
         <div class="f"><label for="a_meet">Meeting preference</label><select id="a_meet" name="Meeting preference"><option>Virtual (video call)</option><option>Phone call</option><option>In person / on-site</option></select></div>
         <div class="f"><label for="a_time">Best times to talk &amp; time zone</label><input id="a_time" name="Availability" placeholder="e.g., Weekdays after 2pm ET"></div>
       </div>
@@ -807,7 +807,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div class="tier-grid" id="tierGrid"></div>
       <p class="tier-foot">Standard tools: ChatDesk, BookDesk, LeadDesk, IntakeDesk, RewardsDesk, ReviewDesk, SocialDesk, StaffDesk, InvoiceDesk, InsightDesk. Property &amp; hospitality tools (priced per property): WorkOrderDesk, GuestDesk, HousekeepingDesk, ComplianceDesk. Text-message and phone-number fees are passed through at cost. <b>Small Business Suite:</b> any 3 standard tools on Essentials for $69/mo.</p>
     </div>
-    <p class="pricenote"><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with Square or PayPal.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $125/hr · Every build gets a fixed, written quote before work starts.</p>
+    <p class="pricenote"><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with PayPal — PayPal balance or any debit/credit card, no PayPal account needed.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $125/hr · Every build gets a fixed, written quote before work starts.</p>
     <div class="founding" id="founding">
       <div>
         <p class="eyebrow">Founding Client Program</p>
@@ -928,8 +928,8 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <details><summary>Why Keep a Human in the Loop?</summary><p>AI is fast but not perfect. Having staff approve prices, promises, and sensitive replies protects your customers and your reputation, catches mistakes before they go out, and keeps your team in charge. Routine, low-risk steps like reminders can run automatically.</p></details>
       <details><summary>Is There a Free Trial?</summary><p>Yes. Every tool includes a free 14-day trial with a license key — no payment details needed. At the end, choose a plan or let it expire; nothing is charged automatically.</p></details>
       <details><summary>How Much Are the Monthly Plans?</summary><p>Standard tools are $29, $59, or $99 per month (Essentials, Growth, Pro). Property and hospitality tools are $49, $99, or $179 per property per month. Any 3 standard tools on Essentials are $69/month. Text-message and phone-number fees are passed through at cost.</p></details>
-      <details><summary>Can I Pay Over Time?</summary><p>Yes. Any setup or project of $1,000 or more can be split into 3 interest-free monthly payments, with the first payment at signing. You can pay online with Square or PayPal, which may also offer their own pay-over-time options at checkout.</p></details>
-      <details><summary>Can I Buy Directly on the Site?</summary><p>Yes. Tap <b>Buy</b> on any product or package, choose pay in full or a payment plan, and pick Square or PayPal. Custom builds are quoted first; you can pay the deposit online once you accept the proposal.</p></details>
+      <details><summary>Can I Pay Over Time?</summary><p>Yes. Any setup or project of $1,000 or more can be split into 3 interest-free monthly payments, with the first payment at signing. You can pay online with PayPal, which may also offer its own Pay Later options at checkout.</p></details>
+      <details><summary>Can I Buy Directly on the Site?</summary><p>Yes. Tap <b>Buy</b> on any product or package, choose pay in full or a payment plan, and check out securely with PayPal. Custom builds are quoted first; you can pay the deposit online once you accept the proposal.</p></details>
       <details><summary>What Happens After Launch?</summary><p>You get a 30-day results check included, plus the option of a monthly care plan for support, updates, and new improvements.</p></details>
     </div>
   </div>
@@ -1000,8 +1000,8 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <label id="planOpt"><input type="radio" name="plan" value="3 monthly payments"> 3 interest-free monthly payments</label>
     </fieldset>
     <fieldset class="buy-opts" id="methodOpts"><legend>Payment method</legend>
-      <label><input type="radio" name="method" value="Square" checked> Square (card, Apple Pay, Google Pay)</label>
-      <label><input type="radio" name="method" value="PayPal"> PayPal</label>
+      
+      <label><input type="radio" name="method" value="PayPal" checked> PayPal — PayPal balance or any debit/credit card (no account needed)</label>
     </fieldset>
     <div class="form-grid">
       <div class="f"><label for="buy_name">Your name <span class="req">*</span></label><input id="buy_name" required autocomplete="name"></div>
@@ -1064,12 +1064,12 @@ const CONFIG = {
             {name:"Pro", price:179, note:"Per property · custom workflows · quarterly strategy call"} ]
   },
   trialDays: 14,
-  // Paste Square / PayPal payment links here (see PAYMENTS.md). Empty = customer gets an emailed secure invoice instead.
+  // Paste PayPal payment links here (see PAYMENTS.md). Empty = customer gets an emailed secure invoice instead.
   payLinks: {
-    assess:{square:"",paypal:""}, bundle:{square:"",paypal:""}, care:{square:"",paypal:""}, pilot:{square:"",paypal:""},
-    chat:{square:"",paypal:""}, salon:{square:"",paypal:""}, property:{square:"",paypal:""}, resort:{square:"",paypal:""}, service:{square:"",paypal:""},
-    intake:{square:"",paypal:""}, compliance:{square:"",paypal:""}, rewards:{square:"",paypal:""}, review:{square:"",paypal:""}, social:{square:"",paypal:""},
-    staff:{square:"",paypal:""}, invoice:{square:"",paypal:""}, insight:{square:"",paypal:""}
+    assess:{paypal:""}, bundle:{paypal:""}, care:{paypal:""}, pilot:{paypal:""},
+    chat:{paypal:""}, salon:{paypal:""}, property:{paypal:""}, resort:{paypal:""}, service:{paypal:""},
+    intake:{paypal:""}, compliance:{paypal:""}, rewards:{paypal:""}, review:{paypal:""}, social:{paypal:""},
+    staff:{paypal:""}, invoice:{paypal:""}, insight:{paypal:""}
   }
 };
 
@@ -1822,8 +1822,8 @@ async function localReply(t) {
   if (/trial|try it free|free trial|test it/.test(s))
     return botSay(`Every tool comes with a <b>free ${CONFIG.trialDays}-day trial</b> — no payment details needed. Tap <b>14-day free trial</b> on any product and you’ll get a license key and setup link by email.`, ["Which product fits me?", "How much does it cost?"]);
   if (/payment plan|installment|pay over time|finance|monthly payments|split/.test(s))
-    return botSay("Yes — any setup or project of $1,000 or more can be split into <b>3 interest-free monthly payments</b> (first payment at signing). Square and PayPal may also offer pay-over-time options at checkout.", ["Buy a product", "Book a free audit"]);
-  if (/buy|purchase|checkout|pay now|order|square|paypal/.test(s)) { document.getElementById("pricing").scrollIntoView({ behavior: "smooth" }); return botSay("You can buy directly on the site: pick a product or package and tap <b>Buy</b>. Pay in full or in 3 monthly payments, with Square or PayPal.", ["Payment plans", "Which product fits me?"]); }
+    return botSay("Yes — any setup or project of $1,000 or more can be split into <b>3 interest-free monthly payments</b> (first payment at signing). PayPal may also offer Pay Later options at checkout.", ["Buy a product", "Book a free audit"]);
+  if (/buy|purchase|checkout|pay now|order|square|paypal/.test(s)) { document.getElementById("pricing").scrollIntoView({ behavior: "smooth" }); return botSay("You can buy directly on the site: pick a product or package and tap <b>Buy</b>. Pay in full or in 3 monthly payments, securely with PayPal (cards accepted).", ["Payment plans", "Which product fits me?"]); }
   if (/founding|discount|deal|promo|sale|holiday|new year/.test(s) && saleActive() && /sale|holiday|new year/.test(s))
     return botSay(`The <b>${esc(CONFIG.sale.label)}</b> is on: <b>${CONFIG.sale.pct}% off</b> all listed products and services through ${esc(saleEndText())}. It doesn’t combine with the founding-client discount — you get whichever saves you more.`, ["How much does it cost?", "Book a free audit"]);
   if (/founding|discount|deal|promo/.test(s))

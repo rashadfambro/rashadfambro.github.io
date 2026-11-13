@@ -121,8 +121,10 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     pg.fill("#buy_name", "Pat Buyer"); pg.fill("#buy_biz", "Pat Co"); pg.fill("#buy_email", "pat@example.com")
     pg.click("#buyGo")
     assert "checkbox" in pg.inner_text("#buyErr")
+    assert pg.locator("input[name=method]").count() == 1   # PayPal only
     pg.check("#buy_ok"); pg.check("input[name=plan][value='3 monthly payments']"); pg.check("input[name=method][value='PayPal']")
-    pg.click("#buyGo"); pg.wait_for_timeout(400)
+    pg.click("#buyGo")
+    pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=10000)
     res = pg.inner_text("#buyResult")
     assert "Nothing has been charged" in res
     href = pg.get_attribute("#buyResult a", "href")
@@ -178,7 +180,7 @@ def test_R12_industry_chips_and_try_buttons(home):
     ("tell me about the founding client program", ["25% off", "testimonial"]),
     ("Do you meet in person?", ["on-site", "travel"]),
     ("do you offer payment plans?", ["3 interest-free"]),
-    ("can I buy online?", ["Square", "PayPal"]),
+    ("can I buy online?", ["PayPal"]),
     ("can you set up a loyalty rewards program?", ["RewardsDesk"]),
     ("do you build chatbots?", ["ChatDesk"]),
     ("is there a free trial?", ["14-day trial", "license key"]),
@@ -355,7 +357,8 @@ def test_R28_free_trial_flow(make_page, base_url):
     assert not pg.is_visible("#methodOpts") and not pg.is_visible("#buyTerms") and pg.is_visible("#trialNote")
     assert "Free for 14 days, then" in pg.inner_text("#buyPrice") and "$49/mo" in pg.inner_text("#buyPrice")
     pg.fill("#buy_name", "Tia Trial"); pg.fill("#buy_biz", "Seaside Resort"); pg.fill("#buy_email", "tia@example.com")
-    pg.click("#buyGo"); pg.wait_for_timeout(400)
+    pg.click("#buyGo")
+    pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=10000)
     assert "press Send" in pg.inner_text("#buyResult")
     href = pg.get_attribute("#buyResult a", "href")
     assert href.startswith(f"mailto:{OWNER_EMAIL}") and "free%20trial" in href.lower()
