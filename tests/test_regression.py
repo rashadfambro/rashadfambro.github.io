@@ -68,6 +68,7 @@ def test_R03_profile_focus_and_former(home):
     prof = home.page.inner_text(".profile")
     assert "healthcare technology" not in prof.lower()
     assert re.search(r"Focus\s+AI", prof)
+    assert re.search(r"Experience\s+IT professional", prof) and "Former" not in prof
     assert "on-site" in prof.lower()
 
 
@@ -351,7 +352,7 @@ def test_R28_free_trial_flow(make_page, base_url):
     w = open_home(make_page, base_url, when=AFTER_SALE)
     pg = w.page
     trial_ids = pg.eval_on_selector_all("[data-trial]", "els => els.map(e => e.dataset.trial)")
-    assert len(trial_ids) == 14
+    assert len(trial_ids) == 15
     pg.locator("[data-trial='housekeeping']").click()
     assert "14-Day Trial" in pg.inner_text("#buyTitle")
     assert not pg.is_visible("#methodOpts") and not pg.is_visible("#buyTerms") and pg.is_visible("#trialNote")
@@ -456,3 +457,74 @@ def test_R37_how_i_deliver_section(home):
 def test_R38_faq_no_seasonal_copy(home):
     faq = home.page.inner_text("#faq")
     assert "Holiday" not in faq
+
+
+# ---------------- v9: direct form sending, multi-industry, PackageDesk ----------------
+def _fake_formsubmit(pg, success=True, seen=None):
+    def handle(route):
+        if seen is not None:
+            seen.append((route.request.url, route.request.post_data_json))
+        route.fulfill(status=200, content_type="application/json",
+                      body='{"success":"true","message":"The form was submitted successfully."}' if success
+                      else '{"success":"false","message":"This form needs Activation."}')
+    pg.route(re.compile(r"https://formsubmit\.co/.*"), handle)
+
+
+def test_R39_forms_send_directly_to_owner(make_page, base_url):
+    w = make_page(); pg = w.page
+    seen = []
+    _fake_formsubmit(pg, True, seen)
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    assert pg.evaluate("CONFIG.formEndpoint") == f"https://formsubmit.co/ajax/{OWNER_EMAIL}"
+    pg.fill("#a_name", "Test Person"); pg.fill("#a_biz", "Test Co"); pg.fill("#a_email", "test@example.com"); pg.fill("#a_flow", "Testing direct send")
+    pg.click("#auditForm button[type=submit]")
+    pg.wait_for_function("document.querySelector('#auditResult h4').innerText.includes('received')", timeout=10000)
+    assert not pg.is_visible("#auditMail")
+    url, body = seen[-1]
+    assert url == f"https://formsubmit.co/ajax/{OWNER_EMAIL}"
+    assert body["email"] == "test@example.com" and "Email" not in body
+    assert body["_subject"].startswith("New website lead (audit)") and "Test Co" in body["_subject"]
+    assert body["_template"] == "table" and "_autoresponse" in body
+    assert w.errors == []
+
+
+def test_R40_unactivated_form_falls_back_to_email(make_page, base_url):
+    w = make_page(); pg = w.page
+    _fake_formsubmit(pg, False)
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    pg.fill("#a_name", "Test Person"); pg.fill("#a_biz", "Test Co"); pg.fill("#a_email", "test@example.com"); pg.fill("#a_flow", "Testing fallback")
+    pg.click("#auditForm button[type=submit]")
+    pg.wait_for_selector("#auditResult:not([hidden])", timeout=10000)
+    assert pg.is_visible("#auditMail") and pg.get_attribute("#auditMail", "href").startswith(f"mailto:{OWNER_EMAIL}")
+    assert "One Last Step" in pg.inner_text("#auditResult h4")
+
+
+def test_R41_order_and_trial_send_directly(make_page, base_url):
+    w = open_home(make_page, base_url, when=AFTER_SALE)
+    pg = w.page
+    seen = []
+    _fake_formsubmit(pg, True, seen)
+    pg.locator("[data-trial='package']").click()
+    pg.wait_for_selector("#buy_name", state="visible")
+    pg.fill("#buy_name", "Pat Package"); pg.fill("#buy_biz", "Lakeside Apartments"); pg.fill("#buy_email", "pat@example.com")
+    pg.click("#buyGo")
+    pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=15000)
+    assert "on its way" in pg.inner_text("#buyResult")
+    assert seen[-1][1]["_subject"].startswith("Trial request") and "PackageDesk" in seen[-1][1]["Workflow"]
+
+
+def test_R42_multi_industry_wording_and_packagedesk(home):
+    pg = home.page
+    ind = pg.inner_text("#industries")
+    assert "Multi-industry solutions with workflow customizations" in ind
+    assert "Current focus" not in ind and "first focus" not in ind.lower()
+    assert "PackageDesk" in pg.inner_text("#prodGrid")
+    assert "PackageDesk" in pg.inner_text(".tier-foot")
+    pg.click("#labPick button[data-demo='package']")
+    pg.fill("#labInput", "Refrigerated grocery delivery for apt 12C, resident isn't answering")
+    pg.click("#labRun"); pg.wait_for_timeout(2300)
+    out = pg.inner_text("#labOut")
+    assert "Perishable" in out and "12C" in out
+    pg.click("#chatFab")
+    assert "PackageDesk" in chat(pg, "do you have a package room system for our mail room?")
+    assert home.errors == []

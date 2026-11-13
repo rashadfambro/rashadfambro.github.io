@@ -62,6 +62,8 @@ def make_page(browser):
     pages = []
     def _make(width=1300, height=900, **ctx):
         context = browser.new_context(viewport={"width": width, "height": height}, **ctx)
+        # Never send real form emails from tests: the form service is unreachable unless a test overrides it.
+        context.route(re.compile(r"https://formsubmit\.co/.*"), lambda r: r.abort())
         pg = context.new_page()
         w = PageWithErrors(pg)
         pages.append((context, w))

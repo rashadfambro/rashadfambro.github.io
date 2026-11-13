@@ -85,3 +85,9 @@ GitHub Actions: all 4 jobs passed (smoke + regression × production + staging), 
 Release of Nov 13 (pricing/tiers/trials/housekeeping): production 57 passed + R27 parity passed; staging 57 passed. Defect found and fixed: the chat assistant treated “free trial” as a request for the free audit.
 Earlier run: production 51 passed, 1 skipped (R27, by design) · Staging: 51 passed, 1 skipped · R27 with REQUIRE_SYNC=1: passed.
 Defects found and fixed during this run: two industry-page headings not in Title Case (price text inside the heading); QR caption showed the contact message while the QR library was loading; test harness link parser counted a `data-cfg-href` attribute as a link.
+| R39 | Forms send directly to Rashad's Gmail through FormSubmit (correct endpoint, subject, reply-to, auto-reply) |
+| R40 | If the form service isn't activated or fails, the visitor gets the email-draft fallback |
+| R41 | Trials and orders also send directly |
+| R42 | Multi-industry wording, PackageDesk product, demo and chat answer |
+
+Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a test fakes the response.
