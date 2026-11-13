@@ -22,8 +22,8 @@ STAGING = os.path.join(ROOT, "staging")
 SITE_ITEMS = ["index.html", "products.html", "industries", "tools", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png"]
 START, END = "<!--STAGING-START-->", "<!--STAGING-END-->"
 MARKER = (START + '<meta name="robots" content="noindex, nofollow">'
-          '<style>.stg-ribbon{position:fixed;left:0;bottom:0;z-index:9999;background:#ff5a5a;color:#fff;'
-          'font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-top-right-radius:8px}</style>'
+          '<style>.stg-ribbon{position:fixed;right:0;top:50%;z-index:9999;transform:rotate(-90deg) translateY(-100%);transform-origin:right top;background:#ff5a5a;color:#fff;'
+          'font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:8px 8px 0 0}</style>'
           + END)
 RIBBON = START + '<div class="stg-ribbon" aria-hidden="true">STAGING</div>' + END
 

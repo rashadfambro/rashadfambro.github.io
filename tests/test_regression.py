@@ -393,3 +393,27 @@ def test_R32_product_prices(home):
     expect = {"RewardsDesk": "$750", "ReviewDesk": "$150", "SocialDesk": "$750", "LeadDesk": "$1,000", "IntakeDesk": "$1,250", "ComplianceDesk": "$2,500"}
     for k, v in expect.items():
         assert prices[k].startswith(f"Setup {v} "), (k, prices[k])
+
+
+# ---------------- v7: navigation ----------------
+def test_R33_back_to_top_and_home(home):
+    pg = home.page
+    assert not pg.is_visible("#toTop")
+    pg.evaluate("window.scrollTo(0, 3000)"); pg.wait_for_timeout(200)
+    assert pg.is_visible("#toTop")
+    pg.click("#toTop"); pg.wait_for_function("window.scrollY < 5", timeout=5000)
+    pg.evaluate("window.scrollTo(0, 3000)"); pg.wait_for_timeout(200)
+    pg.click("#nav a[data-home]"); pg.wait_for_function("window.scrollY < 5", timeout=5000)
+    assert pg.locator("#nav a").first.inner_text() == "Home"
+    assert home.errors == []
+
+
+@pytest.mark.parametrize("path", ["products.html", "industries/hotels.html"])
+def test_R34_subpage_home_and_top(make_page, base_url, path):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + path)
+    assert pg.locator("header a", has_text="Home").count() == 1
+    pg.evaluate("window.scrollTo(0, 2500)"); pg.wait_for_timeout(200)
+    assert pg.is_visible("#toTop")
+    pg.click("#toTop"); pg.wait_for_function("window.scrollY < 5", timeout=5000)
+    assert w.errors == []

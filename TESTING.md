@@ -72,6 +72,8 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R30 | Sale fine print | “Doesn’t combine…” on its own smaller line, not in the main sale sentence |
 | R31 | Hotel tools | WorkOrderDesk and IntakeDesk list hotels & resorts; HousekeepingDesk demo classifies a VIP checkout as high-priority Checkout clean |
 | R32 | Product prices | RewardsDesk $750, ReviewDesk $150, SocialDesk $750, LeadDesk $1,000, IntakeDesk $1,250, ComplianceDesk $2,500 |
+| R33 | Home & back to top | Home is the first nav item; floating Top button appears after scrolling and returns to the top; Home does the same |
+| R34 | Subpage navigation | Product guide and industry pages have a Home link and a working Top button |
 | R27 | Staging parity | After a promote, staging and production are identical (run with REQUIRE_SYNC=1) |
 
 ## Latest runs (Nov 13, 2026)
