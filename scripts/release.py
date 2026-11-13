@@ -75,7 +75,7 @@ def sync_staging():
 
 
 def promote():
-    ref = "backup/prod-" + datetime.datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+    ref = "backup/prod-" + datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d-%H%M%S")
     git("branch", ref)
     print("backup branch created:", ref, "(push with: git push origin", ref + ")")
     copy_items(STAGING, ROOT)

@@ -28,10 +28,10 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | S02 | Navigation | Every nav link points to an existing section |
 | S03 | Primary call to action | Hero CTA targets the audit form |
 | S04 | Packages | 4 packages; $750 assessment, $2,500 pilot, $150/mo care plan |
-| S05 | Products | 13 product cards |
+| S05 | Products | 14 product cards |
 | S06 | Chat assistant | Opens and answers a pricing question with $750 |
 | S07 | Audit request form | Required-field validation; valid submit shows send panel addressed to rashadfambro@gmail.com |
-| S08 | Product guide | 13 product sections, no errors |
+| S08 | Product guide | 14 product sections, no errors |
 | S09 | Industry pages | All 22 pages return 200 with one H1 |
 | S10 | Mobile layout | No horizontal scroll at 390px (home, guide, industry, audit tool) |
 | S11 | Sitemap | Valid XML; every URL maps to a real file |
@@ -45,15 +45,15 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R02 | Privacy of employers | No former employer names on any page |
 | R03 | Profile | Focus includes AI; Former has no "healthcare technology"; on-site meetings mentioned |
 | R04 | Founding program | 25% off, testimonial required, no 30% |
-| R05 | Offers | $150 referral, $750 assessment credit, $1,999 bundle |
+| R05 | Offers | $150 referral, $750 assessment credit, $1,699 Launch Bundle, $5,999 Hotel Operations Bundle |
 | R06 | Holiday sale | Banner and 10% prices ($675) during the sale; hidden and regular prices after Jan 31, 2027 |
-| R07 | Sale math | ChatDesk $1,200 → $1,080 and $149 → $134/mo during sale |
-| R08 | Buy flow | Every Buy button opens checkout; plan option only for $1,000+; validation; order fallback to owner email with plan and method; nothing charged |
+| R07 | Sale math | ChatDesk $1,000 → $900 and $29 → $26/mo during sale |
+| R08 | Buy flow | Every Buy button opens checkout; Essentials/Growth/Pro tier choice updates price; installments only for $1,000+; validation; order fallback to owner email with tier, plan and method; nothing charged |
 | R09 | Payment plans | Shown in pricing note and FAQ |
-| R10 | Demo lab | All 6 demos triage and approve |
+| R10 | Demo lab | All 7 demos (incl. housekeeping) triage and approve |
 | R11 | Industry links | All 23 `#for-…` links personalize headline and preselect industry |
 | R12 | Industry chips | All 22 chips show a panel with a working Try button |
-| R13 | Chat intents | Pricing, founding, in-person, payment plans, buying, rewards, chatbots, holiday sale, full lead capture |
+| R13 | Chat intents | Pricing, founding, in-person, payment plans, buying, rewards, chatbots, free trial, housekeeping, holiday sale, full lead capture |
 | R14 | Savings calculator | Matches the formula for known inputs |
 | R15 | Estimate email capture | Rejects bad email; valid email produces send link to owner |
 | R16 | Project request builder | 4 steps, validation, summary, send panel to owner |
@@ -67,9 +67,15 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R24 | Accessibility | Every visible form field has a label |
 | R25 | Price consistency | Product prices match between home page and guide |
 | R26 | Audit tool pricing | Founding discount applied correctly ($2,500 → $1,875) |
+| R28 | Free trials | 14 trial buttons; trial modal hides payment fields; price shows “Free for 14 days, then…”; request goes to owner email |
+| R29 | Monthly plans | Essentials/Growth/Pro at $29/$59/$99 (standard) and $49/$99/$179 (property); $69 suite; trial mention |
+| R30 | Sale fine print | “Doesn’t combine…” on its own smaller line, not in the main sale sentence |
+| R31 | Hotel tools | WorkOrderDesk and IntakeDesk list hotels & resorts; HousekeepingDesk demo classifies a VIP checkout as high-priority Checkout clean |
+| R32 | Product prices | RewardsDesk $750, ReviewDesk $150, SocialDesk $750, LeadDesk $1,000, IntakeDesk $1,250, ComplianceDesk $2,500 |
 | R27 | Staging parity | After a promote, staging and production are identical (run with REQUIRE_SYNC=1) |
 
 ## Latest runs (Nov 13, 2026)
 GitHub Actions: all 4 jobs passed (smoke + regression × production + staging), including the online QR check.
-Production: 51 passed, 1 skipped (R27, by design) · Staging: 51 passed, 1 skipped · R27 with REQUIRE_SYNC=1: passed.
+Release of Nov 13 (pricing/tiers/trials/housekeeping): production 57 passed + R27 parity passed; staging 57 passed. Defect found and fixed: the chat assistant treated “free trial” as a request for the free audit.
+Earlier run: production 51 passed, 1 skipped (R27, by design) · Staging: 51 passed, 1 skipped · R27 with REQUIRE_SYNC=1: passed.
 Defects found and fixed during this run: two industry-page headings not in Title Case (price text inside the heading); QR caption showed the contact message while the QR library was loading; test harness link parser counted a `data-cfg-href` attribute as a link.

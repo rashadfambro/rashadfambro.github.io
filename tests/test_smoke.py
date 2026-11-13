@@ -32,8 +32,8 @@ def test_S04_packages_show_current_prices(home):
         assert price in text, price
 
 
-def test_S05_product_grid_has_13_products(home):
-    assert home.page.locator("#prodGrid .prod").count() == 13
+def test_S05_product_grid_has_14_products(home):
+    assert home.page.locator("#prodGrid .prod").count() == 14
 
 
 def test_S06_chat_assistant_answers(home):
@@ -59,7 +59,7 @@ def test_S07_audit_form_validates_and_routes_to_owner_email(home):
 
 def test_S08_product_guide_loads(make_page, base_url):
     w = make_page(); w.page.goto(base_url + "products.html")
-    assert w.page.locator("article.prod").count() == 13
+    assert w.page.locator("article.prod").count() == 14
     assert w.errors == []
 
 

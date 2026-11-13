@@ -78,7 +78,7 @@ def test_R04_founding_program_terms(home):
 
 def test_R05_offer_amounts(home):
     t = home.page.inner_text(".offers")
-    assert "$150 credit" in t and "$750 assessment" in t and "$1,999" in t
+    assert "$150 credit" in t and "$750 assessment" in t and "$1,699" in t and "$5,999" in t
 
 
 # ---------------- holiday sale ----------------
@@ -94,7 +94,7 @@ def test_R06_sale_banner_during_and_after(make_page, base_url):
 def test_R07_sale_price_math_on_products(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
     chat_card = w.page.locator(".prod", has_text="ChatDesk").first.inner_text()
-    assert "$1,080" in chat_card and "$134/mo" in chat_card
+    assert "$900" in chat_card and "$26/mo" in chat_card
 
 
 # ---------------- purchasing ----------------
@@ -102,7 +102,7 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     w = open_home(make_page, base_url, when=AFTER_SALE)
     pg = w.page
     ids = pg.eval_on_selector_all("[data-buy]", "els => [...new Set(els.map(e => e.dataset.buy))]")
-    assert set(["assess", "bundle", "care", "pilot", "chat", "salon", "rewards"]).issubset(ids)
+    assert set(["assess", "bundle", "hotelbundle", "care", "pilot", "chat", "salon", "rewards", "housekeeping"]).issubset(ids)
     for i in ids:
         pg.locator(f"[data-buy='{i}']").first.click()
         assert pg.is_visible("#buyModal"), i
@@ -112,7 +112,10 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     assert not pg.is_visible("#planOpt")          # $150/mo plan: no installment option
     pg.click("#buyClose")
     pg.locator("[data-buy='chat']").first.click()
-    assert pg.is_visible("#planOpt")              # $1,200 setup: installments offered
+    assert pg.is_visible("#planOpt")              # $1,000 setup: installments offered
+    assert pg.locator("input[name=tier]").count() == 3   # Essentials / Growth / Pro
+    pg.check("input[name=tier][value='1']")
+    assert "$59/mo" in pg.inner_text("#buyPrice")
     pg.click("#buyGo")
     assert "required" in pg.inner_text("#buyErr")
     pg.fill("#buy_name", "Pat Buyer"); pg.fill("#buy_biz", "Pat Co"); pg.fill("#buy_email", "pat@example.com")
@@ -123,7 +126,7 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     res = pg.inner_text("#buyResult")
     assert "Nothing has been charged" in res
     href = pg.get_attribute("#buyResult a", "href")
-    assert href.startswith(f"mailto:{OWNER_EMAIL}") and "3%20monthly%20payments" in href and "PayPal" in href
+    assert href.startswith(f"mailto:{OWNER_EMAIL}") and "3%20monthly%20payments" in href and "PayPal" in href and "Growth" in href
     assert w.errors == []
 
 
@@ -178,6 +181,8 @@ def test_R12_industry_chips_and_try_buttons(home):
     ("can I buy online?", ["Square", "PayPal"]),
     ("can you set up a loyalty rewards program?", ["RewardsDesk"]),
     ("do you build chatbots?", ["ChatDesk"]),
+    ("is there a free trial?", ["14-day trial", "license key"]),
+    ("we need help with housekeeping room turns", ["HousekeepingDesk"]),
 ])
 def test_R13_chat_intents(make_page, base_url, q, expect):
     w = open_home(make_page, base_url, when=AFTER_SALE)
@@ -305,7 +310,7 @@ def test_R23_product_guide_sections(make_page, base_url):
     w = make_page(); w.page.goto(base_url + "products.html")
     for art in w.page.locator("article.prod").all():
         t = art.inner_text()
-        for k in ["HOW IT WORKS", "SAVES MONEY", "WINS MORE BUSINESS", "BOOSTS PRODUCTIVITY", "HUMAN IN THE LOOP", "Setup from"]:
+        for k in ["HOW IT WORKS", "SAVES MONEY", "WINS MORE BUSINESS", "BOOSTS PRODUCTIVITY", "HUMAN IN THE LOOP", "Setup $", "plans from"]:
             assert k.lower() in t.lower(), (k, t[:40])
 
 
@@ -337,3 +342,54 @@ def test_R27_staging_matches_production():
     import subprocess, sys
     r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "release.py"), "check"], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout
+
+
+# ---------------- v6: trials, plans, housekeeping, sale note ----------------
+def test_R28_free_trial_flow(make_page, base_url):
+    w = open_home(make_page, base_url, when=AFTER_SALE)
+    pg = w.page
+    trial_ids = pg.eval_on_selector_all("[data-trial]", "els => els.map(e => e.dataset.trial)")
+    assert len(trial_ids) == 14
+    pg.locator("[data-trial='housekeeping']").click()
+    assert "14-Day Trial" in pg.inner_text("#buyTitle")
+    assert not pg.is_visible("#methodOpts") and not pg.is_visible("#buyTerms") and pg.is_visible("#trialNote")
+    assert "Free for 14 days, then" in pg.inner_text("#buyPrice") and "$49/mo" in pg.inner_text("#buyPrice")
+    pg.fill("#buy_name", "Tia Trial"); pg.fill("#buy_biz", "Seaside Resort"); pg.fill("#buy_email", "tia@example.com")
+    pg.click("#buyGo"); pg.wait_for_timeout(400)
+    assert "press Send" in pg.inner_text("#buyResult")
+    href = pg.get_attribute("#buyResult a", "href")
+    assert href.startswith(f"mailto:{OWNER_EMAIL}") and "free%20trial" in href.lower()
+    assert w.errors == []
+
+
+def test_R29_monthly_plan_tiers(make_page, base_url):
+    w = open_home(make_page, base_url, when=AFTER_SALE)
+    t = w.page.inner_text("#tiers")
+    for x in ["Essentials", "Growth", "Pro", "$29/mo", "$59/mo", "$99/mo", "$49/mo", "$179/mo", "$69/mo", "14-day trial"]:
+        assert x in t, x
+
+
+def test_R30_sale_fine_print_on_its_own_line(make_page, base_url):
+    w = open_home(make_page, base_url, when=SALE_DAY)
+    assert "founding-client discount" not in w.page.inner_text("#saleText")
+    fine = w.page.locator("#saleFine")
+    assert "founding-client discount" in fine.inner_text()
+    assert w.page.evaluate("getComputedStyle(document.getElementById('saleFine')).display") == "block"
+
+
+def test_R31_hotel_tools(home):
+    pg = home.page
+    for name, needle in [("WorkOrderDesk", "hotels & resorts"), ("IntakeDesk", "Hotels & resorts"), ("HousekeepingDesk", "Hotels")]:
+        assert needle in pg.locator(".prod", has_text=name).first.inner_text(), name
+    pg.click("#labPick button[data-demo='housekeeping']")
+    pg.fill("#labInput", "Room 512 checked out early and the VIP guests arrive at 2pm")
+    pg.click("#labRun"); pg.wait_for_timeout(2300)
+    out = pg.inner_text("#labOut")
+    assert "Checkout clean" in out and "High" in out and "512" in out
+
+
+def test_R32_product_prices(home):
+    prices = home.page.evaluate("Object.fromEntries(PRODUCTS.map(p => [p.name, p.price]))")
+    expect = {"RewardsDesk": "$750", "ReviewDesk": "$150", "SocialDesk": "$750", "LeadDesk": "$1,000", "IntakeDesk": "$1,250", "ComplianceDesk": "$2,500"}
+    for k, v in expect.items():
+        assert prices[k].startswith(f"Setup {v} "), (k, prices[k])
