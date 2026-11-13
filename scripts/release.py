@@ -4,12 +4,12 @@
 Environments (all served by GitHub Pages from branch `main`):
   Production  https://rashadfambro.github.io/
   Staging     https://rashadfambro.github.io/staging/   (noindex replica; changes land here first)
-  Backups     git tags `prod-YYYYMMDD-HHMMSS` — a snapshot of production taken before every promote
+  Backups     branches `backup/prod-YYYYMMDD-HHMMSS` — a snapshot of production taken before every promote
 
 Usage:
   python3 scripts/release.py sync-staging   # copy production -> staging (refresh staging to match prod)
   python3 scripts/release.py promote        # tag a prod backup, then copy staging -> production
-  python3 scripts/release.py rollback TAG   # restore production files from a backup tag
+  python3 scripts/release.py rollback REF   # restore production files from a backup branch
   python3 scripts/release.py check          # verify staging and production are identical (except markers)
 
 Flow: edit files under staging/  ->  run tests against /staging/  ->  push  ->  check staging URL
@@ -75,9 +75,9 @@ def sync_staging():
 
 
 def promote():
-    tag = "prod-" + datetime.datetime.utcnow().strftime("%Y%m%d-%H%M%S")
-    git("tag", tag)
-    print("backup tag created:", tag, "(push with: git push origin --tags)")
+    ref = "backup/prod-" + datetime.datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+    git("branch", ref)
+    print("backup branch created:", ref, "(push with: git push origin", ref + ")")
     copy_items(STAGING, ROOT)
     for item in SITE_ITEMS:
         p = os.path.join(ROOT, item)
@@ -88,10 +88,10 @@ def promote():
     print("staging promoted to production")
 
 
-def rollback(tag):
+def rollback(ref):
     for item in SITE_ITEMS:
-        git("checkout", tag, "--", item)
-    print("production restored from", tag, "- commit and push to publish")
+        git("checkout", ref, "--", item)
+    print("production restored from", ref, "- commit and push to publish")
 
 
 def check():

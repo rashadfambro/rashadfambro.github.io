@@ -15,11 +15,11 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 |---|---|---|
 | Production | https://rashadfambro.github.io/ | Live site |
 | Staging | https://rashadfambro.github.io/staging/ | Exact replica (noindex, red STAGING ribbon). Changes land here first |
-| Backups | git tags `prod-YYYYMMDD-HHMMSS` | Snapshot of production taken automatically before every promote |
+| Backups | branches `backup/prod-YYYYMMDD-HHMMSS` | Snapshot of production taken automatically before every promote (first one: `backup/prod-20261113`) |
 
 1. Edit files under `staging/` → run `SITE_PATH=/staging/ python -m pytest` → push → check the staging URL.
-2. `python3 scripts/release.py promote` (creates the backup tag, copies staging → production) → run the tests against production → push with `--tags`.
-3. To roll back: `python3 scripts/release.py rollback prod-…` → push.
+2. `python3 scripts/release.py promote` (creates the backup branch, copies staging → production) → run the tests against production → push `main` and the backup branch.
+3. To roll back: `python3 scripts/release.py rollback backup/prod-…` → push.
 
 ## Smoke suite (critical paths)
 | ID | Scenario | Expected |
@@ -69,6 +69,7 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R26 | Audit tool pricing | Founding discount applied correctly ($2,500 → $1,875) |
 | R27 | Staging parity | After a promote, staging and production are identical (run with REQUIRE_SYNC=1) |
 
-## Latest local run (Nov 13, 2026)
+## Latest runs (Nov 13, 2026)
+GitHub Actions: all 4 jobs passed (smoke + regression × production + staging), including the online QR check.
 Production: 51 passed, 1 skipped (R27, by design) · Staging: 51 passed, 1 skipped · R27 with REQUIRE_SYNC=1: passed.
 Defects found and fixed during this run: two industry-page headings not in Title Case (price text inside the heading); QR caption showed the contact message while the QR library was loading; test harness link parser counted a `data-cfg-href` attribute as a link.
