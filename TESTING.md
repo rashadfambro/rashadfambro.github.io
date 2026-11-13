@@ -94,3 +94,6 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R43 | Every product has a demo or a prototype; prototype buttons link to the right page |
 | R44 | All six prototypes and the prototype index load without errors and take the visitor's brand name |
 | R45 | Core flow in each prototype works (points and offers, review replies, post drafting, handbook answers, invoices and reminders, weekly summary) |
+| R46 | Page source reads cleanly for crawlers: no fallback message, no empty phone row, footer year, no checkout promise in static HTML |
+| R47 | Order button says "Place my order" unless a payment link is set, then "Continue to secure checkout" |
+| R48 | Email-draft fallback keeps accents, symbols and dashes intact in subject and body |

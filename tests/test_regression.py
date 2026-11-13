@@ -592,3 +592,43 @@ def test_R45_prototype_core_flows(make_page, base_url):
     pg = _proto(make_page, base_url, "insights.html").page
     pg.click("#nextWk"); pg.click("[data-tab=summary]"); assert "Good morning" in pg.inner_text("#sumTxt")
     pg.click("[data-tab=impact]"); assert "%" in pg.inner_text("#baRows")
+
+
+# ---------------- v11: fixes from the external site review ----------------
+def test_R46_static_html_reads_clean_for_crawlers():
+    from urllib.parse import unquote
+    s = open(site_file("index.html"), encoding="utf-8").read()
+    assert "couldn’t be sent automatically" not in s.split("<script")[0]
+    assert 'id="vPhoneRow"' not in s.split("<script")[0]
+    assert '© <span id="yr">2026</span>' in s
+    assert "Continue to secure checkout" not in s.split("<script")[0]
+
+
+def test_R47_order_button_matches_payment_setup(home):
+    pg = home.page
+    pg.locator("[data-buy='assess']").first.click()
+    assert pg.inner_text("#buyGo") == "Place my order →"
+    pg.click("#buyClose")
+    pg.evaluate("CONFIG.payLinks.assess.paypal='https://example.com/pay'")
+    pg.locator("[data-buy='assess']").first.click()
+    assert pg.inner_text("#buyGo") == "Continue to secure checkout →"
+
+
+def test_R48_email_draft_fallback_is_clean(make_page, base_url):
+    from urllib.parse import unquote, urlparse, parse_qs
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    pg.fill("#a_name", "José Núñez"); pg.fill("#a_biz", "Café & Co — Downtown"); pg.fill("#a_email", "jose@example.com")
+    pg.fill("#a_flow", "Bookings by DM; 40% no-shows"); pg.fill("#a_notes", "Two locations, it’s urgent")
+    pg.click("#auditForm button[type=submit]")
+    pg.wait_for_selector("#auditResult:not([hidden])", timeout=10000)
+    assert "One Last Step" in pg.inner_text("#auditResult h4")
+    assert "couldn’t be sent automatically" in pg.inner_text("#auditResultNote")
+    href = pg.get_attribute("#auditMail", "href")
+    q = parse_qs(urlparse(href).query)
+    assert q["subject"][0] == "Free workflow audit request — Café & Co — Downtown"
+    body = q["body"][0]
+    for part in ["José Núñez", "Café & Co — Downtown", "40% no-shows", "Two locations, it’s urgent"]:
+        assert part in body
+    assert "�" not in body and "%" not in body.replace("40%", "")
+    assert w.errors == []

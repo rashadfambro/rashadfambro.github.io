@@ -772,8 +772,8 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       </div>
       <div class="row" style="margin-top:18px"><button class="btn btn-dark" type="submit">Request free audit →</button><span class="hint" id="auditErr" role="alert" style="color:#b42318;margin:0"></span></div>
       <div class="result" id="auditResult" hidden>
-        <h4>Almost Done — One Last Step</h4>
-        <p class="hint" style="margin:0" id="auditResultNote">It couldn’t be sent automatically just now. Open it in your email app, or copy it and send it to <b data-cfg="email">rashadfambro@gmail.com</b>.</p>
+        <h4>Your Request</h4>
+        <p class="hint" style="margin:0" id="auditResultNote"></p>
         <pre id="auditText"></pre>
         <div class="row">
           <a class="btn btn-primary btn-sm" id="auditMail" href="#">Open email draft</a>
@@ -906,8 +906,8 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
           </ol>
           <p class="hint">Sending this request doesn’t commit you to anything. Final terms are in the written agreement.</p>
           <div class="result" id="bResult" hidden>
-            <h4>Almost Done — One Last Step</h4>
-            <p class="hint" style="margin:0">It couldn’t be sent automatically just now. Open it in your email app, or copy it and send it to <b data-cfg="email">rashadfambro@gmail.com</b>.</p>
+            <h4>Your Request</h4>
+            <p class="hint" style="margin:0" id="bResultNote"></p>
             <pre id="bText"></pre>
             <div class="row"><a class="btn btn-primary btn-sm" id="bMail" href="#">Open email draft</a><button class="btn btn-line btn-sm" type="button" id="bCopy">Copy request</button></div>
           </div>
@@ -982,7 +982,6 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         <p class="role">Software Solutions Consultant</p>
         <ul>
           <li><b>Email</b><a id="vEmail" href="#" data-cfg="email">rashadfambro@gmail.com</a> <button class="linkbtn" data-copy="email">Copy</button></li>
-          <li id="vPhoneRow" hidden><b>Phone</b><a id="vPhone" href="#"></a></li>
           <li><b>LinkedIn</b><a data-cfg-href="linkedin" href="https://www.linkedin.com/in/rashadfambro/" target="_blank" rel="noopener">in/rashadfambro</a></li>
           <li><b>Meets</b>Virtually worldwide · on-site visits available</li>
         </ul>
@@ -1009,7 +1008,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
 <footer class="footer">
   <div class="wrap foot-ind"><span>Industries:</span> <a href="industries/apartments.html">Apartment Communities</a> · <a href="industries/hotels.html">Hotels &amp; Resorts</a> · <a href="industries/timeshares.html">Timeshares</a> · <a href="industries/salons.html">Nail Salons</a> · <a href="industries/spas.html">Massage &amp; Spa</a> · <a href="industries/barbers.html">Barbershops</a> · <a href="industries/smoke-shops.html">Smoke &amp; Vape Shops</a> · <a href="industries/restaurants.html">Restaurants</a> · <a href="industries/contractors.html">Contractors &amp; Trades</a> · <a href="industries/real-estate.html">Real Estate</a> · <a href="industries/law-firms.html">Law Firms</a> · <a href="industries/dental.html">Dental Offices</a> · <a href="industries/hud-housing.html">HUD-Assisted Housing</a> · <a href="industries/auto-repair.html">Auto Repair Shops</a> · <a href="industries/cleaning.html">Cleaning Services</a> · <a href="industries/short-term-rentals.html">Short-Term Rentals</a> · <a href="industries/self-storage.html">Self-Storage</a> · <a href="industries/insurance.html">Insurance Agencies</a> · <a href="industries/tax-firms.html">Tax &amp; Bookkeeping Firms</a> · <a href="industries/gyms.html">Gyms &amp; Fitness Studios</a> · <a href="industries/event-venues.html">Event Venues</a> · <a href="products.html">Product Guide</a></div>
   <div class="wrap">
-    <span>© <span id="yr"></span> <span data-cfg="businessName">Rashad Fambro Consulting</span> · Software Solutions · Automation &amp; AI</span>
+    <span>© <span id="yr">2026</span> <span data-cfg="businessName">Rashad Fambro Consulting</span> · Software Solutions · Automation &amp; AI</span>
     <span><a href="#audit">Free audit</a> · <a href="#demos">Demos</a> · <a href="#contact">Contact</a> · <a href="#top">Back to top ↑</a></span>
   </div>
 </footer>
@@ -1018,7 +1017,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
 <div class="modal" id="buyModal" hidden role="dialog" aria-modal="true" aria-labelledby="buyTitle">
   <form class="modal-card" id="buyForm" novalidate>
     <button type="button" class="modal-x" id="buyClose" aria-label="Close">×</button>
-    <p class="eyebrow" style="margin-bottom:4px">Secure Checkout</p>
+    <p class="eyebrow" style="margin-bottom:4px">Order Online</p>
     <h3 id="buyTitle">Buy</h3>
     <p class="buy-price" id="buyPrice"></p>
     <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -1039,7 +1038,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
     </div>
     <p class="hint" id="trialNote" hidden>Free for 14 days — no payment details needed. You’ll receive a license key and setup link by email. At the end of the trial, choose a plan or let it expire; nothing is charged automatically.</p>
     <label class="buy-terms" id="buyTerms"><input type="checkbox" id="buy_ok"> I understand setup begins after a short kickoff call, and monthly plans can be canceled with 30 days’ notice.</label>
-    <div class="row" style="margin-top:14px"><button class="btn btn-dark" type="submit" id="buyGo">Continue to secure checkout →</button><span class="hint" id="buyErr" role="alert" style="color:#b42318;margin:0"></span></div>
+    <div class="row" style="margin-top:14px"><button class="btn btn-dark" type="submit" id="buyGo">Place my order →</button><span class="hint" id="buyErr" role="alert" style="color:#b42318;margin:0"></span></div>
     <div class="result" id="buyResult" hidden></div>
   </form>
 </div>
@@ -1126,7 +1125,7 @@ const mailto = (subject, body) => `mailto:${CONFIG.email}?subject=${encodeURICom
 $$("[data-cfg]").forEach(el => { const v = CONFIG[el.dataset.cfg]; if (v) el.textContent = v; });
 $$("[data-cfg-href]").forEach(el => { const v = CONFIG[el.dataset.cfgHref]; if (v) el.href = v; });
 $("#vEmail").href = "mailto:" + CONFIG.email;
-if (CONFIG.phone){ $("#vPhoneRow").hidden=false; $("#vPhone").textContent=CONFIG.phone; $("#vPhone").href="tel:"+CONFIG.phone.replace(/[^\d+]/g,""); }
+if (CONFIG.phone){ const li=document.createElement("li"); li.id="vPhoneRow"; li.innerHTML=`<b>Phone</b><a id="vPhone" href="tel:${CONFIG.phone.replace(/[^\d+]/g,"")}">${esc(CONFIG.phone)}</a>`; $("#vEmail").closest("li").after(li); }
 $("#spots").textContent = CONFIG.foundingSpots;
 if (!CONFIG.foundingSpots) $("#founding").hidden = true;
 $("#yr").textContent = new Date().getFullYear();
@@ -1459,6 +1458,7 @@ auditForm.addEventListener("submit",async e=>{
   aBtn.disabled=false; aBtn.textContent=aLbl;
   $("#auditResult").hidden=false;
   if(sent){ $("#auditResult h4").textContent="Thanks — your request was received"; $("#auditResultNote").textContent="I’ll reply within one business day. A copy of your request is below."; $("#auditMail").hidden=true; }
+  else { $("#auditResult h4").textContent="Almost Done — One Last Step"; $("#auditResultNote").innerHTML=FALLBACK_NOTE; $("#auditMail").hidden=false; }
   $("#auditResult").scrollIntoView({behavior:"smooth",block:"nearest"});
 });
 $("#auditCopy").addEventListener("click",()=>copyText($("#auditText").textContent,"Request copied"));
@@ -1492,7 +1492,8 @@ $("#bNext").addEventListener("click",async()=>{
   const sent=await sendLead("project",d);
   $("#bNext").disabled=false; $("#bResult").hidden=false;
   bLis.forEach(l=>l.className="done"); $("#bNext").hidden=true;
-  if(sent){ $("#bResult h4").textContent="Thanks — your request was received. I’ll reply within one business day."; $("#bMail").hidden=true; }
+  if(sent){ $("#bResult h4").textContent="Thanks — your request was received"; $("#bResultNote").textContent="I’ll reply within one business day. A copy of your request is below."; $("#bMail").hidden=true; }
+  else { $("#bResult h4").textContent="Almost Done — One Last Step"; $("#bResultNote").innerHTML=FALLBACK_NOTE; $("#bMail").hidden=false; }
   $("#bResult").scrollIntoView({behavior:"smooth",block:"nearest"});
 });
 $("#bBack").addEventListener("click",()=>bShow(Math.max(0,bStep-1)));
@@ -1522,6 +1523,7 @@ if (saleActive()) {
   $("#saleFine").textContent = "Doesn’t combine with the founding-client discount — you get the better deal.";
 }
 
+const FALLBACK_NOTE = `It couldn’t be sent automatically just now. Open it in your email app, or copy it and send it to <b>${esc(CONFIG.email)}</b>.`;
 /* ---------- buy / checkout ---------- */
 const BUYABLE = {
   assess:{name:"AI Readiness Assessment (virtual)", price:750},
@@ -1556,7 +1558,8 @@ function openBuy(id, mode){
   const canPlan = !trial && (it.price||0) >= CONFIG.paymentPlan.minimum;
   $("#planOpt").hidden=!canPlan; if(!canPlan) $("input[name=plan][value='Pay in full']").checked=true;
   $("#payOpts").hidden = trial; $("#methodOpts").hidden = trial; $("#buyTerms").hidden = trial; $("#trialNote").hidden = !trial;
-  $("#buyGo").textContent = trial ? "Start my free trial →" : "Continue to secure checkout →";
+  const hasLink = Object.values(CONFIG.payLinks[id]||{}).some(Boolean);
+  $("#buyGo").textContent = trial ? "Start my free trial →" : hasLink ? "Continue to secure checkout →" : "Place my order →";
   $("#buyResult").hidden=true; $("#buyErr").textContent=""; $("#buyGo").hidden=false;
   $("#buyModal").hidden=false; setTimeout(()=>$("#buy_name").focus(),30);
 }
