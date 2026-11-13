@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rashadfambro.github.io/sitemap.xml
