@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d1a2d">
+<title>Rashad Fambro | Software Solutions Consultant · Automation &amp; Business Tools</title>
+<meta name="description" content="Rashad Fambro helps small and mid-sized businesses save staff time, respond to customers faster, and grow with workflow automation, business software, and custom MVPs. Start with a free workflow audit.">
+<link rel="canonical" href="https://rashadfambro.github.io/">
+<meta property="og:url" content="https://rashadfambro.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rashad Fambro | Software Solutions Consultant">
+<meta property="og:description" content="Workflow automation, business software, and custom MVPs for property, hospitality, and small businesses. Free workflow audit.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1a2d'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Georgia,serif' font-size='28' fill='%237cc4ff'%3ERF%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,500;1,8..60,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<style>
+:root{
+  --ink:#0d1a2d;--ink-2:#14263f;--ink-3:#1d3454;--line-d:#2f4766;
+  --paper:#f5f8fc;--white:#fff;--soft:#e9f0f8;--line:#d3dce7;--muted:#56606c;--text:#1a2533;
+  --sky:#7cc4ff;--sky-2:#b9e0ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px;--shadow:0 20px 60px -24px rgba(13,26,45,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--paper);color:var(--text);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img,svg{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid #2f8cff;outline-offset:3px;border-radius:4px}
+h1,h2,h3,h4,p{margin:0}
+.wrap{width:min(1200px,calc(100% - 64px));margin-inline:auto}
+.skip{position:absolute;left:8px;top:8px;transform:translateY(-200%);background:var(--sky);color:var(--ink);padding:10px 14px;z-index:99;border-radius:8px}
+.skip:focus{transform:none}
+.eyebrow{font:800 .72rem/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#3b5878;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow .n{color:var(--sky);background:var(--ink);border-radius:999px;padding:2px 8px;letter-spacing:.06em}
+.dark .eyebrow,.hero .eyebrow,.founding .eyebrow{color:var(--sky-2)}
+.dark .eyebrow .n{background:var(--sky);color:var(--ink)}
+h1,h2{font-family:var(--serif);font-weight:600;font-variant-ligatures:no-common-ligatures;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
+h2{font-size:clamp(2rem,4vw,3.3rem)}
+h3{font-size:1.12rem;line-height:1.3}
+.lede{color:var(--muted);font-size:1.06rem;max-width:58ch}
+.dark .lede{color:#c3cfdd}
+.section{padding-block:clamp(64px,9vw,112px)}
+.dark{background:var(--ink);color:#eef3f9}
+.tint{background:var(--soft);border-block:1px solid var(--line)}
+.head{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:end;margin-bottom:40px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 20px;border-radius:10px;border:1px solid transparent;font-weight:750;font-size:.93rem;text-decoration:none;transition:transform .15s,background .15s,border-color .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--sky);color:var(--ink)}
+.btn-primary:hover{background:var(--sky-2)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:var(--ink-3)}
+.btn-ghost{border-color:#4a6283;color:#eef3f9;background:transparent}
+.btn-ghost:hover{background:var(--ink-3)}
+.btn-line{border-color:#a8b6c7;background:#fff;color:var(--ink)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-sm{min-height:38px;padding:8px 14px;font-size:.84rem}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#e2edf9;color:#24466d;border:1px solid #c3d6ec}
+.chip.live{background:#dcf8ee;color:#0d6a4b;border-color:#a9e8d1}
+.chip.soon{background:#fff3df;color:#8a5a0b;border-color:#f3d7a6}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+
+/* header */
+.mast{position:sticky;top:0;z-index:50;background:rgba(13,26,45,.94);backdrop-filter:blur(10px);color:#eef3f9;border-bottom:1px solid var(--line-d)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:72px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;line-height:1.15}
+.mark{width:42px;height:42px;border-radius:11px;background:linear-gradient(140deg,var(--sky),#3d8bff);color:var(--ink);display:grid;place-items:center;font:600 1rem var(--serif)}
+.brand b{display:block;font-weight:800;font-size:.98rem}
+.brand small{display:block;color:#a9bbd0;font-size:.74rem;font-weight:600}
+.nav{display:flex;gap:22px;font-size:.88rem;font-weight:600;color:#c7d4e2}
+.nav a{text-decoration:none}
+.nav a:hover{color:var(--sky)}
+.menu-btn{display:none;background:none;border:1px solid #4a6283;color:#fff;border-radius:8px;padding:8px 12px}
+
+/* hero */
+.hero{background:radial-gradient(1100px 500px at 85% -10%,#1f4b80 0%,transparent 60%),radial-gradient(700px 400px at -10% 110%,#173c63 0%,transparent 60%),var(--ink);color:#eef3f9;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;padding-block:clamp(64px,8vw,116px)}
+.hero h1{font-size:clamp(2.7rem,5.6vw,5.1rem);margin-bottom:22px}
+.hero h1 em{font-style:italic;color:var(--sky)}
+.hero .lede{font-size:1.15rem;color:#c9d6e5}
+.hero-points{list-style:none;padding:0;margin:26px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;color:#a9bbd0;font-size:.86rem;font-weight:600}
+.hero-points li::before{content:"✓";color:var(--mint);margin-right:7px;font-weight:800}
+.board{background:linear-gradient(180deg,#152a46,#11233b);border:1px solid #33507a;border-radius:18px;box-shadow:0 40px 90px -30px #000c;overflow:hidden}
+.board-top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #2c4568;font-size:.72rem;font-weight:800;letter-spacing:.1em;color:#a9bbd0}
+.pulse{display:inline-flex;align-items:center;gap:8px;color:var(--mint)}
+.pulse::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 #5fe0b580;animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px #5fe0b500}100%{box-shadow:0 0 0 0 #5fe0b500}}
+.board-body{padding:20px 18px}
+.msg{background:#1d3657;border:1px solid #33507a;border-radius:12px;padding:14px;font-size:.92rem;min-height:84px;transition:opacity .35s}
+.msg small{display:block;color:var(--sky-2);font-weight:800;font-size:.68rem;letter-spacing:.1em;margin-bottom:6px;text-transform:uppercase}
+.pipe{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.pipe li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;border:1px solid #2c4568;background:#16304f;font-size:.86rem;color:#9fb2c8;transition:all .35s}
+.pipe li i{font-style:normal;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;background:#0f2038;font-size:.72rem;font-weight:800;color:#6f89a8;flex:none}
+.pipe li span{margin-left:auto;font-size:.7rem;font-weight:800;letter-spacing:.06em}
+.pipe li.on{color:#fff;border-color:#4b74a6;background:#1f3d63}
+.pipe li.on i{background:var(--sky);color:var(--ink)}
+.pipe li.gate.on{background:#e5f2ff;color:var(--ink);border-color:#e5f2ff}
+.pipe li.gate.on i{background:var(--ink);color:var(--sky)}
+.board-foot{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #2c4568}
+.board-foot div{padding:12px 16px;border-left:1px solid #2c4568}
+.board-foot div:first-child{border-left:0}
+.board-foot b{display:block;font:500 1.35rem var(--serif);color:#fff}
+.board-foot small{color:#8ea3bc;font-size:.72rem;font-weight:600}
+
+/* stats */
+.stats{background:var(--sky);color:var(--ink)}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-grid div{padding:26px 24px;border-left:1px solid #5aa6e6}
+.stat-grid div:first-child{border-left:0;padding-left:0}
+.stat-grid b{display:block;font:500 clamp(2rem,3.6vw,3rem)/1 var(--serif);letter-spacing:-.03em}
+.stat-grid p{font-size:.85rem;font-weight:600;margin-top:6px;max-width:28ch}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(32px,5vw,72px);align-items:start}
+.profile{background:var(--ink);color:#eef3f9;border-radius:20px;padding:30px;position:sticky;top:96px}
+.avatar{width:92px;height:92px;border-radius:24px;background:linear-gradient(140deg,var(--sky),#3d8bff);display:grid;place-items:center;font:500 2.2rem var(--serif);color:var(--ink);margin-bottom:18px}
+.profile h3{font:500 1.7rem var(--serif)}
+.profile .role{color:var(--sky-2);font-weight:700;font-size:.9rem;margin:4px 0 16px}
+.profile ul{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:8px;font-size:.9rem;color:#c3cfdd}
+.profile li b{color:#fff}
+.timeline{list-style:none;padding:0;margin:26px 0 0;border-left:2px solid var(--line)}
+.timeline li{position:relative;padding:0 0 22px 24px}
+.timeline li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--white);border:3px solid #3d8bff}
+.timeline h4{font-size:1rem}
+.timeline .co{color:#3b5878;font-weight:700;font-size:.85rem}
+.timeline p{color:var(--muted);font-size:.93rem;margin-top:4px}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}
+.values .card{padding:20px}
+.values h4{font-size:.98rem;margin-bottom:6px}
+.values p{font-size:.88rem;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.tags span{border:1px solid #b9c7d7;border-radius:999px;padding:4px 12px;font-size:.8rem;font-weight:600;background:#fff}
+
+/* solutions */
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.sol{position:relative;overflow:hidden}
+.sol .ico{width:46px;height:46px;border-radius:12px;background:var(--soft);display:grid;place-items:center;margin-bottom:16px;color:#1e5fa8}
+.sol h3{margin-bottom:8px}
+.sol p{color:var(--muted);font-size:.93rem}
+.sol ul{margin:14px 0 0;padding-left:18px;color:#3e4855;font-size:.88rem}
+.sol li+li{margin-top:4px}
+
+/* products */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.prod{background:var(--ink-2);border:1px solid var(--line-d);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:10px;color:#eef3f9}
+.prod .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.prod h3{font:500 1.5rem var(--serif)}
+.prod .for{color:var(--sky-2);font-size:.82rem;font-weight:700}
+.prod p{color:#b9c8d9;font-size:.92rem}
+.prod ul{margin:4px 0 8px;padding-left:18px;color:#d5dfea;font-size:.87rem}
+.prod .row{margin-top:auto}
+.prod .btn-line{background:transparent;color:#fff;border-color:#4a6283}
+.prod.wide{grid-column:1/-1;background:linear-gradient(120deg,#17304f,#1d3a63);border-color:#4b74a6}
+.prod.wide ul{columns:2;column-gap:28px}
+@media(max-width:620px){.prod.wide ul{columns:1}}
+
+/* industries */
+.focus-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:34px}
+.focus{border-top:4px solid #3d8bff}
+.focus h3{font:500 1.35rem var(--serif);margin:10px 0 8px}
+.focus ul{margin:0;padding-left:18px;font-size:.88rem;color:#3e4855}
+.focus li+li{margin-top:5px}
+.ind-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:22px;align-items:start}
+.ind-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ind-chips button{border:1px solid #b9c7d7;background:#fff;border-radius:999px;padding:9px 15px;font-weight:700;font-size:.88rem}
+.ind-chips button:hover{border-color:var(--ink)}
+.ind-chips button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ind-panel h3{font:500 1.8rem var(--serif);margin-bottom:6px}
+.ind-panel .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
+.ind-panel h4{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#3b5878;margin-bottom:8px}
+.ind-panel ul{margin:0;padding-left:18px;font-size:.9rem;color:#3e4855}
+.ind-panel li+li{margin-top:5px}
+
+/* demo lab */
+.lab{display:grid;grid-template-columns:270px minmax(0,1fr);border-radius:18px;overflow:hidden;border:1px solid #c3cfdc;background:#fff;box-shadow:var(--shadow)}
+.lab-pick{background:var(--ink);padding:12px;display:flex;flex-direction:column;gap:6px}
+.lab-pick button{text-align:left;background:transparent;border:1px solid transparent;color:#dfe8f2;border-radius:10px;padding:11px 12px}
+.lab-pick button small{display:block;font-size:.66rem;letter-spacing:.1em;font-weight:800;color:#8ea3bc;text-transform:uppercase}
+.lab-pick button strong{display:block;font-size:.95rem}
+.lab-pick button:hover{border-color:#4a6283}
+.lab-pick button[aria-pressed="true"]{background:var(--sky);color:var(--ink)}
+.lab-pick button[aria-pressed="true"] small{color:#1d4d80}
+.lab-main{padding:clamp(18px,3vw,32px)}
+.lab-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}
+.lab-head h3{font:500 clamp(1.6rem,3vw,2.3rem) var(--serif)}
+.lab-cols{display:grid;grid-template-columns:1fr 1.15fr;gap:16px}
+.pane{border:1px solid var(--line);border-radius:12px;background:#f3f7fb;padding:16px}
+.pane label,.pane .lbl{display:block;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#3b5878;margin-bottom:8px}
+.pane textarea{width:100%;min-height:150px;border:1px solid #c3cfdc;border-radius:10px;padding:12px;background:#fff;resize:vertical;font-size:.95rem}
+.hint{font-size:.8rem;color:var(--muted);margin-top:8px}
+.steps-live{list-style:none;padding:0;margin:0 0 12px;display:flex;gap:6px;flex-wrap:wrap}
+.steps-live li{font-size:.72rem;font-weight:800;padding:4px 9px;border-radius:999px;background:#e3eaf2;color:#7a8696;transition:all .25s}
+.steps-live li.on{background:var(--ink);color:var(--sky)}
+.steps-live li.done{background:#dcf8ee;color:#0d6a4b}
+.out dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;font-size:.9rem}
+.out dt{font-weight:800;color:#3b5878}
+.out dd{margin:0}
+.pri{display:inline-block;padding:1px 9px;border-radius:999px;font-size:.75rem;font-weight:800}
+.pri.high{background:#ffe1e1;color:#a31d1d}.pri.med{background:#fff1d6;color:#8a5a0b}.pri.low{background:#dcf8ee;color:#0d6a4b}
+.draft{margin-top:12px;background:#fff;border:1px dashed #9db4cf;border-radius:10px;padding:12px;font-size:.9rem;white-space:pre-wrap}
+.check{margin-top:12px;background:#fff8e8;border:1px solid #f3d7a6;border-radius:10px;padding:10px 12px;font-size:.86rem}
+.check b{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#8a5a0b;margin-bottom:4px}
+.check ul{margin:0;padding-left:18px}
+.lab-actions{margin-top:16px}
+.status{margin-top:10px;font-size:.86rem;color:var(--muted);min-height:1.5em}
+
+/* roi */
+.roi{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
+.field{margin-bottom:18px}
+.field label{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:6px}
+.field output{font-weight:800;color:#1e5fa8}
+input[type=range]{width:100%;accent-color:#2f7fe0}
+.roi-out{background:var(--ink);color:#fff;border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:18px}
+.roi-out .big{font:500 clamp(2.4rem,4.5vw,3.6rem)/1 var(--serif);color:var(--sky)}
+.roi-out .sub{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.roi-out .sub div{background:var(--ink-3);border-radius:10px;padding:14px}
+.roi-out .sub b{display:block;font:500 1.5rem var(--serif)}
+.roi-out small{color:#a9bbd0;font-size:.8rem}
+
+/* forms */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+.f label{display:block;font-weight:700;font-size:.86rem;margin-bottom:5px}
+.f input,.f select,.f textarea{width:100%;border:1px solid #b9c7d7;border-radius:10px;padding:11px 12px;background:#fff;font-size:.95rem}
+.f textarea{min-height:92px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:#2f7fe0;outline:none;box-shadow:0 0 0 3px #2f7fe033}
+.req{color:#b42318}
+.audit-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(24px,5vw,64px);align-items:start}
+.gets{list-style:none;padding:0;margin:22px 0;display:grid;gap:12px;counter-reset:g}
+.gets li{display:grid;grid-template-columns:40px 1fr;gap:12px;counter-increment:g}
+.gets li::before{content:counter(g);width:40px;height:40px;border-radius:10px;background:var(--ink);color:var(--sky);display:grid;place-items:center;font-weight:800}
+.gets b{display:block}
+.gets span{color:var(--muted);font-size:.92rem}
+.result{border:1px solid #a9e8d1;background:#effcf7;border-radius:12px;padding:18px;margin-top:14px}
+.result h4{margin-bottom:6px}
+.result pre{white-space:pre-wrap;font:500 .85rem/1.5 ui-monospace,Menlo,Consolas,monospace;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;max-height:240px;overflow:auto;margin:10px 0}
+
+/* process */
+.proc{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(7,1fr);gap:10px;counter-reset:p}
+.proc li{counter-increment:p;background:var(--ink-2);border:1px solid var(--line-d);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.proc li::before{content:"0" counter(p);font:500 1.5rem var(--serif);color:var(--sky)}
+.proc h3{font-size:.98rem;color:#fff}
+.proc p{font-size:.83rem;color:#b9c8d9}
+.proc .when{margin-top:auto;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mint)}
+
+/* packages */
+.pkg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+.pkg{display:flex;flex-direction:column;gap:10px}
+.pkg.feat{border:2px solid #2f7fe0;box-shadow:var(--shadow)}
+.pkg h3{font:500 1.45rem var(--serif)}
+.price{font:600 1.15rem var(--sans);color:var(--ink)}
+.price small{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.pkg p{color:var(--muted);font-size:.9rem}
+.pkg ul{list-style:none;padding:0;margin:4px 0 12px;display:grid;gap:7px;font-size:.88rem}
+.pkg li::before{content:"✓";color:#0d8a5f;font-weight:800;margin-right:8px}
+.pkg .btn{margin-top:auto}
+.founding{margin-top:26px;background:linear-gradient(120deg,#0d1a2d,#1d3a63);color:#fff;border-radius:18px;padding:clamp(22px,4vw,36px);display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center}
+.founding h3{font:500 clamp(1.5rem,2.6vw,2.1rem) var(--serif);margin-bottom:8px}
+.founding p{color:#c3cfdd}
+.founding ul{margin:12px 0 0;padding-left:18px;color:#dfe8f2;font-size:.92rem}
+.spots{font:500 3.6rem/1 var(--serif);color:var(--sky)}
+
+/* start project */
+.builder{display:grid;grid-template-columns:240px 1fr;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.b-steps{background:var(--soft);padding:16px;list-style:none;margin:0;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--line)}
+.b-steps li{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;font-weight:700;font-size:.9rem;color:#7a8696}
+.b-steps li i{font-style:normal;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-size:.78rem}
+.b-steps li.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px #0d1a2d14}
+.b-steps li.on i{background:var(--ink);color:var(--sky);border-color:var(--ink)}
+.b-steps li.done{color:#0d6a4b}
+.b-steps li.done i{background:#dcf8ee;border-color:#a9e8d1}
+.b-body{padding:clamp(18px,3vw,32px)}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0}
+.opt label{display:block;border:1px solid #b9c7d7;border-radius:12px;padding:14px;cursor:pointer;height:100%}
+.opt label b{display:block}
+.opt label span{font-size:.85rem;color:var(--muted)}
+.opt input:checked+label{border-color:#2f7fe0;background:#eef6ff;box-shadow:0 0 0 2px #2f7fe055}
+.opt input:focus-visible+label{outline:3px solid #2f8cff;outline-offset:2px}
+.b-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+.summary{background:var(--soft);border-radius:12px;padding:16px;font-size:.92rem}
+.summary dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}
+.summary dt{font-weight:800;color:#3b5878}
+.summary dd{margin:0}
+.terms{font-size:.86rem;color:var(--muted);margin-top:12px}
+.terms li+li{margin-top:4px}
+
+/* trust & faq */
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.trust-grid h3{margin:8px 0 6px}
+.trust-grid p{font-size:.9rem;color:var(--muted)}
+.faq{display:grid;gap:10px;max-width:880px}
+.faq details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+.faq summary{cursor:pointer;font-weight:750;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:1.3rem;line-height:1;color:#2f7fe0}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin-top:10px;color:var(--muted)}
+
+/* contact */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px);align-items:center}
+.vcard{background:#fff;color:var(--ink);border-radius:20px;padding:26px;display:grid;grid-template-columns:1fr auto;gap:20px;box-shadow:0 30px 80px -30px #000c}
+.vcard h3{font:500 1.6rem var(--serif)}
+.vcard .role{color:#1e5fa8;font-weight:700;font-size:.88rem;margin-bottom:14px}
+.vcard ul{list-style:none;padding:0;margin:0;display:grid;gap:8px;font-size:.9rem}
+.vcard li{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.vcard li b{min-width:70px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#56606c}
+.qr-box{display:flex;flex-direction:column;align-items:center;gap:8px}
+.qr{width:164px;height:164px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;display:grid;place-items:center;font-size:.75rem;color:var(--muted);text-align:center}
+.qr svg{width:100%;height:100%}
+.qr-tabs{display:flex;gap:4px;background:var(--soft);border-radius:999px;padding:3px}
+.qr-tabs button{border:0;background:transparent;border-radius:999px;padding:4px 10px;font-size:.74rem;font-weight:800}
+.qr-tabs button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.vcard .row{grid-column:1/-1}
+.linkbtn{background:none;border:0;padding:0;color:#1e5fa8;font-weight:700;text-decoration:underline;font-size:.82rem}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(200%);opacity:0;visibility:hidden;background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;font-size:.9rem;transition:transform .25s;z-index:100;box-shadow:var(--shadow)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible}
+.footer{background:#08121f;color:#8ea3bc;font-size:.84rem}
+.footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:22px}
+.footer a{text-decoration:none}
+.footer a:hover{color:#fff}
+.foot-ind{padding-top:20px;font-size:.8rem;line-height:1.9;border-bottom:1px solid #1d3454;padding-bottom:16px}
+.foot-ind span{font-weight:800;color:#c3cfdd}
+
+/* responsive */
+@media(max-width:1080px){
+  .nav{gap:16px;font-size:.82rem}
+  .proc{grid-template-columns:repeat(4,1fr)}
+  .pkg-grid,.focus-grid,.trust-grid{grid-template-columns:repeat(2,1fr)}
+  .sol-grid,.prod-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .wrap{width:calc(100% - 40px)}
+  .menu-btn{display:block}
+  .nav{display:none;position:absolute;left:0;right:0;top:72px;background:var(--ink);flex-direction:column;padding:16px 20px 22px;gap:14px;border-bottom:1px solid var(--line-d);font-size:1rem}
+  .nav.open{display:flex}
+  .topbar .btn-primary{display:none}
+  .hero-grid,.head,.about-grid,.ind-wrap,.roi,.audit-grid,.contact-grid,.founding{grid-template-columns:minmax(0,1fr)}
+  .profile{position:static}
+  .lab,.builder{grid-template-columns:minmax(0,1fr)}
+  .lab-pick,.b-steps{min-width:0}
+  .lab-pick{flex-direction:row;overflow-x:auto}
+  .lab-pick button{flex:0 0 auto}
+  .b-steps{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .b-steps li{flex:0 0 auto}
+  .lab-cols{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-grid div:nth-child(3){border-left:0;padding-left:0}
+  .values{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .sol-grid,.prod-grid,.pkg-grid,.focus-grid,.trust-grid,.form-grid,.opts,.ind-panel .cols{grid-template-columns:minmax(0,1fr)}
+  .proc{grid-template-columns:1fr 1fr}
+  .vcard{grid-template-columns:minmax(0,1fr)}
+  .qr-box{order:-1}
+  .board-foot b{font-size:1.1rem}
+  .stat-grid div{padding:18px 12px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* chat assistant */
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
+.chat-fab{position:fixed;right:20px;bottom:20px;z-index:80;display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border:1px solid #33507a;border-radius:999px;padding:13px 18px 13px 14px;font-weight:800;font-size:.92rem;box-shadow:0 14px 40px -10px #0d1a2dcc}
+.chat-fab:hover{background:var(--ink-3)}
+.chat-fab .dot{width:30px;height:30px;border-radius:50%;background:var(--sky);color:var(--ink);display:grid;place-items:center}
+.chat-nudge{position:fixed;right:20px;bottom:84px;z-index:80;max-width:260px;background:#fff;border:1px solid var(--line);border-radius:14px 14px 4px 14px;padding:12px 30px 12px 14px;font-size:.88rem;font-weight:600;box-shadow:var(--shadow);cursor:pointer;animation:pop .3s}
+.chat-nudge .x{position:absolute;top:4px;right:6px;border:0;background:none;font-size:1.1rem;color:var(--muted)}
+@keyframes pop{from{transform:translateY(8px);opacity:0}}
+.chat{position:fixed;right:20px;bottom:84px;z-index:90;width:min(380px,calc(100vw - 24px));height:min(560px,calc(100vh - 120px));background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 80px -20px #0d1a2d99;display:flex;flex-direction:column;overflow:hidden;animation:pop .2s}
+.chat header{background:var(--ink);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.chat header b{display:block}
+.chat header small{color:var(--mint);font-size:.74rem;font-weight:700}
+.chat header button{background:none;border:0;color:#fff;font-size:1.5rem;line-height:1;padding:4px 8px}
+.chat-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:#f5f8fc}
+.cmsg{max-width:86%;padding:10px 13px;border-radius:14px;font-size:.9rem;line-height:1.45}
+.cmsg.bot{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.cmsg.me{background:var(--ink);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.cmsg a{color:#1e5fa8;font-weight:700}
+.typing{display:inline-flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9db4cf;animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{50%{opacity:.3}}
+.chat-chips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0;background:#f5f8fc}
+.chat-chips:empty{display:none}
+.chat-chips button{border:1px solid #9db4cf;background:#fff;color:#1e5fa8;border-radius:999px;padding:6px 11px;font-size:.8rem;font-weight:700}
+.chat-chips button:hover{background:#eef6ff}
+.chat form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:#fff}
+.chat input{flex:1;border:1px solid #b9c7d7;border-radius:10px;padding:10px 12px;font-size:.92rem}
+.chat input:focus{outline:none;border-color:#2f7fe0}
+.chat form button{background:var(--ink);color:#fff;border:0;border-radius:10px;padding:0 14px;font-weight:800}
+.chat .fine{font-size:.7rem;color:var(--muted);text-align:center;padding:0 12px 8px;background:#fff}
+@media(max-width:620px){.chat-fab span.t{display:none}.chat-fab{padding:10px}.chat{right:12px;bottom:76px}}
+
+/* v5 additions */
+.salebar{background:linear-gradient(90deg,#ffc46b,#ffd99a);color:var(--ink);font-size:.9rem;text-align:center}
+.salebar .wrap{padding:9px 0}
+.salebar a{font-weight:800;margin-left:8px}
+s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
+.prod s.was{color:#7f93ab}
+.now{color:inherit}
+.pkg .now{color:#b45309}
+.prod .now{color:var(--amber)}
+.pkg .btn-sm{align-self:stretch}
+.modal{position:fixed;inset:0;background:#0d1a2dcc;z-index:120;display:grid;place-items:center;padding:16px;overflow:auto}
+.modal-card{background:#fff;border-radius:18px;padding:26px;width:min(560px,100%);position:relative;max-height:calc(100vh - 32px);overflow:auto}
+.modal-card h3{font:600 1.7rem var(--serif)}
+.modal-x{position:absolute;top:10px;right:12px;border:0;background:none;font-size:1.6rem;line-height:1}
+.buy-price{font-weight:800;font-size:1.05rem;margin:6px 0 12px}
+.buy-opts{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px}
+.buy-opts legend{font-weight:800;font-size:.8rem;padding:0 6px}
+.buy-opts label{display:flex;gap:8px;align-items:center;font-size:.92rem;padding:4px 0}
+.buy-terms{display:flex;gap:8px;align-items:flex-start;font-size:.84rem;color:var(--muted);margin-top:12px}
+/* v4 additions */
+.out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.outc .big{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:var(--soft);font:700 1.3rem var(--sans);color:#1e5fa8;margin-bottom:14px}
+.outc h3{font:600 1.35rem var(--serif);margin-bottom:8px}
+.outc p{color:var(--muted);font-size:.94rem}
+.outc.hl{border:2px solid #2f7fe0}
+.outc.hl .big{background:#dcf8ee;color:#0d6a4b}
+.hitl{margin-top:18px;background:var(--ink);color:#eef3f9;border-radius:var(--r);padding:18px 22px;display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+.hitl b{display:block;color:var(--sky);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.hitl span{font-weight:700}
+.hitl em{color:var(--mint);font-style:normal}
+.hitl p{color:#b9c8d9;font-size:.9rem}
+.mission{margin-top:18px;padding:14px 18px;border-left:4px solid #2f7fe0;background:#fff;border-radius:0 10px 10px 0;font-size:.98rem}
+.prod .price{color:var(--mint);font-size:.82rem;font-weight:800;letter-spacing:.02em}
+.chip.soon2{background:#26405f;color:#cfe3ff;border-color:#3b5d86}
+.brandrel{margin-top:26px;display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;background:var(--ink-2);border:1px solid var(--line-d);border-radius:18px;padding:clamp(20px,3vw,32px);align-items:center}
+.brandrel h3{font:600 clamp(1.4rem,2.4vw,1.9rem) var(--serif);margin-bottom:8px}
+.brandrel p{color:#b9c8d9;margin-bottom:16px}
+.brandrel ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.brandrel li{background:#132a47;border:1px solid #2c4568;border-radius:12px;padding:14px;font-size:.87rem;color:#c3cfdd}
+.brandrel li b{display:block;color:#fff;font-size:.95rem;margin-bottom:4px}
+.pricenote{margin-top:16px;font-size:.86rem;color:var(--muted);text-align:center}
+.offers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.offers h3{font:600 1.25rem var(--serif);margin:10px 0 6px}
+.offers p{font-size:.9rem;color:var(--muted)}
+.founding li b{color:var(--sky)}
+.roi-mail label{display:block;font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--sky-2);margin-bottom:6px}
+.roi-mail input{flex:1;min-width:0;border:1px solid #4a6283;background:#132a47;color:#fff;border-radius:10px;padding:10px 12px}
+.roi-mail .row{flex-wrap:nowrap}
+@media(max-width:900px){.out-grid,.offers{grid-template-columns:minmax(0,1fr)}.hitl,.brandrel{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:620px){.brandrel ul{grid-template-columns:minmax(0,1fr)}}
+</style>
+<!--STAGING-START--><meta name="robots" content="noindex, nofollow"><style>.stg-ribbon{position:fixed;left:0;bottom:0;z-index:9999;background:#ff5a5a;color:#fff;font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-top-right-radius:8px}</style><!--STAGING-END--></head>
+<body><!--STAGING-START--><div class="stg-ribbon" aria-hidden="true">STAGING</div><!--STAGING-END-->
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="mast">
+  <div class="wrap topbar">
+    <a class="brand" href="#top" aria-label="Rashad Fambro, home">
+      <span class="mark" aria-hidden="true">RF</span>
+      <span><b data-cfg="businessName">Rashad Fambro Consulting</b><small>Software Solutions · Automation &amp; AI</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#about">About</a><a href="#solutions">Solutions</a><a href="#products">Products</a><a href="#industries">Industries</a><a href="#demos">Demos</a><a href="#pricing">Packages</a><a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#audit">Free audit →</a>
+  </div>
+</header>
+
+<div class="salebar" id="saleBar" hidden><div class="wrap"><b id="saleLabel"></b> <span id="saleText"></span> <a href="#pricing">See prices →</a></div></div>
+<main id="main">
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Software Solutions Consultant · Automation &amp; AI</p>
+      <h1>Less Busywork.<br><em>More Time for Customers.</em></h1>
+      <p class="lede">I build AI solutions and automation that help your business earn more and your team get more done — answering customers faster, capturing every lead, and taking repetitive work off your staff’s plate. People stay in control: your team reviews and approves what matters. Start with one workflow, prove the results, then grow.</p>
+      <div class="row" style="margin-top:28px">
+        <a class="btn btn-primary" href="#audit">Get a free workflow audit →</a>
+        <a class="btn btn-ghost" href="#demos">Try a live demo</a>
+        <button class="btn btn-ghost" type="button" data-open-chat="">Ask a question</button>
+      </div>
+      <ul class="hero-points">
+        <li>17 years building solutions with customers</li><li>Human-approved AI</li><li>Virtual or on-site</li><li>Pilots in weeks, not months</li>
+      </ul>
+    </div>
+    <div class="board" aria-label="Animated example of an automated workflow">
+      <div class="board-top"><span>▦ LIVE WORKFLOW EXAMPLE</span><span class="pulse">RUNNING</span></div>
+      <div class="board-body">
+        <div class="msg" id="heroMsg"><small id="heroSrc">Apartment resident · text message</small><span id="heroText">“Water is leaking under my kitchen sink in Unit 204. I can be home after 3.”</span></div>
+        <ol class="pipe" id="heroPipe">
+          <li><i>1</i>Request captured<span>INBOX</span></li>
+          <li><i>2</i><span style="margin:0;font-size:inherit;letter-spacing:0;font-weight:inherit" id="heroSort">Sorted: Plumbing · High priority</span><span>AUTO</span></li>
+          <li><i>3</i><span style="margin:0;font-size:inherit;letter-spacing:0;font-weight:inherit" id="heroDraft">Work order &amp; reply drafted</span><span>AUTO</span></li>
+          <li class="gate"><i>4</i>Staff reviews &amp; approves<span>HUMAN</span></li>
+        </ol>
+      </div>
+      <div class="board-foot">
+        <div><b id="c1">0</b><small>requests handled</small></div>
+        <div><b>&lt;2 min</b><small>to first reply</small></div>
+        <div><b id="c3">0 hrs</b><small>staff time saved</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" aria-label="Experience at a glance">
+  <div class="wrap stat-grid">
+    <div><b>17 yrs</b><p>Building, testing, and launching software</p></div>
+    <div><b>80+</b><p>Clients supported across 5 products</p></div>
+    <div><b>50+</b><p>Engineers led across 4 countries</p></div>
+    <div><b>35%</b><p>Faster regression cycles delivered as a QA Director</p></div>
+  </div>
+</section>
+
+
+<!-- OUTCOMES -->
+<section class="section" id="outcomes">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">01</span> Why It Matters</p><h2>More Revenue. Faster Teams. People in Control.</h2></div>
+      <p class="lede">Every tool I build is measured against three outcomes. If it doesn’t move at least one of them, we don’t build it.</p>
+    </div>
+    <div class="out-grid">
+      <article class="card outc"><span class="big">$</span><h3>Help Your Business Earn More</h3><p>Answer every inquiry in minutes, follow up on every quote, cut no-shows, and bring customers back with rewards and reminders. Faster responses win more jobs, bookings, and leases.</p></article>
+      <article class="card outc"><span class="big">⚡</span><h3>Help Your Team Execute Faster</h3><p>Requests arrive sorted, replies arrive drafted, and the next step is always clear. Staff spend less time on copy-paste admin and more time on customers and skilled work.</p></article>
+      <article class="card outc hl"><span class="big">✓</span><h3>Keep Humans in the Loop</h3><p>AI drafts, sorts, and suggests — people decide. Approval steps protect accuracy, your reputation, and your customers’ trust, and every action is logged so you can see who approved what.</p></article>
+    </div>
+    <div class="hitl">
+      <div><b>How Human-in-the-Loop Works</b><span>Customer message → AI sorts &amp; drafts → <em>your staff reviews &amp; approves</em> → action taken &amp; logged</span></div>
+      <p>You choose what runs automatically (like reminders) and what always needs a person (like prices, refunds, or anything sensitive).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="wrap about-grid">
+    <aside class="profile">
+      <div class="avatar" aria-hidden="true">RF</div>
+      <h3>Rashad Fambro</h3>
+      <p class="role">Software Solutions Consultant</p>
+      <ul>
+        <li><b>Former</b> Director of Quality Assurance</li>
+        <li><b>Degree</b> B.S. Software Engineering</li>
+        <li><b>Meets</b> Virtually worldwide, or on-site at your business</li>
+        <li><b>Focus</b> AI solutions, automation, custom applications, launch &amp; support</li>
+      </ul>
+      <div class="row">
+        <a class="btn btn-primary btn-sm" href="#audit">Book a free audit</a>
+        <a class="btn btn-ghost btn-sm" data-cfg-href="linkedin" href="https://www.linkedin.com/in/rashadfambro/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </aside>
+    <div>
+      <p class="eyebrow"><span class="n">02</span> About me</p>
+      <h2>Customer-First Software Experience, Sized for Your Business</h2>
+      <p class="lede" style="margin-top:18px">I’m Rashad Fambro. For 17 years I’ve worked directly with customers to understand their problems and deliver software that solves them — across healthcare, finance, restaurants, retail, and defense. Most recently, as a Director of Quality Assurance, I led 50+ engineers supporting 80+ client organizations. Today I bring that same customer-first approach to businesses that want modern automation and AI without the risk, jargon, or enterprise price tag.</p>
+      <p class="mission"><b>Mission:</b> Build AI solutions and tools that increase human productivity — so businesses earn more, teams move faster, and people stay in control.</p>
+      <ol class="timeline">
+        <li><h4>Director, Quality Assurance</h4><p class="co">Healthcare analytics software company · 6 years</p><p>Grew a 12-person QA team to 50+ across 4 countries supporting 80+ clients, partnered with client teams on launches and production support, managed a multi-million-dollar resource budget, and cut regression testing time 35% while lowering production incidents.</p></li>
+        <li><h4>Test Manager</h4><p class="co">Benefits &amp; enrollment software company · 7 years</p><p>Delivered open enrollment and healthcare benefits management software used by millions of people — launching systems for employer groups of 10,000–150,000 employees and some of the largest insurance carriers, while working directly with client teams in HIPAA-regulated environments.</p></li>
+        <li><h4>QA Architect &amp; Engineer</h4><p class="co">Retail media, restaurant technology, defense &amp; retail software</p><p>Led global test automation for retail media, tested restaurant point-of-sale systems and credit card certification, verified military communications systems, and shipped inventory apps used in 3,500 stores.</p></li>
+      </ol>
+      <div class="values">
+        <div class="card"><h4>I Test Before I Ship</h4><p>Every tool is tested with your real scenarios before your team relies on it. That’s been my job for 17 years.</p></div>
+        <div class="card"><h4>Customer-Facing and Technical</h4><p>I’ve spent my career working directly with customers and alongside engineering teams — turning real business needs into software that works.</p></div>
+        <div class="card"><h4>I Handle Data Carefully</h4><p>Years in regulated healthcare taught me to collect only what’s needed and keep people in control.</p></div>
+      </div>
+      <div class="tags" aria-label="Industry experience"><span>Healthcare technology</span><span>Finance &amp; payments</span><span>Restaurant POS</span><span>Retail &amp; retail media</span><span>Defense communications</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section class="section tint" id="solutions">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">03</span> Solutions</p><h2>What I Build and Set Up for You</h2></div>
+      <p class="lede">Every engagement starts with the work that costs you the most time or the most customers. Then we pick the simplest tool that fixes it — sometimes that’s software you already pay for.</p>
+    </div>
+    <div class="sol-grid">
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></div><h3>Smart Intake &amp; Assistants</h3><p>Capture calls, texts, emails, and web forms in one place. Requests are sorted, summarized, and replies drafted — with AI where it fits — and your staff approves.</p><ul><li>Inquiry &amp; request triage</li><li>Drafted replies and follow-ups</li><li>FAQ and after-hours assistants</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H14a4 4 0 0 1 4 4v5.5"/></svg></div><h3>Workflow Automation</h3><p>Automatic routing, reminders, status updates, and handoffs between the tools you use — with approval steps where they matter.</p><ul><li>Reminders &amp; no-show reduction</li><li>Task routing by team or shift</li><li>Form → spreadsheet → alert flows</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M7 9l3 2-3 2M12 13h4"/></svg></div><h3>Custom Applications &amp; Internal Tools</h3><p>When off-the-shelf software doesn’t fit, I build focused applications for your team and customers — starting with a version you can test with real users in weeks.</p><ul><li>Staff portals &amp; dashboards</li><li>Client or resident-facing apps</li><li>Prototype → pilot → launch</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/></svg></div><h3>Software Selection &amp; Integration</h3><p>Choose, configure, and connect cloud software for scheduling, CRM, ticketing, and payments — so data stops living in five places.</p><ul><li>Tool comparisons in plain English</li><li>Setup, migration &amp; connections</li><li>Cancel what you don’t need</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Dashboards &amp; Reporting</h3><p>See response times, open requests, bookings, and lead conversion at a glance — the numbers that show whether a change is working.</p><ul><li>Owner &amp; manager dashboards</li><li>Weekly automated reports</li><li>Before/after time-savings tracking</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V7z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3>Testing, Training &amp; Support</h3><p>My specialty. Your team tests real scenarios before launch, gets trained, and has a clear owner and support plan afterward.</p><ul><li>User acceptance testing (UAT)</li><li>Staff training &amp; quick guides</li><li>Monthly care &amp; improvement plans</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section dark" id="products">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">04</span> Products</p><h2>The Desk Suite: Ready-to-Adapt MVPs</h2></div>
+      <p class="lede">Each product is a working prototype I tailor to your business, so you’re not paying to start from scratch. Try any of them in the demo lab below — all demos use fictional data.</p>
+    </div>
+    <div class="prod-grid" id="prodGrid"></div>
+    <div class="brandrel">
+      <div><p class="eyebrow">Built for Your Brand</p><h3>Your Brand. Always Up to Date.</h3><p>Every tool is delivered as a managed service in your business’s name and kept current through a tested release process.</p><a class="btn btn-primary btn-sm" href="products.html">Read the full product guide →</a></div>
+      <ul>
+        <li><b>Branded for Your Business</b>Your logo, colors, domain, and tone of voice — customers see your brand, not mine.</li>
+        <li><b>Managed SaaS Releases</b>Versioned updates with release notes, rolled out in stages: test → pilot → everyone.</li>
+        <li><b>Tested Before Every Release</b>Regression testing on every update — 17 years of QA discipline built in.</li>
+        <li><b>Safe Rollbacks, Your Data</b>Any release can be rolled back, and your data stays in your accounts.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="section" id="industries">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">05</span> Industries</p><h2>Built for Businesses That Serve People</h2></div>
+      <p class="lede">My first focus is hospitality and property management — but the same problems (missed messages, manual scheduling, slow follow-up) show up in almost every small business.</p>
+    </div>
+    <p class="eyebrow">Current focus · Property &amp; hospitality</p>
+    <div class="focus-grid">
+      <article class="card focus"><span class="chip">Property</span><h3>Apartment Communities</h3><ul><li>Maintenance intake &amp; triage</li><li>Vendor dispatch &amp; resident updates</li><li>Leasing inquiry follow-up</li><li>Renewal &amp; inspection reminders</li></ul></article>
+      <article class="card focus"><span class="chip">Hospitality</span><h3>Hotels</h3><ul><li>Guest requests routed to departments</li><li>Shift-change handoff boards</li><li>Review response drafting</li><li>Group &amp; event inquiry tracking</li></ul></article>
+      <article class="card focus"><span class="chip">Hospitality</span><h3>Resorts</h3><ul><li>Activity &amp; amenity bookings</li><li>Pre-arrival guest messaging</li><li>Housekeeping &amp; maintenance queues</li><li>Upsell offers staff can approve</li></ul></article>
+      <article class="card focus"><span class="chip">Vacation ownership</span><h3>Timeshares</h3><ul><li>Owner &amp; member service requests</li><li>Reservation &amp; exchange questions</li><li>Owner communication campaigns</li><li>Sales tour scheduling &amp; follow-up</li></ul></article>
+    </div>
+    <p class="eyebrow">Also serving · choose your industry</p>
+    <div class="ind-wrap">
+      <div class="ind-chips" id="indChips" role="group" aria-label="Choose an industry"></div>
+      <div class="card ind-panel" id="indPanel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO LAB -->
+<section class="section tint" id="demos">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">06</span> Demo lab</p><h2>Try It With Your Own Message</h2></div>
+      <p class="lede">Pick a product, edit the incoming message — or type something your customers actually send — and watch it get sorted, routed, and drafted for your team to approve.</p>
+    </div>
+    <div class="lab">
+      <div class="lab-pick" id="labPick" role="group" aria-label="Choose a demo"></div>
+      <div class="lab-main">
+        <div class="lab-head">
+          <div><p class="eyebrow" id="labSector" style="margin-bottom:4px">Apartment operations</p><h3 id="labTitle">WorkOrderDesk</h3></div>
+          <span class="chip soon">Simulation</span>
+        </div>
+        <div class="lab-cols">
+          <div class="pane">
+            <label for="labInput">Incoming message</label>
+            <textarea id="labInput"></textarea>
+            <p class="hint">Edit this or write your own. Nothing leaves your browser.</p>
+            <div class="row" style="margin-top:10px" id="labSamples"></div>
+          </div>
+          <div class="pane out" aria-live="polite">
+            <span class="lbl">Suggested handoff</span>
+            <ol class="steps-live" id="labSteps"><li>Read</li><li>Classify</li><li>Extract</li><li>Draft</li><li>Await approval</li></ol>
+            <p id="labPlaceholder" class="hint" style="margin-top:0">Click <b>Run triage</b> to see how the request would be sorted and what your team would need to check.</p>
+            <div id="labOut" hidden>
+              <dl id="labDl"></dl>
+              <div class="draft" id="labDraft"></div>
+              <div class="check"><b>Your team checks before sending</b><ul id="labCheck"></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="row lab-actions">
+          <button class="btn btn-dark" id="labRun">Run triage</button>
+          <button class="btn btn-dark" id="labApprove" hidden>Approve &amp; hand off</button>
+          <button class="btn btn-line" id="labRevise" hidden>Request changes</button>
+          <button class="btn btn-line" id="labReset" hidden>Reset</button>
+        </div>
+        <p class="status" id="labStatus" role="status">This demo uses a rule-based simulation and fictional data. It doesn’t send messages or create real tickets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section class="section" id="roi">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">07</span> Savings estimator</p><h2>What Is Busywork Costing You?</h2></div>
+      <p class="lede">Move the sliders to estimate the time and money tied up in repetitive tasks. We’ll measure the real numbers together in your free audit.</p>
+    </div>
+    <div class="roi">
+      <div class="card">
+        <div class="field"><label for="r1">Team members doing repetitive tasks <output id="o1"></output></label><input type="range" id="r1" min="1" max="50" value="6"></div>
+        <div class="field"><label for="r2">Hours per person, per week, on those tasks <output id="o2"></output></label><input type="range" id="r2" min="1" max="25" value="6"></div>
+        <div class="field"><label for="r3">Average hourly cost (wages + overhead) <output id="o3"></output></label><input type="range" id="r3" min="12" max="90" value="24"></div>
+        <div class="field"><label for="r4">Share we could realistically automate <output id="o4"></output></label><input type="range" id="r4" min="10" max="60" step="5" value="30"></div>
+        <div class="field"><label for="r5">Missed or slow-response leads per month <output id="o5"></output></label><input type="range" id="r5" min="0" max="60" value="8"></div>
+        <div class="field" style="margin-bottom:0"><label for="r6">Average value of a new customer or booking <output id="o6"></output></label><input type="range" id="r6" min="50" max="5000" step="50" value="350"></div>
+      </div>
+      <div class="roi-out" aria-live="polite">
+        <div><small>Estimated yearly value</small><div class="big" id="roiTotal">$0</div></div>
+        <div class="sub">
+          <div><b id="roiHours">0</b><small>staff hours freed per month</small></div>
+          <div><b id="roiLabor">$0</b><small>labor value per year</small></div>
+          <div><b id="roiLeads">$0</b><small>revenue from recovering 25% of missed leads, per year</small></div>
+          <div><b id="roiFte">0</b><small>full-time-equivalent people</small></div>
+        </div>
+        <small>Estimates only, based on your inputs. Actual results depend on your workflows and tools.</small>
+        <form class="roi-mail" id="roiMail" novalidate><label for="roiEmail">Email me this estimate</label><div class="row"><input id="roiEmail" type="email" placeholder="you@business.com" autocomplete="email"><button class="btn btn-primary btn-sm" type="submit">Send</button></div><small id="roiMsg"></small></form>
+        <a class="btn btn-ghost" href="#audit" id="roiCta">Validate these numbers in a free audit →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIT -->
+<section class="section tint" id="audit">
+  <div class="wrap audit-grid">
+    <div>
+      <p class="eyebrow"><span class="n">08</span> Free workflow audit</p>
+      <h2>Bring One Task That Keeps Eating Your Time</h2>
+      <p class="lede" style="margin-top:16px">In a free 30-minute call, we walk through one recurring workflow with the person who owns it. No software purchase, no obligation.</p>
+      <ol class="gets">
+        <li><div><b>Where Time Gets Lost</b><span>A simple map of the workflow and its biggest bottleneck.</span></div></li>
+        <li><div><b>What to Fix First</b><span>One practical change — often using software you already have.</span></div></li>
+        <li><div><b>How to Measure It</b><span>A starting number: minutes per request, time to first reply, or bookings won.</span></div></li>
+        <li><div><b>A One-Page Summary</b><span>Yours to keep, whether you hire me or not. Delivered within 3 business days.</span></div></li>
+      </ol>
+      <p class="hint">Good places to start: maintenance requests, guest messages, booking reminders, quote follow-ups, client intake, approvals.</p>
+    </div>
+    <form class="card" id="auditForm" novalidate>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <h3 style="font:500 1.6rem var(--serif);margin-bottom:4px">Request Your Free Audit</h3>
+      <p class="hint" style="margin:0 0 18px">Takes about 2 minutes. Please don’t include passwords, payment details, or private customer or patient information.</p>
+      <div class="form-grid">
+        <div class="f"><label for="a_name">Your name <span class="req">*</span></label><input id="a_name" name="Name" required autocomplete="name"></div>
+        <div class="f"><label for="a_biz">Business name <span class="req">*</span></label><input id="a_biz" name="Business" required autocomplete="organization"></div>
+        <div class="f"><label for="a_email">Email <span class="req">*</span></label><input id="a_email" name="Email" type="email" required autocomplete="email"></div>
+        <div class="f"><label for="a_phone">Phone</label><input id="a_phone" name="Phone" type="tel" autocomplete="tel"></div>
+        <div class="f"><label for="a_ind">Industry</label><select id="a_ind" name="Industry"></select></div>
+        <div class="f"><label for="a_size">Team size</label><select id="a_size" name="Team size"><option>1–5</option><option>6–15</option><option>16–50</option><option>51–200</option><option>200+</option></select></div>
+        <div class="f full"><label for="a_flow">Which workflow would you like to improve? <span class="req">*</span></label><textarea id="a_flow" name="Workflow" required placeholder="e.g., Residents text maintenance requests to three different people and some get lost."></textarea></div>
+        <div class="f"><label for="a_tools">Tools you use today</label><input id="a_tools" name="Current tools" placeholder="e.g., Yardi, Google Sheets, Square"></div>
+        <div class="f"><label for="a_meet">Meeting preference</label><select id="a_meet" name="Meeting preference"><option>Virtual (video call)</option><option>Phone call</option><option>In person / on-site</option></select></div>
+        <div class="f"><label for="a_time">Best times to talk &amp; time zone</label><input id="a_time" name="Availability" placeholder="e.g., Weekdays after 2pm ET"></div>
+      </div>
+      <div class="row" style="margin-top:18px"><button class="btn btn-dark" type="submit">Request free audit →</button><span class="hint" id="auditErr" role="alert" style="color:#b42318;margin:0"></span></div>
+      <div class="result" id="auditResult" hidden>
+        <h4>Almost Done — Send Your Request</h4>
+        <p class="hint" style="margin:0" id="auditResultNote">Your request is ready. Open it in your email app, or copy it and send it to <b data-cfg="email">rashadfambro@gmail.com</b>.</p>
+        <pre id="auditText"></pre>
+        <div class="row">
+          <a class="btn btn-primary btn-sm" id="auditMail" href="#">Open email draft</a>
+          <button class="btn btn-line btn-sm" type="button" id="auditCopy">Copy request</button>
+          <a class="btn btn-line btn-sm" id="auditCal" href="#" target="_blank" rel="noopener" hidden>Pick a time on my calendar ↗</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section dark" id="process">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">09</span> How we work together</p><h2>From First Call to Launch, in Plain Steps</h2></div>
+      <p class="lede">You always know what happens next, what it costs, and who owns it. You decide what runs automatically and what needs a person’s approval.</p>
+    </div>
+    <ol class="proc">
+      <li><h3>Discovery Call</h3><p>Free 30-minute video or phone call about your goals and the workflow that hurts most.</p><span class="when">Free · Virtual</span></li>
+      <li><h3>Workflow Audit</h3><p>I map the process — virtually or on-site at your business — find the bottleneck, and send a one-page summary.</p><span class="when">Virtual or On-Site</span></li>
+      <li><h3>Proposal</h3><p>A fixed-price proposal with scope, timeline, success measures, and options.</p><span class="when">Within 1 week</span></li>
+      <li><h3>Agreement &amp; Kickoff</h3><p>Sign electronically, pay the deposit, and we schedule kickoff with your team.</p><span class="when">E-sign · Deposit</span></li>
+      <li><h3>Build the Pilot</h3><p>I set up or build a focused version, with weekly check-ins and demos.</p><span class="when">2–6 weeks</span></li>
+      <li><h3>Test With Your Team</h3><p>Your staff runs real scenarios (user acceptance testing) and signs off.</p><span class="when">1–2 weeks</span></li>
+      <li><h3>Launch &amp; Support</h3><p>Go live with training, a clear owner, and a 30-day check on results.</p><span class="when">Ongoing</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">10</span> Packages</p><h2>Clear Options. Fixed Quotes. No Surprises.</h2></div>
+      <p class="lede">Every project gets a written, fixed-price quote before any work starts. Most clients begin with an assessment or a single pilot.</p>
+    </div>
+    <div class="pkg-grid" id="pkgGrid"></div>
+    <p class="pricenote"><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with Square or PayPal.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $125/hr · Every build gets a fixed, written quote before work starts.</p>
+    <div class="founding" id="founding">
+      <div>
+        <p class="eyebrow">Founding Client Program</p>
+        <h3>Be One of My First Clients — and Get More for It</h3>
+        <p>I’m taking on a small group of founding clients. You get early-client pricing and my direct attention; in return, you provide a testimonial I can share.</p>
+        <ul>
+          <li><b>25% off</b> your first setup or project fee</li>
+          <li><b>First month free</b> on any Desk plan</li>
+          <li><b>Monthly price locked</b> for 12 months</li>
+          <li><b>Priority scheduling</b> and a direct line to me</li>
+          <li><b>Required:</b> a short written or video testimonial after launch, plus your feedback along the way</li>
+        </ul>
+      </div>
+      <div style="text-align:center"><div class="spots" id="spots">5</div><p style="margin:6px 0 16px">founding spots open</p><a class="btn btn-primary" href="#start">Apply as a founding client →</a></div>
+    </div>
+    <div class="offers">
+      <article class="card"><span class="chip live">Bundle</span><h3>Launch Bundle</h3><p><b>ChatDesk + BookDesk setup for $1,999</b> (save $401). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Buy the bundle</button></article>
+      <article class="card"><span class="chip live">Credit</span><h3>Assessment Credit</h3><p>The full <b>$750 assessment fee is credited</b> toward any build you start within 60 days.</p></article>
+      <article class="card"><span class="chip live">Referral</span><h3>Referral Reward</h3><p>Refer a business that signs and get a <b>$150 credit</b> — or $150 paid to you if you’re not a client.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- START A PROJECT -->
+<section class="section tint" id="start">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">11</span> Start a project</p><h2>Ready to Move Forward? Request Your Proposal</h2></div>
+      <p class="lede">Answer four quick questions. I’ll reply within one business day with next steps, a proposal, and an agreement you can sign electronically.</p>
+    </div>
+    <div class="builder">
+      <ol class="b-steps" id="bSteps"><li class="on"><i>1</i>Package</li><li><i>2</i>Your business</li><li><i>3</i>Timeline</li><li><i>4</i>Review &amp; send</li></ol>
+      <form class="b-body" id="builder" novalidate>
+        <fieldset class="bstep" data-step="0" style="border:0;padding:0;margin:0">
+          <legend><h3 style="font:500 1.5rem var(--serif)">Which Package Fits Best?</h3></legend>
+          <div class="opts" id="bPkgs"></div>
+        </fieldset>
+        <fieldset class="bstep" data-step="1" hidden style="border:0;padding:0;margin:0">
+          <legend><h3 style="font:500 1.5rem var(--serif)">Tell Me About Your Business</h3></legend>
+          <div class="form-grid" style="margin-top:14px">
+            <div class="f"><label for="b_name">Your name <span class="req">*</span></label><input id="b_name" required autocomplete="name"></div>
+            <div class="f"><label for="b_biz">Business name <span class="req">*</span></label><input id="b_biz" required autocomplete="organization"></div>
+            <div class="f"><label for="b_email">Email <span class="req">*</span></label><input id="b_email" type="email" required autocomplete="email"></div>
+            <div class="f"><label for="b_ind">Industry</label><select id="b_ind"></select></div>
+            <div class="f full"><label for="b_goal">What should this project accomplish? <span class="req">*</span></label><textarea id="b_goal" required placeholder="e.g., Cut maintenance response time and stop losing requests between shifts."></textarea></div>
+          </div>
+        </fieldset>
+        <fieldset class="bstep" data-step="2" hidden style="border:0;padding:0;margin:0">
+          <legend><h3 style="font:500 1.5rem var(--serif)">When Would You Like to Start?</h3></legend>
+          <div class="opts">
+            <div class="opt"><input type="radio" name="when" id="w1" value="As soon as possible" checked><label for="w1"><b>As soon as possible</b><span>Ready to kick off this month</span></label></div>
+            <div class="opt"><input type="radio" name="when" id="w2" value="In 1–2 months"><label for="w2"><b>In 1–2 months</b><span>Planning ahead</span></label></div>
+            <div class="opt"><input type="radio" name="when" id="w3" value="This quarter, flexible"><label for="w3"><b>This quarter</b><span>Flexible on dates</span></label></div>
+            <div class="opt"><input type="radio" name="when" id="w4" value="Just exploring"><label for="w4"><b>Just exploring</b><span>Want options and pricing first</span></label></div>
+          </div>
+          <div class="f"><label for="b_budget">Budget range (optional)</label><select id="b_budget"><option value="">Prefer to discuss</option><option>Under $2,500</option><option>$2,500 – $7,500</option><option>$7,500 – $20,000</option><option>$20,000+</option></select></div>
+          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:.92rem"><input type="checkbox" id="b_found" style="margin-top:4px"> I’d like to be considered for the founding client program.</label>
+        </fieldset>
+        <fieldset class="bstep" data-step="3" hidden style="border:0;padding:0;margin:0">
+          <legend><h3 style="font:500 1.5rem var(--serif)">Review Your Request</h3></legend>
+          <div class="summary" style="margin-top:14px"><dl id="bSummary"></dl></div>
+          <p class="hint" style="font-weight:700;color:var(--ink);margin-top:16px">What happens after you send this</p>
+          <ol class="terms">
+            <li>I reply within one business day to confirm scope and schedule a call.</li>
+            <li>You receive a written proposal with a fixed price, timeline, and success measures.</li>
+            <li>You sign the agreement electronically and pay the deposit to reserve your start date.</li>
+            <li>We hold a kickoff meeting with your team and start building.</li>
+          </ol>
+          <p class="hint">Sending this request doesn’t commit you to anything. Final terms are in the written agreement.</p>
+          <div class="result" id="bResult" hidden>
+            <h4>Your Request Is Ready to Send</h4>
+            <p class="hint" style="margin:0">Open it in your email app, or copy it and send it to <b data-cfg="email">rashadfambro@gmail.com</b>.</p>
+            <pre id="bText"></pre>
+            <div class="row"><a class="btn btn-primary btn-sm" id="bMail" href="#">Open email draft</a><button class="btn btn-line btn-sm" type="button" id="bCopy">Copy request</button></div>
+          </div>
+        </fieldset>
+        <div class="b-nav">
+          <button class="btn btn-line" type="button" id="bBack" hidden>← Back</button>
+          <span class="hint" id="bErr" role="alert" style="color:#b42318;margin:auto 0"></span>
+          <button class="btn btn-dark" type="button" id="bNext">Continue →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="section" id="trust">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">12</span> How I use AI</p><h2>Smart Tools That Support Your People — Never Replace Their Judgment</h2></div>
+      <p class="lede">Some of my solutions use AI for tasks like sorting requests or drafting replies. I’m upfront about where it’s used, and these are the rules I build by.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="card"><span class="chip live">Rule 1</span><h3>A Person Approves What Matters</h3><p>Prices, promises, refunds, legal or medical answers, and anything sensitive go to your staff before they go out.</p></div>
+      <div class="card"><span class="chip live">Rule 2</span><h3>Only the Data You Need</h3><p>We collect the minimum information to do the job and keep private details out of AI tools unless you’ve approved it.</p></div>
+      <div class="card"><span class="chip live">Rule 3</span><h3>Your Accounts, Your Data</h3><p>Tools are set up in your business’s accounts so you keep ownership and access — even if we stop working together.</p></div>
+      <div class="card"><span class="chip live">Rule 4</span><h3>Tested and Reversible</h3><p>Every change is tested with your team first and has a manual fallback, so nothing breaks your day.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section tint" id="faq">
+  <div class="wrap">
+    <p class="eyebrow"><span class="n">13</span> Questions</p>
+    <h2 style="margin-bottom:28px">Common Questions</h2>
+    <div class="faq">
+      <details><summary>Do I Need to Be “Techy” to Work With You?</summary><p>No. I explain everything in plain language and set things up so your staff can use them with a short training session. You focus on running the business.</p></details>
+      <details><summary>Will I Have to Replace the Software I Already Use?</summary><p>Usually not. I start with the tools you already pay for and connect or extend them. I only recommend new software when it clearly saves more than it costs.</p></details>
+      <details><summary>How Much Does a Project Cost?</summary><p>Desk product setups start at $600 with monthly plans from $79. The AI Readiness Assessment is $750 (virtual), custom pilots start at $2,500, and the Care &amp; Growth Plan starts at $150/month. Every build gets a fixed, written quote first. Founding clients get 25% off their first setup or project and their first month free. During the Holiday &amp; New Year Sale, everything is 10% off.</p></details>
+      <details><summary>How Long Until We See Results?</summary><p>Most pilots launch in 2–6 weeks. We agree on a starting measure up front, like response time or staff minutes per request, so you can see the difference.</p></details>
+      <details><summary>Is AI Safe for My Customers’ Information?</summary><p>We decide together what data the tools can see. Sensitive actions require staff approval, and I keep private information out of AI tools unless you’ve approved how it’s handled. For regulated businesses like dental or legal offices, we review your obligations before anything is built.</p></details>
+      <details><summary>Do You Work With Businesses Outside Hospitality and Property?</summary><p>Yes — salons, barbershops, spas, restaurants, contractors, real estate, law and dental offices, retail, and more. If your team repeats the same tasks every day, there’s likely something worth automating.</p></details>
+      <details><summary>Do You Meet Virtually or in Person?</summary><p>Both. Most work happens over video calls with clients worldwide. For on-site assessments, audits, or launch training, I’m happy to travel to your business — travel expenses (airfare, lodging, mileage) are billed at cost, approved by you in advance, and added to the assessment or project rate.</p></details>
+      <details><summary>Will the Tools Carry My Brand?</summary><p>Yes. Every tool is branded for your business — your logo, colors, domain, and voice. Tools are delivered as a managed service: updates go out through a tested, versioned release process with release notes, staged rollouts, and the ability to roll back.</p></details>
+      <details><summary>Why Keep a Human in the Loop?</summary><p>AI is fast but not perfect. Having staff approve prices, promises, and sensitive replies protects your customers and your reputation, catches mistakes before they go out, and keeps your team in charge. Routine, low-risk steps like reminders can run automatically.</p></details>
+      <details><summary>Can I Pay Over Time?</summary><p>Yes. Any setup or project of $1,000 or more can be split into 3 interest-free monthly payments, with the first payment at signing. You can pay online with Square or PayPal, which may also offer their own pay-over-time options at checkout.</p></details>
+      <details><summary>Can I Buy Directly on the Site?</summary><p>Yes. Tap <b>Buy</b> on any product or package, choose pay in full or a payment plan, and pick Square or PayPal. Custom builds are quoted first; you can pay the deposit online once you accept the proposal.</p></details>
+      <details><summary>What Happens After Launch?</summary><p>You get a 30-day results check included, plus the option of a monthly care plan for support, updates, and new improvements.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section dark" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <p class="eyebrow"><span class="n">14</span> Get in touch</p>
+      <h2>What Would You Like to Make Easier?</h2>
+      <p class="lede" style="margin-top:16px">Tell me about a single task that keeps slowing your team down, or several tools that need to work together. Scan the code to save my contact details to your phone.</p>
+      <div class="row" style="margin-top:26px">
+        <a class="btn btn-primary" href="#audit">Request a free audit →</a>
+        <button class="btn btn-ghost" type="button" data-open-chat="">Chat with my assistant</button>
+        <a class="btn btn-ghost" data-cfg-href="linkedin" href="https://www.linkedin.com/in/rashadfambro/" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
+      </div>
+    </div>
+    <div class="vcard">
+      <div>
+        <h3>Rashad Fambro</h3>
+        <p class="role">Software Solutions Consultant</p>
+        <ul>
+          <li><b>Email</b><a id="vEmail" href="#" data-cfg="email">rashadfambro@gmail.com</a> <button class="linkbtn" data-copy="email">Copy</button></li>
+          <li id="vPhoneRow" hidden><b>Phone</b><a id="vPhone" href="#"></a></li>
+          <li><b>LinkedIn</b><a data-cfg-href="linkedin" href="https://www.linkedin.com/in/rashadfambro/" target="_blank" rel="noopener">in/rashadfambro</a></li>
+          <li><b>Meets</b>Virtually worldwide · on-site visits available</li>
+        </ul>
+      </div>
+      <div class="qr-box">
+        <div class="qr" id="qr" role="img" aria-label="QR code">Loading QR…</div>
+        <div class="qr-tabs" role="group" aria-label="QR code contents" id="qrTabs">
+          <button aria-pressed="true" data-qr="site" hidden>Website</button>
+          <button aria-pressed="false" data-qr="vcard">Contact</button>
+          <button aria-pressed="false" data-qr="linkedin">LinkedIn</button>
+        </div>
+        <small style="color:var(--muted);font-size:.74rem;text-align:center;max-width:170px" id="qrNote">Scan with your phone camera to save my contact.</small>
+      </div>
+      <div class="row">
+        <button class="btn btn-dark btn-sm" id="vcfBtn">Save contact (.vcf)</button>
+        <button class="btn btn-line btn-sm" id="saveSite" type="button">Save this site</button>
+        <button class="btn btn-line btn-sm" data-copy="vcard">Copy contact card</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap foot-ind"><span>Industries:</span> <a href="industries/apartments.html">Apartment Communities</a> · <a href="industries/hotels.html">Hotels &amp; Resorts</a> · <a href="industries/timeshares.html">Timeshares</a> · <a href="industries/salons.html">Nail Salons</a> · <a href="industries/spas.html">Massage &amp; Spa</a> · <a href="industries/barbers.html">Barbershops</a> · <a href="industries/smoke-shops.html">Smoke &amp; Vape Shops</a> · <a href="industries/restaurants.html">Restaurants</a> · <a href="industries/contractors.html">Contractors &amp; Trades</a> · <a href="industries/real-estate.html">Real Estate</a> · <a href="industries/law-firms.html">Law Firms</a> · <a href="industries/dental.html">Dental Offices</a> · <a href="industries/hud-housing.html">HUD-Assisted Housing</a> · <a href="industries/auto-repair.html">Auto Repair Shops</a> · <a href="industries/cleaning.html">Cleaning Services</a> · <a href="industries/short-term-rentals.html">Short-Term Rentals</a> · <a href="industries/self-storage.html">Self-Storage</a> · <a href="industries/insurance.html">Insurance Agencies</a> · <a href="industries/tax-firms.html">Tax &amp; Bookkeeping Firms</a> · <a href="industries/gyms.html">Gyms &amp; Fitness Studios</a> · <a href="industries/event-venues.html">Event Venues</a> · <a href="products.html">Product Guide</a></div>
+  <div class="wrap">
+    <span>© <span id="yr"></span> <span data-cfg="businessName">Rashad Fambro Consulting</span> · Software Solutions · Automation &amp; AI</span>
+    <span><a href="#audit">Free audit</a> · <a href="#demos">Demos</a> · <a href="#contact">Contact</a> · <a href="#top">Back to top ↑</a></span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="buyModal" hidden role="dialog" aria-modal="true" aria-labelledby="buyTitle">
+  <form class="modal-card" id="buyForm" novalidate>
+    <button type="button" class="modal-x" id="buyClose" aria-label="Close">×</button>
+    <p class="eyebrow" style="margin-bottom:4px">Secure Checkout</p>
+    <h3 id="buyTitle">Buy</h3>
+    <p class="buy-price" id="buyPrice"></p>
+    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <fieldset class="buy-opts"><legend>How would you like to pay?</legend>
+      <label><input type="radio" name="plan" value="Pay in full" checked> Pay in full</label>
+      <label id="planOpt"><input type="radio" name="plan" value="3 monthly payments"> 3 interest-free monthly payments</label>
+    </fieldset>
+    <fieldset class="buy-opts"><legend>Payment method</legend>
+      <label><input type="radio" name="method" value="Square" checked> Square (card, Apple Pay, Google Pay)</label>
+      <label><input type="radio" name="method" value="PayPal"> PayPal</label>
+    </fieldset>
+    <div class="form-grid">
+      <div class="f"><label for="buy_name">Your name <span class="req">*</span></label><input id="buy_name" required autocomplete="name"></div>
+      <div class="f"><label for="buy_biz">Business name <span class="req">*</span></label><input id="buy_biz" required autocomplete="organization"></div>
+      <div class="f full"><label for="buy_email">Email <span class="req">*</span></label><input id="buy_email" type="email" required autocomplete="email"></div>
+    </div>
+    <label class="buy-terms"><input type="checkbox" id="buy_ok"> I understand setup begins after a short kickoff call, and monthly plans can be canceled with 30 days’ notice.</label>
+    <div class="row" style="margin-top:14px"><button class="btn btn-dark" type="submit" id="buyGo">Continue to secure checkout →</button><span class="hint" id="buyErr" role="alert" style="color:#b42318;margin:0"></span></div>
+    <div class="result" id="buyResult" hidden></div>
+  </form>
+</div>
+<div class="chat-nudge" id="chatNudge" hidden><button class="x" type="button" aria-label="Dismiss">×</button>Want to see what you could automate? Ask me anything.</div>
+<button class="chat-fab" id="chatFab" type="button" aria-expanded="false" aria-controls="chatPanel"><span class="dot" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 5h16v10H9l-5 4z"/></svg></span><span class="t">Questions? Chat now</span></button>
+<section class="chat" id="chatPanel" hidden aria-label="Chat assistant">
+  <header><div><b>Rashad’s Assistant</b><small>● Automated · replies instantly</small></div><button id="chatClose" type="button" aria-label="Close chat">×</button></header>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <div class="chat-chips" id="chatChips"></div>
+  <form id="chatForm"><input id="chatInput" placeholder="Type your question…" autocomplete="off" aria-label="Message" maxlength="1000"><button type="submit">Send</button></form>
+  <p class="fine">Please don’t share passwords, payment, or private customer details.</p>
+</section>
+
+<script>
+"use strict";
+/* ============================================================
+   EDIT THIS BLOCK to update your details. Everything else
+   on the page reads from here.
+   ============================================================ */
+const CONFIG = {
+  businessName: "Rashad Fambro Consulting",
+  name: "Rashad Fambro",
+  title: "Software Solutions Consultant",
+  email: "rashadfambro@gmail.com",
+  phone: "",                 // e.g. "+1 555 123 4567" — shows on the contact card and QR when set
+  linkedin: "https://www.linkedin.com/in/rashadfambro/",
+  siteUrl: "https://rashadfambro.github.io/",  // your live website URL — adds a "Website" QR tab
+  calendarUrl: "",           // e.g. a Calendly or Google booking link — adds a "Pick a time" button
+  backendUrl: "",            // your Google Apps Script web app URL (see SETUP.md) — saves leads, auto-replies, powers AI chat
+  formEndpoint: "",          // optional alternative: a Formspree/Basin/Getform URL
+  foundingSpots: 5,
+  packages: [
+    { id:"audit", name:"Free Workflow Audit", price:"$0", note:"30-min video call + summary",
+      desc:"Find the one workflow costing you the most time or money.", items:["Live walkthrough of one workflow","Bottleneck map","Recommended first fix","One-page summary in 3 business days"], cta:"Book free audit", href:"#audit" },
+    { id:"assess", name:"AI Readiness Assessment", price:"$750", note:"Virtual · 1–2 weeks", sub:"On-site: $1,500 + travel at cost",
+      desc:"A deeper look across your workflows, tools, and data.", items:["Up to 5 workflows reviewed","AI & tool recommendations with costs","Prioritized roadmap with ROI","Credited toward your first build"], cta:"Choose assessment" },
+    { id:"pilot", name:"Pilot / Custom Build", price:"From $2,500", note:"Typically 2–6 weeks", featured:true, sub:"Desk product setups from $600",
+      desc:"Build and launch one working solution, branded for your business.", items:["Desk product setup or custom application","Human-in-the-loop approval steps","Team testing (UAT) & training","30-day results review"], cta:"Choose pilot" },
+    { id:"care", name:"Care & Growth Plan", price:"From $150/mo", note:"Cancel anytime", sub:"Desk plans from $79/mo",
+      desc:"Hosting, managed releases, support, and ongoing improvements.", items:["Managed SaaS releases & monitoring","Monthly improvement hours","Quarterly results review","Priority support"], cta:"Choose care plan" }
+  ],
+  rates: { advisory:"$125/hr", travel:"Travel billed at cost, approved in advance" },
+  sale: { label:"Holiday & New Year Sale", pct:10, start:"2026-11-13", end:"2027-01-31" },  // set pct:0 to turn off
+  paymentPlan: { minimum:1000, payments:3 },
+  // Paste Square / PayPal payment links here (see PAYMENTS.md). Empty = customer gets an emailed secure invoice instead.
+  payLinks: {
+    assess:{square:"",paypal:""}, bundle:{square:"",paypal:""}, care:{square:"",paypal:""}, pilot:{square:"",paypal:""},
+    chat:{square:"",paypal:""}, salon:{square:"",paypal:""}, property:{square:"",paypal:""}, resort:{square:"",paypal:""}, service:{square:"",paypal:""},
+    intake:{square:"",paypal:""}, compliance:{square:"",paypal:""}, rewards:{square:"",paypal:""}, review:{square:"",paypal:""}, social:{square:"",paypal:""},
+    staff:{square:"",paypal:""}, invoice:{square:"",paypal:""}, insight:{square:"",paypal:""}
+  }
+};
+
+/* ---------- helpers ---------- */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+async function copyText(text, label="Copied"){
+  try{ await navigator.clipboard.writeText(text); toast(label + " to clipboard"); }
+  catch(e){
+    const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+    let ok=false; try{ ok=document.execCommand("copy"); }catch(_){}
+    ta.remove(); toast(ok ? label + " to clipboard" : "Couldn’t copy — please select and copy the text");
+  }
+}
+function saleActive(){ const c=CONFIG.sale; if(!c||!c.pct) return false; const now=new Date(); return now>=new Date(c.start+"T00:00:00") && now<=new Date(c.end+"T23:59:59"); }
+function saleEndText(){ return new Date(CONFIG.sale.end+"T12:00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}); }
+function discount(str){ return str.replace(/\$([\d,]+)/g,(m,n)=>{ const v=+n.replace(/,/g,""); if(!v) return m; return "$"+Math.round(v*(100-CONFIG.sale.pct)/100).toLocaleString("en-US"); }); }
+function priceHTML(str){ return saleActive() && /\$[1-9]/.test(str) ? `<s class="was">${esc(str)}</s> <span class="now">${esc(discount(str))}</span>` : esc(str); }
+const mailto = (subject, body) => `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+/* ---------- config binding ---------- */
+$$("[data-cfg]").forEach(el => { const v = CONFIG[el.dataset.cfg]; if (v) el.textContent = v; });
+$$("[data-cfg-href]").forEach(el => { const v = CONFIG[el.dataset.cfgHref]; if (v) el.href = v; });
+$("#vEmail").href = "mailto:" + CONFIG.email;
+if (CONFIG.phone){ $("#vPhoneRow").hidden=false; $("#vPhone").textContent=CONFIG.phone; $("#vPhone").href="tel:"+CONFIG.phone.replace(/[^\d+]/g,""); }
+$("#spots").textContent = CONFIG.foundingSpots;
+if (!CONFIG.foundingSpots) $("#founding").hidden = true;
+$("#yr").textContent = new Date().getFullYear();
+
+/* ---------- mobile nav ---------- */
+const menuBtn=$(".menu-btn"), nav=$("#nav");
+menuBtn.addEventListener("click",()=>{ const o=nav.classList.toggle("open"); menuBtn.setAttribute("aria-expanded",o); });
+$$("#nav a").forEach(a=>a.addEventListener("click",()=>{ nav.classList.remove("open"); menuBtn.setAttribute("aria-expanded","false"); }));
+
+/* ---------- hero animation ---------- */
+const heroSamples = [
+  {src:"Apartment resident · text message", text:"“Water is leaking under my kitchen sink in Unit 204. I can be home after 3.”", sort:"Sorted: Plumbing · High priority", draft:"Work order & resident reply drafted"},
+  {src:"Resort guest · app message", text:"“We land at 10am Saturday — any chance of early check-in? We’ll need a crib too.”", sort:"Sorted: Front desk + Housekeeping", draft:"Two tasks & guest reply drafted"},
+  {src:"Nail salon client · website chat", text:"“Do you have anything Friday after 5 for a gel manicure and pedicure?”", sort:"Sorted: Booking · 2 services · Fri PM", draft:"Open slots & booking reply drafted"},
+  {src:"Contractor lead · web form", text:"“Looking for a quote to redo our back deck, about 300 sq ft. Hoping to start next month.”", sort:"Sorted: New lead · Deck · ~300 sq ft", draft:"Quote follow-up & reminder drafted"}
+];
+let hi=0, handled=137;
+const pipe=$$("#heroPipe li");
+function heroCycle(){
+  if(document.hidden) return;
+  const s=heroSamples[hi%heroSamples.length];
+  const m=$("#heroMsg"); m.style.opacity=0;
+  setTimeout(()=>{ $("#heroSrc").textContent=s.src; $("#heroText").textContent=s.text; $("#heroSort").textContent=s.sort; $("#heroDraft").textContent=s.draft; m.style.opacity=1; },350);
+  pipe.forEach(li=>li.classList.remove("on"));
+  pipe.forEach((li,i)=>setTimeout(()=>li.classList.add("on"),700+i*700));
+  setTimeout(()=>{ handled++; $("#c1").textContent=handled; $("#c3").textContent=Math.round(handled*6/60)+" hrs"; },700+4*700);
+  hi++;
+}
+$("#c1").textContent=handled; $("#c3").textContent=Math.round(handled*6/60)+" hrs";
+heroCycle();
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(heroCycle,5200);
+
+/* ---------- products ---------- */
+const PRODUCTS = [
+  {id:"chat", wide:true, name:"ChatDesk", for:"Any business · website, text & social", status:"Live on this site", price:"Setup from $1,200 · $149/mo", desc:"An AI chat assistant trained on your business. It answers common questions instantly, day or night, captures leads, books appointments, and hands conversations to your staff when a person is needed.", items:["Answers FAQs from your own policies, prices & hours","Captures leads and sends them to your inbox or CRM","Books appointments and hands off to staff","Clear automated-assistant disclosure and cost limits"]},
+  {id:"property", name:"WorkOrderDesk", for:"Apartments · HOA · property managers", status:"Prototype", price:"Setup from $2,500 · $249/mo", desc:"Maintenance requests from text, email, and web in one queue — triaged by urgency and routed to the right tech.", items:["Urgency triage & after-hours escalation","Vendor dispatch & entry permission","Automatic resident status updates"]},
+  {id:"resort", name:"GuestDesk", for:"Hotels · resorts · timeshares · short-term rentals", status:"Prototype", price:"Setup from $2,500 · $249/mo", desc:"Guest and owner requests routed to front desk, housekeeping, maintenance, or concierge with shift-change visibility.", items:["Department routing & handoff board","Drafted guest replies for staff approval","Owner / member service requests"]},
+  {id:"salon", name:"BookDesk", for:"Salons · barbers · spas · any appointment business", status:"Prototype", price:"Setup from $1,200 · $149/mo", desc:"An AI booking assistant that answers booking requests by text, chat, or DM around the clock, offers real open times from your calendar, and books within your rules.", items:["24/7 booking by text, chat & social DMs","Works with your calendar or booking app","Reminders, deposits & no-show reduction","Waitlist fill-ins and automatic rebooking"]},
+  {id:"service", name:"LeadDesk", for:"Contractors · real estate · restaurants · auto repair", status:"Prototype", price:"Setup from $1,500 · $149/mo", desc:"Every inquiry captured, assigned, and followed up — so quotes and showings don’t slip through the cracks.", items:["Lead capture from every channel","Quote & showing follow-up reminders","Pipeline view: inquiry → booked"]},
+  {id:"intake", name:"IntakeDesk", for:"Law firms · dental offices · tax & insurance", status:"Prototype", price:"Setup from $1,800 · $179/mo", desc:"Structured client intake that collects missing information, flags deadlines, and keeps sensitive details off the open inbox.", items:["Guided intake & document checklists","Deadline and appointment flags","Privacy-first: staff reviews everything"]},
+  {id:"compliance", name:"ComplianceDesk", for:"HUD-assisted housing · smoke shops · regulated retail", status:"Prototype", price:"Setup from $2,000 · $199/mo", desc:"Recurring checklists, recertification reminders, and an audit trail so required tasks get done and documented.", items:["Recertification & inspection reminders","Checklists with sign-off history","Document collection tracking"]},
+  {id:"rewards", name:"RewardsDesk", for:"Smoke shops · salons · barbers · restaurants · retail", status:"Ready to build", price:"Setup from $900 · $99/mo", desc:"A customer rewards program in your brand: points by phone number, birthday offers, and win-back messages that bring regulars back more often.", items:["Points & tiers by phone number — no app needed","Birthday, win-back & “we miss you” offers","Opt-in texting; age-verified where required","See repeat visits and top customers"]},
+  {id:"review", name:"ReviewDesk", for:"Any local business", status:"Ready to build", price:"Setup from $600 · $79/mo", desc:"Ask happy customers for reviews at the right moment and get drafted, on-brand responses to every review for staff to approve.", items:["Automatic review requests after visits","Drafted replies to every review","Unhappy feedback routed privately to you"]},
+  {id:"social", name:"SocialDesk", for:"Any business on Instagram & Facebook", status:"Ready to build", price:"Setup from $900 · $149/mo", desc:"Plan, draft, and schedule a month of posts in your brand voice, and auto-reply to common DMs with a link to book or buy.", items:["Monthly content calendar drafted by AI","Your approval before anything posts","DM keyword replies that capture leads"]},
+  {id:"staff", name:"StaffDesk", for:"Teams with shifts or high turnover", status:"Ready to build", price:"Setup from $1,500 · $149/mo", desc:"An AI assistant that answers staff questions from your handbook and SOPs, plus shift swaps and onboarding checklists in one place.", items:["“Ask the handbook” answers for staff","Shift swap requests with manager approval","New-hire onboarding & training checklists"]},
+  {id:"invoice", name:"InvoiceDesk", for:"Service businesses · contractors · cleaners", status:"Ready to build", price:"Setup from $900 · $99/mo", desc:"Quotes become invoices, invoices get paid: friendly payment reminders and a clear view of who owes what.", items:["Quote → invoice in one click","Polite automatic payment reminders","Works with your accounting app"]},
+  {id:"insight", name:"InsightDesk", for:"Owners & managers", status:"Ready to build", price:"Setup from $1,500 · $149/mo", desc:"An owner dashboard that pulls numbers from your tools and sends a plain-English weekly summary: what changed, what needs attention.", items:["Bookings, leads, sales & response times","AI-written weekly summary by email","Alerts when something needs you"]}
+];
+const DEMO_IDS=["property","resort","salon","service","intake","compliance"];
+$("#prodGrid").innerHTML = PRODUCTS.map(p=>`
+  <article class="prod${p.wide?" wide":""}">
+    <div class="top"><span class="for">${esc(p.for)}</span><span class="chip ${p.status==="Ready to build"?"soon2":"live"}">${esc(p.status)}</span></div>
+    <h3>${esc(p.name)}</h3><span class="price">${priceHTML(p.price)}</span><p>${esc(p.desc)}</p>
+    <ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
+    <div class="row">${p.id==="chat"?'<button type="button" class="btn btn-primary btn-sm" data-open-chat="">Try it now — chat with me</button>':(DEMO_IDS.includes(p.id)?`<a class="btn btn-primary btn-sm" href="#demos" data-open-demo="${p.id}">Try the demo</a>`:`<button type="button" class="btn btn-primary btn-sm" data-open-chat="Tell me about ${esc(p.name)}">Ask about it</button>`)}<button type="button" class="btn btn-line btn-sm" data-buy="${p.id}">Buy</button></div>
+  </article>`).join("");
+
+/* ---------- industries ---------- */
+const INDUSTRIES = [
+  {k:"apartments", n:"Apartment Communities", demo:"property", pains:["Maintenance requests arrive by text, email, and phone","After-hours emergencies are hard to triage","Residents keep asking “any update?”"], wins:["One maintenance queue with urgency triage","Automatic resident status updates","Leasing inquiry follow-up reminders"]},
+  {k:"hotels", n:"Hotels & Resorts", demo:"resort", pains:["Guest requests get lost between shifts","Front desk is buried in repeat questions","Slow replies hurt reviews"], wins:["Department routing with handoff board","Drafted replies staff approve in one click","Review response drafts"]},
+  {k:"timeshare", n:"Timeshares", demo:"resort", pains:["High volume of owner questions","Reservation and exchange rules are complex","Tour no-shows waste sales time"], wins:["Owner request triage and FAQ assistant","Tour confirmation and reminder flows","Owner communication campaigns"]},
+  {k:"nails", n:"Nail Salons", demo:"salon", pains:["Booking by DM and text all day","No-shows leave empty chairs","Hard to rebook regulars"], wins:["Booking requests turned into open slots","Reminder texts and waitlist fill-ins","Automatic rebooking nudges"]},
+  {k:"massage", n:"Massage & Spa", demo:"salon", pains:["Intake forms on paper","Late cancellations","Package and gift card tracking"], wins:["Digital intake before the visit","Reminders with easy reschedule","Package balance tracking"]},
+  {k:"barbers", n:"Barbershops", demo:"salon", pains:["Walk-in vs. appointment chaos","Phone rings mid-cut","Regulars drift away"], wins:["Live waitlist and booking link","Auto-replies with open times","“Time for a cut?” reminders"]},
+  {k:"smoke", n:"Smoke & Vape Shops", demo:"compliance", pains:["Inventory counts by hand","Age-verification and compliance logs","Regulars shop around for better deals"], wins:["Customer rewards program (RewardsDesk): points, birthday & win-back offers","Low-stock alerts and reorder lists","Daily compliance checklists with sign-off"]},
+  {k:"restaurants", n:"Restaurants", demo:"service", pains:["Catering and event inquiries go cold","Staff scheduling by group text","Reviews pile up unanswered"], wins:["Catering lead capture and follow-up","Shift swap requests in one place","Drafted review replies"]},
+  {k:"contractors", n:"Contractors & Trades", demo:"service", pains:["Quotes sent but never followed up","Job details scattered across texts","Scheduling crews is manual"], wins:["Quote follow-up reminders","Job intake form with photos","Crew schedule and job status board"]},
+  {k:"realestate", n:"Real Estate", demo:"service", pains:["Leads from many sites","Showing requests at all hours","Transaction checklists in email"], wins:["Instant lead response and assignment","Showing request scheduling","Transaction checklist tracker"]},
+  {k:"law", n:"Law Firms", demo:"intake", pains:["Long intake calls for unqualified leads","Missing client documents","Deadline tracking by hand"], wins:["Guided intake that screens matters","Document request checklists","Deadline and court-date reminders"]},
+  {k:"dental", n:"Dental Offices", demo:"intake", pains:["Phones swamped with scheduling","Unfilled cancellations","Recall reminders fall behind"], wins:["Appointment request triage","Cancellation waitlist fill-ins","Recall and treatment reminders"]},
+  {k:"hud", n:"HUD-Assisted Housing", demo:"compliance", pains:["Annual recertification deadlines","Inspection preparation","Document collection from residents"], wins:["Recertification reminder timeline","Inspection readiness checklists","Resident document tracker"]},
+  {k:"autorepair", n:"Auto Repair Shops", demo:"service", pains:["Phones ring all day with status calls","Estimates sent but never followed up","Service reminders done by hand"], wins:["Automatic “your car is ready” updates","Estimate follow-up reminders","Oil change and service reminders"]},
+  {k:"cleaning", n:"Cleaning Services", demo:"service", pains:["Quote requests answered hours later","Scheduling crews by text","Chasing unpaid invoices"], wins:["Instant quote request replies","Crew schedule and job board","Automatic payment reminders (InvoiceDesk)"]},
+  {k:"str", n:"Short-Term Rentals", demo:"resort", pains:["Guest messages at all hours","Cleaner turnover coordination","Repeat questions about check-in and Wi-Fi"], wins:["24/7 guest messaging assistant","Turnover task alerts for cleaners","Review requests and drafted replies"]},
+  {k:"storage", n:"Self-Storage", demo:"chat", pains:["Unstaffed hours mean missed rentals","Late payments and lien notices","Same unit-size questions daily"], wins:["After-hours AI assistant that reserves units","Payment reminders and notice tracking","Unit-size and pricing answers"]},
+  {k:"insurance", n:"Insurance Agencies", demo:"intake", pains:["Quote intake takes long calls","Renewals slip through the cracks","Document chasing"], wins:["Guided quote intake forms","Renewal reminder sequences","Missing-document checklists"]},
+  {k:"tax", n:"Tax & Bookkeeping Firms", demo:"intake", pains:["Seasonal intake overload","Clients send documents late","Repeat status questions"], wins:["Client intake and document checklists","Automatic deadline reminders","Status updates without phone tag"]},
+  {k:"fitness", n:"Gyms & Fitness Studios", demo:"salon", pains:["Members quietly cancel","Class booking by DM","Trial leads not followed up"], wins:["Class booking assistant","Win-back and rewards offers","Trial lead follow-up"]},
+  {k:"venues", n:"Event Venues", demo:"service", pains:["Inquiries need fast answers to win","Tours scheduled by email back-and-forth","Contracts and deposits tracked manually"], wins:["Instant inquiry replies with availability","Tour scheduling","Deposit and contract reminders"]},
+  {k:"other", n:"Your Business", demo:"chat", pains:["The same questions every day","Work tracked in spreadsheets and texts","No clear view of what’s open"], wins:["One shared queue for requests","Automated reminders and handoffs","A simple owner dashboard"]}
+];
+const indChips=$("#indChips"), indPanel=$("#indPanel");
+indChips.innerHTML = INDUSTRIES.map((x,i)=>`<button type="button" data-ind="${x.k}" aria-pressed="${i===3}">${esc(x.n)}</button>`).join("");
+function showInd(k){
+  const x=INDUSTRIES.find(i=>i.k===k); const p=PRODUCTS.find(p=>p.id===x.demo);
+  $$("#indChips button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ind===k));
+  indPanel.innerHTML=`<span class="chip">Suggested product · ${esc(p.name)}</span><h3 style="margin-top:12px">${esc(x.n)}</h3>
+   <div class="cols"><div><h4>Where Time Gets Lost</h4><ul>${x.pains.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>
+   <div><h4>Quick Wins</h4><ul>${x.wins.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div></div>
+   <div class="row">${x.demo==="chat"?`<button type="button" class="btn btn-dark btn-sm" data-open-chat="">Try ${esc(p.name)}</button>`:`<a class="btn btn-dark btn-sm" href="#demos" data-open-demo="${x.demo}">Try ${esc(p.name)}</a>`}<a class="btn btn-line btn-sm" href="#audit" data-pre-ind="${esc(x.n)}">Free audit for ${esc(x.n.toLowerCase())}</a></div>`;
+}
+indChips.addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) showInd(b.dataset.ind); });
+showInd("nails");
+
+/* industry selects */
+const indOptions = ["Apartment Community / Property Management","Hotel","Resort","Timeshare / Vacation Ownership",...INDUSTRIES.slice(3).filter(i=>i.k!=="other").map(i=>i.n),"Other"];
+["#a_ind","#b_ind"].forEach(s=>{ $(s).innerHTML = `<option value="">Select…</option>` + indOptions.map(o=>`<option>${esc(o)}</option>`).join(""); });
+document.addEventListener("click",e=>{
+  const a=e.target.closest("[data-pre-ind]"); if(!a) return;
+  const v=a.dataset.preInd; const sel=$("#a_ind"); const opt=[...sel.options].find(o=>o.text.toLowerCase().startsWith(v.toLowerCase().slice(0,6)));
+  if(opt) sel.value=opt.text;
+});
+
+/* ---------- demo lab ---------- */
+const DEMOS = {
+  property:{sector:"Apartment operations", title:"WorkOrderDesk", label:"Apartments", short:"Maintenance intake",
+    samples:["Water is pooling under the kitchen sink in Unit 204. I turned off the valve and can be home after 3.","The AC in apt 3B stopped working and it’s 90 degrees inside. My kids are home.","My dishwasher has been making a grinding noise for a week. Unit 12, anytime is fine, you can enter."],
+    cats:[["Plumbing",/leak|water|sink|toilet|drain|pipe|faucet|clog|shower|flood/i,"Maintenance · Plumbing"],["HVAC",/\bac\b|a\/c|air|heat|furnace|thermostat|hot inside|cold inside|degrees/i,"Maintenance · HVAC"],["Electrical",/power|outlet|breaker|light|electric|spark/i,"Maintenance · Electrical"],["Appliance",/dishwasher|fridge|refrigerator|oven|stove|washer|dryer|microwave|disposal/i,"Maintenance · Appliance"],["Access & security",/lock|key|door|gate|fob|window/i,"Maintenance · Access"],["Pest control",/bug|roach|mice|mouse|ant|pest|rat|bed ?bug/i,"Vendor · Pest control"],["Noise / community",/neighbor|loud music|parking|trash|noise complaint/i,"Community manager"]],
+    def:["General maintenance","Maintenance queue"],
+    urgent:/flood|pooling|gushing|fire|smoke|gas|spark|no heat|no water|locked out|sewage|90 degrees|9\d degrees|kids|elderly|emergency|urgent|asap/i,
+    reply:(d)=>`Hi${d.name?" "+d.name:""}, thanks for letting us know. We’ve logged your ${d.cat.toLowerCase()} request${d.unit?" for Unit "+d.unit:""}${d.pri==="High"?" and flagged it as urgent":""}. ${d.time?`We’ll plan around your availability (${d.time}).`:"A team member will confirm a time with you shortly."} Reply here with any photos that might help.`,
+    checks:(d)=>[d.pri==="High"?"Confirm the issue is still active and apply your emergency policy":"Confirm priority against your service standards", d.entry?"Permission to enter was given — confirm it’s on file":"Confirm permission to enter the unit", "Assign a technician or vendor before the reply goes out"]},
+  resort:{multi:true, sector:"Hotel & resort operations", title:"GuestDesk", label:"Hotels & resorts", short:"Guest requests",
+    samples:["We arrive before noon on Saturday. Is early check-in possible? We’ll also need a crib in the room.","Room 1418 — the TV remote isn’t working and we’re out of towels.","Hi, I’m an owner at the resort. Can I switch my week in March to a two-bedroom unit?"],
+    cats:[["Front desk",/check.?in|check.?out|early|late|room change|upgrade|reservation|booking/i,"Front desk"],["Housekeeping",/towel|crib|pillow|blanket|clean|sheets|housekeep|toiletr/i,"Housekeeping"],["Maintenance",/remote|tv|broken|not working|ac\b|leak|light|shower/i,"Engineering"],["Concierge",/restaurant|dinner|tour|spa|activity|tickets|shuttle|airport/i,"Concierge"],["Owner services",/owner|member|points|exchange|my week|timeshare|maintenance fee/i,"Owner services"]],
+    def:["Guest services","Front desk"],
+    urgent:/emergency|urgent|asap|leak|smoke|locked out|medical|unsafe/i,
+    reply:(d)=>`Hello${d.name?" "+d.name:""}, thank you for reaching out! We’ve shared your request with our ${d.teams.join(" and ").toLowerCase()} team${d.teams.length>1?"s":""}${d.room?" for room "+d.room:""}. ${d.time?`We’ve noted your timing (${d.time}). `:""}We’ll confirm availability shortly — we can’t guarantee it until our team checks.`,
+    checks:(d)=>["Confirm availability before promising anything", d.teams.length>1?"Make sure each department accepted its task":"Confirm the department accepted the task", "Note the request on the guest or owner profile"]},
+  salon:{sector:"Salon, barber & spa", title:"BookDesk", label:"Salons & spas", short:"Booking requests",
+    samples:["Do you have anything Friday after 5 for a gel manicure and pedicure? It’s for me and my sister.","Can I get a fade and beard trim tomorrow morning with Marcus?","I need to cancel my 2pm massage today, can I move it to next week? Deep tissue, 60 min."],
+    cats:[["Cancellation / reschedule",/cancel|reschedul|move it|can.?t make|change my/i,"Front desk · Reschedule"],["Nails",/gel|acrylic|manicure|mani|pedicure|pedi|nail|dip/i,"Nail tech booking"],["Hair / barber",/fade|cut|trim|beard|line ?up|taper|braid|color|hair/i,"Barber / stylist booking"],["Massage & spa",/massage|deep tissue|swedish|hot stone|facial|wax|spa/i,"Therapist booking"]],
+    def:["General booking","Front desk"],
+    urgent:/today|asap|right now|this morning|in an hour/i,
+    reply:(d)=>`Hi${d.name?" "+d.name:""}! Thanks for reaching out. ${d.cat.startsWith("Cancel")?"No problem — we can help you reschedule.":"We’d love to get you in."}${d.services.length?" Services noted: "+d.services.join(", ")+".":""}${d.party>1?` Booking for ${d.party} people.`:""} ${d.time?`Here are the closest openings around ${d.time}:`:"Here are our next openings:"} [open slots inserted after staff review]`,
+    checks:(d)=>["Confirm real openings in your booking calendar", d.staff?`Check ${d.staff}’s availability`:"Assign a stylist / tech / therapist", d.cat.startsWith("Cancel")?"Apply your cancellation policy before confirming":"Confirm price and duration for each service"]},
+  service:{sector:"Leads & follow-up", title:"LeadDesk", label:"Contractors & local services", short:"Lead follow-up",
+    samples:["Could you send the updated quote? We’d like to get started next week if you have availability.","Looking for a quote to redo our back deck, about 300 sq ft. Budget around $8,000. Call me at 555-201-3344.","We want catering for 40 people on June 14th, mostly vegetarian. What would that cost?"],
+    cats:[["Quote follow-up",/updated quote|revised|sent.*quote|following up|any update/i,"Account owner"],["Catering / event",/catering|event|party|banquet|\d+\s*(?:people|guests)/i,"Catering manager"],["Showing / real estate",/showing|tour|listing|home for sale|open house|pre.?approv/i,"Agent · Showings"],["New quote request",/quote|estimate|bid|price|cost|how much/i,"Sales · New lead"],["Scheduling",/schedule|appointment|availability|start|book/i,"Scheduler"]],
+    def:["General inquiry","Sales inbox"],
+    urgent:/asap|urgent|today|tomorrow|this week|emergency/i,
+    reply:(d)=>`Hi${d.name?" "+d.name:""}, thanks for reaching out! We’ve received your ${d.cat.toLowerCase().replace(/ request$/,"")} request${d.party>1?` for ${d.party} people`:""}${d.date?` for ${d.date}`:""}. ${d.budget?`We’ve noted your budget (${d.budget}). `:""}${d.cat.startsWith("Quote")?"Your account owner will review the updated quote and confirm our start-date availability.":"We’ll follow up with pricing and availability within one business day."}`,
+    checks:(d)=>["Verify pricing before anything goes out","Confirm schedule availability"+(d.date?` for ${d.date}`:""),"Set a follow-up reminder if there’s no reply in 2 days"]},
+  intake:{sector:"Law & dental offices", title:"IntakeDesk", label:"Law & dental", short:"Client intake",
+    samples:["I was in a car accident last Tuesday and the other driver’s insurance keeps calling me. Do I need a lawyer?","Hi, I have a toothache on the lower left side and it’s getting worse. Can I come in this week?","I need to update my will and add my new grandson. What documents should I bring?"],
+    cats:[["Personal injury",/accident|injur|crash|slip|fall|insurance keeps/i,"Attorney intake · PI"],["Estate planning",/will|trust|estate|power of attorney|probate|grand/i,"Attorney intake · Estate"],["Family law",/divorce|custody|child support|separation/i,"Attorney intake · Family"],["Dental · urgent",/toothache|tooth pain|swelling|broken tooth|chipped|bleeding gum|abscess/i,"Dental front desk · Same-week"],["Dental · routine",/cleaning|checkup|whitening|exam|x-?ray|crown|filling/i,"Dental front desk"]],
+    def:["General intake","Office manager"],
+    urgent:/swelling|bleeding|worse|severe|court date|deadline|served|arrest|this week|pain/i,
+    reply:(d)=>`Thank you for contacting our office${d.name?", "+d.name:""}. We’ve received your message and a team member will review it and follow up${d.pri==="High"?" as soon as possible":" within one business day"}. To help us prepare, please don’t send sensitive details by text — we’ll share a secure intake form.`,
+    checks:()=>["Staff reviews before any reply — no legal or medical advice from automation","Run a conflict check / confirm patient record as required","Send the secure intake form and request only needed documents"]},
+  compliance:{multi:true, sector:"Compliance & recurring tasks", title:"ComplianceDesk", label:"HUD housing & retail", short:"Recertification & checklists",
+    samples:["Unit 7C annual recertification is due on March 1. Resident still hasn’t sent pay stubs.","Morning checklist: ID scanner not working at register 2, and we’re low on the top 3 vape SKUs.","REAC inspection is scheduled for next month — what do we still need to fix?"],
+    cats:[["Recertification",/recert|pay ?stub|income|annual|interim|tenant certification|50059/i,"Compliance specialist"],["Inspection prep",/reac|nspire|inspection|smoke detector|work order/i,"Maintenance + manager"],["Age verification",/id scanner|age|verify|carded|id check/i,"Store manager"],["Inventory",/low on|stock|sku|reorder|inventory|out of/i,"Purchasing"]],
+    def:["Checklist item","Manager queue"],
+    urgent:/due|deadline|overdue|not working|next week|tomorrow|today|inspection/i,
+    reply:(d)=>`Task created: ${d.cat}${d.unit?" · Unit "+d.unit:""}${d.date?" · due "+d.date:""}. Assigned to ${d.teams.join(" and ")}. ${d.cat==="Recertification"?"A reminder with the document checklist will go to the resident after staff approval.":"Checklist updated and the owner will see it on today’s dashboard."}`,
+    checks:(d)=>["Confirm the due date against your official schedule", d.cat==="Recertification"?"Verify which documents are required for this resident":"Assign an owner and a completion date","Record sign-off so there’s an audit trail"]}
+};
+let demoKey="property", demoState="idle";
+const labInput=$("#labInput");
+$("#labPick").innerHTML = Object.entries(DEMOS).map(([k,d],i)=>`<button type="button" data-demo="${k}" aria-pressed="${i===0}"><small>0${i+1} · ${esc(d.label)}</small><strong>${esc(d.title)}</strong></button>`).join("");
+function setDemo(k){
+  demoKey=k; const d=DEMOS[k];
+  $$("#labPick button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.demo===k));
+  $("#labSector").textContent=d.sector; $("#labTitle").textContent=d.title;
+  labInput.value=d.samples[0];
+  $("#labSamples").innerHTML = d.samples.map((s,i)=>`<button type="button" class="btn btn-line btn-sm" data-sample="${i}">Example ${i+1}</button>`).join("");
+  resetDemo();
+}
+$("#labPick").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) setDemo(b.dataset.demo); });
+$("#labSamples").addEventListener("click",e=>{ const b=e.target.closest("[data-sample]"); if(b){ labInput.value=DEMOS[demoKey].samples[+b.dataset.sample]; resetDemo(); } });
+document.addEventListener("click",e=>{ const a=e.target.closest("[data-open-demo]"); if(a && DEMOS[a.dataset.openDemo]) setDemo(a.dataset.openDemo); });
+
+const DAYS=/\b(today|tonight|tomorrow|this (?:morning|afternoon|evening|week|weekend)|next (?:week|month|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|(?:mon|tues|wednes|thurs|fri|satur|sun)day|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.? \d{1,2}(?:st|nd|rd|th)?)\b/i;
+const TIMES=/\b((?:after|before|around|by|at)\s+(?:\d{1,2}(?::\d{2})?\s*(?:am|pm)?|noon)|\d{1,2}(?::\d{2})?\s*(?:am|pm)|morning|afternoon|evening)\b/i;
+function analyze(text,k){
+  const D=DEMOS[k]; const t=text.trim();
+  const matched=D.cats.filter(c=>c[1].test(t));
+  const cat = matched[0] ? matched[0][0] : D.def[0];
+  const team = matched[0] ? matched[0][2] : D.def[1];
+  const teams = D.multi ? (matched.length?matched:[[0,0,D.def[1]]]).map(c=>c[2]).filter((v,i,a)=>a.indexOf(v)===i) : [team];
+  const pri = D.urgent.test(t) ? "High" : (matched.length ? "Normal" : "Low");
+  const unit = (t.match(/\b(?:unit|apt\.?|apartment|suite)\s*#?\s*([a-z]?\d+[a-z]?)\b/i)||t.match(/\b(\d{1,4}[a-z])\b/i)||[])[1];
+  const room = (t.match(/\broom\s*#?\s*(\d{2,5})\b/i)||[])[1];
+  const dm=t.match(DAYS), tm=t.match(TIMES);
+  const date = dm?dm[1]:"", timeOnly= tm?tm[1]:"";
+  const time = [date,timeOnly.trim()].filter(Boolean).join(" ");
+  const phone=(t.match(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/)||[])[0];
+  const email=(t.match(/[\w.+-]+@[\w-]+\.[\w.]+/)||[])[0];
+  const budget=(t.match(/\$\s?\d[\d,]*(?:\.\d+)?k?/i)||[])[0];
+  const pm=t.match(/\b(\d{1,4})\s*(?:people|guests|persons|of us|adults)\b/i);
+  let party = pm?+pm[1]:(/\b(me and my|my (?:sister|friend|mom|daughter|husband|wife|partner)|two of us|for us both)\b/i.test(t)?2:1);
+  const sq=(t.match(/\b(\d[\d,]*)\s*(?:sq\.?\s*ft|square feet|sqft)\b/i)||[])[0];
+  const services=[...new Set((t.match(/gel|acrylic|manicure|pedicure|dip|fade|beard trim|haircut|cut|line ?up|braids?|color|deep tissue|swedish|hot stone|facial|wax/gi)||[]).map(s=>s.toLowerCase()))];
+  const staff=(t.match(/\bwith ([A-Z][a-z]+)\b/)||[])[1];
+  const name=(t.match(/\b(?:this is|i'm|i am|my name is)\s+([A-Z][a-z]+)\b/)||[])[1];
+  const entry=/you can (?:go in|enter|come in)|permission to enter|ok to enter|let yourself in/i.test(t);
+  const details=[];
+  if(unit && k!=="resort") details.push(["Unit",unit]);
+  if(room) details.push(["Room",room]);
+  if(time) details.push(["Timing",time]);
+  if(services.length) details.push(["Services",services.join(", ")]);
+  if(party>1) details.push(["Party size",party]);
+  if(staff) details.push(["Requested staff",staff]);
+  if(sq) details.push(["Size",sq]);
+  if(budget) details.push(["Budget",budget]);
+  if(phone) details.push(["Phone",phone]);
+  if(email) details.push(["Email",email]);
+  if(entry) details.push(["Entry permission","Given in message"]);
+  const summary = t.length>110 ? t.slice(0,107).replace(/\s+\S*$/,"")+"…" : t;
+  return {cat,team,teams,pri,unit,room,time,date,phone,budget,party,services,staff,name,entry,details,summary};
+}
+const stepsLi=$$("#labSteps li");
+function resetDemo(){
+  demoState="idle"; $("#labOut").hidden=true; $("#labPlaceholder").hidden=false;
+  stepsLi.forEach(l=>l.className="");
+  $("#labRun").hidden=false; $("#labRun").textContent="Run triage"; $("#labRun").disabled=false;
+  $("#labApprove").hidden=$("#labRevise").hidden=$("#labReset").hidden=true;
+  $("#labStatus").textContent="This demo uses a rule-based simulation and fictional data. It doesn’t send messages or create real tickets.";
+}
+labInput.addEventListener("input",()=>{ if(demoState!=="idle") resetDemo(); });
+function render(r,revised){
+  const D=DEMOS[demoKey];
+  const priCls = r.pri==="High"?"high":r.pri==="Normal"?"med":"low";
+  const rows=[["Category",esc(r.cat)],["Priority",`<span class="pri ${priCls}">${r.pri}</span>`],["Route to",esc(r.teams.join(" + "))],["Summary",esc(r.summary)]].concat(r.details.map(([a,b])=>[esc(a),esc(b)]));
+  $("#labDl").innerHTML=rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join("");
+  let reply=D.reply(r);
+  if(revised) reply = reply.replace(/ ?We’ll plan around[^.]*\.| ?Here are[^:]*:.*$/,"") + "\n\n[Revised: holding firm times and prices until a team member confirms them.]";
+  $("#labDraft").textContent="Draft reply\n\n"+reply;
+  $("#labCheck").innerHTML=D.checks(r).map(c=>`<li>${esc(c)}</li>`).join("");
+}
+$("#labRun").addEventListener("click",()=>{
+  const text=labInput.value.trim();
+  if(text.length<8){ $("#labStatus").textContent="Type a message of at least a few words to try the demo."; labInput.focus(); return; }
+  const revised = demoState==="revising";
+  $("#labRun").disabled=true; $("#labPlaceholder").hidden=true; $("#labOut").hidden=true;
+  stepsLi.forEach(l=>l.className="");
+  const r=analyze(text,demoKey);
+  stepsLi.forEach((l,i)=>{
+    setTimeout(()=>{ if(i>0) stepsLi[i-1].className="done"; l.className="on";
+      if(i===stepsLi.length-1){
+        render(r,revised); $("#labOut").hidden=false;
+        $("#labRun").hidden=true; $("#labApprove").hidden=false; $("#labRevise").hidden=revised; $("#labReset").hidden=false;
+        $("#labStatus").textContent = revised ? "Revised draft ready. Your team decides whether it moves forward." : "Draft ready. Nothing goes out until your team approves it.";
+        demoState="ready"; $("#labApprove").focus({preventScroll:true});
+      }
+    }, i*380);
+  });
+});
+$("#labApprove").addEventListener("click",()=>{
+  stepsLi.forEach(l=>l.className="done");
+  $("#labApprove").hidden=$("#labRevise").hidden=true;
+  const r=analyze(labInput.value,demoKey);
+  $("#labStatus").textContent=`Approved in this demo: handed off to ${r.teams.join(" + ")}. In a live setup this would create the task and send the reply. Nothing was actually sent.`;
+  demoState="done";
+});
+$("#labRevise").addEventListener("click",()=>{
+  $("#labApprove").hidden=$("#labRevise").hidden=true; $("#labRun").hidden=false; $("#labRun").disabled=false; $("#labRun").textContent="Prepare revised draft";
+  $("#labStatus").textContent="Changes requested. This handoff is on hold until a revised draft is approved.";
+  demoState="revising";
+});
+$("#labReset").addEventListener("click",resetDemo);
+setDemo("property");
+
+/* ---------- ROI ---------- */
+const money=n=>"$"+Math.round(n).toLocaleString();
+function roi(){
+  const v=k=>+$("#r"+k).value;
+  $("#o1").textContent=v(1); $("#o2").textContent=v(2)+" hrs"; $("#o3").textContent="$"+v(3)+"/hr"; $("#o4").textContent=v(4)+"%"; $("#o5").textContent=v(5); $("#o6").textContent=money(v(6));
+  const hrsMonth=v(1)*v(2)*(v(4)/100)*4.33;
+  const labor=hrsMonth*12*v(3);
+  const leads=v(5)*0.25*v(6)*12;
+  $("#roiHours").textContent=Math.round(hrsMonth).toLocaleString();
+  $("#roiLabor").textContent=money(labor);
+  $("#roiLeads").textContent=money(leads);
+  $("#roiFte").textContent=(hrsMonth/173).toFixed(1);
+  $("#roiTotal").textContent=money(labor+leads);
+}
+$$(".roi input[type=range]").forEach(i=>i.addEventListener("input",roi)); roi();
+$("#roiMail").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const em=$("#roiEmail").value.trim(), msg=$("#roiMsg");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ msg.textContent="Please enter a valid email."; return; }
+  const summary=`Savings estimate: ${$("#roiTotal").textContent}/yr — ${$("#roiHours").textContent} staff hrs/mo freed, ${$("#roiLabor").textContent} labor value, ${$("#roiLeads").textContent} recovered revenue. Inputs: ${$("#r1").value} people × ${$("#r2").value} hrs/wk at $${$("#r3").value}/hr, ${$("#r4").value}% automatable, ${$("#r5").value} missed leads/mo at $${$("#r6").value}.`;
+  msg.textContent="Sending…";
+  const ok=await sendLead("calculator",{Email:em, Workflow:summary});
+  if(ok){ msg.textContent="Sent! Check your inbox — Rashad will follow up with ideas."; }
+  else { msg.innerHTML=`Almost there: <a href="${mailto("My savings estimate", summary+"\n\nMy email: "+em)}" style="color:var(--sky)">open this email</a> to send it to Rashad.`; }
+});
+
+/* ---------- forms ---------- */
+function validate(fields, errEl){
+  for(const el of fields){
+    const val=el.value.trim();
+    if(el.required && !val){ errEl.textContent="Please fill in the required fields."; el.focus(); return false; }
+    if(el.type==="email" && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)){ errEl.textContent="Please enter a valid email address."; el.focus(); return false; }
+  }
+  errEl.textContent=""; return true;
+}
+const auditForm=$("#auditForm");
+auditForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const fields=$$("input,select,textarea",auditForm);
+  if(!validate(fields,$("#auditErr"))) return;
+  const data={}; fields.forEach(f=>{ if(f.name) data[f.name]=f.value.trim(); });
+  data["Estimated yearly value (from site calculator)"]=$("#roiTotal").textContent;
+  const body="Hi Rashad,\n\nI'd like to request a free workflow audit.\n\n"+Object.entries(data).filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`).join("\n")+"\n\nThanks!";
+  const subject=`Free workflow audit request — ${data.Business}`;
+  $("#auditText").textContent=body;
+  $("#auditMail").href=mailto(subject,body);
+  if(CONFIG.calendarUrl){ $("#auditCal").hidden=false; $("#auditCal").href=CONFIG.calendarUrl; }
+  $("#auditResult").hidden=false;
+  const sent=await sendLead("audit",data);
+  if(sent){ $("#auditResult h4").textContent="Thanks — your request was received"; $("#auditResultNote").textContent="I’ll reply within one business day. A copy of your request is below."; $("#auditMail").hidden=true; }
+  $("#auditResult").scrollIntoView({behavior:"smooth",block:"nearest"});
+});
+$("#auditCopy").addEventListener("click",()=>copyText($("#auditText").textContent,"Request copied"));
+
+/* ---------- project builder ---------- */
+$("#bPkgs").innerHTML = CONFIG.packages.map((p,i)=>`<div class="opt"><input type="radio" name="pkg" id="pk${i}" value="${esc(p.name)}" ${p.featured?"checked":""}><label for="pk${i}"><b>${esc(p.name)}</b><span>${esc(p.price)} · ${esc(p.note)}</span></label></div>`).join("");
+let bStep=0; const bSteps=$$(".bstep"), bLis=$$("#bSteps li");
+function bShow(n){
+  bStep=n; bSteps.forEach((s,i)=>s.hidden=i!==n);
+  bLis.forEach((l,i)=>l.className=i<n?"done":i===n?"on":"");
+  $("#bBack").hidden=n===0; $("#bNext").hidden=false;
+  $("#bNext").textContent = n===3 ? "Send request →" : "Continue →";
+  $("#bErr").textContent="";
+  if(n===3){
+    const rows=bData();
+    $("#bSummary").innerHTML=Object.entries(rows).filter(([,v])=>v).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+    $("#bResult").hidden=true;
+  }
+}
+function bData(){
+  return {"Package":($("input[name=pkg]:checked")||{}).value||"", "Name":$("#b_name").value.trim(), "Business":$("#b_biz").value.trim(), "Email":$("#b_email").value.trim(), "Industry":$("#b_ind").value, "Goal":$("#b_goal").value.trim(), "Start":($("input[name=when]:checked")||{}).value||"", "Budget":$("#b_budget").value||"Prefer to discuss", "Founding client program":$("#b_found").checked?"Yes, please consider me":""};
+}
+$("#bNext").addEventListener("click",async()=>{
+  if(bStep===1 && !validate($$("#b_name,#b_biz,#b_email,#b_goal"),$("#bErr"))) return;
+  if(bStep<3) return bShow(bStep+1);
+  const d=bData();
+  const body="Hi Rashad,\n\nI'm ready to discuss a project and would like a proposal.\n\n"+Object.entries(d).filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`).join("\n")+"\n\nPlease send next steps.\n";
+  const subject=`Project proposal request — ${d.Business} (${d.Package})`;
+  $("#bText").textContent=body; $("#bMail").href=mailto(subject,body); $("#bResult").hidden=false;
+  bLis.forEach(l=>l.className="done"); $("#bNext").hidden=true;
+  const sent=await sendLead("project",d);
+  if(sent){ $("#bResult h4").textContent="Thanks — your request was received. I’ll reply within one business day."; $("#bMail").hidden=true; }
+  $("#bResult").scrollIntoView({behavior:"smooth",block:"nearest"});
+});
+$("#bBack").addEventListener("click",()=>bShow(Math.max(0,bStep-1)));
+$("#bCopy").addEventListener("click",()=>copyText($("#bText").textContent,"Request copied"));
+
+/* ---------- packages ---------- */
+$("#pkgGrid").innerHTML = CONFIG.packages.map(p=>`
+  <article class="card pkg ${p.featured?"feat":""}">
+    ${p.featured?'<span class="chip live" style="align-self:flex-start">Most popular start</span>':'<span class="chip" style="align-self:flex-start">'+esc(p.note)+'</span>'}
+    <h3>${esc(p.name)}</h3>
+    <div class="price">${priceHTML(p.price)}${p.sub?`<small>${esc(saleActive()?discount(p.sub):p.sub)}</small>`:(p.featured?`<small>${esc(p.note)}</small>`:"")}</div>
+    <p>${esc(p.desc)}</p>
+    <ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
+    <a class="btn ${p.featured?"btn-dark":"btn-line"}" href="${p.href||"#start"}" ${p.href?"":`data-pick-pkg="${esc(p.name)}"`}>${esc(p.cta)}</a>
+    ${p.id!=="audit"?`<button type="button" class="btn btn-line btn-sm" data-buy="${p.id}">${p.id==="pilot"?"Pay deposit / buy":"Buy now"}</button>`:""}
+  </article>`).join("");
+document.addEventListener("click",e=>{
+  const a=e.target.closest("[data-pick-pkg]"); if(!a) return;
+  const r=$$("input[name=pkg]").find(x=>x.value===a.dataset.pickPkg); if(r) r.checked=true; bShow(0);
+});
+
+/* ---------- holiday sale ---------- */
+if (saleActive()) {
+  $("#saleBar").hidden = false;
+  $("#saleLabel").textContent = CONFIG.sale.label + ":";
+  $("#saleText").textContent = `${CONFIG.sale.pct}% off all listed products and services through ${saleEndText()}. Doesn’t combine with the founding-client discount — you get the better deal.`;
+}
+
+/* ---------- buy / checkout ---------- */
+const BUYABLE = {
+  assess:{name:"AI Readiness Assessment (virtual)", price:750},
+  bundle:{name:"Launch Bundle: ChatDesk + BookDesk setup", price:1999, monthly:298},
+  care:{name:"Care & Growth Plan", monthly:150},
+  pilot:{name:"Pilot / Custom Build (deposit after proposal)", price:2500, quote:true}
+};
+PRODUCTS.forEach(p=>{ const m=p.price.match(/\$([\d,]+)[^$]*\$([\d,]+)/); if(m) BUYABLE[p.id]={name:p.name+" setup + monthly plan", price:+m[1].replace(/,/g,""), monthly:+m[2].replace(/,/g,"")}; });
+let buyItem=null;
+const money2=n=>"$"+Math.round(n).toLocaleString("en-US");
+function buyPriceText(it){
+  const f = saleActive() ? (100-CONFIG.sale.pct)/100 : 1;
+  const parts=[];
+  if(it.price) parts.push((it.quote?"From ":"")+(f<1?`<s class="was">${money2(it.price)}</s> `:"")+money2(it.price*f)+(it.quote?"":" setup"));
+  if(it.monthly) parts.push((f<1?`<s class="was">${money2(it.monthly)}</s> `:"")+money2(it.monthly*f)+"/mo");
+  return parts.join(" + ")+(f<1?` <span class="chip soon">${CONFIG.sale.pct}% off</span>`:"");
+}
+function openBuy(id){
+  buyItem=id; const it=BUYABLE[id]; if(!it) return;
+  $("#buyTitle").textContent=it.name; $("#buyPrice").innerHTML=buyPriceText(it);
+  const canPlan = (it.price||0) >= CONFIG.paymentPlan.minimum;
+  $("#planOpt").hidden=!canPlan; if(!canPlan) $("input[name=plan][value='Pay in full']").checked=true;
+  $("#buyResult").hidden=true; $("#buyErr").textContent=""; $("#buyGo").hidden=false;
+  $("#buyModal").hidden=false; setTimeout(()=>$("#buy_name").focus(),30);
+}
+function closeBuy(){ $("#buyModal").hidden=true; }
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-buy]"); if(b){ e.preventDefault(); openBuy(b.dataset.buy); } });
+$("#buyClose").addEventListener("click",closeBuy);
+$("#buyModal").addEventListener("click",e=>{ if(e.target.id==="buyModal") closeBuy(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("#buyModal").hidden) closeBuy(); });
+$("#buyForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!validate($$("#buy_name,#buy_biz,#buy_email"),$("#buyErr"))) return;
+  if(!$("#buy_ok").checked){ $("#buyErr").textContent="Please confirm the checkbox to continue."; return; }
+  const it=BUYABLE[buyItem], plan=$("input[name=plan]:checked").value, method=$("input[name=method]:checked").value;
+  const priceText=$("#buyPrice").textContent.replace(/\s+/g," ").trim();
+  const order={Name:$("#buy_name").value.trim(), Business:$("#buy_biz").value.trim(), Email:$("#buy_email").value.trim(), Package:it.name, Workflow:`ORDER: ${it.name} — ${priceText} — ${plan} via ${method}`, Budget:priceText, Start:"Order placed online"};
+  const link = plan==="Pay in full" && ((CONFIG.payLinks[buyItem]||{})[method.toLowerCase()]||"");
+  $("#buyGo").disabled=true;
+  const sent = await sendLead("order", order);
+  $("#buyGo").disabled=false;
+  const r=$("#buyResult"); r.hidden=false;
+  if(link){
+    r.innerHTML=`<h4>Opening secure ${esc(method)} checkout…</h4><p class="hint" style="margin:0">If it doesn’t open, <a href="${esc(link)}" target="_blank" rel="noopener">continue to checkout here</a>.</p>`;
+    window.location.href = link; return;
+  }
+  if(sent){
+    r.innerHTML=`<h4>Order received — thank you!</h4><p class="hint" style="margin:0">A secure ${esc(method)} ${plan==="Pay in full"?"invoice":"payment-plan invoice"} for <b>${esc(it.name)}</b> will be emailed to <b>${esc(order.Email)}</b> within one business day. Nothing has been charged yet.</p>`;
+    $("#buyGo").hidden=true; return;
+  }
+  const body=`Hi Rashad,\n\nI'd like to purchase: ${it.name}\nPrice shown: ${priceText}\nPayment: ${plan} via ${method}\n\nName: ${order.Name}\nBusiness: ${order.Business}\nEmail: ${order.Email}\n\nPlease send a secure invoice.`;
+  r.innerHTML=`<h4>One last step</h4><p class="hint" style="margin:0">Send your order to <b>${esc(CONFIG.email)}</b> and you’ll receive a secure ${esc(method)} invoice within one business day. Nothing has been charged.</p><div class="row" style="margin-top:10px"><a class="btn btn-primary btn-sm" href="${esc(mailto("Order: "+it.name, body))}">Open email draft</a><button type="button" class="btn btn-line btn-sm" id="buyCopy">Copy order</button></div>`;
+  $("#buyCopy").addEventListener("click",()=>copyText(body,"Order copied"));
+});
+
+/* ---------- save this site ---------- */
+$("#saveSite").addEventListener("click",async()=>{
+  const url = CONFIG.siteUrl || location.href.split("#")[0];
+  if (navigator.share) { try { await navigator.share({ title: CONFIG.businessName, url }); return; } catch(e){} }
+  copyText(url, "Website link copied");
+  toast("Link copied — on a phone, use Share → Add to Home Screen to save it");
+});
+
+/* ---------- contact card, vCard, QR ---------- */
+function vcardText(){
+  const [first,...rest]=CONFIG.name.split(" "); const last=rest.join(" ");
+  return ["BEGIN:VCARD","VERSION:3.0",`N:${last};${first};;;`,`FN:${CONFIG.name}`,`ORG:${CONFIG.businessName}`,`TITLE:${CONFIG.title}`,
+    `EMAIL;TYPE=INTERNET:${CONFIG.email}`, CONFIG.phone?`TEL;TYPE=CELL:${CONFIG.phone}`:"", `URL:${CONFIG.siteUrl||CONFIG.linkedin}`,
+    CONFIG.siteUrl?`X-SOCIALPROFILE;TYPE=linkedin:${CONFIG.linkedin}`:"", "NOTE:Workflow automation, business software & custom MVPs","END:VCARD"].filter(Boolean).join("\r\n");
+}
+$("#vcfBtn").addEventListener("click",()=>{
+  const blob=new Blob([vcardText()],{type:"text/vcard"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download="Rashad_Fambro.vcf"; document.body.appendChild(a);
+  try{ a.click(); toast("Contact card downloading"); }catch(e){ copyText(vcardText(),"Contact card copied"); }
+  a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000);
+});
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-copy]"); if(!b) return;
+  if(b.dataset.copy==="email") copyText(CONFIG.email,"Email copied");
+  if(b.dataset.copy==="vcard") copyText(vcardText(),"Contact card copied");
+});
+if(CONFIG.siteUrl) $("[data-qr=site]").hidden=false;
+const qrNotes={vcard:"Scan with your phone camera to save my contact.",linkedin:"Scan to open my LinkedIn profile.",site:"Scan to open and save this website on your phone."};
+function drawQR(kind){
+  const box=$("#qr");
+  const data = kind==="vcard"?vcardText():kind==="linkedin"?CONFIG.linkedin:CONFIG.siteUrl;
+  selectQRTab(kind);
+  if(typeof qrcode!=="function"){ box.textContent="QR code unavailable offline — use the buttons below."; return; }
+  const q=qrcode(0,"M"); q.addData(data); q.make();
+  const n=q.getModuleCount(), m=2; let d="";
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++) if(q.isDark(r,c)) d+=`M${c+m},${r+m}h1v1h-1z`;
+  box.innerHTML=`<svg viewBox="0 0 ${n+m*2} ${n+m*2}" shape-rendering="crispEdges" aria-hidden="true"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#0d1a2d"/></svg>`;
+  box.setAttribute("aria-label",`QR code: ${qrNotes[kind]}`);
+}
+$("#qrTabs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) drawQR(b.dataset.qr); });
+const QR_DEFAULT = CONFIG.siteUrl ? "site" : "vcard";
+function selectQRTab(kind){ $$("#qrTabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.qr===kind)); $("#qrNote").textContent=qrNotes[kind]; }
+selectQRTab(QR_DEFAULT);
+function initQR(tries=0){ if(typeof qrcode==="function") drawQR(QR_DEFAULT); else if(tries<40) setTimeout(()=>initQR(tries+1),150); else drawQR(QR_DEFAULT); }
+window.addEventListener("load",()=>initQR());
+/* ============================================================
+   LEAD SOURCE TRACKING — remembers where each visitor came from
+   (?utm_source=…, ?ref=flyer, #for-apartments links, referrer)
+   ============================================================ */
+const LEAD_SRC = (() => {
+  let s = null;
+  try { s = JSON.parse(sessionStorage.getItem("rf_src") || "null"); } catch (e) {}
+  if (!s) {
+    const q = new URLSearchParams(location.search);
+    const utm = [q.get("utm_source"), q.get("utm_medium"), q.get("utm_campaign")].filter(Boolean).join(" / ");
+    let ref = "";
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+    s = {
+      source: utm || (q.get("ref") ? "ref:" + q.get("ref") : "") || (location.hash.startsWith("#for-") ? "link:" + location.hash.slice(1) : "") || (ref ? "referrer:" + ref : "direct"),
+      page: location.pathname + location.hash
+    };
+    try { sessionStorage.setItem("rf_src", JSON.stringify(s)); } catch (e) {}
+  }
+  return s;
+})();
+
+/* Sends a lead to your backend (Google Apps Script) or Formspree. Returns true only when it was really received. */
+async function sendLead(form, data) {
+  const payload = Object.assign({ type: "lead", form, source: LEAD_SRC.source, page: LEAD_SRC.page }, data);
+  if (CONFIG.backendUrl) {
+    try {
+      const r = await fetch(CONFIG.backendUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+      const j = await r.json();
+      if (j && j.ok) return true;
+    } catch (e) {}
+  }
+  if (CONFIG.formEndpoint) {
+    try {
+      const r = await fetch(CONFIG.formEndpoint, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      return r.ok;
+    } catch (e) {}
+  }
+  return false;
+}
+
+/* ============================================================
+   INDUSTRY LINKS — share yoursite/#for-apartments etc. and the
+   page greets that visitor with their industry pre-selected.
+   ============================================================ */
+const LANDINGS = {
+  "for-apartments":   { who: "apartment communities", line: "Faster Maintenance. Happier Residents.", ind: "apartments", demo: "property", opt: "Apartment Community / Property Management" },
+  "for-property-managers": { who: "property managers", line: "Every Request Tracked. Nothing Lost.", ind: "apartments", demo: "property", opt: "Apartment Community / Property Management" },
+  "for-hotels":       { who: "hotels", line: "Guest Requests Handled Before They Become Reviews.", ind: "hotels", demo: "resort", opt: "Hotel" },
+  "for-resorts":      { who: "resorts", line: "More Time for Guests. Less Time on Handoffs.", ind: "hotels", demo: "resort", opt: "Resort" },
+  "for-timeshares":   { who: "timeshare & vacation ownership teams", line: "Owner Questions Answered Faster.", ind: "timeshare", demo: "resort", opt: "Timeshare / Vacation Ownership" },
+  "for-salons":       { who: "nail salons", line: "Fuller Chairs. Fewer No-Shows.", ind: "nails", demo: "salon", opt: "Nail Salons" },
+  "for-barbers":      { who: "barbershops", line: "Book More Cuts Without Answering the Phone Mid-Fade.", ind: "barbers", demo: "salon", opt: "Barbershops" },
+  "for-spas":         { who: "massage & spa businesses", line: "Booked, Reminded, and Rebooked Automatically.", ind: "massage", demo: "salon", opt: "Massage & Spa" },
+  "for-restaurants":  { who: "restaurants", line: "Catering Leads That Don’t Go Cold.", ind: "restaurants", demo: "service", opt: "Restaurants" },
+  "for-contractors":  { who: "contractors & trades", line: "Every Quote Followed Up. More Jobs Booked.", ind: "contractors", demo: "service", opt: "Contractors & Trades" },
+  "for-real-estate":  { who: "real estate teams", line: "Respond to Every Lead in Minutes.", ind: "realestate", demo: "service", opt: "Real Estate" },
+  "for-law-firms":    { who: "law firms", line: "Cleaner Intake. Fewer Missed Details.", ind: "law", demo: "intake", opt: "Law Firms" },
+  "for-dental":       { who: "dental offices", line: "Fewer Phone Calls. Fuller Schedules.", ind: "dental", demo: "intake", opt: "Dental Offices" },
+  "for-hud-housing":  { who: "HUD-assisted housing", line: "Recertifications on Time, Every Time.", ind: "hud", demo: "compliance", opt: "HUD-Assisted Housing" },
+  "for-auto-repair":  { who: "auto repair shops", line: "Fewer Status Calls. More Approved Repairs.", ind: "autorepair", demo: "service", opt: "Auto Repair Shops" },
+  "for-cleaning":     { who: "cleaning services", line: "Quotes Answered Fast. Invoices Paid Faster.", ind: "cleaning", demo: "service", opt: "Cleaning Services" },
+  "for-short-term-rentals": { who: "short-term rental hosts", line: "Guests Answered 24/7. Turnovers on Track.", ind: "str", demo: "resort", opt: "Short-Term Rentals" },
+  "for-self-storage": { who: "self-storage facilities", line: "Rent Units Even When the Office Is Closed.", ind: "storage", demo: "property", opt: "Self-Storage" },
+  "for-insurance":    { who: "insurance agencies", line: "Faster Quotes. No Missed Renewals.", ind: "insurance", demo: "intake", opt: "Insurance Agencies" },
+  "for-tax-firms":    { who: "tax & bookkeeping firms", line: "Tax Season Without the Inbox Chaos.", ind: "tax", demo: "intake", opt: "Tax & Bookkeeping Firms" },
+  "for-gyms":         { who: "gyms & fitness studios", line: "Fuller Classes. Fewer Cancellations.", ind: "fitness", demo: "salon", opt: "Gyms & Fitness Studios" },
+  "for-event-venues": { who: "event venues", line: "Answer Inquiries First. Book More Events.", ind: "venues", demo: "service", opt: "Event Venues" },
+  "for-smoke-shops":  { who: "smoke & vape shops", line: "Bring Regulars Back. Stay Compliant.", ind: "smoke", demo: "compliance", opt: "Smoke & Vape Shops" }
+};
+function applyLanding() {
+  const key = location.hash.slice(1);
+  const L = LANDINGS[key];
+  if (!L) return;
+  $(".hero .eyebrow").textContent = "Software solutions for " + L.who;
+  $(".hero h1").innerHTML = esc(L.line.split(". ")[0].replace(/\.$/, "")) + ".<br><em>" + esc(L.line.split(". ").slice(1).join(". ") || "Built around your team.") + "</em>";
+  showInd(L.ind);
+  setDemo(L.demo);
+  ["#a_ind", "#b_ind"].forEach(s => { const o = [...$(s).options].find(o => o.text === L.opt); if (o) $(s).value = o.text; });
+  chatContext.industry = L;
+}
+window.addEventListener("hashchange", () => { if (LANDINGS[location.hash.slice(1)]) { applyLanding(); scrollTo({ top: 0 }); } });
+
+/* ============================================================
+   CHAT ASSISTANT
+   AI mode: when CONFIG.backendUrl is set and the backend has an
+   API key, replies come from Claude via your Apps Script backend.
+   Otherwise a built-in guided assistant answers and captures leads.
+   ============================================================ */
+const chatContext = { industry: null };
+const CHAT = {
+  open: false, mode: CONFIG.backendUrl ? "ai" : "local", history: [], busy: false,
+  capture: null, // {step, data, form}
+  session: (() => { try { let s = sessionStorage.getItem("rf_chat"); if (!s) { s = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem("rf_chat", s); } return s; } catch (e) { return "anon-" + Date.now(); } })()
+};
+const chatEl = {
+  fab: $("#chatFab"), panel: $("#chatPanel"), log: $("#chatLog"), form: $("#chatForm"), input: $("#chatInput"), chips: $("#chatChips"), nudge: $("#chatNudge")
+};
+const MAIN_CHIPS = ["Book a free audit", "Which product fits me?", "How much does it cost?", "How does it work?", "Talk to Rashad"];
+
+function chatAdd(role, html, isHtml) {
+  const div = document.createElement("div");
+  div.className = "cmsg " + (role === "user" ? "me" : "bot");
+  if (isHtml) div.innerHTML = html; else div.textContent = html;
+  chatEl.log.appendChild(div);
+  chatEl.log.scrollTop = chatEl.log.scrollHeight;
+  return div;
+}
+function chatChips(list) {
+  chatEl.chips.innerHTML = (list || []).map(c => `<button type="button">${esc(c)}</button>`).join("");
+}
+function botSay(text, chips, delay = 450) {
+  const t = chatAdd("bot", '<span class="typing"><i></i><i></i><i></i></span>', true);
+  return new Promise(res => setTimeout(() => {
+    t.innerHTML = text; chatEl.log.scrollTop = chatEl.log.scrollHeight;
+    CHAT.history.push({ role: "assistant", content: t.textContent });
+    chatChips(chips); res();
+  }, delay));
+}
+function openChat(fromUser) {
+  CHAT.open = true; chatEl.panel.hidden = false; chatEl.fab.setAttribute("aria-expanded", "true"); chatEl.nudge.hidden = true;
+  if (!chatEl.log.children.length) {
+    const L = chatContext.industry;
+    botSay(`Hi! I’m Rashad’s automated assistant. ${L ? `I can show you how ${esc(L.who)} save time with automation, ` : "I can explain what Rashad builds, "}help you pick a product, or book your <b>free 30-minute workflow audit</b>. What would you like to do?`, MAIN_CHIPS, 250);
+  }
+  if (fromUser) setTimeout(() => chatEl.input.focus(), 50);
+}
+function closeChat() { CHAT.open = false; chatEl.panel.hidden = true; chatEl.fab.setAttribute("aria-expanded", "false"); chatEl.fab.focus(); }
+chatEl.fab.addEventListener("click", () => CHAT.open ? closeChat() : openChat(true));
+$("#chatClose").addEventListener("click", closeChat);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && CHAT.open) closeChat(); });
+chatEl.chips.addEventListener("click", e => { const b = e.target.closest("button"); if (b) userSays(b.textContent); });
+chatEl.form.addEventListener("submit", e => { e.preventDefault(); const v = chatEl.input.value.trim(); if (v) { chatEl.input.value = ""; userSays(v); } });
+document.addEventListener("click", e => { const a = e.target.closest("[data-open-chat]"); if (a) { e.preventDefault(); openChat(true); if (a.dataset.openChat) userSays(a.dataset.openChat); } });
+
+// gentle nudge once per visit
+setTimeout(() => {
+  let seen = false; try { seen = sessionStorage.getItem("rf_nudge"); sessionStorage.setItem("rf_nudge", "1"); } catch (e) {}
+  if (!seen && !CHAT.open) chatEl.nudge.hidden = false;
+}, 20000);
+chatEl.nudge.addEventListener("click", e => { if (e.target.closest(".x")) { chatEl.nudge.hidden = true; return; } openChat(true); });
+
+async function userSays(text) {
+  if (CHAT.busy) return;
+  chatAdd("user", text);
+  CHAT.history.push({ role: "user", content: text });
+  chatChips([]);
+  if (CHAT.capture) return captureStep(text);
+  if (CHAT.mode === "ai") {
+    CHAT.busy = true;
+    const t = chatAdd("bot", '<span class="typing"><i></i><i></i><i></i></span>', true);
+    try {
+      const r = await fetch(CONFIG.backendUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ type: "chat", session: CHAT.session, messages: CHAT.history.slice(-14), source: LEAD_SRC.source, page: LEAD_SRC.page }) });
+      const j = await r.json();
+      if (!j.ok || !j.reply) throw new Error(j.error || "no reply");
+      t.innerHTML = linkify(esc(j.reply));
+      CHAT.history.push({ role: "assistant", content: j.reply });
+      chatChips(j.leadSaved ? ["See the demos", "Pricing & packages"] : ["Book a free audit", "Talk to Rashad"]);
+      CHAT.busy = false; return;
+    } catch (e) {
+      t.remove(); CHAT.mode = "local"; CHAT.busy = false; // fall back silently to the guided assistant
+    }
+  }
+  return localReply(text);
+}
+function linkify(s) { return s.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/\n/g, "<br>"); }
+
+/* ---------- guided assistant ---------- */
+const KW = [
+  { id: "rewards", re: /reward|loyalty|points|punch card|repeat customer/i, who: "businesses that want more repeat customers" },
+  { id: "review", re: /review|reputation|google rating|yelp/i, who: "businesses that live on reviews" },
+  { id: "social", re: /instagram|facebook|social media|tiktok|posts?\b|content calendar/i, who: "businesses marketing on social media" },
+  { id: "staff", re: /staff|employee|handbook|sop|onboard|training|shift swap/i, who: "teams with shifts or new hires" },
+  { id: "invoice", re: /invoice|payment reminder|late pay|billing|collections/i, who: "service businesses that bill customers" },
+  { id: "insight", re: /dashboard|report|kpi|metrics|analytics/i, who: "owners who want a clear view of the numbers" },
+  { id: "chat", re: /chat ?bot|ai assistant|virtual assistant|website chat|live chat|answer(ing)? (customer )?questions|faq|self.?storage|storage unit/i, who: "businesses that get the same questions every day" },
+  { id: "property", re: /apartment|property|tenant|resident|hoa|landlord|leasing|maintenance request|work order/i, who: "apartment and property teams" },
+  { id: "resort", re: /hotel|resort|guest|timeshare|vacation|owner(s)? |front desk|housekeep|hospitality|motel|inn\b|airbnb|short.?term rental|vrbo/i, who: "hotels, resorts and timeshares" },
+  { id: "salon", re: /salon|nail|barber|massage|spa\b|stylist|lash|brow|beauty|no.?show|gym|fitness|yoga|studio|booking|appointment/i, who: "salons, barbers and spas" },
+  { id: "service", re: /contractor|plumb|roof|hvac|electrician|landscap|clean|real estate|realtor|broker|restaurant|cater|food truck|quote|lead|auto repair|mechanic|body shop|venue|wedding/i, who: "contractors, auto shops, real estate, venues and restaurants" },
+  { id: "intake", re: /law|attorney|legal|lawyer|dental|dentist|orthodont|clinic|accountant|cpa|tax|bookkeep|insurance|intake/i, who: "law, dental and professional offices" },
+  { id: "compliance", re: /hud|section 8|recert|lihtc|affordable housing|smoke|vape|tobacco|dispensar|compliance|inventory/i, who: "HUD housing and regulated retail" }
+];
+function detectProduct(t) { return KW.find(k => k.re.test(t)); }
+
+async function localReply(t) {
+  const s = t.toLowerCase();
+  const prod = detectProduct(s);
+  if (/^(hi|hello|hey|good (morning|afternoon|evening)|yo)\b/.test(s) && s.length < 25)
+    return botSay("Hi there! What kind of business do you run? I’ll point you to the most useful product and demo.", MAIN_CHIPS);
+  if (/in person|in-person|on.?site|visit|travel|come to|meet/.test(s) && !/book|audit/.test(s))
+    return botSay("Yes — Rashad meets virtually with clients worldwide and also travels for <b>on-site assessments, audits and launch training</b>. Travel expenses are billed at cost, approved by you in advance, on top of the assessment or project rate. The free audit call is virtual.", ["Book a free audit", "How much does it cost?"]);
+  if (/brand|white.?label|my logo|update|release/.test(s))
+    return botSay("Every tool is <b>branded for your business</b> — your logo, colors, domain and voice — and delivered as a managed service. Updates go out through a tested, versioned release process with staged rollouts and rollback if needed.", ["Which product fits me?", "Book a free audit"]);
+  if (/book|audit|free|consult|schedule|sign me up|get started|start/.test(s) && !/how much|price|cost|in person|on.?site|travel/.test(s))
+    return startCapture("audit", prod);
+  if (/send .*message|leave a message|message rashad|yes,? send it/.test(s)) return startCapture("message", prod);
+  if (/talk to|human|person|rashad|call|phone|email|contact|reach/.test(s)) {
+    return botSay(`You can email Rashad at <b>${esc(CONFIG.email)}</b>${CONFIG.phone ? ` or call <b>${esc(CONFIG.phone)}</b>` : ""}${CONFIG.calendarUrl ? `, or <a href="${esc(CONFIG.calendarUrl)}" target="_blank" rel="noopener">pick a time on his calendar</a>` : ""}. Or I can pass a message to him right now — he replies within one business day.`, ["Send Rashad a message", "Book a free audit"]);
+  }
+  if (/price|cost|how much|rate|charge|afford|budget|expensive|cheap/.test(s))
+    return botSay(`Clear pricing, fixed written quotes:<br>• <b>Free Workflow Audit</b> — $0<br>• <b>AI Readiness Assessment</b> — $750 virtual ($1,500 on-site + travel at cost), credited toward your build<br>• <b>Desk products</b> — setup from $600, plans from $79/mo<br>• <b>Pilot / Custom Build</b> — from $2,500<br>• <b>Care &amp; Growth Plan</b> — from $150/mo<br>${saleActive() ? `<b>${esc(CONFIG.sale.label)}: ${CONFIG.sale.pct}% off</b> everything through ${esc(saleEndText())}.<br>` : ""}Payment plans are available, and you can buy products online.`, ["Book a free audit", "Founding client program", "Payment plans"]);
+  if (/payment plan|installment|pay over time|finance|monthly payments|split/.test(s))
+    return botSay("Yes — any setup or project of $1,000 or more can be split into <b>3 interest-free monthly payments</b> (first payment at signing). Square and PayPal may also offer pay-over-time options at checkout.", ["Buy a product", "Book a free audit"]);
+  if (/buy|purchase|checkout|pay now|order|square|paypal/.test(s)) { document.getElementById("pricing").scrollIntoView({ behavior: "smooth" }); return botSay("You can buy directly on the site: pick a product or package and tap <b>Buy</b>. Pay in full or in 3 monthly payments, with Square or PayPal.", ["Payment plans", "Which product fits me?"]); }
+  if (/founding|discount|deal|promo|sale|holiday|new year/.test(s) && saleActive() && /sale|holiday|new year/.test(s))
+    return botSay(`The <b>${esc(CONFIG.sale.label)}</b> is on: <b>${CONFIG.sale.pct}% off</b> all listed products and services through ${esc(saleEndText())}. It doesn’t combine with the founding-client discount — you get whichever saves you more.`, ["How much does it cost?", "Book a free audit"]);
+  if (/founding|discount|deal|promo/.test(s))
+    return botSay(`Rashad is taking on <b>${CONFIG.foundingSpots} founding clients</b>: <b>25% off</b> the first setup or project, <b>first month free</b> on any Desk plan, monthly price <b>locked for 12 months</b>, and priority scheduling. A short testimonial after launch is required. There’s also a <b>Launch Bundle</b>: ChatDesk + BookDesk setup for $1,999. Want me to put your name in?`, ["Yes, apply", "Book a free audit"]);
+  if (/yes,? apply|apply/.test(s)) return startCapture("founding", prod);
+  if (/see packages|packages/.test(s)) { location.hash = "pricing"; return botSay("I’ve scrolled you to the packages. Anything I can clarify?", MAIN_CHIPS); }
+  if (/demo|see the demos|try/.test(s)) {
+    let p = prod ? prod.id : (CHAT.lastProd || (chatContext.industry ? chatContext.industry.demo : "property"));
+    if (!DEMOS[p]) return botSay(p === "chat" ? "You’re already trying ChatDesk — this chat is the demo!" : `${esc((PRODUCTS.find(x => x.id === p) || {}).name || "That product")} doesn’t have a demo in the lab yet — Rashad can walk you through it on a free audit call, branded for your business.`, ["Book a free audit", "Which product fits me?"]);
+    setDemo(p); document.getElementById("demos").scrollIntoView({ behavior: "smooth" });
+    return botSay(`I opened the <b>${esc(DEMOS[p].title)}</b> demo for you. Type a message your customers might send and click <b>Run triage</b>.`, ["Which product fits me?", "Book a free audit"]);
+  }
+  if (prod || /which product|fits me|recommend|what do you have|products?/.test(s)) {
+    if (!prod) return botSay("Happy to help. What type of business are you in?", ["Apartments / property", "Hotel or resort", "Salon / barber / spa", "Contractor / real estate / restaurant", "Law or dental office", "HUD housing / retail"]);
+    if (prod.id === "chat") { CHAT.lastProd = "chat"; return botSay("That’s <b>ChatDesk</b> — and you’re using it right now. Rashad builds assistants like this for your business: trained on your services, hours and policies, capturing leads and booking appointments 24/7, with handoff to your staff. Want a free audit to see what yours would handle?", ["Book a free audit", "How much does it cost?"]); }
+    const P = PRODUCTS.find(x => x.id === prod.id); CHAT.lastProd = prod.id;
+    const long = t.split(/\s+/).length >= 8; if (long) CHAT.pendingNeed = t;
+    return botSay(`For ${esc(prod.who)}, I’d start with <b>${esc(P.name)}</b>: ${esc(P.desc)}<br><br>Rashad adapts it to your tools and process. ${long ? "Want me to send what you described to Rashad so he can follow up?" : "Want to try the demo or book a free audit to see if it fits?"}`, long ? ["Yes, send it", "Try the demo", "How much does it cost?"] : ["Try the demo", "Book a free audit", "How much does it cost?"]);
+  }
+  if (/how does it work|process|steps|how do you work|what happens/.test(s))
+    return botSay("Simple steps: <b>1)</b> free 30-min call → <b>2)</b> one-page audit summary in 3 business days → <b>3)</b> fixed-price proposal → <b>4)</b> e-sign and kickoff → <b>5)</b> pilot built in 2–6 weeks → <b>6)</b> your team tests it → <b>7)</b> launch with training and a 30-day results check.", ["Book a free audit", "How much does it cost?"]);
+  if (/how long|timeline|weeks|fast|quick/.test(s))
+    return botSay("Most pilots launch in <b>2–6 weeks</b>, depending on scope. Smaller automations can be faster. The free audit gives you a realistic timeline for your situation.", ["Book a free audit"]);
+  if (/\bai\b|chatgpt|robot|bot|replace|job|safe|privacy|data|secure|hipaa/.test(s))
+    return botSay("Good question. Some solutions use AI for things like sorting requests or drafting replies, but <b>your staff approves anything customer-facing</b>, only the needed data is used, and everything runs in your own accounts. The goal is to free your team up, not replace them. (And yes — I’m an automated assistant myself.)", ["How does it work?", "Book a free audit"]);
+  if (/who|experience|background|qualif|about/.test(s))
+    return botSay("Rashad has spent 17 years working directly with customers and building the software that solves their problems. He was a Director of Quality Assurance leading 50+ engineers across 4 countries, supporting 80+ client organizations, with experience in healthcare, finance, restaurants, retail and defense.", ["Which product fits me?", "Book a free audit"]);
+  if (/thank|thanks|great|awesome|cool|ok(ay)?$/.test(s))
+    return botSay("You’re welcome! Anything else I can help with?", MAIN_CHIPS);
+  // fallback: describe their problem → capture
+  if (s.split(/\s+/).length >= 6)
+    return botSay("That sounds like something worth looking at in a free workflow audit. Want me to send this to Rashad so he can follow up?", ["Yes, send it", "Which product fits me?", "How much does it cost?"]).then(() => { CHAT.pendingNeed = t; });
+  return botSay("I can help you find the right product, explain pricing and how it works, or book a free audit. What would be most useful?", MAIN_CHIPS);
+}
+
+/* ---------- lead capture inside chat ---------- */
+function startCapture(form, prod) {
+  CHAT.capture = { form, step: "name", data: { need: CHAT.pendingNeed || "", industry: prod ? prod.who : (chatContext.industry ? chatContext.industry.who : "") } };
+  CHAT.pendingNeed = "";
+  const intro = form === "audit" ? "Great — let’s get your free workflow audit started. It takes about a minute."
+    : form === "founding" ? "Great — I’ll put you forward for the founding client program."
+    : "Sure — I’ll pass your message to Rashad.";
+  return botSay(intro + " What’s your first and last name?", ["Cancel"]);
+}
+async function captureStep(t) {
+  const c = CHAT.capture, v = t.trim();
+  if (/^cancel$|^stop$|never ?mind/i.test(v)) { CHAT.capture = null; return botSay("No problem. Anything else I can help with?", MAIN_CHIPS); }
+  if (c.step === "name") { c.data.name = v.slice(0, 80); c.step = "business"; return botSay(`Nice to meet you, ${esc(v.split(" ")[0])}! What’s the name of your business?`, ["Cancel"]); }
+  if (c.step === "business") { c.data.business = v.slice(0, 120); c.step = "email"; return botSay("What’s the best email to reach you?", ["Cancel"]); }
+  if (c.step === "email") {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return botSay("Hmm, that doesn’t look like an email address. Could you double-check it?", ["Cancel"]);
+    c.data.email = v; c.step = "phone"; return botSay("Phone number? (Optional — tap Skip.)", ["Skip"]);
+  }
+  if (c.step === "phone") { if (!/^skip$/i.test(v)) c.data.phone = v.slice(0, 40); c.step = c.data.need ? "confirm" : "need";
+    if (c.step === "need") return botSay("Last one: what task or workflow would you most like to make easier? A sentence or two is perfect. (Please skip private customer details.)", ["Cancel"]); }
+  if (c.step === "need") { c.data.need = v.slice(0, 1500); c.step = "confirm"; }
+  if (c.step === "confirm") {
+    c.step = "sending";
+    const d = c.data;
+    const payload = { Name: d.name, Business: d.business, Email: d.email, Phone: d.phone || "", Industry: d.industry || "", Workflow: d.need,
+      "Founding client program": c.form === "founding" ? "Yes, please consider me" : "" };
+    const formName = c.form === "audit" ? "chatbot-audit" : c.form === "founding" ? "chatbot-founding" : "chatbot-message";
+    CHAT.busy = true;
+    const ok = await sendLead(formName, payload);
+    CHAT.busy = false; CHAT.capture = null;
+    if (ok) {
+      return botSay(`All set, ${esc(d.name.split(" ")[0])}! Rashad has your request and will reply to <b>${esc(d.email)}</b> within one business day — check your inbox for a confirmation.${CONFIG.calendarUrl ? ` Want to lock in a time now? <a href="${esc(CONFIG.calendarUrl)}" target="_blank" rel="noopener">Pick a slot here</a>.` : ""}`, ["See the demos", "How does it work?"]);
+    }
+    const body = `Hi Rashad,\n\n${c.form === "founding" ? "I'd like to apply for the founding client program." : "I'd like a free workflow audit."}\n\nName: ${d.name}\nBusiness: ${d.business}\nEmail: ${d.email}\n${d.phone ? "Phone: " + d.phone + "\n" : ""}${d.industry ? "Industry: " + d.industry + "\n" : ""}What I'd like to improve: ${d.need}\n`;
+    CHAT.lastBody = body;
+    return botSay(`Thanks, ${esc(d.name.split(" ")[0])}! One last tap to send it: <a href="${esc(mailto("Free workflow audit — " + d.business, body))}">open the email draft</a>, or <button type="button" class="linkbtn" data-copy-chat>copy it</button> and send it to <b>${esc(CONFIG.email)}</b>. Rashad replies within one business day.`, ["See the demos", "How does it work?"]);
+  }
+}
+document.addEventListener("click", e => { if (e.target.closest("[data-copy-chat]")) copyText(CHAT.lastBody || "", "Message copied"); });
+
+applyLanding();
+
+</script>
+</body>
+</html>

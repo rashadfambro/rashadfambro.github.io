@@ -1,0 +1,32 @@
+name: Website tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: ${{ matrix.suite }} · ${{ matrix.env }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [production, staging]
+        suite: [smoke, regression]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test tools
+        run: |
+          pip install pytest playwright
+          python -m playwright install --with-deps chromium
+      - name: Run ${{ matrix.suite }} suite against ${{ matrix.env }}
+        env:
+          SITE_PATH: ${{ matrix.env == 'staging' && '/staging/' || '/' }}
+        run: python -m pytest -m ${{ matrix.suite }} -q -rs

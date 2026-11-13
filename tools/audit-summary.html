@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Audit Summary Generator | Rashad Fambro Consulting (internal)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1a2d;--sky:#7cc4ff;--mint:#5fe0b5;--paper:#f5f8fc;--soft:#e9f0f8;--line:#d3dce7;--muted:#56606c;--text:#1a2533;--serif:"Source Serif 4",Georgia,serif;--sans:"Manrope",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--text);font:15px/1.5 var(--sans)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;line-height:1.15}
+.app{display:grid;grid-template-columns:minmax(320px,440px) 1fr;min-height:100vh}
+.editor{background:#fff;border-right:1px solid var(--line);padding:20px;overflow:auto;max-height:100vh;position:sticky;top:0}
+.editor h1{font-size:1.4rem;margin-bottom:4px}.editor p.sub{color:var(--muted);font-size:.85rem;margin:0 0 14px}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:12px;margin:0 0 12px}
+legend{font-weight:800;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#3b5878;padding:0 6px}
+label{display:block;font-weight:700;font-size:.8rem;margin:8px 0 3px}
+input,select,textarea{width:100%;border:1px solid #b9c7d7;border-radius:8px;padding:8px 10px;font:inherit;font-size:.9rem;background:#fff}
+textarea{min-height:68px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+button{font:inherit;font-weight:750;font-size:.85rem;border-radius:9px;padding:9px 13px;cursor:pointer;border:1px solid #a8b6c7;background:#fff}
+button.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.hint{font-size:.78rem;color:var(--muted)}
+.previewwrap{padding:24px;overflow:auto}
+.page{background:#fff;width:8.5in;min-height:11in;margin:0 auto;box-shadow:0 20px 60px -24px #0d1a2d55;padding:.55in .6in;font-size:10.5pt;line-height:1.42}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:12px}
+.ph .brand{display:flex;gap:10px;align-items:center}
+.mark{width:40px;height:40px;border-radius:10px;background:linear-gradient(140deg,var(--sky),#3d8bff);display:grid;place-items:center;font:600 1rem var(--serif);color:var(--ink)}
+.ph h1{font-size:20pt}.ph small{color:var(--muted);font-size:8.5pt;display:block}
+.meta{text-align:right;font-size:8.5pt;color:var(--muted)}
+.meta b{color:var(--text)}
+.snap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 12px}
+.snap div{background:var(--soft);border-radius:8px;padding:8px 10px}
+.snap b{display:block;font:600 15pt var(--serif)}.snap span{font-size:8pt;color:var(--muted);font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
+.sec h3{font-size:11.5pt;margin:0 0 4px;color:var(--ink);border-left:3px solid #2f7fe0;padding-left:7px}
+.sec ul,.sec ol{margin:0;padding-left:17px}.sec li{margin-bottom:2px}
+.fix{background:#effcf7;border:1px solid #a9e8d1;border-radius:8px;padding:10px 12px;margin:12px 0}
+.fix h3{border:0;padding:0}
+.hitl{font-size:9pt;background:#fff8e8;border:1px solid #f3d7a6;border-radius:8px;padding:8px 10px;margin-top:10px}
+.pf{margin-top:14px;padding-top:8px;border-top:1px solid var(--line);font-size:8.3pt;color:var(--muted);display:flex;justify-content:space-between;gap:10px}
+.full{grid-column:1/-1}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.editor{position:static;max-height:none}.page{width:100%;min-height:0}}
+@media print{
+  @page{size:letter;margin:0}
+  body{background:#fff}.editor{display:none}.app{display:block}.previewwrap{padding:0}
+  .page{box-shadow:none;width:auto;min-height:0;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<form class="editor" id="ed" autocomplete="off">
+  <h1>Audit Summary Generator</h1>
+  <p class="sub">Internal tool. Fill in during or after the free audit; the one-page summary updates live. Print → “Save as PDF” to send it. Data stays in this browser.</p>
+  <div class="bar"><button type="button" class="pri" id="print">Print / Save PDF</button><button type="button" id="copy">Copy as email text</button><button type="button" id="sample">Load sample</button><button type="button" id="clear">Clear</button></div>
+  <fieldset><legend>Client</legend>
+    <div class="two"><div><label>Contact name</label><input name="contact"></div><div><label>Business</label><input name="business"></div></div>
+    <div class="two"><div><label>Industry</label><input name="industry"></div><div><label>Audit date</label><input name="date" type="date"></div></div>
+    <div class="two"><div><label>Meeting</label><select name="meeting"><option>Virtual</option><option>On-site</option><option>Phone</option></select></div><div><label>Team size</label><input name="team"></div></div>
+  </fieldset>
+  <fieldset><legend>Workflow Reviewed</legend>
+    <label>Workflow name</label><input name="workflow">
+    <label>Current steps (one per line)</label><textarea name="steps"></textarea>
+    <label>Tools used today</label><input name="tools">
+    <div class="two"><div><label>Volume per week</label><input name="volume" type="number" min="0"></div><div><label>Minutes per item</label><input name="minutes" type="number" min="0"></div></div>
+    <div class="two"><div><label>Hourly cost ($)</label><input name="rate" type="number" min="0"></div><div><label>Share automatable (%)</label><input name="pct" type="number" min="0" max="100"></div></div>
+    <div class="two"><div><label>Missed/slow leads per month</label><input name="leads" type="number" min="0"></div><div><label>Value per customer ($)</label><input name="value" type="number" min="0"></div></div>
+  </fieldset>
+  <fieldset><legend>Findings &amp; Plan</legend>
+    <label>What we found (one per line)</label><textarea name="findings"></textarea>
+    <label>Recommended first fix</label><textarea name="fix"></textarea>
+    <label>Recommended product</label><select name="product"></select>
+    <label>Human-in-the-loop checkpoint</label><input name="hitl" placeholder="e.g., Staff approve every reply that mentions price or timing">
+    <label>Other opportunities (one per line)</label><textarea name="more"></textarea>
+    <label>Success measures (one per line)</label><textarea name="measures"></textarea>
+    <label class="hint" style="font-weight:600"><input type="checkbox" name="founding" style="width:auto"> Founding client pricing (25% off setup)</label>
+    <label class="hint" style="font-weight:600"><input type="checkbox" name="sale" style="width:auto"> Show Holiday &amp; New Year Sale (10% off)</label>
+  </fieldset>
+  <p class="hint">Tip: numbers are estimates from what the client shared — label them that way in conversation.</p>
+</form>
+<div class="previewwrap"><article class="page" id="page"></article></div>
+</div>
+<script>
+"use strict";
+const PRODUCTS={
+  "None yet":null,
+  "ChatDesk — AI chat assistant":[1200,149],"BookDesk — AI booking assistant":[1200,149],"WorkOrderDesk — maintenance intake":[2500,249],
+  "GuestDesk — guest & owner requests":[2500,249],"LeadDesk — lead capture & follow-up":[1500,149],"IntakeDesk — client intake":[1800,179],
+  "ComplianceDesk — compliance checklists":[2000,199],"RewardsDesk — customer rewards":[900,99],"ReviewDesk — reviews & reputation":[600,79],
+  "SocialDesk — social media assistant":[900,149],"StaffDesk — staff handbook assistant":[1500,149],"InvoiceDesk — invoices & reminders":[900,99],
+  "InsightDesk — owner dashboard":[1500,149],"Launch Bundle — ChatDesk + BookDesk":[1999,298],"Pilot / Custom Build":[2500,150]
+};
+const $=s=>document.querySelector(s), ed=$("#ed");
+ed.product.innerHTML=Object.keys(PRODUCTS).map(k=>`<option>${k}</option>`).join("");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const lines=s=>String(s||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
+const money=n=>"$"+Math.round(n).toLocaleString("en-US");
+const num=k=>+(ed[k].value||0);
+function data(){ const d={}; [...ed.elements].forEach(el=>{ if(el.name) d[el.name]= el.type==="checkbox"?el.checked:el.value; }); return d; }
+function calc(){
+  const hrsMonth=num("volume")*num("minutes")/60*4.33;
+  const saved=hrsMonth*num("pct")/100;
+  const labor=saved*12*num("rate");
+  const leads=num("leads")*0.25*num("value")*12;
+  return {hrsMonth,saved,labor,leads,total:labor+leads};
+}
+function invest(d){
+  const p=PRODUCTS[d.product]; if(!p) return "";
+  let f=1, notes=[];
+  if(d.founding){ f=0.75; notes.push("founding client pricing (25% off setup)"); }
+  else if(d.sale){ f=0.9; notes.push("Holiday & New Year Sale (10% off)"); }
+  const setup=p[0]*f, monthly=d.sale&&!d.founding?p[1]*0.9:p[1];
+  return `<b>${esc(d.product.split(" — ")[0])}</b>: ${f<1?`<s>${money(p[0])}</s> `:""}${money(setup)} setup + ${money(monthly)}/mo${notes.length?` · ${notes.join(", ")}`:""}. Setups of $1,000+ can be split into 3 interest-free monthly payments.`;
+}
+function render(){
+  const d=data(), c=calc();
+  const date=d.date?new Date(d.date+"T12:00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}):"";
+  const ul=(arr,o)=>arr.length?`<${o?"ol":"ul"}>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</${o?"ol":"ul"}>`:`<p class="hint">—</p>`;
+  $("#page").innerHTML=`
+  <header class="ph"><div class="brand"><span class="mark">RF</span><div><h1>Workflow Audit Summary</h1><small>Rashad Fambro Consulting · Software Solutions · Automation &amp; AI</small></div></div>
+    <div class="meta"><b>${esc(d.business||"Client business")}</b><br>${esc(d.contact||"")}${d.industry?" · "+esc(d.industry):""}<br>${esc(date)} · ${esc(d.meeting)} audit${d.team?" · Team: "+esc(d.team):""}</div></header>
+  <p><b>Workflow reviewed:</b> ${esc(d.workflow||"—")}${d.tools?` &nbsp;·&nbsp; <b>Tools today:</b> ${esc(d.tools)}`:""}</p>
+  <div class="snap">
+    <div><b>${Math.round(c.hrsMonth)}</b><span>staff hours/month on this workflow</span></div>
+    <div><b>${Math.round(c.saved)}</b><span>hours/month we can free up (${num("pct")||0}%)</span></div>
+    <div><b>${money(c.labor)}</b><span>labor value per year</span></div>
+    <div><b>${money(c.total)}</b><span>est. yearly value incl. ${c.leads?"recovered leads":"time saved"}</span></div>
+  </div>
+  <div class="grid">
+    <section class="sec"><h3>How It Works Today</h3>${ul(lines(d.steps),true)}</section>
+    <section class="sec"><h3>What We Found</h3>${ul(lines(d.findings))}</section>
+  </div>
+  <div class="fix sec"><h3>Recommended First Fix</h3><p style="margin:0">${esc(d.fix||"—")}</p>
+    ${d.hitl?`<div class="hitl"><b>Human-in-the-loop checkpoint:</b> ${esc(d.hitl)}</div>`:""}</div>
+  <div class="grid">
+    <section class="sec"><h3>How We’ll Measure Success</h3>${ul(lines(d.measures))}</section>
+    <section class="sec"><h3>Other Opportunities</h3>${ul(lines(d.more))}</section>
+    ${invest(d)?`<section class="sec full"><h3>Suggested Investment</h3><p style="margin:0">${invest(d)}</p></section>`:""}
+    <section class="sec full"><h3>Next Steps</h3><ol><li>Review this summary — it’s yours to keep either way.</li><li>Reply “yes” and I’ll send a fixed-price proposal within 2 business days.</li><li>Sign electronically, pay the deposit (or first installment), and we schedule kickoff.</li></ol></section>
+  </div>
+  <footer class="pf"><span>Estimates are based on information shared during the audit and are not guarantees.</span><span>Rashad Fambro · rashadfambro.github.io</span></footer>`;
+  try{ localStorage.setItem("auditDraft",JSON.stringify(d)); }catch(e){}
+}
+function load(d){ [...ed.elements].forEach(el=>{ if(el.name && d[el.name]!==undefined){ if(el.type==="checkbox") el.checked=!!d[el.name]; else el.value=d[el.name]; } }); render(); }
+const SAMPLE={contact:"Maria Lopez, Community Manager",business:"Sunrise Apartments (sample)",industry:"Apartment community · 220 units",date:new Date().toISOString().slice(0,10),meeting:"Virtual",team:"6 staff",
+  workflow:"Maintenance requests from residents",steps:"Residents text, call, or email the office or a tech directly\nStaff re-type requests into a spreadsheet\nManager assigns techs by group text each morning\nResidents call back asking for status",
+  tools:"Google Sheets, office phone, personal cell phones",volume:"60",minutes:"12",rate:"24",pct:"40",leads:"4",value:"1800",
+  findings:"Requests arrive in 4 places; ~1 in 10 is missed or delayed\nAfter-hours emergencies depend on whoever sees the text\nAbout 15 status calls per week interrupt office staff\nNo record of response times for owners",
+  fix:"Route every maintenance request into one WorkOrderDesk queue with urgency triage, drafted resident replies, and automatic status updates.",
+  product:"WorkOrderDesk — maintenance intake",hitl:"Office staff confirm priority and technician before any reply goes to a resident",
+  more:"ChatDesk on the website for leasing questions after hours\nReviewDesk to request reviews after completed work orders\nInsightDesk weekly summary for the owner",
+  measures:"Time to first reply under 15 minutes\nStatus calls cut by half within 60 days\nZero missed after-hours emergencies",founding:true,sale:false};
+ed.addEventListener("input",render);
+$("#print").addEventListener("click",()=>window.print());
+$("#sample").addEventListener("click",()=>load(SAMPLE));
+$("#clear").addEventListener("click",()=>{ ed.reset(); try{localStorage.removeItem("auditDraft")}catch(e){} render(); });
+$("#copy").addEventListener("click",async()=>{
+  const t=$("#page").innerText.replace(/\n{3,}/g,"\n\n");
+  try{ await navigator.clipboard.writeText(t); $("#copy").textContent="Copied!"; }catch(e){ $("#copy").textContent="Copy failed"; }
+  setTimeout(()=>$("#copy").textContent="Copy as email text",1800);
+});
+let saved=null; try{ saved=JSON.parse(localStorage.getItem("auditDraft")||"null"); }catch(e){}
+if(saved) load(saved); else { ed.date.value=new Date().toISOString().slice(0,10); render(); }
+</script>
+</body>
+</html>
