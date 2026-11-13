@@ -529,3 +529,66 @@ def test_R42_multi_industry_wording_and_packagedesk(home):
     pg.click("#chatFab")
     assert "PackageDesk" in chat(pg, "do you have a package room system for our mail room?")
     assert home.errors == []
+
+
+# ---------------- v10: prototypes for every former "Ready to build" product ----------------
+PROTOS = {"rewards": "rewards.html", "review": "reviews.html", "social": "social.html",
+          "staff": "staff.html", "invoice": "invoices.html", "insight": "insights.html"}
+
+
+def _proto(make_page, base_url, file):
+    w = make_page(); w.page.goto(base_url + "prototypes/" + file); w.page.wait_for_timeout(300)
+    return w
+
+
+def test_R43_every_product_has_a_demo_or_prototype(home, base_url):
+    pg = home.page
+    assert pg.evaluate("PRODUCTS.every(p => p.status === 'Prototype' || p.status.startsWith('Live'))")
+    for pid, file in PROTOS.items():
+        href = pg.get_attribute(f"[data-proto-link='{pid}']", "href")
+        assert href == f"prototypes/{file}"
+    assert "Ready to build" not in pg.inner_text("#prodGrid")
+
+
+def test_R44_prototypes_load_branded_without_errors(make_page, base_url):
+    for file in list(PROTOS.values()) + ["index.html"]:
+        w = _proto(make_page, base_url, file)
+        assert w.errors == [], (file, w.errors)
+        assert "Rashad Fambro Consulting" in w.page.inner_text("body")
+        if file != "index.html":
+            w.page.fill("#bizName", "Sunset Barbers")
+            assert "Sunset Barbers" in w.page.inner_text("header")
+            assert "nothing is sent" in w.page.inner_text(".banner")
+
+
+
+def test_R45_prototype_core_flows(make_page, base_url):
+    # RewardsDesk: look up, add points, approve an offer
+    pg = _proto(make_page, base_url, "rewards.html").page
+    pg.fill("#phone", "555-0142"); pg.click("#lookup"); pg.fill("#amt", "30"); pg.click("#addPts")
+    assert "Reward ready" in pg.inner_text("#rewardBox")
+    pg.click("[data-tab=offers]"); n = pg.locator("[data-ok]").count(); pg.locator("[data-ok]").first.click()
+    assert pg.locator("[data-ok]").count() == n - 1
+    # ReviewDesk: draft a reply to a 2-star review and post it
+    pg = _proto(make_page, base_url, "reviews.html").page
+    pg.click("[data-r='2']"); assert "sorry" in pg.input_value("#reply").lower()
+    pg.click("#post"); assert pg.locator("[data-r='2']").count() == 0
+    pg.click("[data-tab=ask]"); pg.click("[data-star='2']"); assert "privately" in pg.inner_text("#askResult")
+    # SocialDesk: draft a month, approve, schedule; DM keyword
+    pg = _proto(make_page, base_url, "social.html").page
+    pg.click("#gen"); assert pg.locator("[data-post]").count() == 12
+    pg.locator("[data-app]").first.click(); pg.click("#sched"); assert "Scheduled" in pg.inner_text("#posts")
+    pg.click("[data-tab=dms]"); pg.click("#testDm"); assert "PRICE" in pg.inner_text("#dmOut")
+    # StaffDesk: answer from the handbook, unknown goes to a manager
+    pg = _proto(make_page, base_url, "staff.html").page
+    pg.click("#askBtn"); assert "Closing the register" in pg.inner_text("#ans")
+    pg.fill("#q", "Is parking reimbursed?"); pg.click("#askBtn"); assert "manager" in pg.inner_text("#ans")
+    # InvoiceDesk: quote -> invoice -> send; reminders exist
+    pg = _proto(make_page, base_url, "invoices.html").page
+    pg.locator("[data-conv]").first.click(); pg.click("[data-tab=invoices]"); pg.click("#sendInv")
+    assert "Invoice #1043" in pg.inner_text("#preview")
+    pg.click("[data-tab=remind]"); assert pg.locator("[data-rs]").count() >= 2
+    # InsightDesk: summary and before/after
+    pg = _proto(make_page, base_url, "insights.html").page
+    pg.click("#nextWk"); pg.click("[data-tab=summary]"); assert "Good morning" in pg.inner_text("#sumTxt")
+    pg.click("[data-tab=impact]"); assert "%" in pg.inner_text("#baRows")

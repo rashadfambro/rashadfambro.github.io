@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StaffDesk Prototype · Rashad Fambro Consulting</title>
+<meta name="description" content="Staff get answers from your handbook, managers approve shift swaps, and new hires follow a checklist. Clickable prototype with sample data.">
+<link rel="icon" href="../icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1a2d;--ink-3:#1d3454;--paper:#f5f8fc;--line:#d3dce7;--muted:#56606c;--text:#1a2533;--sky:#7cc4ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;--brand:#2f7fe0;
+--serif:"Source Serif 4",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
+a{color:inherit}button,input,select,textarea{font:inherit}
+header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}
+header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
+header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
+header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
+header input[type=color]{width:34px;height:30px;border:0;background:none;padding:0}
+.banner{background:#fff6e5;border-bottom:1px solid #f1d9a8;color:#6b4b00;font-size:13px;padding:8px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.banner a{font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel[hidden]{display:none}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font:600 18px/1.2 var(--serif);margin:0 0 10px}.card h3{font-size:14px;margin:0 0 6px}
+.kpi .v{font:600 28px/1.1 var(--serif)}.kpi .l{font-size:12.5px;color:var(--muted)}.kpi .d{font-size:12.5px;font-weight:700}
+.up{color:#0a7a52}.down{color:#b42318}
+label.f{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input.i,select.i,textarea.i{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+textarea.i{min-height:90px}
+.btn{border:1px solid transparent;border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff}
+.btn.alt{background:#fff;color:var(--ink);border-color:#a8b6c7}.btn.ok{background:#0a7a52}.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.chip{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;background:#e9f0f8}
+.chip.g{background:#dff7ee;color:#0a6a48}.chip.a{background:#fff1d6;color:#7a5200}.chip.r{background:#ffe3e3;color:#9b1c1c}
+.muted{color:var(--muted)}.small{font-size:13px}
+.list>div{border-bottom:1px solid var(--line);padding:10px 0}.list>div:last-child{border:0}
+.sel{outline:2px solid var(--brand);border-radius:10px}
+.out{background:#f2f6fb;border:1px dashed #a8b6c7;border-radius:10px;padding:12px;white-space:pre-wrap}
+.bar{height:10px;border-radius:99px;background:#e9f0f8;overflow:hidden}.bar>i{display:block;height:100%;background:var(--brand)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
+</style></head>
+<body data-proto="staff">
+<header><div class="logo">Y</div><div><h1>StaffDesk <span class="sub">for <span data-biz>Your Business</span></span></h1><div class="sub">Staff get answers from your handbook, managers approve shift swaps, and new hires follow a checklist.</div></div><span class="sp"></span>
+<label>Brand name <input type="text" id="bizName" aria-label="Business name"></label><label>Color <input type="color" id="bizColor" aria-label="Brand color"></label></header>
+<div class="banner"><span><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
+<a href="../index.html#products">← Back to products</a><a href="../index.html#audit">Book a free audit</a><button type="button" class="btn alt sm" id="reset">Reset sample data</button></div>
+<main><nav class="tabs" aria-label="StaffDesk sections"><button type="button" data-tab="askt" aria-selected="true">Ask the Handbook</button><button type="button" data-tab="book" aria-selected="false">Handbook</button><button type="button" data-tab="swaps" aria-selected="false">Shift Swaps</button><button type="button" data-tab="onboard" aria-selected="false">Onboarding</button></nav>
+
+<section class="panel" id="askt"><div class="grid g2">
+ <div class="card"><h2>Ask a Question</h2><label class="f" for="q">What do you need to know?</label><input class="i" id="q" value="How do I close the register?"><div class="row" style="margin-top:8px"><button class="btn" id="askBtn" type="button">Ask</button></div><div class="out" id="ans" style="margin-top:10px">Answers come only from your handbook, with the source shown.</div></div>
+ <div class="card"><h2>Questions for a Manager</h2><p class="small muted">When the handbook doesn't cover it, the question goes to a manager instead of a guess.</p><div class="list" id="mgrQ"></div></div></div></section>
+<section class="panel" id="book" hidden><div class="grid g2"><div class="card"><h2>Policies &amp; SOPs</h2><div class="list" id="sops"></div></div>
+ <div class="card"><h2>Add a Policy</h2><label class="f" for="st">Title</label><input class="i" id="st"><label class="f" for="sb">Text</label><textarea class="i" id="sb"></textarea><div class="row" style="margin-top:8px"><button class="btn" id="addSop" type="button">Add to handbook</button></div></div></div></section>
+<section class="panel" id="swaps" hidden><div class="grid g2"><div class="card"><h2>Request a Swap</h2>
+ <label class="f" for="sf">Your name</label><input class="i" id="sf" value="Jasmine"><label class="f" for="sto">Covering teammate</label><input class="i" id="sto" value="Marcus"><label class="f" for="sd">Shift</label><input class="i" id="sd" value="Saturday 2–10 PM"><div class="row" style="margin-top:8px"><button class="btn" id="reqSwap" type="button">Send to manager</button></div></div>
+ <div class="card"><h2>Manager Approval</h2><div class="list" id="swapList"></div></div></div></section>
+<section class="panel" id="onboard" hidden><div class="card"><div class="row" style="justify-content:space-between"><h2>New Hires</h2><div class="row"><input class="i" id="nh" placeholder="New hire name" style="width:200px"><button class="btn" id="addNh" type="button">Add</button></div></div><div class="grid g2" id="hires"></div></div></section>
+
+</main>
+<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const KEY="proto-"+document.body.dataset.proto;
+function load(def){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):structuredClone(def)}catch(e){return structuredClone(def)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
+function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assign(b,JSON.parse(localStorage.getItem("proto-brand")||"{}"))}catch(e){}return b}
+function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
+function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
+function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
+document.addEventListener("DOMContentLoaded",()=>{tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+ $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
+
+
+const STEPS=["Paperwork and ID","Read the handbook","Shadow a shift","POS and register training","Safety walkthrough","First solo shift"];
+const DEF={mq:[],swaps:[{from:"Leo",to:"Priya",shift:"Friday 6–11 PM",status:"Pending"}],hires:[{name:"Avery",done:[0,1]}],sops:[
+ {t:"Closing the register",b:"Count the drawer with a second person, record totals on the closing sheet, drop cash over $200 in the safe, and lock the drawer. Report any difference over $5 to the manager on duty."},
+ {t:"Opening checklist",b:"Arrive 20 minutes early, turn off the alarm, check the schedule, stock the front, and open the register with $150 starting cash."},
+ {t:"Calling out sick",b:"Call the manager on duty at least 2 hours before your shift. Texts alone don't count. Two no-call no-shows end employment."},
+ {t:"Refunds and returns",b:"Refunds within 14 days with a receipt to the original payment. Store credit without a receipt. Anything over $100 needs a manager."},
+ {t:"Dress code",b:"Black top with the company logo, clean closed-toe shoes, name tag visible."},
+ {t:"Safety incidents",b:"Make the area safe, help the injured person, tell the manager right away, and fill in an incident form before the end of the shift."}]};
+let S=load(DEF);
+const words=s=>s.toLowerCase().match(/[a-z]{3,}/g)||[];
+function answer(q){const qs=new Set(words(q).filter(w=>!["how","what","the","for","can","does","you","need","know","when","with","about","our"].includes(w)));let best=null,score=0;
+ S.sops.forEach(s=>{const sw=words(s.t+" "+s.b);let n=0;qs.forEach(w=>{if(sw.some(x=>x.startsWith(w.slice(0,5))))n++});if(n>score){score=n;best=s}});return score>=1?best:null}
+function render(){
+ $("#sops").innerHTML=S.sops.map(s=>`<div><b>${esc(s.t)}</b><div class="small">${esc(s.b)}</div></div>`).join("");
+ $("#mgrQ").innerHTML=S.mq.length?S.mq.map(q=>`<div>${esc(q)} <span class="chip a">Waiting for a manager</span></div>`).join(""):'<p class="muted small">None right now.</p>';
+ $("#swapList").innerHTML=S.swaps.map((w,i)=>`<div><b>${esc(w.from)}</b> → <b>${esc(w.to)}</b> · ${esc(w.shift)} <span class="chip ${w.status==="Approved"?"g":w.status==="Declined"?"r":"a"}">${w.status}</span>${w.status==="Pending"?`<div class="row" style="margin-top:6px"><button class="btn ok sm" data-ap="${i}" type="button">Approve</button><button class="btn alt sm" data-de="${i}" type="button">Decline</button></div>`:""}</div>`).join("");
+ $$("[data-ap]").forEach(b=>b.onclick=()=>{S.swaps[b.dataset.ap].status="Approved";save();render();toast("Swap approved; schedule updated")});
+ $$("[data-de]").forEach(b=>b.onclick=()=>{S.swaps[b.dataset.de].status="Declined";save();render()});
+ $("#hires").innerHTML=S.hires.map((h,i)=>{const pct=Math.round(h.done.length/STEPS.length*100);return `<div class="card"><div class="row" style="justify-content:space-between"><b>${esc(h.name)}</b><span class="small">${pct}% done</span></div><div class="bar" style="margin:8px 0"><i style="width:${pct}%"></i></div>${STEPS.map((s,j)=>`<label class="small" style="display:block"><input type="checkbox" data-h="${i}" data-s="${j}" ${h.done.includes(j)?"checked":""}> ${s}</label>`).join("")}</div>`}).join("");
+ $$("[data-h]").forEach(c=>c.onchange=()=>{const h=S.hires[c.dataset.h],j=Number(c.dataset.s);h.done=c.checked?[...new Set([...h.done,j])]:h.done.filter(x=>x!==j);save();render()})}
+$("#askBtn").onclick=()=>{const q=$("#q").value.trim();if(!q)return;const s=answer(q);
+ if(s){$("#ans").innerHTML=`<b>${esc(s.b)}</b><div class="small muted" style="margin-top:6px">From your handbook: “${esc(s.t)}”</div>`}else{S.mq.unshift(q);save();render();$("#ans").innerHTML="<b>The handbook doesn't cover that.</b> I've sent your question to a manager instead of guessing."}};
+$("#addSop").onclick=()=>{const t=$("#st").value.trim(),b=$("#sb").value.trim();if(!t||!b){toast("Add a title and text");return}S.sops.push({t,b});$("#st").value=$("#sb").value="";save();render();toast("Added to the handbook")};
+$("#reqSwap").onclick=()=>{S.swaps.unshift({from:$("#sf").value,to:$("#sto").value,shift:$("#sd").value,status:"Pending"});save();render();toast("Sent to the manager for approval")};
+$("#addNh").onclick=()=>{const n=$("#nh").value.trim();if(!n)return;S.hires.push({name:n,done:[]});$("#nh").value="";save();render()};
+</script></body></html>

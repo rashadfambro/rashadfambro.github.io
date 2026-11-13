@@ -91,3 +91,6 @@ Defects found and fixed during this run: two industry-page headings not in Title
 | R42 | Multi-industry wording, PackageDesk product, demo and chat answer |
 
 Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a test fakes the response.
+| R43 | Every product has a demo or a prototype; prototype buttons link to the right page |
+| R44 | All six prototypes and the prototype index load without errors and take the visitor's brand name |
+| R45 | Core flow in each prototype works (points and offers, review replies, post drafting, handbook answers, invoices and reminders, weekly summary) |

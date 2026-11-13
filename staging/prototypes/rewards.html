@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RewardsDesk Prototype · Rashad Fambro Consulting</title>
+<meta name="description" content="Points by phone number, automatic offers you approve, and repeat-visit results. Clickable prototype with sample data.">
+<link rel="icon" href="../icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1a2d;--ink-3:#1d3454;--paper:#f5f8fc;--line:#d3dce7;--muted:#56606c;--text:#1a2533;--sky:#7cc4ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;--brand:#2f7fe0;
+--serif:"Source Serif 4",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
+a{color:inherit}button,input,select,textarea{font:inherit}
+header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}
+header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
+header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
+header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
+header input[type=color]{width:34px;height:30px;border:0;background:none;padding:0}
+.banner{background:#fff6e5;border-bottom:1px solid #f1d9a8;color:#6b4b00;font-size:13px;padding:8px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.banner a{font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel[hidden]{display:none}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font:600 18px/1.2 var(--serif);margin:0 0 10px}.card h3{font-size:14px;margin:0 0 6px}
+.kpi .v{font:600 28px/1.1 var(--serif)}.kpi .l{font-size:12.5px;color:var(--muted)}.kpi .d{font-size:12.5px;font-weight:700}
+.up{color:#0a7a52}.down{color:#b42318}
+label.f{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input.i,select.i,textarea.i{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+textarea.i{min-height:90px}
+.btn{border:1px solid transparent;border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff}
+.btn.alt{background:#fff;color:var(--ink);border-color:#a8b6c7}.btn.ok{background:#0a7a52}.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.chip{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;background:#e9f0f8}
+.chip.g{background:#dff7ee;color:#0a6a48}.chip.a{background:#fff1d6;color:#7a5200}.chip.r{background:#ffe3e3;color:#9b1c1c}
+.muted{color:var(--muted)}.small{font-size:13px}
+.list>div{border-bottom:1px solid var(--line);padding:10px 0}.list>div:last-child{border:0}
+.sel{outline:2px solid var(--brand);border-radius:10px}
+.out{background:#f2f6fb;border:1px dashed #a8b6c7;border-radius:10px;padding:12px;white-space:pre-wrap}
+.bar{height:10px;border-radius:99px;background:#e9f0f8;overflow:hidden}.bar>i{display:block;height:100%;background:var(--brand)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
+</style><!--STAGING-START--><meta name="robots" content="noindex, nofollow"><style>.stg-ribbon{position:fixed;right:0;top:50%;z-index:9999;transform:rotate(-90deg) translateY(-100%);transform-origin:right top;background:#ff5a5a;color:#fff;font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:8px 8px 0 0}</style><!--STAGING-END--></head>
+<body data-proto="rewards"><!--STAGING-START--><div class="stg-ribbon" aria-hidden="true">STAGING</div><!--STAGING-END-->
+<header><div class="logo">Y</div><div><h1>RewardsDesk <span class="sub">for <span data-biz>Your Business</span></span></h1><div class="sub">Points by phone number, automatic offers you approve, and repeat-visit results.</div></div><span class="sp"></span>
+<label>Brand name <input type="text" id="bizName" aria-label="Business name"></label><label>Color <input type="color" id="bizColor" aria-label="Brand color"></label></header>
+<div class="banner"><span><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
+<a href="../index.html#products">← Back to products</a><a href="../index.html#audit">Book a free audit</a><button type="button" class="btn alt sm" id="reset">Reset sample data</button></div>
+<main><nav class="tabs" aria-label="RewardsDesk sections"><button type="button" data-tab="checkout" aria-selected="true">Checkout</button><button type="button" data-tab="customers" aria-selected="false">Customers</button><button type="button" data-tab="offers" aria-selected="false">Offers to Approve</button><button type="button" data-tab="results" aria-selected="false">Results</button></nav>
+
+<section class="panel" id="checkout"><div class="grid g2">
+ <div class="card"><h2>At the Register</h2>
+  <label class="f" for="phone">Customer phone number</label><div class="row"><input class="i" id="phone" placeholder="e.g. 555-0142" style="flex:1"><button class="btn" id="lookup" type="button">Look up</button></div>
+  <div id="who" class="small" style="margin-top:10px"></div>
+  <div id="joinBox" hidden><label class="f" for="jname">First name</label><input class="i" id="jname">
+   <label class="small"><input type="checkbox" id="joptin" checked> Customer agrees to receive reward texts (reply STOP to end)</label><br>
+   <label class="small" id="ageRow"><input type="checkbox" id="jage"> ID checked: customer is of legal age</label>
+   <div class="row" style="margin-top:8px"><button class="btn" id="join" type="button">Join rewards</button></div></div>
+  <div id="buyBox" hidden><label class="f" for="amt">Purchase amount ($)</label><div class="row"><input class="i" id="amt" type="number" min="0" step="0.01" value="24.50" style="flex:1"><button class="btn ok" id="addPts" type="button">Add points</button></div></div>
+  <div id="rewardBox" style="margin-top:12px"></div>
+ </div>
+ <div class="card"><h2>Program Rules</h2>
+  <p class="small">1 point per $1. <b id="ruleTxt"></b></p>
+  <label class="f" for="thr">Points for a reward</label><input class="i" id="thr" type="number" min="10" step="10">
+  <label class="f" for="rv">Reward value ($ off)</label><input class="i" id="rv" type="number" min="1">
+  <label class="small" style="display:block;margin-top:10px"><input type="checkbox" id="agerestr"> Age-restricted products (ask for ID at sign-up)</label>
+  <p class="muted small">Texts go only to customers who opted in. Owners approve every offer before it is sent.</p>
+ </div></div></section>
+<section class="panel" id="customers" hidden><div class="card"><h2>Members</h2><table><thead><tr><th>Name</th><th>Phone</th><th>Points</th><th>Visits</th><th>Last visit</th><th>Texts</th></tr></thead><tbody id="custRows"></tbody></table></div></section>
+<section class="panel" id="offers" hidden><div class="card"><h2>Offers Waiting for Your Approval</h2><p class="small muted">Drafted automatically from birthdays, lapsed regulars, and milestones.</p><div class="list" id="offerList"></div></div></section>
+<section class="panel" id="results" hidden><div class="grid g4" id="kpis"></div><div class="card" style="margin-top:14px"><h2>Top Customers</h2><table><thead><tr><th>Name</th><th>Visits</th><th>Points</th></tr></thead><tbody id="topRows"></tbody></table></div></section>
+
+</main>
+<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const KEY="proto-"+document.body.dataset.proto;
+function load(def){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):structuredClone(def)}catch(e){return structuredClone(def)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
+function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assign(b,JSON.parse(localStorage.getItem("proto-brand")||"{}"))}catch(e){}return b}
+function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
+function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
+function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
+document.addEventListener("DOMContentLoaded",()=>{tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+ $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
+
+
+const M=new Date().getMonth()+1;
+const DEF={thr:100,rv:10,age:false,sent:[],cust:[
+ {name:"Maria",phone:"555-0142",points:86,visits:9,last:3,bday:M,opt:true},
+ {name:"Devon",phone:"555-0177",points:140,visits:14,last:6,bday:4,opt:true},
+ {name:"Aisha",phone:"555-0190",points:22,visits:2,last:51,bday:9,opt:true},
+ {name:"Tom",phone:"555-0105",points:61,visits:7,last:63,bday:M,opt:false},
+ {name:"Lena",phone:"555-0123",points:12,visits:1,last:20,bday:1,opt:true},
+ {name:"Chris",phone:"555-0168",points:97,visits:11,last:2,bday:7,opt:true}]};
+let S=load(DEF), cur=null;
+const norm=p=>p.replace(/\D/g,"").slice(-7);
+function offersList(){const b=brand().name,o=[];
+ S.cust.forEach(c=>{if(c.bday===M)o.push({id:"bd-"+c.phone,c,kind:"Birthday",text:`Happy birthday, ${c.name}! Enjoy $${S.rv} off your next visit at ${b} this month.`});
+  if(c.last>45)o.push({id:"wm-"+c.phone,c,kind:"We miss you",text:`Hi ${c.name}, it's been a while! Here's double points on your next visit to ${b} this week.`});
+  if(c.points>=S.thr)o.push({id:"rw-"+c.phone,c,kind:"Reward ready",text:`${c.name}, you've earned $${S.rv} off at ${b}. Show this text at checkout.`});});
+ return o.filter(x=>!S.sent.includes(x.id))}
+function render(){$("#thr").value=S.thr;$("#rv").value=S.rv;$("#agerestr").checked=S.age;$("#ageRow").hidden=!S.age;
+ $("#ruleTxt").textContent=`Every ${S.thr} points = $${S.rv} off.`;
+ $("#custRows").innerHTML=S.cust.map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${c.points}</td><td>${c.visits}</td><td>${c.last} days ago</td><td>${c.opt?'<span class="chip g">Opted in</span>':'<span class="chip">No texts</span>'}</td></tr>`).join("");
+ const o=offersList();$("#offerList").innerHTML=o.length?o.map(x=>`<div><div class="row"><span class="chip a">${x.kind}</span><b>${esc(x.c.name)}</b>${x.c.opt?"":'<span class="chip r">Not opted in: will not be texted</span>'}</div><textarea class="i" data-txt="${x.id}" style="min-height:60px;margin-top:6px">${esc(x.text)}</textarea><div class="row" style="margin-top:6px"><button class="btn ok sm" data-ok="${x.id}" type="button">Approve &amp; send</button><button class="btn alt sm" data-skip="${x.id}" type="button">Skip</button></div></div>`).join(""):'<p class="muted">All caught up. New offers appear as customers hit milestones.</p>';
+ $$("[data-ok]").forEach(b=>b.onclick=()=>{const x=o.find(y=>y.id===b.dataset.ok);S.sent.push(x.id);save();render();toast(x.c.opt?`Sent to ${x.c.name}`:`Skipped: ${x.c.name} has not opted in`)});
+ $$("[data-skip]").forEach(b=>b.onclick=()=>{S.sent.push(b.dataset.skip);save();render();toast("Skipped")});
+ const n=S.cust.length,rep=S.cust.filter(c=>c.visits>=2).length,pts=S.cust.reduce((a,c)=>a+c.points,0);
+ $("#kpis").innerHTML=[["Members",n],["Repeat-visit rate",Math.round(rep/n*100)+"%"],["Points outstanding",pts],["Offers sent",S.sent.length]].map(k=>`<div class="card kpi"><div class="v">${k[1]}</div><div class="l">${k[0]}</div></div>`).join("");
+ $("#topRows").innerHTML=[...S.cust].sort((a,b)=>b.visits-a.visits).slice(0,5).map(c=>`<tr><td>${esc(c.name)}</td><td>${c.visits}</td><td>${c.points}</td></tr>`).join("");
+ showCur()}
+function showCur(){$("#rewardBox").innerHTML="";if(!cur){return}
+ $("#who").innerHTML=`<b>${esc(cur.name)}</b> · ${cur.points} points · ${cur.visits} visits`;$("#buyBox").hidden=false;$("#joinBox").hidden=true;
+ if(cur.points>=S.thr)$("#rewardBox").innerHTML=`<div class="out" id="rewardReady"><b>Reward ready:</b> $${S.rv} off. <button class="btn sm" id="redeem" type="button">Redeem now</button></div>`,$("#redeem").onclick=()=>{cur.points-=S.thr;save();render();toast(`Redeemed $${S.rv} off for ${cur.name}`)}}
+$("#lookup").onclick=()=>{const p=norm($("#phone").value);if(p.length<7){toast("Enter a phone number");return}
+ cur=S.cust.find(c=>norm(c.phone)===p)||null;
+ if(cur){showCur()}else{$("#who").innerHTML="New customer: invite them to join.";$("#joinBox").hidden=false;$("#buyBox").hidden=true;$("#rewardBox").innerHTML=""}};
+$("#join").onclick=()=>{const name=$("#jname").value.trim();if(!name){toast("Add a first name");return}
+ if(S.age&&!$("#jage").checked){toast("Check ID before joining");return}
+ cur={name,phone:$("#phone").value.trim(),points:0,visits:0,last:0,bday:0,opt:$("#joptin").checked};S.cust.push(cur);save();render();toast(`${name} joined`)};
+$("#addPts").onclick=()=>{if(!cur)return;const pts=Math.floor(Number($("#amt").value)||0);cur.points+=pts;cur.visits+=1;cur.last=0;save();render();toast(`+${pts} points for ${cur.name}`)};
+$("#thr").onchange=()=>{S.thr=Math.max(10,Number($("#thr").value)||100);save();render()};
+$("#rv").onchange=()=>{S.rv=Math.max(1,Number($("#rv").value)||10);save();render()};
+$("#agerestr").onchange=()=>{S.age=$("#agerestr").checked;save();render()};
+</script></body></html>

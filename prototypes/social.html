@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SocialDesk Prototype · Rashad Fambro Consulting</title>
+<meta name="description" content="A month of on-brand posts drafted for approval, plus instant replies to common DMs. Clickable prototype with sample data.">
+<link rel="icon" href="../icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1a2d;--ink-3:#1d3454;--paper:#f5f8fc;--line:#d3dce7;--muted:#56606c;--text:#1a2533;--sky:#7cc4ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;--brand:#2f7fe0;
+--serif:"Source Serif 4",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
+a{color:inherit}button,input,select,textarea{font:inherit}
+header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}
+header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
+header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
+header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
+header input[type=color]{width:34px;height:30px;border:0;background:none;padding:0}
+.banner{background:#fff6e5;border-bottom:1px solid #f1d9a8;color:#6b4b00;font-size:13px;padding:8px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.banner a{font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel[hidden]{display:none}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font:600 18px/1.2 var(--serif);margin:0 0 10px}.card h3{font-size:14px;margin:0 0 6px}
+.kpi .v{font:600 28px/1.1 var(--serif)}.kpi .l{font-size:12.5px;color:var(--muted)}.kpi .d{font-size:12.5px;font-weight:700}
+.up{color:#0a7a52}.down{color:#b42318}
+label.f{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input.i,select.i,textarea.i{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+textarea.i{min-height:90px}
+.btn{border:1px solid transparent;border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff}
+.btn.alt{background:#fff;color:var(--ink);border-color:#a8b6c7}.btn.ok{background:#0a7a52}.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.chip{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;background:#e9f0f8}
+.chip.g{background:#dff7ee;color:#0a6a48}.chip.a{background:#fff1d6;color:#7a5200}.chip.r{background:#ffe3e3;color:#9b1c1c}
+.muted{color:var(--muted)}.small{font-size:13px}
+.list>div{border-bottom:1px solid var(--line);padding:10px 0}.list>div:last-child{border:0}
+.sel{outline:2px solid var(--brand);border-radius:10px}
+.out{background:#f2f6fb;border:1px dashed #a8b6c7;border-radius:10px;padding:12px;white-space:pre-wrap}
+.bar{height:10px;border-radius:99px;background:#e9f0f8;overflow:hidden}.bar>i{display:block;height:100%;background:var(--brand)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
+</style></head>
+<body data-proto="social">
+<header><div class="logo">Y</div><div><h1>SocialDesk <span class="sub">for <span data-biz>Your Business</span></span></h1><div class="sub">A month of on-brand posts drafted for approval, plus instant replies to common DMs.</div></div><span class="sp"></span>
+<label>Brand name <input type="text" id="bizName" aria-label="Business name"></label><label>Color <input type="color" id="bizColor" aria-label="Brand color"></label></header>
+<div class="banner"><span><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
+<a href="../index.html#products">← Back to products</a><a href="../index.html#audit">Book a free audit</a><button type="button" class="btn alt sm" id="reset">Reset sample data</button></div>
+<main><nav class="tabs" aria-label="SocialDesk sections"><button type="button" data-tab="plan" aria-selected="true">Content Calendar</button><button type="button" data-tab="dms" aria-selected="false">DM Auto-Replies</button><button type="button" data-tab="setup" aria-selected="false">Brand Voice</button></nav>
+
+<section class="panel" id="plan"><div class="card"><div class="row" style="justify-content:space-between"><h2>This Month's Posts</h2><div class="row"><button class="btn" id="gen" type="button">Draft this month</button><button class="btn ok" id="sched" type="button">Schedule approved posts</button></div></div>
+ <p class="small muted" id="planNote"></p><div class="grid g3" id="posts"></div></div></section>
+<section class="panel" id="dms" hidden><div class="grid g2">
+ <div class="card"><h2>Keyword Replies</h2><table><thead><tr><th>Keyword</th><th>Auto-reply</th></tr></thead><tbody id="kwRows"></tbody></table></div>
+ <div class="card"><h2>Test a DM</h2><label class="f" for="dm">Message from a follower</label><input class="i" id="dm" value="what's the price for a cut?"><div class="row" style="margin-top:8px"><button class="btn" id="testDm" type="button">See the reply</button></div><div class="out" id="dmOut" style="margin-top:10px">The reply appears here.</div></div></div></section>
+<section class="panel" id="setup" hidden><div class="card"><h2>Brand Voice</h2><div class="grid g3">
+ <div><label class="f" for="ind">Industry</label><select class="i" id="ind"><option value="salon">Salon or barbershop</option><option value="restaurant">Restaurant</option><option value="apartments">Apartment community</option><option value="contractor">Contractor</option><option value="retail">Retail shop</option></select></div>
+ <div><label class="f" for="tone">Tone</label><select class="i" id="tone"><option>Friendly</option><option>Professional</option><option>Playful</option></select></div>
+ <div><label class="f" for="offer">Offer to feature</label><input class="i" id="offer"></div></div>
+ <p class="small muted">Change these, then go back to the calendar and draft the month again.</p></div></section>
+
+</main>
+<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const KEY="proto-"+document.body.dataset.proto;
+function load(def){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):structuredClone(def)}catch(e){return structuredClone(def)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
+function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assign(b,JSON.parse(localStorage.getItem("proto-brand")||"{}"))}catch(e){}return b}
+function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
+function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
+function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
+document.addEventListener("DOMContentLoaded",()=>{tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+ $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
+
+
+const DEF={ind:"salon",tone:"Friendly",offer:"10% off your first visit",posts:[],kw:[["PRICE","Thanks for asking! Our full price list is here: [link]. Want to book?"],["BOOK","You can book in under a minute here: [booking link]"],["HOURS","We're open Tue–Sat, 9–7. See you soon!"],["HELP","Thanks for reaching out — a team member will reply shortly."]]};
+let S=load(DEF);
+const IDEAS={salon:["the 3 questions to ask before a color change","what happens during a first visit","how to keep a fresh cut looking sharp for weeks","meet the team member behind your favorite style"],
+ restaurant:["the dish our regulars order most","what's new on the menu this month","how our kitchen preps for Friday night","the story behind our signature recipe"],
+ apartments:["5 ways to make move-in day easier","how to submit a maintenance request in under a minute","community events this month","a resident favorite amenity"],
+ contractor:["the #1 sign it's time to repair, not replace","before and after from a recent project","what to ask any contractor before you hire","how we keep job sites clean"],
+ retail:["new arrivals this week","staff picks of the month","how our rewards program works","a quick gift guide"]};
+const TYPES=["Tip","Behind the scenes","Offer","FAQ"],TAGS={salon:"#salon #hairgoals #selfcare",restaurant:"#foodie #localeats #supportlocal",apartments:"#apartmentliving #community #home",contractor:"#homeimprovement #renovation #beforeandafter",retail:"#shoplocal #newarrivals #giftideas"};
+function voice(t){return S.tone==="Professional"?t:S.tone==="Playful"?t+" ✨":t+" 💙"}
+function gen(){const b=brand().name,ideas=IDEAS[S.ind],d=new Date(),y=d.getFullYear(),m=d.getMonth(),posts=[];let n=0;
+ for(let day=1;day<=28&&posts.length<12;day++){const dt=new Date(y,m,day);if(![1,3,5].includes(dt.getDay()))continue;const type=TYPES[n%4],idea=ideas[n%4];
+  const cap=type==="Offer"?`${S.offer} at ${b}. Tap the link in bio or DM us BOOK to claim it.`:type==="FAQ"?`You asked: ${idea}? Here's the answer, straight from the ${b} team.`:type==="Tip"?`Quick tip from ${b}: ${idea}.`:`Behind the scenes at ${b}: ${idea}.`;
+  posts.push({date:dt.toDateString().slice(0,10),type,cap:voice(cap),tags:TAGS[S.ind],status:"Draft"});n++}
+ S.posts=posts;save();render();toast("12 posts drafted for your review")}
+function render(){$("#ind").value=S.ind;$("#tone").value=S.tone;$("#offer").value=S.offer;
+ const a=S.posts.filter(p=>p.status!=="Draft").length;$("#planNote").textContent=S.posts.length?`${S.posts.length} posts · ${a} approved or scheduled. Edit any caption before approving.`:"Click “Draft this month” to create 12 posts (Mon/Wed/Fri) in your brand voice.";
+ $("#posts").innerHTML=S.posts.map((p,i)=>`<div class="card" data-post="${i}"><div class="row" style="justify-content:space-between"><b>${p.date}</b><span class="chip ${p.status==="Draft"?"a":"g"}">${p.status}</span></div><div class="small muted">${p.type}</div><textarea class="i" data-cap="${i}" style="min-height:96px;margin-top:6px">${esc(p.cap)}</textarea><div class="small muted">${p.tags}</div><div class="row" style="margin-top:6px"><button class="btn ok sm" data-app="${i}" type="button" ${p.status!=="Draft"?"disabled":""}>Approve</button></div></div>`).join("");
+ $$("[data-cap]").forEach(t=>t.oninput=()=>{S.posts[t.dataset.cap].cap=t.value;save()});
+ $$("[data-app]").forEach(b=>b.onclick=()=>{S.posts[b.dataset.app].status="Approved";save();render()});
+ $("#kwRows").innerHTML=S.kw.map((k,i)=>`<tr><td><b>${k[0]}</b></td><td><input class="i" data-kw="${i}" value="${esc(k[1])}"></td></tr>`).join("");
+ $$("[data-kw]").forEach(t=>t.oninput=()=>{S.kw[t.dataset.kw][1]=t.value;save()})}
+$("#gen").onclick=gen;
+$("#sched").onclick=()=>{let n=0;S.posts.forEach(p=>{if(p.status==="Approved"){p.status="Scheduled";n++}});save();render();toast(n?`${n} posts scheduled`:"Approve some posts first")};
+$("#testDm").onclick=()=>{const t=$("#dm").value.toLowerCase(),map={PRICE:/price|cost|how much/,BOOK:/book|appointment|available|schedule/,HOURS:/hour|open|close/};
+ const hit=S.kw.find(k=>map[k[0]]&&map[k[0]].test(t));$("#dmOut").innerHTML=hit?`<b>Auto-reply (${hit[0]}):</b> ${esc(hit[1])}`:"<b>No keyword matched.</b> This DM goes to your inbox for a person to answer."};
+$("#ind").onchange=()=>{S.ind=$("#ind").value;save()};$("#tone").onchange=()=>{S.tone=$("#tone").value;save()};$("#offer").oninput=()=>{S.offer=$("#offer").value;save()};
+</script></body></html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReviewDesk Prototype · Rashad Fambro Consulting</title>
+<meta name="description" content="Ask happy customers for reviews, catch unhappy ones privately, and reply to every review. Clickable prototype with sample data.">
+<link rel="icon" href="../icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1a2d;--ink-3:#1d3454;--paper:#f5f8fc;--line:#d3dce7;--muted:#56606c;--text:#1a2533;--sky:#7cc4ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;--brand:#2f7fe0;
+--serif:"Source Serif 4",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
+a{color:inherit}button,input,select,textarea{font:inherit}
+header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}
+header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
+header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
+header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
+header input[type=color]{width:34px;height:30px;border:0;background:none;padding:0}
+.banner{background:#fff6e5;border-bottom:1px solid #f1d9a8;color:#6b4b00;font-size:13px;padding:8px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.banner a{font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel[hidden]{display:none}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font:600 18px/1.2 var(--serif);margin:0 0 10px}.card h3{font-size:14px;margin:0 0 6px}
+.kpi .v{font:600 28px/1.1 var(--serif)}.kpi .l{font-size:12.5px;color:var(--muted)}.kpi .d{font-size:12.5px;font-weight:700}
+.up{color:#0a7a52}.down{color:#b42318}
+label.f{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input.i,select.i,textarea.i{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+textarea.i{min-height:90px}
+.btn{border:1px solid transparent;border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff}
+.btn.alt{background:#fff;color:var(--ink);border-color:#a8b6c7}.btn.ok{background:#0a7a52}.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.chip{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;background:#e9f0f8}
+.chip.g{background:#dff7ee;color:#0a6a48}.chip.a{background:#fff1d6;color:#7a5200}.chip.r{background:#ffe3e3;color:#9b1c1c}
+.muted{color:var(--muted)}.small{font-size:13px}
+.list>div{border-bottom:1px solid var(--line);padding:10px 0}.list>div:last-child{border:0}
+.sel{outline:2px solid var(--brand);border-radius:10px}
+.out{background:#f2f6fb;border:1px dashed #a8b6c7;border-radius:10px;padding:12px;white-space:pre-wrap}
+.bar{height:10px;border-radius:99px;background:#e9f0f8;overflow:hidden}.bar>i{display:block;height:100%;background:var(--brand)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
+</style></head>
+<body data-proto="review">
+<header><div class="logo">Y</div><div><h1>ReviewDesk <span class="sub">for <span data-biz>Your Business</span></span></h1><div class="sub">Ask happy customers for reviews, catch unhappy ones privately, and reply to every review.</div></div><span class="sp"></span>
+<label>Brand name <input type="text" id="bizName" aria-label="Business name"></label><label>Color <input type="color" id="bizColor" aria-label="Brand color"></label></header>
+<div class="banner"><span><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
+<a href="../index.html#products">← Back to products</a><a href="../index.html#audit">Book a free audit</a><button type="button" class="btn alt sm" id="reset">Reset sample data</button></div>
+<main><nav class="tabs" aria-label="ReviewDesk sections"><button type="button" data-tab="inbox" aria-selected="true">Review Inbox</button><button type="button" data-tab="ask" aria-selected="false">Ask for Reviews</button><button type="button" data-tab="trends" aria-selected="false">Trends</button></nav>
+
+<section class="panel" id="inbox"><div class="grid g2">
+ <div class="card"><div class="row" style="justify-content:space-between"><h2>Reviews</h2><label class="small"><input type="checkbox" id="onlyOpen" checked> Needs a reply</label></div><div class="list" id="revList"></div></div>
+ <div class="card"><h2>Drafted Reply</h2><div id="revSel" class="small muted">Pick a review to see the drafted reply.</div>
+  <textarea class="i" id="reply" hidden></textarea><div class="row" style="margin-top:8px"><button class="btn ok" id="post" type="button" hidden>Approve &amp; post reply</button></div>
+  <p class="small muted">Nothing posts until you approve it. Low ratings are drafted with an apology and an offer to talk offline.</p></div></div></section>
+<section class="panel" id="ask" hidden><div class="grid g2">
+ <div class="card"><h2>Send a Review Request</h2><label class="f" for="cname">Customer name</label><input class="i" id="cname" value="Jordan">
+  <p class="small">Preview what the customer sees, then pick how they rated the visit:</p>
+  <div class="out" id="askMsg"></div>
+  <div class="row" style="margin-top:8px" id="stars"></div>
+  <div id="askResult" style="margin-top:10px"></div></div>
+ <div class="card"><h2>Private Feedback</h2><p class="small muted">Unhappy customers reach you first, not Google.</p><div class="list" id="privList"></div></div></div></section>
+<section class="panel" id="trends" hidden><div class="grid g3" id="rkpis"></div><div class="card" style="margin-top:14px"><h2>Average Rating by Month</h2><div id="chart"></div></div></section>
+
+</main>
+<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const KEY="proto-"+document.body.dataset.proto;
+function load(def){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):structuredClone(def)}catch(e){return structuredClone(def)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
+function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assign(b,JSON.parse(localStorage.getItem("proto-brand")||"{}"))}catch(e){}return b}
+function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
+function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
+function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
+document.addEventListener("DOMContentLoaded",()=>{tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+ $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
+
+
+const DEF={sel:null,priv:[],rev:[
+ {id:1,name:"Sam P.",stars:5,src:"Google",text:"Fast, friendly staff and the place was spotless. Will be back!",replied:false},
+ {id:2,name:"Rita K.",stars:2,src:"Google",text:"Waited 25 minutes past my appointment time and nobody told me why.",replied:false},
+ {id:3,name:"Jon M.",stars:4,src:"Yelp",text:"Good service, a little pricey but worth it.",replied:false},
+ {id:4,name:"Bea L.",stars:5,src:"Google",text:"Ask for Nina, she is amazing.",replied:true,reply:"Thank you, Bea! We'll pass this on to Nina."},
+ {id:5,name:"Ola D.",stars:1,src:"Yelp",text:"Rude at the front desk and my order was wrong.",replied:false}],
+ months:[["Jun",4.1],["Jul",4.2],["Aug",4.0],["Sep",4.3],["Oct",4.4],["Nov",4.5]]};
+let S=load(DEF);
+function draft(r){const b=brand().name,first=r.name.split(" ")[0];
+ if(r.stars>=4){let x=`Thank you, ${first}! We're so glad you had a great visit`;if(/staff|friendly|nina|team/i.test(r.text))x+=" and we'll share your kind words with the team";if(/price|pricey|cost/i.test(r.text))x+=". We work hard to make every visit worth it";return x+`. See you next time at ${b}!`}
+ let x=`${first}, we're sorry your visit didn't meet expectations.`;if(/wait|late|minutes/i.test(r.text))x+=" Waiting past your appointment time isn't okay, and we're fixing how we keep guests updated.";if(/rude|staff|desk/i.test(r.text))x+=" How you were treated matters to us, and we've shared this with our manager.";if(/wrong|order|mistake/i.test(r.text))x+=" We'd like to make your order right.";
+ return x+` Please reach out to us directly so we can make it up to you. — The ${b} team`}
+function render(){const only=$("#onlyOpen").checked;
+ $("#revList").innerHTML=S.rev.filter(r=>!only||!r.replied).map(r=>`<div data-r="${r.id}" class="${S.sel===r.id?"sel":""}" style="cursor:pointer;padding:10px"><div class="row"><b>${"★".repeat(r.stars)}${"☆".repeat(5-r.stars)}</b><span class="chip">${r.src}</span>${r.replied?'<span class="chip g">Replied</span>':'<span class="chip a">Needs reply</span>'}</div><div><b>${esc(r.name)}</b>: ${esc(r.text)}</div>${r.replied?`<div class="small muted">Reply: ${esc(r.reply)}</div>`:""}</div>`).join("")||'<p class="muted">Every review has a reply.</p>';
+ $$("[data-r]").forEach(d=>d.onclick=()=>{S.sel=Number(d.dataset.r);render()});
+ const r=S.rev.find(x=>x.id===S.sel);
+ if(r&&!r.replied){$("#revSel").innerHTML=`Replying to <b>${esc(r.name)}</b> (${r.stars}★)`;$("#reply").hidden=false;$("#post").hidden=false;if($("#reply").dataset.for!==String(r.id)){$("#reply").value=draft(r);$("#reply").dataset.for=r.id}}else{$("#reply").hidden=true;$("#post").hidden=true;$("#revSel").textContent="Pick a review that needs a reply."}
+ $("#askMsg").textContent=`Hi ${$("#cname").value||"there"}, thanks for visiting ${brand().name}! How did we do? Tap a star.`;
+ $("#stars").innerHTML=[1,2,3,4,5].map(n=>`<button class="btn alt sm" data-star="${n}" type="button">${n}★</button>`).join("");
+ $$("[data-star]").forEach(b=>b.onclick=()=>{const n=Number(b.dataset.star),c=$("#cname").value||"Customer";
+  if(n>=4){$("#askResult").innerHTML=`<div class="out"><b>Shown to ${esc(c)}:</b> Wonderful! Would you share that on Google? [Leave a Google review]</div>`;toast("Happy customer sent to Google")}
+  else{$("#askResult").innerHTML=`<div class="out"><b>Shown to ${esc(c)}:</b> We're sorry. Tell us what went wrong and the manager will reach out. (Sent privately to you, not posted.)</div>`;S.priv.unshift({c,n});save();render();toast("Routed privately to you")}});
+ $("#privList").innerHTML=S.priv.length?S.priv.map(p=>`<div><b>${esc(p.c)}</b> rated ${p.n}★ <span class="chip a">Call back</span></div>`).join(""):'<p class="muted small">None yet. Try a 1–3 star rating.</p>';
+ const avg=(S.rev.reduce((a,r)=>a+r.stars,0)/S.rev.length).toFixed(1),rate=Math.round(S.rev.filter(r=>r.replied).length/S.rev.length*100);
+ $("#rkpis").innerHTML=[["Average rating (inbox)",avg+"★"],["Reviews answered",rate+"%"],["Private catches",S.priv.length]].map(k=>`<div class="card kpi"><div class="v">${k[1]}</div><div class="l">${k[0]}</div></div>`).join("");
+ const W=600,H=200,bw=60;$("#chart").innerHTML=`<svg viewBox="0 0 ${W} ${H+30}" role="img" aria-label="Average rating by month" style="width:100%;max-width:640px">${S.months.map((m,i)=>{const h=(m[1]-3)/2*H,x=30+i*(bw+30);return `<rect x="${x}" y="${H-h}" width="${bw}" height="${h}" rx="6" fill="var(--brand)"/><text x="${x+bw/2}" y="${H-h-6}" text-anchor="middle" font-size="13" fill="#1a2533">${m[1].toFixed(1)}</text><text x="${x+bw/2}" y="${H+20}" text-anchor="middle" font-size="12" fill="#56606c">${m[0]}</text>`}).join("")}</svg><p class="small muted">Axis starts at 3.0 stars to show the change.</p>`}
+$("#post").onclick=()=>{const r=S.rev.find(x=>x.id===S.sel);if(!r)return;r.replied=true;r.reply=$("#reply").value;S.sel=null;save();render();toast("Reply approved and posted")};
+$("#onlyOpen").onchange=render;$("#cname").oninput=render;
+</script></body></html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>InvoiceDesk Prototype · Rashad Fambro Consulting</title>
+<meta name="description" content="Approved quotes become invoices, reminders go out on schedule, and you see who owes what. Clickable prototype with sample data.">
+<link rel="icon" href="../icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1a2d;--ink-3:#1d3454;--paper:#f5f8fc;--line:#d3dce7;--muted:#56606c;--text:#1a2533;--sky:#7cc4ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;--brand:#2f7fe0;
+--serif:"Source Serif 4",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
+a{color:inherit}button,input,select,textarea{font:inherit}
+header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}
+header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
+header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
+header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
+header input[type=color]{width:34px;height:30px;border:0;background:none;padding:0}
+.banner{background:#fff6e5;border-bottom:1px solid #f1d9a8;color:#6b4b00;font-size:13px;padding:8px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.banner a{font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel[hidden]{display:none}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font:600 18px/1.2 var(--serif);margin:0 0 10px}.card h3{font-size:14px;margin:0 0 6px}
+.kpi .v{font:600 28px/1.1 var(--serif)}.kpi .l{font-size:12.5px;color:var(--muted)}.kpi .d{font-size:12.5px;font-weight:700}
+.up{color:#0a7a52}.down{color:#b42318}
+label.f{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input.i,select.i,textarea.i{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+textarea.i{min-height:90px}
+.btn{border:1px solid transparent;border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff}
+.btn.alt{background:#fff;color:var(--ink);border-color:#a8b6c7}.btn.ok{background:#0a7a52}.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.chip{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;background:#e9f0f8}
+.chip.g{background:#dff7ee;color:#0a6a48}.chip.a{background:#fff1d6;color:#7a5200}.chip.r{background:#ffe3e3;color:#9b1c1c}
+.muted{color:var(--muted)}.small{font-size:13px}
+.list>div{border-bottom:1px solid var(--line);padding:10px 0}.list>div:last-child{border:0}
+.sel{outline:2px solid var(--brand);border-radius:10px}
+.out{background:#f2f6fb;border:1px dashed #a8b6c7;border-radius:10px;padding:12px;white-space:pre-wrap}
+.bar{height:10px;border-radius:99px;background:#e9f0f8;overflow:hidden}.bar>i{display:block;height:100%;background:var(--brand)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
+</style></head>
+<body data-proto="invoice">
+<header><div class="logo">Y</div><div><h1>InvoiceDesk <span class="sub">for <span data-biz>Your Business</span></span></h1><div class="sub">Approved quotes become invoices, reminders go out on schedule, and you see who owes what.</div></div><span class="sp"></span>
+<label>Brand name <input type="text" id="bizName" aria-label="Business name"></label><label>Color <input type="color" id="bizColor" aria-label="Brand color"></label></header>
+<div class="banner"><span><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
+<a href="../index.html#products">← Back to products</a><a href="../index.html#audit">Book a free audit</a><button type="button" class="btn alt sm" id="reset">Reset sample data</button></div>
+<main><nav class="tabs" aria-label="InvoiceDesk sections"><button type="button" data-tab="quotes" aria-selected="true">Quotes</button><button type="button" data-tab="invoices" aria-selected="false">Invoices</button><button type="button" data-tab="remind" aria-selected="false">Reminders to Approve</button><button type="button" data-tab="aging" aria-selected="false">Who Owes What</button></nav>
+
+<section class="panel" id="quotes"><div class="card"><h2>Quotes</h2><table><thead><tr><th>Client</th><th>Work</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody id="qRows"></tbody></table></div></section>
+<section class="panel" id="invoices" hidden><div class="grid g2"><div class="card"><h2>Invoices</h2><table><thead><tr><th>#</th><th>Client</th><th>Total</th><th>Due</th><th>Status</th></tr></thead><tbody id="iRows"></tbody></table></div>
+ <div class="card"><h2>Invoice Preview</h2><div id="preview" class="small muted">Pick an invoice to preview it.</div></div></div></section>
+<section class="panel" id="remind" hidden><div class="card"><h2>Reminders Due Today</h2><p class="small muted">Schedule: 3 days before the due date, on the due date, then 7 and 14 days late. You approve each one.</p><div class="list" id="rList"></div></div></section>
+<section class="panel" id="aging" hidden><div class="grid g4" id="ageK"></div><div class="card" style="margin-top:14px"><h2>Open Balances</h2><table><thead><tr><th>Client</th><th>Invoice</th><th>Amount</th><th>Days overdue</th></tr></thead><tbody id="aRows"></tbody></table></div></section>
+
+</main>
+<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const KEY="proto-"+document.body.dataset.proto;
+function load(def){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):structuredClone(def)}catch(e){return structuredClone(def)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
+function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assign(b,JSON.parse(localStorage.getItem("proto-brand")||"{}"))}catch(e){}return b}
+function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
+function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
+function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
+document.addEventListener("DOMContentLoaded",()=>{tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+ $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
+
+
+const DEF={sel:null,sentR:[],next:1043,quotes:[
+ {id:"Q-212",client:"Harbor Dental",work:"Office deep clean (3,200 sq ft)",total:640,status:"Approved"},
+ {id:"Q-213",client:"Lopez Residence",work:"Move-out clean, 3 bed / 2 bath",total:385,status:"Approved"},
+ {id:"Q-214",client:"Summit Realty",work:"Weekly office cleaning (4 visits)",total:880,status:"Waiting on client"}],
+ inv:[{no:1038,client:"Greenway Apartments",total:1250,issued:-30,due:-16,status:"Sent"},
+  {no:1039,client:"Bright Smiles Pediatrics",total:420,issued:-17,due:-3,status:"Sent"},
+  {no:1040,client:"Oak Street Cafe",total:275,issued:-11,due:3,status:"Sent"},
+  {no:1041,client:"Patel Family",total:190,issued:-20,due:-6,status:"Paid"},
+  {no:1042,client:"Northside Gym",total:560,issued:-14,due:0,status:"Sent"}]};
+let S=load(DEF);
+const day=o=>{const d=new Date();d.setDate(d.getDate()+o);return d.toLocaleDateString("en-US",{month:"short",day:"numeric"})};
+function reminders(){const r=[];S.inv.filter(i=>i.status==="Sent").forEach(i=>{const late=-i.due;let kind=null;
+ if(i.due===3)kind="Friendly heads-up (due in 3 days)";else if(i.due===0)kind="Due today";else if(late>=7&&late<14)kind="7 days past due";else if(late>=14)kind="14+ days past due";
+ if(kind){const id=i.no+"-"+kind;if(!S.sentR.includes(id))r.push({id,i,kind})}});return r}
+function msg(r){const b=brand().name,f=r.i.client;return r.kind.startsWith("Friendly")?`Hi ${f}, a quick reminder that invoice #${r.i.no} for ${money(r.i.total)} is due on ${day(r.i.due)}. Pay here: [pay link]. Thank you! — ${b}`:
+ r.kind==="Due today"?`Hi ${f}, invoice #${r.i.no} for ${money(r.i.total)} is due today. Pay here: [pay link]. Thanks for your business! — ${b}`:
+ `Hi ${f}, invoice #${r.i.no} for ${money(r.i.total)} was due on ${day(r.i.due)}. If it's already on the way, thank you! If not, you can pay here: [pay link], or reply to set up a plan. — ${b}`}
+function render(){
+ $("#qRows").innerHTML=S.quotes.map((q,i)=>`<tr><td>${esc(q.client)}</td><td>${esc(q.work)}</td><td>${money(q.total)}</td><td><span class="chip ${q.status==="Approved"?"g":q.status==="Invoiced"?"":"a"}">${q.status}</span></td><td>${q.status==="Approved"?`<button class="btn sm" data-conv="${i}" type="button">Create invoice</button>`:""}</td></tr>`).join("");
+ $$("[data-conv]").forEach(b=>b.onclick=()=>{const q=S.quotes[b.dataset.conv];q.status="Invoiced";const inv={no:S.next++,client:q.client,total:q.total,issued:0,due:14,status:"Draft",work:q.work};S.inv.unshift(inv);S.sel=inv.no;save();render();toast(`Invoice #${inv.no} drafted from ${q.id}`)});
+ $("#iRows").innerHTML=S.inv.map(i=>`<tr data-inv="${i.no}" style="cursor:pointer" class="${S.sel===i.no?"sel":""}"><td>${i.no}</td><td>${esc(i.client)}</td><td>${money(i.total)}</td><td>${day(i.due)}</td><td><span class="chip ${i.status==="Paid"?"g":i.status==="Draft"?"a":i.due<0?"r":""}">${i.status==="Sent"&&i.due<0?"Overdue":i.status}</span></td></tr>`).join("");
+ $$("[data-inv]").forEach(t=>t.onclick=()=>{S.sel=Number(t.dataset.inv);render()});
+ const s=S.inv.find(i=>i.no===S.sel);
+ $("#preview").innerHTML=s?`<div class="out" style="white-space:normal"><div class="row" style="justify-content:space-between"><b data-biz>${esc(brand().name)}</b><b>Invoice #${s.no}</b></div><div class="small">Bill to: ${esc(s.client)}<br>Issued ${day(s.issued)} · Due ${day(s.due)}</div><table style="margin:8px 0"><tr><td>${esc(s.work||"Services")}</td><td style="text-align:right">${money(s.total)}</td></tr><tr><th>Total</th><th style="text-align:right">${money(s.total)}</th></tr></table><div class="small">Pay online: [pay link] · card, PayPal, or bank transfer</div></div>
+  <div class="row" style="margin-top:8px">${s.status==="Draft"?`<button class="btn ok" id="sendInv" type="button">Approve &amp; send</button>`:""}${s.status==="Sent"?`<button class="btn alt" id="markPaid" type="button">Mark paid</button>`:""}</div>`:"Pick an invoice to preview it.";
+ if($("#sendInv"))$("#sendInv").onclick=()=>{s.status="Sent";save();render();toast(`Invoice #${s.no} sent with a pay link`)};
+ if($("#markPaid"))$("#markPaid").onclick=()=>{s.status="Paid";save();render();toast(`#${s.no} marked paid`)};
+ const r=reminders();$("#rList").innerHTML=r.length?r.map(x=>`<div><div class="row"><span class="chip a">${x.kind}</span><b>${esc(x.i.client)}</b> · #${x.i.no}</div><textarea class="i" style="min-height:70px;margin-top:6px">${esc(msg(x))}</textarea><div class="row" style="margin-top:6px"><button class="btn ok sm" data-rs="${x.id}" type="button">Approve &amp; send</button><button class="btn alt sm" data-rk="${x.id}" type="button">Skip today</button></div></div>`).join(""):'<p class="muted">No reminders due today.</p>';
+ $$("[data-rs]").forEach(b=>b.onclick=()=>{S.sentR.push(b.dataset.rs);save();render();toast("Reminder sent")});
+ $$("[data-rk]").forEach(b=>b.onclick=()=>{S.sentR.push(b.dataset.rk);save();render()});
+ const open=S.inv.filter(i=>i.status==="Sent"),sum=f=>money(open.filter(f).reduce((a,i)=>a+i.total,0));
+ $("#ageK").innerHTML=[["Not yet due",sum(i=>i.due>=0)],["1–30 days late",sum(i=>i.due<0&&i.due>=-30)],["31+ days late",sum(i=>i.due<-30)],["Paid this month",money(S.inv.filter(i=>i.status==="Paid").reduce((a,i)=>a+i.total,0))]].map(k=>`<div class="card kpi"><div class="v">${k[1]}</div><div class="l">${k[0]}</div></div>`).join("");
+ $("#aRows").innerHTML=open.sort((a,b)=>a.due-b.due).map(i=>`<tr><td>${esc(i.client)}</td><td>#${i.no}</td><td>${money(i.total)}</td><td>${i.due<0?-i.due:"—"}</td></tr>`).join("")}
+</script></body></html>

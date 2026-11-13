@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>InsightDesk Prototype · Rashad Fambro Consulting</title>
+<meta name="description" content="Your key numbers on one page and a plain-English summary every Monday. Clickable prototype with sample data.">
+<link rel="icon" href="../icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1a2d;--ink-3:#1d3454;--paper:#f5f8fc;--line:#d3dce7;--muted:#56606c;--text:#1a2533;--sky:#7cc4ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;--brand:#2f7fe0;
+--serif:"Source Serif 4",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
+a{color:inherit}button,input,select,textarea{font:inherit}
+header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}
+header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
+header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
+header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
+header input[type=color]{width:34px;height:30px;border:0;background:none;padding:0}
+.banner{background:#fff6e5;border-bottom:1px solid #f1d9a8;color:#6b4b00;font-size:13px;padding:8px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.banner a{font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel[hidden]{display:none}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font:600 18px/1.2 var(--serif);margin:0 0 10px}.card h3{font-size:14px;margin:0 0 6px}
+.kpi .v{font:600 28px/1.1 var(--serif)}.kpi .l{font-size:12.5px;color:var(--muted)}.kpi .d{font-size:12.5px;font-weight:700}
+.up{color:#0a7a52}.down{color:#b42318}
+label.f{display:block;font-size:13px;font-weight:700;margin:8px 0 4px}
+input.i,select.i,textarea.i{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+textarea.i{min-height:90px}
+.btn{border:1px solid transparent;border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff}
+.btn.alt{background:#fff;color:var(--ink);border-color:#a8b6c7}.btn.ok{background:#0a7a52}.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.chip{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;background:#e9f0f8}
+.chip.g{background:#dff7ee;color:#0a6a48}.chip.a{background:#fff1d6;color:#7a5200}.chip.r{background:#ffe3e3;color:#9b1c1c}
+.muted{color:var(--muted)}.small{font-size:13px}
+.list>div{border-bottom:1px solid var(--line);padding:10px 0}.list>div:last-child{border:0}
+.sel{outline:2px solid var(--brand);border-radius:10px}
+.out{background:#f2f6fb;border:1px dashed #a8b6c7;border-radius:10px;padding:12px;white-space:pre-wrap}
+.bar{height:10px;border-radius:99px;background:#e9f0f8;overflow:hidden}.bar>i{display:block;height:100%;background:var(--brand)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
+</style><!--STAGING-START--><meta name="robots" content="noindex, nofollow"><style>.stg-ribbon{position:fixed;right:0;top:50%;z-index:9999;transform:rotate(-90deg) translateY(-100%);transform-origin:right top;background:#ff5a5a;color:#fff;font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:8px 8px 0 0}</style><!--STAGING-END--></head>
+<body data-proto="insight"><!--STAGING-START--><div class="stg-ribbon" aria-hidden="true">STAGING</div><!--STAGING-END-->
+<header><div class="logo">Y</div><div><h1>InsightDesk <span class="sub">for <span data-biz>Your Business</span></span></h1><div class="sub">Your key numbers on one page and a plain-English summary every Monday.</div></div><span class="sp"></span>
+<label>Brand name <input type="text" id="bizName" aria-label="Business name"></label><label>Color <input type="color" id="bizColor" aria-label="Brand color"></label></header>
+<div class="banner"><span><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
+<a href="../index.html#products">← Back to products</a><a href="../index.html#audit">Book a free audit</a><button type="button" class="btn alt sm" id="reset">Reset sample data</button></div>
+<main><nav class="tabs" aria-label="InsightDesk sections"><button type="button" data-tab="dash" aria-selected="true">Dashboard</button><button type="button" data-tab="summary" aria-selected="false">Weekly Summary</button><button type="button" data-tab="alerts" aria-selected="false">Alerts</button><button type="button" data-tab="impact" aria-selected="false">Before &amp; After</button></nav>
+
+<section class="panel" id="dash"><div class="row" style="justify-content:space-between;margin-bottom:10px"><b id="wk"></b><button class="btn alt sm" id="nextWk" type="button">Show next week →</button></div>
+ <div class="grid g4" id="kp"></div><div class="card" style="margin-top:14px"><h2>Revenue by Week</h2><div id="revChart"></div></div></section>
+<section class="panel" id="summary" hidden><div class="card"><h2>Monday Summary</h2><div class="out" id="sumTxt" style="white-space:normal"></div><p class="small muted">Sent every Monday morning by email. The numbers come straight from your tools; people make the decisions.</p></div></section>
+<section class="panel" id="alerts" hidden><div class="card"><h2>Needs Attention</h2><div class="list" id="alList"></div></div></section>
+<section class="panel" id="impact" hidden><div class="card"><h2>Since the Booking Assistant Launched (Week 5)</h2><table><thead><tr><th>Measure</th><th>Weeks 1–4 average</th><th>Since launch</th><th>Change</th></tr></thead><tbody id="baRows"></tbody></table><p class="small muted">Sample data for illustration.</p></div></section>
+
+</main>
+<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const KEY="proto-"+document.body.dataset.proto;
+function load(def){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):structuredClone(def)}catch(e){return structuredClone(def)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
+function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assign(b,JSON.parse(localStorage.getItem("proto-brand")||"{}"))}catch(e){}return b}
+function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
+function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
+function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
+document.addEventListener("DOMContentLoaded",()=>{tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+ $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
+
+
+const W=[{rev:8200,book:118,leads:31,resp:42,open:6,rating:4.3},{rev:8650,book:121,leads:29,resp:38,open:5,rating:4.3},{rev:7900,book:109,leads:35,resp:47,open:9,rating:4.2},{rev:8400,book:117,leads:30,resp:40,open:7,rating:4.3},
+ {rev:9100,book:131,leads:36,resp:9,open:3,rating:4.4},{rev:9550,book:138,leads:38,resp:7,open:2,rating:4.5},{rev:9300,book:134,leads:33,resp:8,open:4,rating:4.5},{rev:9900,book:142,leads:41,resp:6,open:2,rating:4.6},
+ {rev:9600,book:139,leads:44,resp:31,open:8,rating:4.5},{rev:10200,book:147,leads:39,resp:7,open:3,rating:4.6}];
+const DEF={i:7};let S=load(DEF);
+const pct=(a,b)=>Math.round((a-b)/b*100);
+function delta(a,b,lowerBetter){const p=pct(a,b),good=lowerBetter?p<0:p>0;return `<span class="d ${p===0?"":good?"up":"down"}">${p>0?"+":""}${p}% vs last week</span>`}
+function render(){const c=W[S.i],p=W[S.i-1];$("#wk").textContent=`Week ${S.i+1} of 10 (sample data)`;$("#nextWk").disabled=S.i>=W.length-1;
+ $("#kp").innerHTML=[["Revenue",money(c.rev).replace(".00",""),delta(c.rev,p.rev)],["Bookings",c.book,delta(c.book,p.book)],["New leads",c.leads,delta(c.leads,p.leads)],["Avg. first reply",c.resp+" min",delta(c.resp,p.resp,true)]].map(k=>`<div class="card kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div>${k[2]}</div>`).join("");
+ const shown=W.slice(0,S.i+1),max=Math.max(...W.map(w=>w.rev)),H=180,bw=44;
+ $("#revChart").innerHTML=`<svg viewBox="0 0 640 ${H+30}" role="img" aria-label="Revenue by week" style="width:100%;max-width:680px">${shown.map((w,i)=>{const h=w.rev/max*H,x=20+i*(bw+18);return `<rect x="${x}" y="${H-h}" width="${bw}" height="${h}" rx="5" fill="${i===S.i?"var(--brand)":"#b9cde3"}"/><text x="${x+bw/2}" y="${H+18}" text-anchor="middle" font-size="12" fill="#56606c">W${i+1}</text>`}).join("")}</svg>`;
+ const b=brand().name,up=c.rev>=p.rev,lines=[`<p><b>Good morning! Here's last week at ${esc(b)}.</b></p>`,
+  `<p>Revenue was ${money(c.rev).replace(".00","")}, ${up?"up":"down"} ${Math.abs(pct(c.rev,p.rev))}% from the week before, on ${c.book} bookings.</p>`,
+  `<p>You received ${c.leads} new leads and the average first reply took ${c.resp} minutes${c.resp>20?", which is slower than usual":""}.</p>`,
+  `<p>${c.open?`${c.open} leads still have no follow-up.`:"Every lead got a follow-up."} Average rating: ${c.rating}★.</p>`,
+  `<p><b>One thing to do this week:</b> ${c.resp>20?"check who covers messages during busy hours; replies slowed down.":c.open>4?"follow up with the open leads before Wednesday.":"keep doing what you're doing, and ask this week's happy customers for reviews."}</p>`];
+ $("#sumTxt").innerHTML=lines.join("");
+ const al=[];if(c.resp>20)al.push(["Replies slowed down",`Average first reply is ${c.resp} minutes (goal: under 15).`,"r"]);if(c.open>4)al.push(["Leads waiting",`${c.open} leads have no follow-up after 24 hours.`,"a"]);if(c.rev<p.rev)al.push(["Revenue dipped",`Down ${Math.abs(pct(c.rev,p.rev))}% from last week.`,"a"]);
+ $("#alList").innerHTML=al.length?al.map(a=>`<div><span class="chip ${a[2]}">${a[0]}</span> ${a[1]}</div>`).join(""):'<p class="muted">Nothing needs attention this week.</p>';
+ const avg=(a,k)=>a.reduce((s,w)=>s+w[k],0)/a.length,pre=W.slice(0,4),post=W.slice(4,S.i+1);
+ $("#baRows").innerHTML=[["Avg. first reply (min)","resp",true],["Bookings per week","book"],["Revenue per week","rev"],["Average rating","rating"]].map(m=>{const a=avg(pre,m[1]),z=post.length?avg(post,m[1]):a,ch=pct(z,a);const f=v=>m[1]==="rev"?money(Math.round(v)).replace(".00",""):m[1]==="rating"?v.toFixed(2):Math.round(v);return `<tr><td>${m[0]}</td><td>${f(a)}</td><td>${post.length?f(z):"—"}</td><td class="${(m[2]?ch<0:ch>0)?"up":"down"}">${post.length?(ch>0?"+":"")+ch+"%":"—"}</td></tr>`}).join("")}
+$("#nextWk").onclick=()=>{if(S.i<W.length-1){S.i++;save();render()}};
+</script></body></html>
