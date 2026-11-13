@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://rashadfambro.github.io/</loc><changefreq>monthly</changefreq></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://rashadfambro.github.io/</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/products.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/apartments.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/hotels.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/timeshares.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/salons.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/spas.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/barbers.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/smoke-shops.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/restaurants.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/contractors.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/real-estate.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/law-firms.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/dental.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/hud-housing.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/auto-repair.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/cleaning.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/short-term-rentals.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/self-storage.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/insurance.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/tax-firms.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/gyms.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://rashadfambro.github.io/industries/event-venues.html</loc><changefreq>monthly</changefreq></url>
+</urlset>

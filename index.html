@@ -14,14 +14,14 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1a2d'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Georgia,serif' font-size='28' fill='%237cc4ff'%3ERF%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,500;1,8..60,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
 <style>
 :root{
   --ink:#0d1a2d;--ink-2:#14263f;--ink-3:#1d3454;--line-d:#2f4766;
   --paper:#f5f8fc;--white:#fff;--soft:#e9f0f8;--line:#d3dce7;--muted:#56606c;--text:#1a2533;
   --sky:#7cc4ff;--sky-2:#b9e0ff;--mint:#5fe0b5;--amber:#ffc46b;--rose:#ff8b8b;
-  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
   --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
   --r:14px;--shadow:0 20px 60px -24px rgba(13,26,45,.35);
 }
@@ -42,7 +42,7 @@ h1,h2,h3,h4,p{margin:0}
 .eyebrow .n{color:var(--sky);background:var(--ink);border-radius:999px;padding:2px 8px;letter-spacing:.06em}
 .dark .eyebrow,.hero .eyebrow,.founding .eyebrow{color:var(--sky-2)}
 .dark .eyebrow .n{background:var(--sky);color:var(--ink)}
-h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
+h1,h2{font-family:var(--serif);font-weight:600;font-variant-ligatures:no-common-ligatures;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
 h2{font-size:clamp(2rem,4vw,3.3rem)}
 h3{font-size:1.12rem;line-height:1.3}
 .lede{color:var(--muted);font-size:1.06rem;max-width:58ch}
@@ -328,6 +328,8 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 .footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:22px}
 .footer a{text-decoration:none}
 .footer a:hover{color:#fff}
+.foot-ind{padding-top:20px;font-size:.8rem;line-height:1.9;border-bottom:1px solid #1d3454;padding-bottom:16px}
+.foot-ind span{font-weight:800;color:#c3cfdd}
 
 /* responsive */
 @media(max-width:1080px){
@@ -397,6 +399,38 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 .chat form button{background:var(--ink);color:#fff;border:0;border-radius:10px;padding:0 14px;font-weight:800}
 .chat .fine{font-size:.7rem;color:var(--muted);text-align:center;padding:0 12px 8px;background:#fff}
 @media(max-width:620px){.chat-fab span.t{display:none}.chat-fab{padding:10px}.chat{right:12px;bottom:76px}}
+
+/* v4 additions */
+.out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.outc .big{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:var(--soft);font:700 1.3rem var(--sans);color:#1e5fa8;margin-bottom:14px}
+.outc h3{font:600 1.35rem var(--serif);margin-bottom:8px}
+.outc p{color:var(--muted);font-size:.94rem}
+.outc.hl{border:2px solid #2f7fe0}
+.outc.hl .big{background:#dcf8ee;color:#0d6a4b}
+.hitl{margin-top:18px;background:var(--ink);color:#eef3f9;border-radius:var(--r);padding:18px 22px;display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+.hitl b{display:block;color:var(--sky);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.hitl span{font-weight:700}
+.hitl em{color:var(--mint);font-style:normal}
+.hitl p{color:#b9c8d9;font-size:.9rem}
+.mission{margin-top:18px;padding:14px 18px;border-left:4px solid #2f7fe0;background:#fff;border-radius:0 10px 10px 0;font-size:.98rem}
+.prod .price{color:var(--mint);font-size:.82rem;font-weight:800;letter-spacing:.02em}
+.chip.soon2{background:#26405f;color:#cfe3ff;border-color:#3b5d86}
+.brandrel{margin-top:26px;display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;background:var(--ink-2);border:1px solid var(--line-d);border-radius:18px;padding:clamp(20px,3vw,32px);align-items:center}
+.brandrel h3{font:600 clamp(1.4rem,2.4vw,1.9rem) var(--serif);margin-bottom:8px}
+.brandrel p{color:#b9c8d9;margin-bottom:16px}
+.brandrel ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.brandrel li{background:#132a47;border:1px solid #2c4568;border-radius:12px;padding:14px;font-size:.87rem;color:#c3cfdd}
+.brandrel li b{display:block;color:#fff;font-size:.95rem;margin-bottom:4px}
+.pricenote{margin-top:16px;font-size:.86rem;color:var(--muted);text-align:center}
+.offers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.offers h3{font:600 1.25rem var(--serif);margin:10px 0 6px}
+.offers p{font-size:.9rem;color:var(--muted)}
+.founding li b{color:var(--sky)}
+.roi-mail label{display:block;font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--sky-2);margin-bottom:6px}
+.roi-mail input{flex:1;min-width:0;border:1px solid #4a6283;background:#132a47;color:#fff;border-radius:10px;padding:10px 12px}
+.roi-mail .row{flex-wrap:nowrap}
+@media(max-width:900px){.out-grid,.offers{grid-template-columns:minmax(0,1fr)}.hitl,.brandrel{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:620px){.brandrel ul{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -423,14 +457,14 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
     <div>
       <p class="eyebrow">Software Solutions Consultant · Automation &amp; AI</p>
       <h1>Less Busywork.<br><em>More Time for Customers.</em></h1>
-      <p class="lede">I help businesses cut the repetitive work that slows their teams down — with workflow automation, smarter software, and custom tools built around how you already operate — including AI where it genuinely helps, always with your team in control. Start with one workflow, prove the time savings, then grow from there.</p>
+      <p class="lede">I build AI solutions and automation that help your business earn more and your team get more done — answering customers faster, capturing every lead, and taking repetitive work off your staff’s plate. People stay in control: your team reviews and approves what matters. Start with one workflow, prove the results, then grow.</p>
       <div class="row" style="margin-top:28px">
         <a class="btn btn-primary" href="#audit">Get a free workflow audit →</a>
         <a class="btn btn-ghost" href="#demos">Try a live demo</a>
         <button class="btn btn-ghost" type="button" data-open-chat="">Ask a question</button>
       </div>
       <ul class="hero-points">
-        <li>17 years building solutions with customers</li><li>Your team approves anything customer-facing</li><li>Pilots in weeks, not months</li>
+        <li>17 years building solutions with customers</li><li>Human-approved AI</li><li>Virtual or on-site</li><li>Pilots in weeks, not months</li>
       </ul>
     </div>
     <div class="board" aria-label="Animated example of an automated workflow">
@@ -462,6 +496,26 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
   </div>
 </section>
 
+
+<!-- OUTCOMES -->
+<section class="section" id="outcomes">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow"><span class="n">01</span> Why It Matters</p><h2>More Revenue. Faster Teams. People in Control.</h2></div>
+      <p class="lede">Every tool I build is measured against three outcomes. If it doesn’t move at least one of them, we don’t build it.</p>
+    </div>
+    <div class="out-grid">
+      <article class="card outc"><span class="big">$</span><h3>Help Your Business Earn More</h3><p>Answer every inquiry in minutes, follow up on every quote, cut no-shows, and bring customers back with rewards and reminders. Faster responses win more jobs, bookings, and leases.</p></article>
+      <article class="card outc"><span class="big">⚡</span><h3>Help Your Team Execute Faster</h3><p>Requests arrive sorted, replies arrive drafted, and the next step is always clear. Staff spend less time on copy-paste admin and more time on customers and skilled work.</p></article>
+      <article class="card outc hl"><span class="big">✓</span><h3>Keep Humans in the Loop</h3><p>AI drafts, sorts, and suggests — people decide. Approval steps protect accuracy, your reputation, and your customers’ trust, and every action is logged so you can see who approved what.</p></article>
+    </div>
+    <div class="hitl">
+      <div><b>How Human-in-the-Loop Works</b><span>Customer message → AI sorts &amp; drafts → <em>your staff reviews &amp; approves</em> → action taken &amp; logged</span></div>
+      <p>You choose what runs automatically (like reminders) and what always needs a person (like prices, refunds, or anything sensitive).</p>
+    </div>
+  </div>
+</section>
+
 <!-- ABOUT -->
 <section class="section" id="about">
   <div class="wrap about-grid">
@@ -470,10 +524,10 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
       <h3>Rashad Fambro</h3>
       <p class="role">Software Solutions Consultant</p>
       <ul>
-        <li><b>Former</b> Director of Quality Assurance, healthcare technology</li>
+        <li><b>Former</b> Director of Quality Assurance</li>
         <li><b>Degree</b> B.S. Software Engineering</li>
-        <li><b>Works</b> Remotely with clients worldwide</li>
-        <li><b>Focus</b> Automation, business software, MVPs, launch &amp; support</li>
+        <li><b>Meets</b> Virtually worldwide, or on-site at your business</li>
+        <li><b>Focus</b> AI solutions, automation, custom applications, launch &amp; support</li>
       </ul>
       <div class="row">
         <a class="btn btn-primary btn-sm" href="#audit">Book a free audit</a>
@@ -481,9 +535,10 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
       </div>
     </aside>
     <div>
-      <p class="eyebrow"><span class="n">01</span> About me</p>
+      <p class="eyebrow"><span class="n">02</span> About me</p>
       <h2>Customer-First Software Experience, Sized for Your Business</h2>
       <p class="lede" style="margin-top:18px">I’m Rashad Fambro. For 17 years I’ve worked directly with customers to understand their problems and deliver software that solves them — across healthcare, finance, restaurants, retail, and defense. Most recently, as a Director of Quality Assurance, I led 50+ engineers supporting 80+ client organizations. Today I bring that same customer-first approach to businesses that want modern automation and AI without the risk, jargon, or enterprise price tag.</p>
+      <p class="mission"><b>Mission:</b> Build AI solutions and tools that increase human productivity — so businesses earn more, teams move faster, and people stay in control.</p>
       <ol class="timeline">
         <li><h4>Director, Quality Assurance</h4><p class="co">Healthcare analytics software company · 6 years</p><p>Grew a 12-person QA team to 50+ across 4 countries supporting 80+ clients, partnered with client teams on launches and production support, managed a multi-million-dollar resource budget, and cut regression testing time 35% while lowering production incidents.</p></li>
         <li><h4>Test Manager</h4><p class="co">Benefits &amp; enrollment software company · 7 years</p><p>Delivered open enrollment and healthcare benefits management software used by millions of people — launching systems for employer groups of 10,000–150,000 employees and some of the largest insurance carriers, while working directly with client teams in HIPAA-regulated environments.</p></li>
@@ -503,13 +558,13 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="solutions">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">02</span> Solutions</p><h2>What I Build and Set Up for You</h2></div>
+      <div><p class="eyebrow"><span class="n">03</span> Solutions</p><h2>What I Build and Set Up for You</h2></div>
       <p class="lede">Every engagement starts with the work that costs you the most time or the most customers. Then we pick the simplest tool that fixes it — sometimes that’s software you already pay for.</p>
     </div>
     <div class="sol-grid">
       <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></div><h3>Smart Intake &amp; Assistants</h3><p>Capture calls, texts, emails, and web forms in one place. Requests are sorted, summarized, and replies drafted — with AI where it fits — and your staff approves.</p><ul><li>Inquiry &amp; request triage</li><li>Drafted replies and follow-ups</li><li>FAQ and after-hours assistants</li></ul></article>
       <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H14a4 4 0 0 1 4 4v5.5"/></svg></div><h3>Workflow Automation</h3><p>Automatic routing, reminders, status updates, and handoffs between the tools you use — with approval steps where they matter.</p><ul><li>Reminders &amp; no-show reduction</li><li>Task routing by team or shift</li><li>Form → spreadsheet → alert flows</li></ul></article>
-      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M7 9l3 2-3 2M12 13h4"/></svg></div><h3>Custom MVPs &amp; Internal Tools</h3><p>When off-the-shelf software doesn’t fit, I build a focused minimum viable product you can test with real users in weeks.</p><ul><li>Dashboards &amp; staff portals</li><li>Client or resident-facing apps</li><li>Prototype → pilot → launch</li></ul></article>
+      <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M7 9l3 2-3 2M12 13h4"/></svg></div><h3>Custom Applications &amp; Internal Tools</h3><p>When off-the-shelf software doesn’t fit, I build focused applications for your team and customers — starting with a version you can test with real users in weeks.</p><ul><li>Staff portals &amp; dashboards</li><li>Client or resident-facing apps</li><li>Prototype → pilot → launch</li></ul></article>
       <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/></svg></div><h3>Software Selection &amp; Integration</h3><p>Choose, configure, and connect cloud software for scheduling, CRM, ticketing, and payments — so data stops living in five places.</p><ul><li>Tool comparisons in plain English</li><li>Setup, migration &amp; connections</li><li>Cancel what you don’t need</li></ul></article>
       <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Dashboards &amp; Reporting</h3><p>See response times, open requests, bookings, and lead conversion at a glance — the numbers that show whether a change is working.</p><ul><li>Owner &amp; manager dashboards</li><li>Weekly automated reports</li><li>Before/after time-savings tracking</li></ul></article>
       <article class="card sol"><div class="ico"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V7z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3>Testing, Training &amp; Support</h3><p>My specialty. Your team tests real scenarios before launch, gets trained, and has a clear owner and support plan afterward.</p><ul><li>User acceptance testing (UAT)</li><li>Staff training &amp; quick guides</li><li>Monthly care &amp; improvement plans</li></ul></article>
@@ -521,10 +576,19 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section dark" id="products">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">03</span> Products</p><h2>The Desk Suite: Ready-to-Adapt MVPs</h2></div>
+      <div><p class="eyebrow"><span class="n">04</span> Products</p><h2>The Desk Suite: Ready-to-Adapt MVPs</h2></div>
       <p class="lede">Each product is a working prototype I tailor to your business, so you’re not paying to start from scratch. Try any of them in the demo lab below — all demos use fictional data.</p>
     </div>
     <div class="prod-grid" id="prodGrid"></div>
+    <div class="brandrel">
+      <div><p class="eyebrow">Built for Your Brand</p><h3>Your Brand. Always Up to Date.</h3><p>Every tool is delivered as a managed service in your business’s name and kept current through a tested release process.</p><a class="btn btn-primary btn-sm" href="products.html">Read the full product guide →</a></div>
+      <ul>
+        <li><b>Branded for Your Business</b>Your logo, colors, domain, and tone of voice — customers see your brand, not mine.</li>
+        <li><b>Managed SaaS Releases</b>Versioned updates with release notes, rolled out in stages: test → pilot → everyone.</li>
+        <li><b>Tested Before Every Release</b>Regression testing on every update — 17 years of QA discipline built in.</li>
+        <li><b>Safe Rollbacks, Your Data</b>Any release can be rolled back, and your data stays in your accounts.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -532,7 +596,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="industries">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">04</span> Industries</p><h2>Built for Businesses That Serve People</h2></div>
+      <div><p class="eyebrow"><span class="n">05</span> Industries</p><h2>Built for Businesses That Serve People</h2></div>
       <p class="lede">My first focus is hospitality and property management — but the same problems (missed messages, manual scheduling, slow follow-up) show up in almost every small business.</p>
     </div>
     <p class="eyebrow">Current focus · Property &amp; hospitality</p>
@@ -554,7 +618,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="demos">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">05</span> Demo lab</p><h2>Try It With Your Own Message</h2></div>
+      <div><p class="eyebrow"><span class="n">06</span> Demo lab</p><h2>Try It With Your Own Message</h2></div>
       <p class="lede">Pick a product, edit the incoming message — or type something your customers actually send — and watch it get sorted, routed, and drafted for your team to approve.</p>
     </div>
     <div class="lab">
@@ -598,7 +662,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="roi">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">06</span> Savings estimator</p><h2>What Is Busywork Costing You?</h2></div>
+      <div><p class="eyebrow"><span class="n">07</span> Savings estimator</p><h2>What Is Busywork Costing You?</h2></div>
       <p class="lede">Move the sliders to estimate the time and money tied up in repetitive tasks. We’ll measure the real numbers together in your free audit.</p>
     </div>
     <div class="roi">
@@ -619,7 +683,8 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
           <div><b id="roiFte">0</b><small>full-time-equivalent people</small></div>
         </div>
         <small>Estimates only, based on your inputs. Actual results depend on your workflows and tools.</small>
-        <a class="btn btn-primary" href="#audit" id="roiCta">Validate these numbers in a free audit →</a>
+        <form class="roi-mail" id="roiMail" novalidate><label for="roiEmail">Email me this estimate</label><div class="row"><input id="roiEmail" type="email" placeholder="you@business.com" autocomplete="email"><button class="btn btn-primary btn-sm" type="submit">Send</button></div><small id="roiMsg"></small></form>
+        <a class="btn btn-ghost" href="#audit" id="roiCta">Validate these numbers in a free audit →</a>
       </div>
     </div>
   </div>
@@ -629,7 +694,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="audit">
   <div class="wrap audit-grid">
     <div>
-      <p class="eyebrow"><span class="n">07</span> Free workflow audit</p>
+      <p class="eyebrow"><span class="n">08</span> Free workflow audit</p>
       <h2>Bring One Task That Keeps Eating Your Time</h2>
       <p class="lede" style="margin-top:16px">In a free 30-minute call, we walk through one recurring workflow with the person who owns it. No software purchase, no obligation.</p>
       <ol class="gets">
@@ -653,6 +718,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
         <div class="f"><label for="a_size">Team size</label><select id="a_size" name="Team size"><option>1–5</option><option>6–15</option><option>16–50</option><option>51–200</option><option>200+</option></select></div>
         <div class="f full"><label for="a_flow">Which workflow would you like to improve? <span class="req">*</span></label><textarea id="a_flow" name="Workflow" required placeholder="e.g., Residents text maintenance requests to three different people and some get lost."></textarea></div>
         <div class="f"><label for="a_tools">Tools you use today</label><input id="a_tools" name="Current tools" placeholder="e.g., Yardi, Google Sheets, Square"></div>
+        <div class="f"><label for="a_meet">Meeting preference</label><select id="a_meet" name="Meeting preference"><option>Virtual (video call)</option><option>Phone call</option><option>In person / on-site</option></select></div>
         <div class="f"><label for="a_time">Best times to talk &amp; time zone</label><input id="a_time" name="Availability" placeholder="e.g., Weekdays after 2pm ET"></div>
       </div>
       <div class="row" style="margin-top:18px"><button class="btn btn-dark" type="submit">Request free audit →</button><span class="hint" id="auditErr" role="alert" style="color:#b42318;margin:0"></span></div>
@@ -674,12 +740,12 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section dark" id="process">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">08</span> How we work together</p><h2>From First Call to Launch, in Plain Steps</h2></div>
+      <div><p class="eyebrow"><span class="n">09</span> How we work together</p><h2>From First Call to Launch, in Plain Steps</h2></div>
       <p class="lede">You always know what happens next, what it costs, and who owns it. You decide what runs automatically and what needs a person’s approval.</p>
     </div>
     <ol class="proc">
-      <li><h3>Discovery Call</h3><p>Free 30-minute conversation about your goals and the workflow that hurts most.</p><span class="when">Free · Day 1</span></li>
-      <li><h3>Workflow Audit</h3><p>I map the process, find the bottleneck, and send a one-page summary.</p><span class="when">Free · 3 days</span></li>
+      <li><h3>Discovery Call</h3><p>Free 30-minute video or phone call about your goals and the workflow that hurts most.</p><span class="when">Free · Virtual</span></li>
+      <li><h3>Workflow Audit</h3><p>I map the process — virtually or on-site at your business — find the bottleneck, and send a one-page summary.</p><span class="when">Virtual or On-Site</span></li>
       <li><h3>Proposal</h3><p>A fixed-price proposal with scope, timeline, success measures, and options.</p><span class="when">Within 1 week</span></li>
       <li><h3>Agreement &amp; Kickoff</h3><p>Sign electronically, pay the deposit, and we schedule kickoff with your team.</p><span class="when">E-sign · Deposit</span></li>
       <li><h3>Build the Pilot</h3><p>I set up or build a focused version, with weekly check-ins and demos.</p><span class="when">2–6 weeks</span></li>
@@ -693,18 +759,30 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="pricing">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">09</span> Packages</p><h2>Clear Options. Fixed Quotes. No Surprises.</h2></div>
+      <div><p class="eyebrow"><span class="n">10</span> Packages</p><h2>Clear Options. Fixed Quotes. No Surprises.</h2></div>
       <p class="lede">Every project gets a written, fixed-price quote before any work starts. Most clients begin with an assessment or a single pilot.</p>
     </div>
     <div class="pkg-grid" id="pkgGrid"></div>
+    <p class="pricenote">All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $125/hr · Every build gets a fixed, written quote before work starts.</p>
     <div class="founding" id="founding">
       <div>
-        <p class="eyebrow">Founding client program</p>
+        <p class="eyebrow">Founding Client Program</p>
         <h3>Be One of My First Clients — and Get More for It</h3>
-        <p>I’m taking on a small group of founding clients in property management, hospitality, and local services.</p>
-        <ul><li>Founding-client rate on your first pilot</li><li>Priority scheduling and direct access to me</li><li>In return: honest feedback and, if you’re happy, a short case study</li></ul>
+        <p>I’m taking on a small group of founding clients. You get early-client pricing and my direct attention; I get honest feedback and a success story.</p>
+        <ul>
+          <li><b>30% off</b> your first setup or project fee</li>
+          <li><b>First month free</b> on any Desk plan</li>
+          <li><b>Monthly price locked</b> for 12 months</li>
+          <li><b>Priority scheduling</b> and a direct line to me</li>
+          <li>In return: feedback and, if you’re happy, a short case study</li>
+        </ul>
       </div>
       <div style="text-align:center"><div class="spots" id="spots">5</div><p style="margin:6px 0 16px">founding spots open</p><a class="btn btn-primary" href="#start">Apply as a founding client →</a></div>
+    </div>
+    <div class="offers">
+      <article class="card"><span class="chip live">Bundle</span><h3>Launch Bundle</h3><p><b>ChatDesk + BookDesk setup for $1,999</b> (save $401). Answer questions and book appointments around the clock from day one.</p></article>
+      <article class="card"><span class="chip live">Credit</span><h3>Assessment Credit</h3><p>The full <b>$950 assessment fee is credited</b> toward any build you start within 60 days.</p></article>
+      <article class="card"><span class="chip live">Referral</span><h3>Referral Reward</h3><p>Refer a business that signs and get a <b>$250 credit</b> — or $250 paid to you if you’re not a client.</p></article>
     </div>
   </div>
 </section>
@@ -713,7 +791,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section tint" id="start">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">10</span> Start a project</p><h2>Ready to Move Forward? Request Your Proposal</h2></div>
+      <div><p class="eyebrow"><span class="n">11</span> Start a project</p><h2>Ready to Move Forward? Request Your Proposal</h2></div>
       <p class="lede">Answer four quick questions. I’ll reply within one business day with next steps, a proposal, and an agreement you can sign electronically.</p>
     </div>
     <div class="builder">
@@ -776,7 +854,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section" id="trust">
   <div class="wrap">
     <div class="head">
-      <div><p class="eyebrow"><span class="n">11</span> How I use AI</p><h2>Smart Tools That Support Your People — Never Replace Their Judgment</h2></div>
+      <div><p class="eyebrow"><span class="n">12</span> How I use AI</p><h2>Smart Tools That Support Your People — Never Replace Their Judgment</h2></div>
       <p class="lede">Some of my solutions use AI for tasks like sorting requests or drafting replies. I’m upfront about where it’s used, and these are the rules I build by.</p>
     </div>
     <div class="trust-grid">
@@ -791,15 +869,18 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <!-- FAQ -->
 <section class="section tint" id="faq">
   <div class="wrap">
-    <p class="eyebrow"><span class="n">12</span> Questions</p>
+    <p class="eyebrow"><span class="n">13</span> Questions</p>
     <h2 style="margin-bottom:28px">Common Questions</h2>
     <div class="faq">
       <details><summary>Do I Need to Be “Techy” to Work With You?</summary><p>No. I explain everything in plain language and set things up so your staff can use them with a short training session. You focus on running the business.</p></details>
       <details><summary>Will I Have to Replace the Software I Already Use?</summary><p>Usually not. I start with the tools you already pay for and connect or extend them. I only recommend new software when it clearly saves more than it costs.</p></details>
-      <details><summary>How Much Does a Project Cost?</summary><p>Every project gets a fixed, written quote after the free audit. Smaller automations cost far less than a custom MVP. Founding clients receive a reduced rate on their first pilot.</p></details>
+      <details><summary>How Much Does a Project Cost?</summary><p>Desk product setups start at $600 with monthly plans from $79. The AI Readiness Assessment is $950 (virtual), and custom pilots start at $3,500. Every build gets a fixed, written quote first. Founding clients get 30% off their first setup or project and their first month free.</p></details>
       <details><summary>How Long Until We See Results?</summary><p>Most pilots launch in 2–6 weeks. We agree on a starting measure up front, like response time or staff minutes per request, so you can see the difference.</p></details>
       <details><summary>Is AI Safe for My Customers’ Information?</summary><p>We decide together what data the tools can see. Sensitive actions require staff approval, and I keep private information out of AI tools unless you’ve approved how it’s handled. For regulated businesses like dental or legal offices, we review your obligations before anything is built.</p></details>
       <details><summary>Do You Work With Businesses Outside Hospitality and Property?</summary><p>Yes — salons, barbershops, spas, restaurants, contractors, real estate, law and dental offices, retail, and more. If your team repeats the same tasks every day, there’s likely something worth automating.</p></details>
+      <details><summary>Do You Meet Virtually or in Person?</summary><p>Both. Most work happens over video calls with clients worldwide. For on-site assessments, audits, or launch training, I’m happy to travel to your business — travel expenses (airfare, lodging, mileage) are billed at cost, approved by you in advance, and added to the assessment or project rate.</p></details>
+      <details><summary>Will the Tools Carry My Brand?</summary><p>Yes. Every tool is branded for your business — your logo, colors, domain, and voice. Tools are delivered as a managed service: updates go out through a tested, versioned release process with release notes, staged rollouts, and the ability to roll back.</p></details>
+      <details><summary>Why Keep a Human in the Loop?</summary><p>AI is fast but not perfect. Having staff approve prices, promises, and sensitive replies protects your customers and your reputation, catches mistakes before they go out, and keeps your team in charge. Routine, low-risk steps like reminders can run automatically.</p></details>
       <details><summary>What Happens After Launch?</summary><p>You get a 30-day results check included, plus the option of a monthly care plan for support, updates, and new improvements.</p></details>
     </div>
   </div>
@@ -809,7 +890,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 <section class="section dark" id="contact">
   <div class="wrap contact-grid">
     <div>
-      <p class="eyebrow"><span class="n">13</span> Get in touch</p>
+      <p class="eyebrow"><span class="n">14</span> Get in touch</p>
       <h2>What Would You Like to Make Easier?</h2>
       <p class="lede" style="margin-top:16px">Tell me about a single task that keeps slowing your team down, or several tools that need to work together. Scan the code to save my contact details to your phone.</p>
       <div class="row" style="margin-top:26px">
@@ -826,7 +907,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
           <li><b>Email</b><a id="vEmail" href="#" data-cfg="email">rashadfambro@gmail.com</a> <button class="linkbtn" data-copy="email">Copy</button></li>
           <li id="vPhoneRow" hidden><b>Phone</b><a id="vPhone" href="#"></a></li>
           <li><b>LinkedIn</b><a data-cfg-href="linkedin" href="https://www.linkedin.com/in/rashadfambro/" target="_blank" rel="noopener">in/rashadfambro</a></li>
-          <li><b>Serves</b>Clients worldwide, remotely</li>
+          <li><b>Meets</b>Virtually worldwide · on-site visits available</li>
         </ul>
       </div>
       <div class="qr-box">
@@ -848,6 +929,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 </main>
 
 <footer class="footer">
+  <div class="wrap foot-ind"><span>Industries:</span> <a href="industries/apartments.html">Apartment Communities</a> · <a href="industries/hotels.html">Hotels &amp; Resorts</a> · <a href="industries/timeshares.html">Timeshares</a> · <a href="industries/salons.html">Nail Salons</a> · <a href="industries/spas.html">Massage &amp; Spa</a> · <a href="industries/barbers.html">Barbershops</a> · <a href="industries/smoke-shops.html">Smoke &amp; Vape Shops</a> · <a href="industries/restaurants.html">Restaurants</a> · <a href="industries/contractors.html">Contractors &amp; Trades</a> · <a href="industries/real-estate.html">Real Estate</a> · <a href="industries/law-firms.html">Law Firms</a> · <a href="industries/dental.html">Dental Offices</a> · <a href="industries/hud-housing.html">HUD-Assisted Housing</a> · <a href="industries/auto-repair.html">Auto Repair Shops</a> · <a href="industries/cleaning.html">Cleaning Services</a> · <a href="industries/short-term-rentals.html">Short-Term Rentals</a> · <a href="industries/self-storage.html">Self-Storage</a> · <a href="industries/insurance.html">Insurance Agencies</a> · <a href="industries/tax-firms.html">Tax &amp; Bookkeeping Firms</a> · <a href="industries/gyms.html">Gyms &amp; Fitness Studios</a> · <a href="industries/event-venues.html">Event Venues</a> · <a href="products.html">Product Guide</a></div>
   <div class="wrap">
     <span>© <span id="yr"></span> <span data-cfg="businessName">Rashad Fambro Consulting</span> · Software Solutions · Automation &amp; AI</span>
     <span><a href="#audit">Free audit</a> · <a href="#demos">Demos</a> · <a href="#contact">Contact</a> · <a href="#top">Back to top ↑</a></span>
@@ -883,15 +965,16 @@ const CONFIG = {
   formEndpoint: "",          // optional alternative: a Formspree/Basin/Getform URL
   foundingSpots: 5,
   packages: [
-    { id:"audit", name:"Free Workflow Audit", price:"$0", note:"30-min call + summary",
-      desc:"Find the one workflow costing you the most time.", items:["Live walkthrough of one workflow","Bottleneck map","Recommended first fix","Starting success measure"], cta:"Book free audit", href:"#audit" },
-    { id:"assess", name:"Automation Assessment", price:"Fixed quote", note:"Typically 1–2 weeks",
-      desc:"A deeper look across several workflows and tools.", items:["Up to 5 workflows reviewed","Tool & cost comparison","Prioritized roadmap with ROI","Rollout plan you can act on"], cta:"Choose assessment" },
-    { id:"pilot", name:"Pilot / MVP Build", price:"Fixed quote", note:"Typically 2–6 weeks", featured:true,
-      desc:"Build and launch one working solution with your team.", items:["Setup or custom MVP build","Smart drafting with staff approval","Team testing (UAT) & training","30-day results review"], cta:"Choose pilot" },
-    { id:"care", name:"Care & Growth Plan", price:"Monthly", note:"Cancel anytime",
-      desc:"Ongoing support, updates, and new improvements.", items:["Monitoring & fixes","Monthly improvement hours","Quarterly results review","Priority support"], cta:"Choose care plan" }
-  ]
+    { id:"audit", name:"Free Workflow Audit", price:"$0", note:"30-min video call + summary",
+      desc:"Find the one workflow costing you the most time or money.", items:["Live walkthrough of one workflow","Bottleneck map","Recommended first fix","One-page summary in 3 business days"], cta:"Book free audit", href:"#audit" },
+    { id:"assess", name:"AI Readiness Assessment", price:"$950", note:"Virtual · 1–2 weeks", sub:"On-site: $1,500 + travel at cost",
+      desc:"A deeper look across your workflows, tools, and data.", items:["Up to 5 workflows reviewed","AI & tool recommendations with costs","Prioritized roadmap with ROI","Credited toward your first build"], cta:"Choose assessment" },
+    { id:"pilot", name:"Pilot / Custom Build", price:"From $3,500", note:"Typically 2–6 weeks", featured:true, sub:"Desk product setups from $600",
+      desc:"Build and launch one working solution, branded for your business.", items:["Desk product setup or custom application","Human-in-the-loop approval steps","Team testing (UAT) & training","30-day results review"], cta:"Choose pilot" },
+    { id:"care", name:"Care & Growth Plan", price:"From $249/mo", note:"Cancel anytime", sub:"Desk plans from $79/mo",
+      desc:"Hosting, managed releases, support, and ongoing improvements.", items:["Managed SaaS releases & monitoring","Monthly improvement hours","Quarterly results review","Priority support"], cta:"Choose care plan" }
+  ],
+  rates: { advisory:"$125/hr", travel:"Travel billed at cost, approved in advance" }
 };
 
 /* ---------- helpers ---------- */
@@ -948,20 +1031,27 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(heroCyc
 
 /* ---------- products ---------- */
 const PRODUCTS = [
-  {id:"chat", wide:true, name:"ChatDesk", for:"Any business · website, text & social", status:"Live on this site", desc:"An AI chat assistant trained on your business. It answers common questions instantly, day or night, captures leads, books appointments, and hands conversations to your staff when a person is needed.", items:["Answers FAQs from your own policies, prices & hours","Captures leads and sends them to your inbox or CRM","Books appointments and hands off to staff","Clear automated-assistant disclosure and cost limits"]},
-  {id:"property", name:"WorkOrderDesk", for:"Apartments · HOA · property managers", status:"Prototype", desc:"Maintenance requests from text, email, and web in one queue — triaged by urgency and routed to the right tech.", items:["Urgency triage & after-hours escalation","Vendor dispatch & entry permission","Automatic resident status updates"]},
-  {id:"resort", name:"GuestDesk", for:"Hotels · resorts · timeshares", status:"Prototype", desc:"Guest and owner requests routed to front desk, housekeeping, maintenance, or concierge with shift-change visibility.", items:["Department routing & handoff board","Drafted guest replies for staff approval","Owner / member service requests"]},
-  {id:"salon", name:"BookDesk", for:"Salons · barbers · spas · any appointment business", status:"Prototype", desc:"An AI booking assistant that answers booking requests by text, chat, or DM around the clock, offers real open times from your calendar, and books within your rules.", items:["24/7 booking by text, chat & social DMs","Works with your calendar or booking app","Reminders, deposits & no-show reduction","Waitlist fill-ins and automatic rebooking"]},
-  {id:"service", name:"LeadDesk", for:"Contractors · real estate · restaurants", status:"Prototype", desc:"Every inquiry captured, assigned, and followed up — so quotes and showings don’t slip through the cracks.", items:["Lead capture from every channel","Quote & showing follow-up reminders","Pipeline view: inquiry → booked"]},
-  {id:"intake", name:"IntakeDesk", for:"Law firms · dental offices · professional services", status:"Prototype", desc:"Structured client intake that collects missing information, flags deadlines, and keeps sensitive details off the open inbox.", items:["Guided intake & document checklists","Deadline and appointment flags","Privacy-first: staff reviews everything"]},
-  {id:"compliance", name:"ComplianceDesk", for:"HUD-assisted housing · smoke shops · regulated retail", status:"Prototype", desc:"Recurring checklists, recertification reminders, and an audit trail so required tasks get done and documented.", items:["Recertification & inspection reminders","Checklists with sign-off history","Document collection tracking"]}
+  {id:"chat", wide:true, name:"ChatDesk", for:"Any business · website, text & social", status:"Live on this site", price:"Setup from $1,200 · $149/mo", desc:"An AI chat assistant trained on your business. It answers common questions instantly, day or night, captures leads, books appointments, and hands conversations to your staff when a person is needed.", items:["Answers FAQs from your own policies, prices & hours","Captures leads and sends them to your inbox or CRM","Books appointments and hands off to staff","Clear automated-assistant disclosure and cost limits"]},
+  {id:"property", name:"WorkOrderDesk", for:"Apartments · HOA · property managers", status:"Prototype", price:"Setup from $2,500 · $249/mo", desc:"Maintenance requests from text, email, and web in one queue — triaged by urgency and routed to the right tech.", items:["Urgency triage & after-hours escalation","Vendor dispatch & entry permission","Automatic resident status updates"]},
+  {id:"resort", name:"GuestDesk", for:"Hotels · resorts · timeshares · short-term rentals", status:"Prototype", price:"Setup from $2,500 · $249/mo", desc:"Guest and owner requests routed to front desk, housekeeping, maintenance, or concierge with shift-change visibility.", items:["Department routing & handoff board","Drafted guest replies for staff approval","Owner / member service requests"]},
+  {id:"salon", name:"BookDesk", for:"Salons · barbers · spas · any appointment business", status:"Prototype", price:"Setup from $1,200 · $149/mo", desc:"An AI booking assistant that answers booking requests by text, chat, or DM around the clock, offers real open times from your calendar, and books within your rules.", items:["24/7 booking by text, chat & social DMs","Works with your calendar or booking app","Reminders, deposits & no-show reduction","Waitlist fill-ins and automatic rebooking"]},
+  {id:"service", name:"LeadDesk", for:"Contractors · real estate · restaurants · auto repair", status:"Prototype", price:"Setup from $1,500 · $149/mo", desc:"Every inquiry captured, assigned, and followed up — so quotes and showings don’t slip through the cracks.", items:["Lead capture from every channel","Quote & showing follow-up reminders","Pipeline view: inquiry → booked"]},
+  {id:"intake", name:"IntakeDesk", for:"Law firms · dental offices · tax & insurance", status:"Prototype", price:"Setup from $1,800 · $179/mo", desc:"Structured client intake that collects missing information, flags deadlines, and keeps sensitive details off the open inbox.", items:["Guided intake & document checklists","Deadline and appointment flags","Privacy-first: staff reviews everything"]},
+  {id:"compliance", name:"ComplianceDesk", for:"HUD-assisted housing · smoke shops · regulated retail", status:"Prototype", price:"Setup from $2,000 · $199/mo", desc:"Recurring checklists, recertification reminders, and an audit trail so required tasks get done and documented.", items:["Recertification & inspection reminders","Checklists with sign-off history","Document collection tracking"]},
+  {id:"rewards", name:"RewardsDesk", for:"Smoke shops · salons · barbers · restaurants · retail", status:"Ready to build", price:"Setup from $900 · $99/mo", desc:"A customer rewards program in your brand: points by phone number, birthday offers, and win-back messages that bring regulars back more often.", items:["Points & tiers by phone number — no app needed","Birthday, win-back & “we miss you” offers","Opt-in texting; age-verified where required","See repeat visits and top customers"]},
+  {id:"review", name:"ReviewDesk", for:"Any local business", status:"Ready to build", price:"Setup from $600 · $79/mo", desc:"Ask happy customers for reviews at the right moment and get drafted, on-brand responses to every review for staff to approve.", items:["Automatic review requests after visits","Drafted replies to every review","Unhappy feedback routed privately to you"]},
+  {id:"social", name:"SocialDesk", for:"Any business on Instagram & Facebook", status:"Ready to build", price:"Setup from $900 · $149/mo", desc:"Plan, draft, and schedule a month of posts in your brand voice, and auto-reply to common DMs with a link to book or buy.", items:["Monthly content calendar drafted by AI","Your approval before anything posts","DM keyword replies that capture leads"]},
+  {id:"staff", name:"StaffDesk", for:"Teams with shifts or high turnover", status:"Ready to build", price:"Setup from $1,500 · $149/mo", desc:"An AI assistant that answers staff questions from your handbook and SOPs, plus shift swaps and onboarding checklists in one place.", items:["“Ask the handbook” answers for staff","Shift swap requests with manager approval","New-hire onboarding & training checklists"]},
+  {id:"invoice", name:"InvoiceDesk", for:"Service businesses · contractors · cleaners", status:"Ready to build", price:"Setup from $900 · $99/mo", desc:"Quotes become invoices, invoices get paid: friendly payment reminders and a clear view of who owes what.", items:["Quote → invoice in one click","Polite automatic payment reminders","Works with your accounting app"]},
+  {id:"insight", name:"InsightDesk", for:"Owners & managers", status:"Ready to build", price:"Setup from $1,500 · $149/mo", desc:"An owner dashboard that pulls numbers from your tools and sends a plain-English weekly summary: what changed, what needs attention.", items:["Bookings, leads, sales & response times","AI-written weekly summary by email","Alerts when something needs you"]}
 ];
+const DEMO_IDS=["property","resort","salon","service","intake","compliance"];
 $("#prodGrid").innerHTML = PRODUCTS.map(p=>`
   <article class="prod${p.wide?" wide":""}">
-    <div class="top"><span class="for">${esc(p.for)}</span><span class="chip live">${esc(p.status)}</span></div>
-    <h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
+    <div class="top"><span class="for">${esc(p.for)}</span><span class="chip ${p.status==="Ready to build"?"soon2":"live"}">${esc(p.status)}</span></div>
+    <h3>${esc(p.name)}</h3><span class="price">${esc(p.price)}</span><p>${esc(p.desc)}</p>
     <ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
-    <div class="row">${p.id==="chat"?'<button type="button" class="btn btn-primary btn-sm" data-open-chat="">Try it now — chat with me</button>':`<a class="btn btn-primary btn-sm" href="#demos" data-open-demo="${p.id}">Try the demo</a>`}<a class="btn btn-line btn-sm" href="#audit">Adapt it for me</a></div>
+    <div class="row">${p.id==="chat"?'<button type="button" class="btn btn-primary btn-sm" data-open-chat="">Try it now — chat with me</button>':(DEMO_IDS.includes(p.id)?`<a class="btn btn-primary btn-sm" href="#demos" data-open-demo="${p.id}">Try the demo</a>`:`<button type="button" class="btn btn-primary btn-sm" data-open-chat="Tell me about ${esc(p.name)}">Ask about it</button>`)}<a class="btn btn-line btn-sm" href="#audit">Adapt it for me</a></div>
   </article>`).join("");
 
 /* ---------- industries ---------- */
@@ -972,13 +1062,21 @@ const INDUSTRIES = [
   {k:"nails", n:"Nail Salons", demo:"salon", pains:["Booking by DM and text all day","No-shows leave empty chairs","Hard to rebook regulars"], wins:["Booking requests turned into open slots","Reminder texts and waitlist fill-ins","Automatic rebooking nudges"]},
   {k:"massage", n:"Massage & Spa", demo:"salon", pains:["Intake forms on paper","Late cancellations","Package and gift card tracking"], wins:["Digital intake before the visit","Reminders with easy reschedule","Package balance tracking"]},
   {k:"barbers", n:"Barbershops", demo:"salon", pains:["Walk-in vs. appointment chaos","Phone rings mid-cut","Regulars drift away"], wins:["Live waitlist and booking link","Auto-replies with open times","“Time for a cut?” reminders"]},
-  {k:"smoke", n:"Smoke & Vape Shops", demo:"compliance", pains:["Inventory counts by hand","Age-verification and compliance logs","Reorder timing guesswork"], wins:["Low-stock alerts and reorder lists","Daily compliance checklists with sign-off","Sales dashboard by product"]},
+  {k:"smoke", n:"Smoke & Vape Shops", demo:"compliance", pains:["Inventory counts by hand","Age-verification and compliance logs","Regulars shop around for better deals"], wins:["Customer rewards program (RewardsDesk): points, birthday & win-back offers","Low-stock alerts and reorder lists","Daily compliance checklists with sign-off"]},
   {k:"restaurants", n:"Restaurants", demo:"service", pains:["Catering and event inquiries go cold","Staff scheduling by group text","Reviews pile up unanswered"], wins:["Catering lead capture and follow-up","Shift swap requests in one place","Drafted review replies"]},
   {k:"contractors", n:"Contractors & Trades", demo:"service", pains:["Quotes sent but never followed up","Job details scattered across texts","Scheduling crews is manual"], wins:["Quote follow-up reminders","Job intake form with photos","Crew schedule and job status board"]},
   {k:"realestate", n:"Real Estate", demo:"service", pains:["Leads from many sites","Showing requests at all hours","Transaction checklists in email"], wins:["Instant lead response and assignment","Showing request scheduling","Transaction checklist tracker"]},
   {k:"law", n:"Law Firms", demo:"intake", pains:["Long intake calls for unqualified leads","Missing client documents","Deadline tracking by hand"], wins:["Guided intake that screens matters","Document request checklists","Deadline and court-date reminders"]},
   {k:"dental", n:"Dental Offices", demo:"intake", pains:["Phones swamped with scheduling","Unfilled cancellations","Recall reminders fall behind"], wins:["Appointment request triage","Cancellation waitlist fill-ins","Recall and treatment reminders"]},
   {k:"hud", n:"HUD-Assisted Housing", demo:"compliance", pains:["Annual recertification deadlines","Inspection preparation","Document collection from residents"], wins:["Recertification reminder timeline","Inspection readiness checklists","Resident document tracker"]},
+  {k:"autorepair", n:"Auto Repair Shops", demo:"service", pains:["Phones ring all day with status calls","Estimates sent but never followed up","Service reminders done by hand"], wins:["Automatic “your car is ready” updates","Estimate follow-up reminders","Oil change and service reminders"]},
+  {k:"cleaning", n:"Cleaning Services", demo:"service", pains:["Quote requests answered hours later","Scheduling crews by text","Chasing unpaid invoices"], wins:["Instant quote request replies","Crew schedule and job board","Automatic payment reminders (InvoiceDesk)"]},
+  {k:"str", n:"Short-Term Rentals", demo:"resort", pains:["Guest messages at all hours","Cleaner turnover coordination","Repeat questions about check-in and Wi-Fi"], wins:["24/7 guest messaging assistant","Turnover task alerts for cleaners","Review requests and drafted replies"]},
+  {k:"storage", n:"Self-Storage", demo:"chat", pains:["Unstaffed hours mean missed rentals","Late payments and lien notices","Same unit-size questions daily"], wins:["After-hours AI assistant that reserves units","Payment reminders and notice tracking","Unit-size and pricing answers"]},
+  {k:"insurance", n:"Insurance Agencies", demo:"intake", pains:["Quote intake takes long calls","Renewals slip through the cracks","Document chasing"], wins:["Guided quote intake forms","Renewal reminder sequences","Missing-document checklists"]},
+  {k:"tax", n:"Tax & Bookkeeping Firms", demo:"intake", pains:["Seasonal intake overload","Clients send documents late","Repeat status questions"], wins:["Client intake and document checklists","Automatic deadline reminders","Status updates without phone tag"]},
+  {k:"fitness", n:"Gyms & Fitness Studios", demo:"salon", pains:["Members quietly cancel","Class booking by DM","Trial leads not followed up"], wins:["Class booking assistant","Win-back and rewards offers","Trial lead follow-up"]},
+  {k:"venues", n:"Event Venues", demo:"service", pains:["Inquiries need fast answers to win","Tours scheduled by email back-and-forth","Contracts and deposits tracked manually"], wins:["Instant inquiry replies with availability","Tour scheduling","Deposit and contract reminders"]},
   {k:"other", n:"Your Business", demo:"chat", pains:["The same questions every day","Work tracked in spreadsheets and texts","No clear view of what’s open"], wins:["One shared queue for requests","Automated reminders and handoffs","A simple owner dashboard"]}
 ];
 const indChips=$("#indChips"), indPanel=$("#indPanel");
@@ -995,7 +1093,7 @@ indChips.addEventListener("click",e=>{ const b=e.target.closest("button"); if(b)
 showInd("nails");
 
 /* industry selects */
-const indOptions = ["Apartment Community / Property Management","Hotel","Resort","Timeshare / Vacation Ownership",...INDUSTRIES.slice(3,13).map(i=>i.n),"Other"];
+const indOptions = ["Apartment Community / Property Management","Hotel","Resort","Timeshare / Vacation Ownership",...INDUSTRIES.slice(3).filter(i=>i.k!=="other").map(i=>i.n),"Other"];
 ["#a_ind","#b_ind"].forEach(s=>{ $(s).innerHTML = `<option value="">Select…</option>` + indOptions.map(o=>`<option>${esc(o)}</option>`).join(""); });
 document.addEventListener("click",e=>{
   const a=e.target.closest("[data-pre-ind]"); if(!a) return;
@@ -1168,7 +1266,17 @@ function roi(){
   $("#roiFte").textContent=(hrsMonth/173).toFixed(1);
   $("#roiTotal").textContent=money(labor+leads);
 }
-$$(".roi input").forEach(i=>i.addEventListener("input",roi)); roi();
+$$(".roi input[type=range]").forEach(i=>i.addEventListener("input",roi)); roi();
+$("#roiMail").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const em=$("#roiEmail").value.trim(), msg=$("#roiMsg");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ msg.textContent="Please enter a valid email."; return; }
+  const summary=`Savings estimate: ${$("#roiTotal").textContent}/yr — ${$("#roiHours").textContent} staff hrs/mo freed, ${$("#roiLabor").textContent} labor value, ${$("#roiLeads").textContent} recovered revenue. Inputs: ${$("#r1").value} people × ${$("#r2").value} hrs/wk at $${$("#r3").value}/hr, ${$("#r4").value}% automatable, ${$("#r5").value} missed leads/mo at $${$("#r6").value}.`;
+  msg.textContent="Sending…";
+  const ok=await sendLead("calculator",{Email:em, Workflow:summary});
+  if(ok){ msg.textContent="Sent! Check your inbox — Rashad will follow up with ideas."; }
+  else { msg.innerHTML=`Almost there: <a href="${mailto("My savings estimate", summary+"\n\nMy email: "+em)}" style="color:var(--sky)">open this email</a> to send it to Rashad.`; }
+});
 
 /* ---------- forms ---------- */
 function validate(fields, errEl){
@@ -1236,7 +1344,7 @@ $("#pkgGrid").innerHTML = CONFIG.packages.map(p=>`
   <article class="card pkg ${p.featured?"feat":""}">
     ${p.featured?'<span class="chip live" style="align-self:flex-start">Most popular start</span>':'<span class="chip" style="align-self:flex-start">'+esc(p.note)+'</span>'}
     <h3>${esc(p.name)}</h3>
-    <div class="price">${esc(p.price)}${p.featured?`<small>${esc(p.note)}</small>`:""}</div>
+    <div class="price">${esc(p.price)}${p.sub?`<small>${esc(p.sub)}</small>`:(p.featured?`<small>${esc(p.note)}</small>`:"")}</div>
     <p>${esc(p.desc)}</p>
     <ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
     <a class="btn ${p.featured?"btn-dark":"btn-line"}" href="${p.href||"#start"}" ${p.href?"":`data-pick-pkg="${esc(p.name)}"`}>${esc(p.cta)}</a>
@@ -1341,7 +1449,15 @@ const LANDINGS = {
   "for-law-firms":    { who: "law firms", line: "Cleaner Intake. Fewer Missed Details.", ind: "law", demo: "intake", opt: "Law Firms" },
   "for-dental":       { who: "dental offices", line: "Fewer Phone Calls. Fuller Schedules.", ind: "dental", demo: "intake", opt: "Dental Offices" },
   "for-hud-housing":  { who: "HUD-assisted housing", line: "Recertifications on Time, Every Time.", ind: "hud", demo: "compliance", opt: "HUD-Assisted Housing" },
-  "for-smoke-shops":  { who: "smoke & vape shops", line: "Inventory and Compliance on Autopilot.", ind: "smoke", demo: "compliance", opt: "Smoke & Vape Shops" }
+  "for-auto-repair":  { who: "auto repair shops", line: "Fewer Status Calls. More Approved Repairs.", ind: "autorepair", demo: "service", opt: "Auto Repair Shops" },
+  "for-cleaning":     { who: "cleaning services", line: "Quotes Answered Fast. Invoices Paid Faster.", ind: "cleaning", demo: "service", opt: "Cleaning Services" },
+  "for-short-term-rentals": { who: "short-term rental hosts", line: "Guests Answered 24/7. Turnovers on Track.", ind: "str", demo: "resort", opt: "Short-Term Rentals" },
+  "for-self-storage": { who: "self-storage facilities", line: "Rent Units Even When the Office Is Closed.", ind: "storage", demo: "property", opt: "Self-Storage" },
+  "for-insurance":    { who: "insurance agencies", line: "Faster Quotes. No Missed Renewals.", ind: "insurance", demo: "intake", opt: "Insurance Agencies" },
+  "for-tax-firms":    { who: "tax & bookkeeping firms", line: "Tax Season Without the Inbox Chaos.", ind: "tax", demo: "intake", opt: "Tax & Bookkeeping Firms" },
+  "for-gyms":         { who: "gyms & fitness studios", line: "Fuller Classes. Fewer Cancellations.", ind: "fitness", demo: "salon", opt: "Gyms & Fitness Studios" },
+  "for-event-venues": { who: "event venues", line: "Answer Inquiries First. Book More Events.", ind: "venues", demo: "service", opt: "Event Venues" },
+  "for-smoke-shops":  { who: "smoke & vape shops", line: "Bring Regulars Back. Stay Compliant.", ind: "smoke", demo: "compliance", opt: "Smoke & Vape Shops" }
 };
 function applyLanding() {
   const key = location.hash.slice(1);
@@ -1443,12 +1559,18 @@ function linkify(s) { return s.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" ta
 
 /* ---------- guided assistant ---------- */
 const KW = [
-  { id: "chat", re: /chat ?bot|ai assistant|virtual assistant|website chat|live chat|answer(ing)? (customer )?questions|faq/i, who: "businesses that get the same questions every day" },
+  { id: "rewards", re: /reward|loyalty|points|punch card|repeat customer/i, who: "businesses that want more repeat customers" },
+  { id: "review", re: /review|reputation|google rating|yelp/i, who: "businesses that live on reviews" },
+  { id: "social", re: /instagram|facebook|social media|tiktok|posts?\b|content calendar/i, who: "businesses marketing on social media" },
+  { id: "staff", re: /staff|employee|handbook|sop|onboard|training|shift swap/i, who: "teams with shifts or new hires" },
+  { id: "invoice", re: /invoice|payment reminder|late pay|billing|collections/i, who: "service businesses that bill customers" },
+  { id: "insight", re: /dashboard|report|kpi|metrics|analytics/i, who: "owners who want a clear view of the numbers" },
+  { id: "chat", re: /chat ?bot|ai assistant|virtual assistant|website chat|live chat|answer(ing)? (customer )?questions|faq|self.?storage|storage unit/i, who: "businesses that get the same questions every day" },
   { id: "property", re: /apartment|property|tenant|resident|hoa|landlord|leasing|maintenance request|work order/i, who: "apartment and property teams" },
-  { id: "resort", re: /hotel|resort|guest|timeshare|vacation|owner(s)? |front desk|housekeep|hospitality|motel|inn\b/i, who: "hotels, resorts and timeshares" },
-  { id: "salon", re: /salon|nail|barber|massage|spa\b|stylist|lash|brow|beauty|no.?show/i, who: "salons, barbers and spas" },
-  { id: "service", re: /contractor|plumb|roof|hvac|electrician|landscap|clean|real estate|realtor|broker|restaurant|cater|food truck|quote|lead/i, who: "contractors, real estate and restaurants" },
-  { id: "intake", re: /law|attorney|legal|lawyer|dental|dentist|orthodont|clinic|accountant|cpa|insurance agen|intake/i, who: "law, dental and professional offices" },
+  { id: "resort", re: /hotel|resort|guest|timeshare|vacation|owner(s)? |front desk|housekeep|hospitality|motel|inn\b|airbnb|short.?term rental|vrbo/i, who: "hotels, resorts and timeshares" },
+  { id: "salon", re: /salon|nail|barber|massage|spa\b|stylist|lash|brow|beauty|no.?show|gym|fitness|yoga|studio|booking|appointment/i, who: "salons, barbers and spas" },
+  { id: "service", re: /contractor|plumb|roof|hvac|electrician|landscap|clean|real estate|realtor|broker|restaurant|cater|food truck|quote|lead|auto repair|mechanic|body shop|venue|wedding/i, who: "contractors, auto shops, real estate, venues and restaurants" },
+  { id: "intake", re: /law|attorney|legal|lawyer|dental|dentist|orthodont|clinic|accountant|cpa|tax|bookkeep|insurance|intake/i, who: "law, dental and professional offices" },
   { id: "compliance", re: /hud|section 8|recert|lihtc|affordable housing|smoke|vape|tobacco|dispensar|compliance|inventory/i, who: "HUD housing and regulated retail" }
 ];
 function detectProduct(t) { return KW.find(k => k.re.test(t)); }
@@ -1458,21 +1580,25 @@ async function localReply(t) {
   const prod = detectProduct(s);
   if (/^(hi|hello|hey|good (morning|afternoon|evening)|yo)\b/.test(s) && s.length < 25)
     return botSay("Hi there! What kind of business do you run? I’ll point you to the most useful product and demo.", MAIN_CHIPS);
-  if (/book|audit|free|consult|schedule|appointment|meet|sign me up|get started|start/.test(s) && !/how much|price|cost/.test(s))
+  if (/in person|in-person|on.?site|visit|travel|come to|meet/.test(s) && !/book|audit/.test(s))
+    return botSay("Yes — Rashad meets virtually with clients worldwide and also travels for <b>on-site assessments, audits and launch training</b>. Travel expenses are billed at cost, approved by you in advance, on top of the assessment or project rate. The free audit call is virtual.", ["Book a free audit", "How much does it cost?"]);
+  if (/brand|white.?label|my logo|update|release/.test(s))
+    return botSay("Every tool is <b>branded for your business</b> — your logo, colors, domain and voice — and delivered as a managed service. Updates go out through a tested, versioned release process with staged rollouts and rollback if needed.", ["Which product fits me?", "Book a free audit"]);
+  if (/book|audit|free|consult|schedule|sign me up|get started|start/.test(s) && !/how much|price|cost|in person|on.?site|travel/.test(s))
     return startCapture("audit", prod);
   if (/send .*message|leave a message|message rashad|yes,? send it/.test(s)) return startCapture("message", prod);
   if (/talk to|human|person|rashad|call|phone|email|contact|reach/.test(s)) {
     return botSay(`You can email Rashad at <b>${esc(CONFIG.email)}</b>${CONFIG.phone ? ` or call <b>${esc(CONFIG.phone)}</b>` : ""}${CONFIG.calendarUrl ? `, or <a href="${esc(CONFIG.calendarUrl)}" target="_blank" rel="noopener">pick a time on his calendar</a>` : ""}. Or I can pass a message to him right now — he replies within one business day.`, ["Send Rashad a message", "Book a free audit"]);
   }
   if (/price|cost|how much|rate|charge|afford|budget|expensive|cheap/.test(s))
-    return botSay("Every project gets a <b>fixed, written quote</b> after the free audit — no hourly surprises. Options:<br>• <b>Free Workflow Audit</b> — $0<br>• <b>Automation Assessment</b> — fixed quote, 1–2 weeks<br>• <b>Pilot / MVP Build</b> — fixed quote, 2–6 weeks<br>• <b>Care &amp; Growth Plan</b> — monthly<br>Founding clients get a reduced rate on their first pilot. Want to start with the free audit?", ["Book a free audit", "Founding client program", "See packages"]);
+    return botSay("Clear pricing, fixed written quotes:<br>• <b>Free Workflow Audit</b> — $0<br>• <b>AI Readiness Assessment</b> — $950 virtual ($1,500 on-site + travel at cost), credited toward your build<br>• <b>Desk products</b> — setup from $600, plans from $79/mo<br>• <b>Pilot / Custom Build</b> — from $3,500<br>• <b>Care &amp; Growth Plan</b> — from $249/mo<br>Founding clients get <b>30% off</b> their first setup and the <b>first month free</b>.", ["Book a free audit", "Founding client program", "See packages"]);
   if (/founding|discount|deal|promo/.test(s))
-    return botSay(`Rashad is taking on <b>${CONFIG.foundingSpots} founding clients</b>: a founding rate on the first pilot and priority scheduling, in exchange for honest feedback and (if you’re happy) a short case study. Want me to put your name in?`, ["Yes, apply", "Book a free audit"]);
+    return botSay(`Rashad is taking on <b>${CONFIG.foundingSpots} founding clients</b>: <b>30% off</b> the first setup or project, <b>first month free</b> on any Desk plan, monthly price <b>locked for 12 months</b>, and priority scheduling — in exchange for feedback and (if you’re happy) a short case study. There’s also a <b>Launch Bundle</b>: ChatDesk + BookDesk setup for $1,999. Want me to put your name in?`, ["Yes, apply", "Book a free audit"]);
   if (/yes,? apply|apply/.test(s)) return startCapture("founding", prod);
   if (/see packages|packages/.test(s)) { location.hash = "pricing"; return botSay("I’ve scrolled you to the packages. Anything I can clarify?", MAIN_CHIPS); }
   if (/demo|see the demos|try/.test(s)) {
     let p = prod ? prod.id : (CHAT.lastProd || (chatContext.industry ? chatContext.industry.demo : "property"));
-    if (!DEMOS[p]) return botSay("You’re already trying ChatDesk — this chat is the demo! For the other products, the demo lab lets you type a customer message and watch it get sorted.", ["Which product fits me?", "Book a free audit"]);
+    if (!DEMOS[p]) return botSay(p === "chat" ? "You’re already trying ChatDesk — this chat is the demo!" : `${esc((PRODUCTS.find(x => x.id === p) || {}).name || "That product")} doesn’t have a demo in the lab yet — Rashad can walk you through it on a free audit call, branded for your business.`, ["Book a free audit", "Which product fits me?"]);
     setDemo(p); document.getElementById("demos").scrollIntoView({ behavior: "smooth" });
     return botSay(`I opened the <b>${esc(DEMOS[p].title)}</b> demo for you. Type a message your customers might send and click <b>Run triage</b>.`, ["Which product fits me?", "Book a free audit"]);
   }
