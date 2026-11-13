@@ -68,7 +68,7 @@ def test_R03_profile_focus_and_former(home):
     prof = home.page.inner_text(".profile")
     assert "healthcare technology" not in prof.lower()
     assert re.search(r"Focus\s+AI", prof)
-    assert re.search(r"Experience\s+IT professional", prof) and "Former" not in prof
+    assert re.search(r"Experience\s+17 years as an IT professional", prof) and "Former" not in prof
     assert "on-site" in prof.lower()
 
 
@@ -476,7 +476,7 @@ def test_R39_forms_send_directly_to_owner(make_page, base_url):
     _fake_formsubmit(pg, True, seen)
     pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
     assert pg.evaluate("CONFIG.formEndpoint") == f"https://formsubmit.co/ajax/{OWNER_EMAIL}"
-    pg.fill("#a_name", "Test Person"); pg.fill("#a_biz", "Test Co"); pg.fill("#a_email", "test@example.com"); pg.fill("#a_flow", "Testing direct send")
+    pg.fill("#a_name", "Test Person"); pg.fill("#a_biz", "Test Co"); pg.fill("#a_email", "test@example.com"); pg.fill("#a_flow", "Testing direct send"); pg.fill("#a_notes", "Two properties, launch before spring")
     pg.click("#auditForm button[type=submit]")
     pg.wait_for_function("document.querySelector('#auditResult h4').innerText.includes('received')", timeout=10000)
     assert not pg.is_visible("#auditMail")
@@ -485,6 +485,7 @@ def test_R39_forms_send_directly_to_owner(make_page, base_url):
     assert body["email"] == "test@example.com" and "Email" not in body
     assert body["_subject"].startswith("New website lead (audit)") and "Test Co" in body["_subject"]
     assert body["_template"] == "table" and "_autoresponse" in body
+    assert body["Notes"] == "Two properties, launch before spring"
     assert w.errors == []
 
 
