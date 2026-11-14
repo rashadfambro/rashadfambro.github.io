@@ -23,6 +23,17 @@ def all_html():
 
 
 # ---------------- price helpers: tests read prices from the site's CONFIG so they hold for any price change ----------------
+
+def wait_js(pg, expr, timeout=5000):
+    """Poll a JS expression with evaluate() (wait_for_function needs eval, which the site's CSP blocks)."""
+    import time
+    end = time.time() + timeout / 1000
+    while time.time() < end:
+        if pg.evaluate("() => { try { return !!(" + expr + "); } catch (e) { return false; } }"):
+            return
+        pg.wait_for_timeout(100)
+    raise AssertionError("timed out waiting for: " + expr)
+
 def dollars(n):
     import math
     return "${:,}".format(int(math.floor(n + 0.5)))   # rounds half up, like the site's JavaScript
@@ -99,13 +110,13 @@ def test_R04_founding_program_terms(home):
 
 def test_R05_offer_amounts(home):
     t = home.page.inner_text(".offers"); P = site_prices(home.page)
-    assert "$150 credit" in t and dollars(P["assess"]) + " assessment" in t and dollars(P["bundle"]) in t and dollars(P["hotel"]) in t
+    assert "$150 credit" in t and "paid for the assessment is credited" in t and dollars(P["bundle"]) in t and dollars(P["hotel"]) in t
 
 
 # ---------------- holiday sale ----------------
 def test_R06_sale_banner_during_and_after(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
-    assert w.page.is_visible("#saleBar") and "10% off" in w.page.inner_text("#saleBar")
+    assert w.page.is_visible("#saleBar") and "10% or more off" in w.page.inner_text("#saleBar")
     P = site_prices(w.page); reg, sale = dollars(P["assess"]), dollars(sale_price(P["assess"], P["sale"]))
     assert sale in w.page.inner_text("#pkgGrid")
     w2 = open_home(make_page, base_url, when=AFTER_SALE)
@@ -148,7 +159,7 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     assert pg.is_checked("input[name=method][value='PayPal']")
     pg.check("#buy_ok"); pg.check("input[name=plan][value='3 monthly payments']"); pg.check("input[name=method][value='PayPal']")
     pg.click("#buyGo")
-    pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=10000)
+    wait_js(pg, "document.getElementById('buyResult').innerText.trim().length > 0", 10000)
     res = pg.inner_text("#buyResult")
     assert "Nothing has been charged" in res
     href = pg.get_attribute("#buyResult a", "href")
@@ -222,7 +233,7 @@ def test_R13_chat_intents(make_page, base_url, q, expect):
 def test_R13b_chat_sale_intent(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
     w.page.click("#chatFab")
-    assert "10% off" in chat(w.page, "is there a holiday sale?")
+    assert "10% or more off" in chat(w.page, "is there a holiday sale?")
 
 
 def test_R13c_chat_lead_capture(home):
@@ -384,7 +395,7 @@ def test_R28_free_trial_flow(make_page, base_url):
     assert "Free for 14 days, then" in pg.inner_text("#buyPrice") and dollars(site_prices(pg)["prop"][0]) + "/mo" in pg.inner_text("#buyPrice")
     pg.fill("#buy_name", "Tia Trial"); pg.fill("#buy_biz", "Seaside Resort"); pg.fill("#buy_email", "tia@example.com")
     pg.click("#buyGo")
-    pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=10000)
+    wait_js(pg, "document.getElementById('buyResult').innerText.trim().length > 0", 10000)
     assert "press Send" in pg.inner_text("#buyResult")
     href = pg.get_attribute("#buyResult a", "href")
     assert href.startswith(f"mailto:{OWNER_EMAIL}") and "free%20trial" in href.lower()
@@ -434,9 +445,9 @@ def test_R33_back_to_top_and_home(home):
     assert not pg.is_visible("#toTop")
     pg.evaluate("window.scrollTo(0, 3000)"); pg.wait_for_timeout(200)
     assert pg.is_visible("#toTop")
-    pg.click("#toTop"); pg.wait_for_function("window.scrollY < 5", timeout=5000)
+    pg.click("#toTop"); wait_js(pg, "window.scrollY < 5", 5000)
     pg.evaluate("window.scrollTo(0, 3000)"); pg.wait_for_timeout(200)
-    pg.click("#nav a[data-home]"); pg.wait_for_function("window.scrollY < 5", timeout=5000)
+    pg.click("#nav a[data-home]"); wait_js(pg, "window.scrollY < 5", 5000)
     assert pg.locator("#nav a").first.inner_text() == "Home"
     assert home.errors == []
 
@@ -448,7 +459,7 @@ def test_R34_subpage_home_and_top(make_page, base_url, path):
     assert pg.locator("header a", has_text="Home").count() == 1
     pg.evaluate("window.scrollTo(0, 2500)"); pg.wait_for_timeout(200)
     assert pg.is_visible("#toTop")
-    pg.click("#toTop"); pg.wait_for_function("window.scrollY < 5", timeout=5000)
+    pg.click("#toTop"); wait_js(pg, "window.scrollY < 5", 5000)
     assert w.errors == []
 
 
@@ -507,7 +518,7 @@ def test_R39_forms_send_directly_to_owner(make_page, base_url):
     assert pg.evaluate("CONFIG.formEndpoint") == f"https://formsubmit.co/ajax/{OWNER_EMAIL}"
     pg.fill("#a_name", "Test Person"); pg.fill("#a_biz", "Test Co"); pg.fill("#a_email", "test@example.com"); pg.fill("#a_flow", "Testing direct send"); pg.fill("#a_notes", "Two properties, launch before spring")
     pg.click("#auditForm button[type=submit]")
-    pg.wait_for_function("document.querySelector('#auditResult h4').innerText.includes('received')", timeout=10000)
+    wait_js(pg, "document.querySelector('#auditResult h4').innerText.includes('received')", 10000)
     assert not pg.is_visible("#auditMail")
     url, body = seen[-1]
     assert url == f"https://formsubmit.co/ajax/{OWNER_EMAIL}"
@@ -538,7 +549,7 @@ def test_R41_order_and_trial_send_directly(make_page, base_url):
     pg.wait_for_selector("#buy_name", state="visible")
     pg.fill("#buy_name", "Pat Package"); pg.fill("#buy_biz", "Lakeside Apartments"); pg.fill("#buy_email", "pat@example.com")
     pg.click("#buyGo")
-    pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=15000)
+    wait_js(pg, "document.getElementById('buyResult').innerText.trim().length > 0", 15000)
     assert "on its way" in pg.inner_text("#buyResult")
     assert seen[-1][1]["_subject"].startswith("Trial request") and "PackageDesk" in seen[-1][1]["Workflow"]
 
@@ -602,7 +613,7 @@ def test_R45_prototype_core_flows(make_page, base_url):
     pg = _proto(make_page, base_url, "reviews.html").page
     pg.click("[data-r='2']"); assert "sorry" in pg.input_value("#reply").lower()
     pg.click("#post"); assert pg.locator("[data-r='2']").count() == 0
-    pg.click("[data-tab=ask]"); pg.click("[data-star='2']"); assert "privately" in pg.inner_text("#askResult")
+    pg.click("[data-tab=ask]"); pg.click("[data-star='2']"); assert "Leave a Google review" in pg.inner_text("#askResult")
     # SocialDesk: draft a month, approve, schedule; DM keyword
     pg = _proto(make_page, base_url, "social.html").page
     pg.click("#gen"); assert pg.locator("[data-post]").count() == 12
@@ -748,3 +759,51 @@ def test_R56_tool_one_liners_and_clean_text(home):
     tc = pg.evaluate("document.body.textContent")
     for bad in ["LocationAvailable", "Branded for Your BusinessYour", "wkpilot", "47staff", "0.3full"]:
         assert bad not in tc, bad
+
+
+def test_R57_prices_match_everywhere_and_security(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(400)
+    sale = pg.evaluate("saleActive()")
+    p = site_prices(pg)
+    # The plan picker in checkout shows the same sale price as the header
+    pg.locator("[data-buy='chat']").first.scroll_into_view_if_needed() if pg.locator("[data-buy='chat']").count() else None
+    pg.evaluate("openBuy('chat','buy')"); pg.wait_for_timeout(200)
+    first = pg.inner_text("#tierRadios label:first-child")
+    std0 = p["std"][0]
+    exp = dollars(sale_price(std0)) if sale else dollars(std0)
+    assert exp + "/mo" in first.replace(".00", ""), first
+    assert exp in pg.inner_text("#buyPrice").replace(".00", "")
+    due = pg.inner_text("#dueNote")
+    assert "Due at kickoff" in due and "Monthly" in due, due
+    pg.click("#buyClose")
+    # The proposal request shows the same assessment price as the package card
+    pg.evaluate("openStart()"); pg.wait_for_timeout(200)
+    a = p["assess"]; shown = dollars(sale_price(a)) if sale else dollars(a)
+    assert shown in pg.inner_text("#bPkgs"), pg.inner_text("#bPkgs")
+    if sale:
+        assert "or more off" in pg.inner_text("#saleText")
+    # Security: CSP + referrer policy on every page; honeypot field on every form
+    for rel in ["index.html", "products.html", "privacy.html", "industries/hotels.html", "prototypes/reviews.html", "tools/audit-summary.html"]:
+        html = open(site_file(rel), encoding="utf-8").read()
+        assert 'http-equiv="Content-Security-Policy"' in html and "object-src 'none'" in html, rel
+        assert 'name="referrer"' in html, rel
+    assert pg.locator("#auditForm input[name=company_website], #builder input[name=company_website], #buyForm input[name=company_website]").count() == 3
+    assert not w.errors, w.errors
+
+
+def test_R58_reviewdesk_invites_everyone_the_same(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/reviews.html"); pg.wait_for_timeout(400)
+    pg.click("text=Ask for Reviews")
+    shown = []
+    for n in (1, 5):
+        pg.click(f"[data-star='{n}']"); pg.wait_for_timeout(150)
+        t = pg.inner_text("#askResult")
+        assert "Leave a Google review" in t and "Send private feedback" in t, t
+        shown.append(t.split("We'd love")[1])
+    assert shown[0] == shown[1]
+    for rel in ["index.html", "products.html", "prototypes/reviews.html", "prototypes/index.html"]:
+        html = open(site_file(rel), encoding="utf-8").read().lower()
+        assert "happy customers" not in html and "unhappy" not in html, rel
+    assert not w.errors, w.errors

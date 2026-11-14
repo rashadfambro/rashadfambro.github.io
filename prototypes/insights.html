@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formsubmit.co https://script.google.com https://script.googleusercontent.com; frame-src https://calendly.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>InsightDesk Prototype · Rashad Fambro Consulting</title>
 <meta name="description" content="Your key numbers on one page and a plain-English summary every Monday. Clickable prototype with sample data.">
 <link rel="icon" href="../icon.svg"><link rel="canonical" href="https://rashadfambro.github.io/prototypes/insights.html">
@@ -95,7 +95,7 @@ function render(){const c=W[S.i],p=W[S.i-1];$("#wk").textContent=`Week ${S.i+1} 
   `<p>Revenue was ${money(c.rev).replace(".00","")}, ${up?"up":"down"} ${Math.abs(pct(c.rev,p.rev))}% from the week before, on ${c.book} bookings.</p>`,
   `<p>You received ${c.leads} new leads and the average first reply took ${c.resp} minutes${c.resp>20?", which is slower than usual":""}.</p>`,
   `<p>${c.open?`${c.open} leads still have no follow-up.`:"Every lead got a follow-up."} Average rating: ${c.rating}★.</p>`,
-  `<p><b>One thing to do this week:</b> ${c.resp>20?"check who covers messages during busy hours; replies slowed down.":c.open>4?"follow up with the open leads before Wednesday.":"keep doing what you're doing, and ask this week's happy customers for reviews."}</p>`];
+  `<p><b>One thing to do this week:</b> ${c.resp>20?"check who covers messages during busy hours; replies slowed down.":c.open>4?"follow up with the open leads before Wednesday.":"keep doing what you're doing, and ask this week's customers for reviews."}</p>`];
  $("#sumTxt").innerHTML=lines.join("");
  const al=[];if(c.resp>20)al.push(["Replies slowed down",`Average first reply is ${c.resp} minutes (goal: under 15).`,"r"]);if(c.open>4)al.push(["Leads waiting",`${c.open} leads have no follow-up after 24 hours.`,"a"]);if(c.rev<p.rev)al.push(["Revenue dipped",`Down ${Math.abs(pct(c.rev,p.rev))}% from last week.`,"a"]);
  $("#alList").innerHTML=al.length?al.map(a=>`<div><span class="chip ${a[2]}">${a[0]}</span> ${a[1]}</div>`).join(""):'<p class="muted">Nothing needs attention this week.</p>';

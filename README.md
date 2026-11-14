@@ -1,6 +1,6 @@
 # Rashad Fambro Consulting
 
-Website for Rashad Fambro, Software Solutions Consultant: workflow automation, business software, and custom MVPs.
+Website for Rashad Fambro, IT Software Consultant: workflow automation, business software, and custom applications and tools.
 
 Live site: https://rashadfambro.github.io/
 
