@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'"><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>Trial Link Generator · Internal</title><link rel="icon" href="../icon.svg">
+<style>
+body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#1a2533;background:#f5f8fc}
+main{max-width:760px;margin:0 auto;padding:24px}h1{font-size:24px;margin:0 0 4px}.muted{color:#56606c;font-size:13.5px}
+.card{background:#fff;border:1px solid #d3dce7;border-radius:14px;padding:18px;margin-top:16px}
+label{display:block;font-weight:700;font-size:13.5px;margin:10px 0 4px}input,select,textarea{font:inherit;width:100%;box-sizing:border-box;border:1px solid #d3dce7;border-radius:9px;padding:8px 10px}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 12px}.tools label{font-weight:400;margin:2px 0}.tools input{width:auto}
+@media(max-width:640px){.tools{grid-template-columns:1fr 1fr}}
+.btn{border:0;border-radius:9px;padding:9px 14px;font-weight:700;background:#0d1a2d;color:#fff;cursor:pointer;margin-top:12px}
+textarea{min-height:170px}code{word-break:break-all}
+</style><!--STAGING-START--><meta name="robots" content="noindex, nofollow"><style>.stg-ribbon{position:fixed;right:0;top:50%;z-index:9999;transform:rotate(-90deg) translateY(-100%);transform-origin:right top;background:#ff5a5a;color:#fff;font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:8px 8px 0 0}</style><!--STAGING-END--></head>
+<body><!--STAGING-START--><div class="stg-ribbon" aria-hidden="true">STAGING</div><!--STAGING-END--><main>
+<h1>Trial Link Generator</h1>
+<p class="muted">Internal tool for Rashad. Makes a branded 14-day trial link for one tool or a package. The trial runs in the client's browser with sample data and anything they enter; nothing connects to their accounts until they choose a plan. Paste the email into Gmail and send it yourself.</p>
+<div class="card">
+ <label for="biz">Business name</label><input id="biz" placeholder="e.g. Lakeview Apartments">
+ <label for="contact">Contact first name</label><input id="contact" placeholder="e.g. Dana">
+ <label for="color">Brand color</label><input id="color" type="color" value="#2f7fe0" style="width:70px;padding:2px">
+ <label for="preset">Package</label><select id="preset"><option value="">Pick tools below</option><option value="chat,salon">Launch Bundle (ChatDesk + BookDesk)</option><option value="property,package,chat">Property Management Bundle</option><option value="resort,housekeeping,property">Hotel Operations Bundle</option></select>
+ <p style="font-weight:700;font-size:13.5px;margin:12px 0 4px">Tools</p><div class="tools" id="tools"></div>
+ <label for="start">Trial start date</label><input id="start" type="date">
+ <button class="btn" id="make" type="button">Make trial link</button>
+</div>
+<div class="card" id="out" hidden><p><b>Trial link</b> <span class="muted" id="ends"></span></p><p><code id="link"></code></p><label for="email">Email to send (edit before sending)</label><textarea id="email"></textarea><button class="btn" id="copy" type="button">Copy email</button></div>
+</main>
+<script>
+const SITE="https://rashadfambro.github.io/prototypes/";
+const T=[["property","WorkOrderDesk","workorders.html"],["chat","ChatDesk","chat.html"],["salon","BookDesk","bookings.html"],["resort","GuestDesk","guests.html"],["housekeeping","HousekeepingDesk","housekeeping.html"],["rewards","RewardsDesk","rewards.html"],["invoice","InvoiceDesk","invoices.html"],["service","LeadDesk","leads.html"],["package","PackageDesk","packages.html"],["social","SocialDesk","social.html"],["review","ReviewDesk","reviews.html"],["staff","StaffDesk","staff.html"],["insight","InsightDesk","insights.html"],["intake","IntakeDesk","intake.html"],["compliance","ComplianceDesk","compliance.html"]];
+function trialHash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36).toUpperCase().padStart(6,"0").slice(0,6)}
+function trialKey(tools,biz,start){return "RF-"+start.replace(/-/g,"")+"-"+trialHash(tools+"|"+biz.trim().toLowerCase()+"|"+start)}
+const $=s=>document.querySelector(s);
+$("#tools").innerHTML=T.map(t=>`<label><input type="checkbox" value="${t[0]}"> ${t[1]}</label>`).join("");
+$("#start").value=new Date().toISOString().slice(0,10);
+$("#preset").onchange=()=>{const v=$("#preset").value.split(",");document.querySelectorAll("#tools input").forEach(i=>i.checked=v.includes(i.value))};
+function makeLink(biz,color,tools,start){const one=tools.length===1,page=one?T.find(t=>t[0]===tools[0])[2]:"suite.html",ts=tools.join(",");
+ const q=new URLSearchParams({trial:trialKey(ts,biz,start),biz,color,start,tools:ts});return SITE+page+"?"+q.toString()}
+$("#make").onclick=()=>{const biz=$("#biz").value.trim(),tools=[...document.querySelectorAll("#tools input:checked")].map(i=>i.value);
+ if(!biz||!tools.length){alert("Add a business name and at least one tool.");return}
+ const start=$("#start").value,link=makeLink(biz,$("#color").value,tools,start),end=new Date(new Date(start+"T00:00:00").getTime()+14*864e5);
+ const names=tools.map(t=>T.find(x=>x[0]===t)[1]).join(", "),who=$("#contact").value.trim()||"there";
+ $("#link").textContent=link;$("#ends").textContent="· ends "+end.toLocaleDateString();
+ $("#email").value=`Hi ${who},\n\nHere's your free 14-day trial of ${names}, branded for ${biz}:\n${link}\n\nYou can try it with the sample data or enter your own. It runs in your browser and nothing is sent to your customers. Your trial ends ${end.toLocaleDateString()}, and nothing is charged automatically.\n\nIf you'd like, we can do a free 30-minute setup call to load your real services, hours, and team. Just reply with a couple of times that work.\n\nRashad`;
+ $("#out").hidden=false};
+$("#copy").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($("#email").value);$("#copy").textContent="Copied"};
+</script></body></html>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formsubmit.co https://script.google.com https://script.googleusercontent.com; frame-src https://calendly.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formsubmit.co https://script.google.com https://script.googleusercontent.com; frame-src 'self' https://calendly.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SocialDesk Prototype · Rashad Fambro Consulting</title>
 <meta name="description" content="A month of on-brand posts drafted for approval, plus instant replies to common DMs. Clickable prototype with sample data.">
 <link rel="icon" href="../icon.svg"><link rel="canonical" href="https://rashadfambro.github.io/prototypes/social.html">
@@ -48,11 +48,15 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 #toast.on{opacity:1}
 footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
+.banner.trial{background:#e8f6ef;border-color:#b7e2cc;color:#0b4f36}.banner.trial.end{background:#ffe9e9;border-color:#f3c2c2;color:#7a1414}
+#trialEnd{position:fixed;inset:0;background:rgba(13,26,45,.72);display:grid;place-items:center;z-index:20;padding:20px}
+#trialEnd .card{max-width:520px}
+body.embedded header,body.embedded .banner,body.embedded footer{display:none}
 </style><!--STAGING-START--><meta name="robots" content="noindex, nofollow"><style>.stg-ribbon{position:fixed;right:0;top:50%;z-index:9999;transform:rotate(-90deg) translateY(-100%);transform-origin:right top;background:#ff5a5a;color:#fff;font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:8px 8px 0 0}</style><!--STAGING-END--></head>
 <body data-proto="social"><!--STAGING-START--><div class="stg-ribbon" aria-hidden="true">STAGING</div><!--STAGING-END-->
 <header><div class="logo">Y</div><div><h1>SocialDesk <span class="sub">for <span data-biz>Your Business</span></span></h1><div class="sub">A month of on-brand posts drafted for approval, plus instant replies to common DMs.</div></div><span class="sp"></span>
 <label>Brand name <input type="text" id="bizName" aria-label="Business name"></label><label>Color <input type="color" id="bizColor" aria-label="Brand color"></label></header>
-<div class="banner"><span><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
+<div class="banner"><span id="btext"><b>Prototype</b> · sample data · nothing is sent to anyone. Every client version is branded and set up around your workflow.</span><span class="sp"></span>
 <a href="../index.html#products">← Back to products</a><a href="../index.html#audit">Book a free audit</a><button type="button" class="btn alt sm" id="reset">Reset sample data</button></div>
 <main><nav class="tabs" aria-label="SocialDesk sections"><button type="button" data-tab="plan" aria-selected="true">Content Calendar</button><button type="button" data-tab="dms" aria-selected="false">DM Auto-Replies</button><button type="button" data-tab="setup" aria-selected="false">Brand Voice</button></nav>
 
@@ -82,7 +86,27 @@ function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assig
 function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
 function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
 function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
-document.addEventListener("DOMContentLoaded",()=>{tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+const TRIAL_DAYS=14;
+function trialHash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36).toUpperCase().padStart(6,"0").slice(0,6)}
+function trialKey(tools,biz,start){return "RF-"+start.replace(/-/g,"")+"-"+trialHash(tools+"|"+biz.trim().toLowerCase()+"|"+start)}
+function readTrial(){const q=new URLSearchParams(location.search);
+ if(q.get("trial")){const t={key:q.get("trial"),biz:q.get("biz")||"",color:q.get("color")||"#2f7fe0",start:q.get("start")||"",tools:q.get("tools")||document.body.dataset.proto};
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(t.start)||t.key!==trialKey(t.tools,t.biz,t.start))return {invalid:true};
+  try{localStorage.setItem("proto-trial",JSON.stringify(t));localStorage.setItem("proto-brand",JSON.stringify({name:t.biz,color:t.color}))}catch(e){}return t}
+ try{const t=JSON.parse(localStorage.getItem("proto-trial")||"null");if(t&&(t.tools.split(",").includes(document.body.dataset.proto)||document.body.dataset.proto==="suite"))return t}catch(e){}return null}
+function trialDaysLeft(t){const s=new Date(t.start+"T00:00:00"),end=new Date(s.getTime()+TRIAL_DAYS*864e5);return Math.ceil((end-new Date())/864e5)}
+function exportData(){const data={exported:new Date().toISOString(),brand:brand(),trial:readTrial(),tools:{}};
+ try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith("proto-"))data.tools[k]=localStorage.getItem(k)}}catch(e){}
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download="desk-trial-data.json";a.click();toast("Your data was downloaded")}
+function applyTrial(){if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("embedded");
+ const t=readTrial(),b=$(".banner");if(!t||!b)return;
+ if(t.invalid){b.classList.add("trial","end");$("#btext").innerHTML="<b>This trial link isn't valid.</b> Please use the exact link from your email, or ask for a new one.";return}
+ const left=trialDaysLeft(t);b.classList.add("trial");
+ if(left>0){$("#btext").innerHTML=`<b>Free ${TRIAL_DAYS}-day trial for ${esc(t.biz)}</b> · ${left} day${left===1?"":"s"} left · your entries stay in this browser · live connections to your own accounts start when you choose a plan`;}
+ else{b.classList.add("end");$("#btext").innerHTML=`<b>Your trial for ${esc(t.biz)} has ended.</b> Your entries are still here and you can download them.`;
+  const o=document.createElement("div");o.id="trialEnd";o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="teH"><h2 id="teH">Your ${TRIAL_DAYS}-Day Trial Has Ended</h2><p class="small">Thanks for trying it, ${esc(t.biz)}. Nothing is charged automatically. Choose a plan to keep going with live connections to your own accounts, or download what you entered.</p><div class="row"><a class="btn" href="../index.html#pricing">Choose a plan</a><button class="btn alt" type="button" id="teExport">Download my data</button><a class="btn alt" href="../index.html#audit">Talk to Rashad</a></div></div>`;document.body.appendChild(o);$("#teExport").onclick=exportData}
+ const x=document.createElement("button");x.type="button";x.className="btn alt sm";x.textContent="Download my data";x.onclick=exportData;b.appendChild(x)}
+document.addEventListener("DOMContentLoaded",()=>{applyTrial();tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
  $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
 
 

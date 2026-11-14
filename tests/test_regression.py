@@ -105,7 +105,7 @@ def test_R03_profile_focus_and_former(home):
     prof = home.page.inner_text(".profile")
     assert "healthcare technology" not in prof.lower()
     assert re.search(r"Focus\s+AI", prof)
-    assert re.search(r"Experience\s+17 years as an IT professional", prof) and "Former" not in prof
+    assert re.search(r"Experience\s+17 years as an IT (software )?professional", prof) and "Former" not in prof
     assert "on-site" in prof.lower()
 
 
@@ -164,6 +164,7 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     assert pg.locator("input[name=method]").count() == 2   # PayPal (default) + Square
     assert pg.is_checked("input[name=method][value='PayPal']")
     pg.check("#buy_ok"); pg.check("input[name=plan][value='3 monthly payments']"); pg.check("input[name=method][value='PayPal']")
+    pg.evaluate("CONFIG.paypalMe=''; if (CONFIG.squareLinks) CONFIG.squareLinks={}")   # no hosted checkout: test the emailed-invoice path
     pg.click("#buyGo")
     wait_js(pg, "document.getElementById('buyResult').innerText.trim().length > 0", 10000)
     res = pg.inner_text("#buyResult")
@@ -224,7 +225,7 @@ def test_R12_industry_chips_and_try_buttons(home):
     ("can I buy online?", ["PayPal", "Square"]),
     ("can you set up a loyalty rewards program?", ["RewardsDesk"]),
     ("do you build chatbots?", ["ChatDesk"]),
-    ("is there a free trial?", ["14-day trial", "license key"]),
+    ("is there a free trial?", ["14-day trial", "trial workspace" if "trial workspace" in open(site_file("index.html"), encoding="utf-8").read() else "license key"]),
     ("we need help with housekeeping room turns", ["HousekeepingDesk"]),
 ])
 def test_R13_chat_intents(make_page, base_url, q, expect):
@@ -284,7 +285,7 @@ def test_R14_roi_math(home):
     assert pg.inner_text("#roiCost") == dollars(cost) + "/mo"
     assert pg.inner_text("#roiTotal") == dollars(net) + "/mo"
     assert pg.inner_text("#roiPayback") == f"{setup / net:.1f} months"
-    assert pg.inner_text("#roiYear") == dollars(net * 12 - setup)
+    assert pg.inner_text("#roiYear") in (dollars(round(net) * 12 - setup), dollars(net * 12 - setup))
     # ChatGPT's worked example: 200 requests x 5 min at $30/hr, $3,500 setup, $150/mo -> $350/mo net, 10-month payback
     r = pg.evaluate("roiCalc({people:1,hours:200*5/60/4.33,rate:30,auto:100,missed:0,winback:0,sale:0,margin:0,usage:0,plan:150,setup:3500})")
     assert round(r["net"]) == 350 and round(r["payback"]) == 10
@@ -334,6 +335,9 @@ def test_R18_internal_links_resolve():
         for href in re.findall(r'\shref="([^"#?][^"]*|#[^"]*)"', s):
             if href.startswith(("http", "mailto:", "tel:", "data:", "$", "javascript")) or "${" in href:
                 continue
+            if "?" in href:
+                base, _, rest = href.partition("?")
+                href = base + ("#" + rest.split("#", 1)[1] if "#" in rest else "")
             path, _, frag = href.partition("#")
             target = os.path.normpath(os.path.join(os.path.dirname(f), path)) if path else f
             if os.path.isdir(target): target = os.path.join(target, "index.html")
@@ -611,6 +615,8 @@ def test_R42_multi_industry_wording_and_packagedesk(home):
 # ---------------- v10: prototypes for every former "Ready to build" product ----------------
 PROTOS = {"rewards": "rewards.html", "review": "reviews.html", "social": "social.html",
           "staff": "staff.html", "invoice": "invoices.html", "insight": "insights.html"}
+MORE_PROTOS = {"chat": "chat.html", "property": "workorders.html", "resort": "guests.html", "salon": "bookings.html", "housekeeping": "housekeeping.html",
+               "package": "packages.html", "service": "leads.html", "intake": "intake.html", "compliance": "compliance.html"}
 
 
 def _proto(make_page, base_url, file):
@@ -683,6 +689,14 @@ def test_R46_static_html_reads_clean_for_crawlers():
 
 def test_R47_order_button_matches_payment_setup(home):
     pg = home.page
+    if "squareLinks" in pg.content():
+        pg.locator("[data-buy='assess']").first.click()
+        assert pg.inner_text("#buyGo") == "Continue to secure checkout →"   # PayPal.me covers any amount
+        pg.click("#buyClose")
+        pg.evaluate("CONFIG.paypalMe=''")
+        pg.locator("[data-buy='assess']").first.click()
+        assert pg.inner_text("#buyGo") == "Send my order request →"
+        return
     pg.locator("[data-buy='assess']").first.click()
     assert pg.inner_text("#buyGo") == ("Send my order request →" if is_v15(pg) else "Place my order →")
     pg.click("#buyClose")
@@ -766,9 +780,10 @@ def test_R54_hero_profile_copy_and_bundles(home):
     for x in ["17 years building software products and solutions with customers", "Human-Approved AI", "Virtual or On-site", "Pilots within weeks", "Integration with existing systems"]:
         assert x in hero, x
     prof = pg.inner_text(".profile")
-    assert "engineering & testing software products and solutions" in prof and "Available virtually worldwide, or on-site at your business" in prof
+    if "MORE_ORDER" not in pg.content():
+        assert "engineering & testing software products and solutions" in prof and "Available virtually worldwide, or on-site at your business" in prof
+        assert "deliver software products that solve them" in pg.inner_text("#about")
     assert "Meets" not in prof
-    assert "deliver software products that solve them" in pg.inner_text("#about")
     offers = pg.inner_text(".offers")
     assert "Property Management Bundle" in offers and "ComplianceDesk" not in offers
     pg.locator("[data-buy='propbundle']").click()
@@ -870,7 +885,7 @@ def test_R60_featured_products_ctas_sample_audit_and_scope(make_page, base_url):
     assert pg.locator(".hero .btn").count() == 1 and "free workflow audit" in pg.inner_text(".hero .btn-primary").lower()
     # Three featured tools; the other 12 are collapsed, with the full catalog in the Product Guide
     names = pg.eval_on_selector_all("#prodGrid .prod h3", "els => els.map(e => e.textContent)")
-    assert names == ["WorkOrderDesk", "LeadDesk", "ChatDesk"], names
+    assert names in (["WorkOrderDesk", "ChatDesk", "BookDesk"], ["WorkOrderDesk", "LeadDesk", "ChatDesk"]), names
     assert not pg.is_visible("#prodGridMore") and pg.locator("#prodGridMore .prod").count() == 12
     pg.click("#moreProducts > summary")
     assert pg.is_visible("#prodGridMore") and pg.locator("#moreProducts a[href='products.html']").count() == 1
@@ -894,4 +909,99 @@ def test_R60_featured_products_ctas_sample_audit_and_scope(make_page, base_url):
     assert pg.evaluate("CONFIG.packages.find(p => p.id === 'pilot').note") == "3–8 weeks to launch"
     assert "3–8 weeks: 2–6 weeks to build, then 1–2 weeks of testing" in pg.text_content("#faq")
     pg.click("#chatFab"); assert "3–8 weeks" in chat(pg, "how long does it take?")
+    assert not w.errors, w.errors
+
+
+def _v16(base_url_page):
+    return "MORE_ORDER" in open(site_file("index.html"), encoding="utf-8").read()
+
+
+def test_R61_every_tool_has_a_working_trial_app(make_page, base_url):
+    if not _v16(None):
+        pytest.skip("staged, not yet promoted")
+    checks = [("workorders.html", "#submit", "#triage", "Plumbing"), ("bookings.html", "[data-slot='9:00']", "#rows", "9:00"),
+              ("packages.html", "#add", "#rows", "Dana"), ("leads.html", "#add", "#apList", "First reply"),
+              ("guests.html", "#route", "#apList", "Housekeeping"), ("compliance.html", "[data-t='0']", "#tasks", "Done")]
+    for f, btn, out, exp in checks:
+        w = make_page(); pg = w.page
+        pg.goto(base_url + "prototypes/" + f); pg.wait_for_timeout(300)
+        pg.click(btn); pg.wait_for_timeout(200)
+        assert exp in pg.text_content(out), f
+        assert not w.errors, (f, w.errors)
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/chat.html"); pg.wait_for_timeout(300)
+    pg.fill("#q", "what are your hours?"); pg.press("#q", "Enter"); pg.wait_for_timeout(200)
+    assert "9 AM" in pg.inner_text("#log")
+    pg.fill("#q", "do you fix boats?"); pg.press("#q", "Enter"); pg.wait_for_timeout(200)
+    assert "do you fix boats?" in pg.text_content("#hoList")
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/housekeeping.html"); pg.wait_for_timeout(300)
+    pg.click("[data-tab='assign']"); pg.click("#auto"); pg.wait_for_timeout(200)
+    assert "Room" in pg.text_content("#att") and not w.errors
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/intake.html"); pg.wait_for_timeout(300)
+    assert "Missing" in pg.text_content("#subList") and not w.errors
+
+
+def test_R62_trial_links_count_down_expire_and_reject_tampering(make_page, base_url):
+    if not _v16(None):
+        pytest.skip("staged, not yet promoted")
+    import datetime
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/workorders.html"); pg.wait_for_timeout(200)
+    today = datetime.date.today()
+    def link(start, biz="Lakeview Apartments", tools="property"):
+        key = pg.evaluate(f"trialKey('{tools}', '{biz}', '{start}')")
+        return f"?trial={key}&biz={biz.replace(' ', '%20')}&color=%23aa3355&start={start}&tools={tools}"
+    pg.goto(base_url + "prototypes/workorders.html" + link(today.isoformat())); pg.wait_for_timeout(300)
+    b = pg.inner_text(".banner")
+    assert "Free 14-day trial for Lakeview Apartments" in b and "14 days left" in b and "Download my data" in b
+    assert pg.inner_text("h1 [data-biz]") == "Lakeview Apartments"
+    old = (today - datetime.timedelta(days=20)).isoformat()
+    pg.goto(base_url + "prototypes/workorders.html" + link(old)); pg.wait_for_timeout(300)
+    assert pg.is_visible("#trialEnd") and "has ended" in pg.inner_text(".banner")
+    bad = link(today.isoformat()).replace("Lakeview", "Hackview", 1)
+    pg.evaluate("localStorage.clear()")
+    pg.goto(base_url + "prototypes/workorders.html" + bad); pg.wait_for_timeout(300)
+    assert "isn't valid" in pg.inner_text(".banner")
+    # A package opens as one product: the Desk Suite with every included tool
+    pg.evaluate("localStorage.clear()")
+    pg.goto(base_url + "prototypes/suite.html" + link(today.isoformat(), tools="property,package,chat")); pg.wait_for_timeout(600)
+    assert pg.eval_on_selector_all("#nav button", "e => e.map(x => x.textContent)") == ["WorkOrderDesk", "PackageDesk", "ChatDesk"]
+    assert "workorders.html?embed=1" in pg.get_attribute("#app", "src")
+    pg.click("#nav button:nth-child(2)"); pg.wait_for_timeout(300)
+    assert "packages.html" in pg.get_attribute("#app", "src")
+    assert "14 days left" in pg.inner_text(".banner")
+    assert not w.errors, w.errors
+
+
+def test_R63_payments_profile_banner_and_product_order(make_page, base_url):
+    if not _v16(None):
+        pytest.skip("staged, not yet promoted")
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(400)
+    names = pg.eval_on_selector_all("#prodGrid .prod h3, #prodGridMore .prod h3", "e => e.map(x => x.textContent)")
+    assert names == ["WorkOrderDesk", "ChatDesk", "BookDesk", "GuestDesk", "HousekeepingDesk", "RewardsDesk", "InvoiceDesk", "LeadDesk",
+                     "PackageDesk", "SocialDesk", "ReviewDesk", "StaffDesk", "InsightDesk", "IntakeDesk", "ComplianceDesk"], names
+    # Ready product: pay the amount due now; built-to-order product: request without payment
+    sale = pg.evaluate("saleActive()")
+    full = sale_price(1500) if sale else 1500
+    assert pg.evaluate("payLinkFor('chat','PayPal','Pay in full')") == f"https://paypal.me/RFambro/{int(full)}USD"
+    assert pg.evaluate("payLinkFor('property','PayPal','Pay in full')") == ""
+    pg.evaluate("openBuy('property','buy')"); pg.wait_for_timeout(200)
+    assert not pg.is_visible("#methodOpts") and pg.is_visible("#pilotNote") and "No payment now" in pg.inner_text("#pilotNote")
+    pg.click("#buyClose"); pg.evaluate("openBuy('chat','buy')"); pg.wait_for_timeout(200)
+    assert pg.is_visible("#methodOpts") and pg.inner_text("#buyGo") == "Continue to secure checkout →"
+    pg.click("#buyClose")
+    # Profile, photo, banner
+    prof = pg.inner_text(".profile")
+    for x in ["17 years as an IT software professional", "Available virtually worldwide, or on-site", "AI Solutions, Workflow Automation, Custom Applications"]:
+        assert x in prof, x
+    assert "engineered and tested the software products and solutions" in pg.inner_text("#about")
+    assert pg.evaluate("document.querySelector('.profile img.photo').naturalWidth") > 0
+    if sale:
+        assert pg.is_visible("#saleRound") and "rounded down" in pg.inner_text("#saleRound") and "rounded" not in pg.inner_text("#saleText")
+    # Google polish: one back-to-top control; honeypot text not in the page
+    assert "Back to top ↑" not in pg.inner_text("footer") and "Leave this field empty" not in pg.content()
+    assert pg.inner_text("#roiYear") == "$15,324" and pg.inner_text("#roiCash") == "$280/mo"
     assert not w.errors, w.errors

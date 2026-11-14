@@ -109,5 +109,8 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R58 | ReviewDesk shows every customer the same review and private-feedback options, whatever their rating |
 | R59 | Client-owned model: ownership FAQ, support allowances per plan, extra-support rate, Fully Hosted allowances and overages (skips until promoted) |
 | R60 | One main hero button; 3 featured tools with the rest collapsed; Request order / Request a pilot / Try demo labels; fictional sample audit; pilot scope and 3–8 week timing agree in pricing, FAQ and chat |
+| R61 | All 9 new trial apps (WorkOrderDesk, ChatDesk, BookDesk, GuestDesk, HousekeepingDesk, PackageDesk, LeadDesk, IntakeDesk, ComplianceDesk) load and their main action works |
+| R62 | Trial links: branded countdown, end-of-trial screen after 14 days, tampered links rejected; a package opens as one Desk Suite |
+| R63 | Product order; PayPal pays the amount due now for ready products; pilot requests ask for no payment; profile, photo, sale banner second line; one back-to-top; ROI rounding and cash view |
 
 Price tests read prices from the site's CONFIG, so they keep passing when prices change.
