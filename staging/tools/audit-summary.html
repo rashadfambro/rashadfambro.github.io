@@ -88,24 +88,24 @@ button.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
 "use strict";
 const PRODUCTS={
   "None yet":null,
-  "ChatDesk — AI chat assistant":[2500,149],
-  "BookDesk — AI booking assistant":[2500,149],
-  "WorkOrderDesk — maintenance work orders":[5000,249],
-  "GuestDesk — guest & owner requests":[5000,249],
-  "HousekeepingDesk — housekeeping & room dispatch":[5000,249],
-  "PackageDesk — package & mail-order intake":[3000,249],
-  "LeadDesk — lead capture & follow-up":[2500,149],
-  "IntakeDesk — client intake":[3000,149],
-  "ComplianceDesk — compliance checklists":[5000,249],
-  "RewardsDesk — customer rewards":[2000,149],
-  "ReviewDesk — reviews & reputation":[750,149],
-  "SocialDesk — social media assistant":[2000,149],
-  "StaffDesk — staff handbook assistant":[3000,149],
-  "InvoiceDesk — invoices & reminders":[2000,149],
-  "InsightDesk — owner dashboard":[3000,149],
-  "Launch Bundle — ChatDesk + BookDesk":[4250,298],
-  "Hotel Operations Bundle — GuestDesk + HousekeepingDesk + WorkOrderDesk":[12500,747],
-  "Pilot / Custom Build":[7500,500]
+  "ChatDesk — AI chat assistant":[1000,25],
+  "BookDesk — AI booking assistant":[1000,25],
+  "WorkOrderDesk — maintenance work orders":[2500,49],
+  "GuestDesk — guest & owner requests":[2500,49],
+  "HousekeepingDesk — housekeeping & room dispatch":[2500,49],
+  "PackageDesk — package & mail-order intake":[1250,49],
+  "LeadDesk — lead capture & follow-up":[1000,25],
+  "IntakeDesk — client intake":[1250,25],
+  "ComplianceDesk — compliance checklists":[2500,49],
+  "RewardsDesk — customer rewards":[750,25],
+  "ReviewDesk — reviews & reputation":[150,25],
+  "SocialDesk — social media assistant":[750,25],
+  "StaffDesk — staff handbook assistant":[1250,25],
+  "InvoiceDesk — invoices & reminders":[750,25],
+  "InsightDesk — owner dashboard":[1250,25],
+  "Launch Bundle — ChatDesk + BookDesk":[1699,50],
+  "Hotel Operations Bundle — GuestDesk + HousekeepingDesk + WorkOrderDesk":[5999,147],
+  "Pilot / Custom Build":[2500,150]
 };
 const $=s=>document.querySelector(s), ed=$("#ed");
 ed.product.innerHTML=Object.keys(PRODUCTS).map(k=>`<option>${k}</option>`).join("");
