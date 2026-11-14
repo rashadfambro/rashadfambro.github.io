@@ -28,8 +28,8 @@ def test_S03_primary_cta_targets_audit(home):
 def test_S04_packages_show_current_prices(home):
     text = home.page.inner_text("#pkgGrid")
     assert home.page.locator("#pkgGrid .pkg").count() == 4
-    for price in ["$750", "$2,500", "$150/mo"]:
-        assert price in text, price
+    for p in home.page.evaluate("CONFIG.packages.map(p => p.price)"):
+        assert p.replace("From ", "") in text or p in text, p
 
 
 def test_S05_product_grid_has_14_products(home):
@@ -42,7 +42,7 @@ def test_S06_chat_assistant_answers(home):
     pg.fill("#chatInput", "how much does it cost?")
     pg.press("#chatInput", "Enter")
     pg.wait_for_timeout(900)
-    assert "$750" in pg.locator(".cmsg.bot").last.inner_text()
+    assert pg.evaluate("CONFIG.packages.find(p => p.id === 'assess').price") in pg.locator(".cmsg.bot").last.inner_text()
     assert home.errors == []
 
 

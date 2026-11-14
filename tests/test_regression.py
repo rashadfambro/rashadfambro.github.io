@@ -22,6 +22,20 @@ def all_html():
     return out
 
 
+# ---------------- price helpers: tests read prices from the site's CONFIG so they hold for any price change ----------------
+def dollars(n):
+    import math
+    return "${:,}".format(int(math.floor(n + 0.5)))   # rounds half up, like the site's JavaScript
+
+
+def site_prices(pg):
+    return pg.evaluate("""() => ({
+      pkg: Object.fromEntries(CONFIG.packages.map(p => [p.id, p.price])),
+      assess: BUYABLE.assess.price, bundle: BUYABLE.bundle.price, hotel: BUYABLE.hotelbundle.price,
+      std: CONFIG.tiers.std.map(t => t.price), prop: CONFIG.tiers.prop.map(t => t.price),
+      sale: CONFIG.sale.pct, products: Object.fromEntries(PRODUCTS.map(p => [p.name, p.price]))})""")
+
+
 def chat(pg, text, wait=900):
     pg.fill("#chatInput", text); pg.press("#chatInput", "Enter"); pg.wait_for_timeout(wait)
     return pg.locator(".cmsg.bot").last.inner_text()
@@ -78,24 +92,27 @@ def test_R04_founding_program_terms(home):
 
 
 def test_R05_offer_amounts(home):
-    t = home.page.inner_text(".offers")
-    assert "$150 credit" in t and "$750 assessment" in t and "$1,699" in t and "$5,999" in t
+    t = home.page.inner_text(".offers"); P = site_prices(home.page)
+    assert "$150 credit" in t and dollars(P["assess"]) + " assessment" in t and dollars(P["bundle"]) in t and dollars(P["hotel"]) in t
 
 
 # ---------------- holiday sale ----------------
 def test_R06_sale_banner_during_and_after(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
     assert w.page.is_visible("#saleBar") and "10% off" in w.page.inner_text("#saleBar")
-    assert "$675" in w.page.inner_text("#pkgGrid")  # $750 -> $675
+    P = site_prices(w.page); reg, sale = dollars(P["assess"]), dollars(P["assess"] * (100 - P["sale"]) / 100)
+    assert sale in w.page.inner_text("#pkgGrid")
     w2 = open_home(make_page, base_url, when=AFTER_SALE)
     assert not w2.page.is_visible("#saleBar")
-    assert "$675" not in w2.page.inner_text("#pkgGrid") and "$750" in w2.page.inner_text("#pkgGrid")
+    assert sale not in w2.page.inner_text("#pkgGrid") and reg in w2.page.inner_text("#pkgGrid")
 
 
 def test_R07_sale_price_math_on_products(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
-    chat_card = w.page.locator(".prod", has_text="ChatDesk").first.inner_text()
-    assert "$900" in chat_card and "$23/mo" in chat_card
+    chat_card = w.page.locator(".prod", has_text="ChatDesk").first.inner_text(); P = site_prices(w.page)
+    setup = int(re.search(r"Setup \$([\d,]+)", P["products"]["ChatDesk"]).group(1).replace(",", ""))
+    f = (100 - P["sale"]) / 100
+    assert dollars(setup * f) in chat_card and dollars(P["std"][0] * f) + "/mo" in chat_card
 
 
 # ---------------- purchasing ----------------
@@ -110,13 +127,13 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
         assert pg.inner_text("#buyTitle").strip(), i
         pg.click("#buyClose")
     pg.locator("[data-buy='care']").first.click()
-    assert not pg.is_visible("#planOpt")          # $150/mo plan: no installment option
+    assert not pg.is_visible("#planOpt")          # monthly care plan under $1,000: no installment option
     pg.click("#buyClose")
     pg.locator("[data-buy='chat']").first.click()
     assert pg.is_visible("#planOpt")              # $1,000 setup: installments offered
     assert pg.locator("input[name=tier]").count() == 3   # Essentials / Growth / Pro
     pg.check("input[name=tier][value='1']")
-    assert "$49/mo" in pg.inner_text("#buyPrice")
+    assert dollars(site_prices(pg)["std"][1]) + "/mo" in pg.inner_text("#buyPrice")
     pg.click("#buyGo")
     assert "required" in pg.inner_text("#buyErr")
     pg.fill("#buy_name", "Pat Buyer"); pg.fill("#buy_biz", "Pat Co"); pg.fill("#buy_email", "pat@example.com")
@@ -178,7 +195,7 @@ def test_R12_industry_chips_and_try_buttons(home):
 
 # ---------------- chat assistant ----------------
 @pytest.mark.parametrize("q,expect", [
-    ("how much does it cost?", ["$750", "$2,500", "$150/mo"]),
+    ("how much does it cost?", ["Assessment", "Pilot", "Care &", "/mo"]),
     ("tell me about the founding client program", ["25% off", "testimonial"]),
     ("Do you meet in person?", ["on-site", "travel"]),
     ("do you offer payment plans?", ["3 interest-free"]),
@@ -239,6 +256,7 @@ def test_R15_roi_email_capture(home):
 
 def test_R16_project_builder_flow(home):
     pg = home.page
+    if pg.locator("#startMore").count(): pg.click("#startMore > summary")
     pg.click("#bNext")
     pg.click("#bNext"); assert "required" in pg.inner_text("#bErr")
     pg.fill("#b_name", "A B"); pg.fill("#b_biz", "AB Co"); pg.fill("#b_email", "ab@example.com"); pg.fill("#b_goal", "Faster replies")
@@ -337,7 +355,9 @@ def test_R26_audit_tool_pricing(make_page, base_url):
     w = make_page(width=1400, height=1000); w.page.goto(base_url + "tools/audit-summary.html")
     w.page.click("#sample"); w.page.wait_for_timeout(200)
     t = w.page.inner_text("#page")
-    assert "$1,875 setup" in t and "25% off" in t   # WorkOrderDesk $2,500 with founding discount
+    hp = make_page(); hp.page.goto(base_url + "index.html"); hp.page.wait_for_timeout(200)
+    wo = int(re.search(r"Setup \$([\d,]+)", site_prices(hp.page)["products"]["WorkOrderDesk"]).group(1).replace(",", ""))
+    assert dollars(wo * 0.75) + " setup" in t and "25% off" in t   # WorkOrderDesk with founding discount matches the site
 
 
 @pytest.mark.skipif(not os.environ.get("REQUIRE_SYNC"), reason="only after a promote (REQUIRE_SYNC=1)")
@@ -356,7 +376,7 @@ def test_R28_free_trial_flow(make_page, base_url):
     pg.locator("[data-trial='housekeeping']").click()
     assert "14-Day Trial" in pg.inner_text("#buyTitle")
     assert not pg.is_visible("#methodOpts") and not pg.is_visible("#buyTerms") and pg.is_visible("#trialNote")
-    assert "Free for 14 days, then" in pg.inner_text("#buyPrice") and "$49/mo" in pg.inner_text("#buyPrice")
+    assert "Free for 14 days, then" in pg.inner_text("#buyPrice") and dollars(site_prices(pg)["prop"][0]) + "/mo" in pg.inner_text("#buyPrice")
     pg.fill("#buy_name", "Tia Trial"); pg.fill("#buy_biz", "Seaside Resort"); pg.fill("#buy_email", "tia@example.com")
     pg.click("#buyGo")
     pg.wait_for_function("document.getElementById('buyResult').innerText.trim().length > 0", timeout=10000)
@@ -368,9 +388,10 @@ def test_R28_free_trial_flow(make_page, base_url):
 
 def test_R29_monthly_plan_tiers(make_page, base_url):
     w = open_home(make_page, base_url, when=AFTER_SALE)
-    t = w.page.inner_text("#tiers")
-    for x in ["Essentials", "Growth", "Pro", "$25/mo", "$49/mo", "$79/mo", "$99/mo", "$150/mo", "$59/mo", "14-day trial"]:
+    t = w.page.inner_text("#tiers"); P = site_prices(w.page)
+    for x in ["Essentials", "Growth", "Pro", "14-day trial"] + [dollars(v) + "/mo" for v in P["std"] + P["prop"]]:
         assert x in t, x
+    assert re.search(r"any 3 standard tools on Essentials for \$[\d,]+/mo", t)
 
 
 def test_R30_sale_fine_print_on_its_own_line(make_page, base_url):
@@ -393,10 +414,13 @@ def test_R31_hotel_tools(home):
 
 
 def test_R32_product_prices(home):
-    prices = home.page.evaluate("Object.fromEntries(PRODUCTS.map(p => [p.name, p.price]))")
-    expect = {"RewardsDesk": "$750", "ReviewDesk": "$150", "SocialDesk": "$750", "LeadDesk": "$1,000", "IntakeDesk": "$1,250", "ComplianceDesk": "$2,500"}
-    for k, v in expect.items():
-        assert prices[k].startswith(f"Setup {v} "), (k, prices[k])
+    P = site_prices(home.page)
+    tiers = home.page.evaluate("Object.fromEntries(PRODUCTS.map(p => [p.name, p.tier]))")
+    for name, price in P["products"].items():
+        if name == "ChatDesk" and "Setup" not in price: continue
+        m = re.fullmatch(r"Setup \$([\d,]+) · plans from \$(\d+)/mo", price)
+        assert m, (name, price)
+        assert int(m.group(2)) == min(P["std"] if tiers[name] == "std" else P["prop"]), (name, price)
 
 
 # ---------------- v7: navigation ----------------
@@ -634,12 +658,10 @@ def test_R48_email_draft_fallback_is_clean(make_page, base_url):
     assert w.errors == []
 
 
-def test_R49_plan_prices_stay_between_25_and_150(home):
-    tiers = home.page.evaluate("CONFIG.tiers")
-    prices = [t["price"] for k in ("std", "prop") for t in tiers[k]]
-    assert min(prices) == 25 and max(prices) == 150
-    assert [t["price"] for t in tiers["std"]] == [25, 49, 79]
-    assert [t["price"] for t in tiers["prop"]] == [49, 99, 150]
+def test_R49_plan_prices_are_consistent(home):
+    P = site_prices(home.page)
+    assert P["std"] == sorted(P["std"]) and P["prop"] == sorted(P["prop"]) and len(P["std"]) == len(P["prop"]) == 3
+    assert P["prop"][0] >= P["std"][0]   # per-property plans never cheaper than standard ones
 
 
 def test_R50_privacy_policy_page(make_page, base_url, home):
@@ -655,10 +677,20 @@ def test_R50_privacy_policy_page(make_page, base_url, home):
 def test_R51_paypal_me_checkout_link(make_page, base_url):
     w = open_home(make_page, base_url, when=AFTER_SALE); pg = w.page
     pg.evaluate("CONFIG.paypalMe='TestHandle'")
-    assert pg.evaluate("payLinkFor('assess','PayPal')") == "https://paypal.me/TestHandle/750USD"
+    a = site_prices(pg)["assess"]
+    assert pg.evaluate("payLinkFor('assess','PayPal')") == f"https://paypal.me/TestHandle/{a}USD"
     assert pg.evaluate("payLinkFor('assess','Square')") == ""
     pg.locator("[data-buy='assess']").first.click()
     assert pg.inner_text("#buyGo") == "Continue to secure checkout →"
     w2 = open_home(make_page, base_url, when=SALE_DAY)
     w2.page.evaluate("CONFIG.paypalMe='TestHandle'")
-    assert w2.page.evaluate("payLinkFor('assess','PayPal')") == "https://paypal.me/TestHandle/675USD"
+    assert w2.page.evaluate("payLinkFor('assess','PayPal')") == f"https://paypal.me/TestHandle/{dollars(a * 0.9)[1:].replace(',', '')}USD"
+
+
+def test_R52_checkout_prices_match_listed_prices(home):
+    pg = home.page
+    pairs = pg.evaluate("""() => { const num = s => +((s.match(/\\$([\\d,]+)/) || [0, "0"])[1].replace(/,/g, ""));
+      const pk = Object.fromEntries(CONFIG.packages.map(p => [p.id, num(p.price)]));
+      return [[BUYABLE.assess.price, pk.assess], [BUYABLE.pilot.price, pk.pilot], [BUYABLE.care.monthly, pk.care]]; }""")
+    for got, listed in pairs:
+        assert got == listed, (got, listed)
