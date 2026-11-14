@@ -807,3 +807,18 @@ def test_R58_reviewdesk_invites_everyone_the_same(make_page, base_url):
         html = open(site_file(rel), encoding="utf-8").read().lower()
         assert "happy customers" not in html and "unhappy" not in html, rel
     assert not w.errors, w.errors
+
+
+def test_R59_client_owned_model_and_allowances(home):
+    pg = home.page
+    if "Who Owns My Data" not in pg.content():
+        pytest.skip("client-owned pricing is staged, not yet promoted")
+    pr = pg.inner_text("#pricing")
+    for x in ["You own the accounts and the data", "$150/hour in 30-minute blocks", "Defect fixes are always free",
+              "Fully Hosted (by request)", "1,000 AI conversations", "$10 per extra 500 texts"]:
+        assert x in pr, x
+    notes = pg.evaluate("CONFIG.tiers.std.map(t=>t.note).join(' | ')")
+    assert "1 small change/mo" in notes and "3 small changes/mo" in notes and "6 small changes/mo" in notes
+    pg.click("text=Who Owns My Data and Accounts?")
+    assert "invited admin" in pg.inner_text("#faq")
+    assert not home.errors, home.errors

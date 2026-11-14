@@ -107,5 +107,6 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R56 | Pricing lists a one-line description for all 15 tools; page text has no run-together words |
 | R57 | Checkout plan picker, proposal request and header show the same (sale) prices; due-at-kickoff summary; CSP, referrer policy and spam honeypot on every page/form |
 | R58 | ReviewDesk shows every customer the same review and private-feedback options, whatever their rating |
+| R59 | Client-owned model: ownership FAQ, support allowances per plan, extra-support rate, Fully Hosted allowances and overages (skips until promoted) |
 
 Price tests read prices from the site's CONFIG, so they keep passing when prices change.
