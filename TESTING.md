@@ -47,7 +47,7 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R04 | Founding program | 25% off, testimonial required, no 30% |
 | R05 | Offers | $150 referral, $750 assessment credit, $1,699 Launch Bundle, $5,999 Hotel Operations Bundle |
 | R06 | Holiday sale | Banner and 10% prices ($675) during the sale; hidden and regular prices after Jan 31, 2027 |
-| R07 | Sale math | ChatDesk $1,000 → $900 and $29 → $26/mo during sale |
+| R07 | Sale math | ChatDesk $1,000 → $900 and $25 → $23/mo during sale |
 | R08 | Buy flow | Every Buy button opens checkout; PayPal (default) or Square; Essentials/Growth/Pro tier choice updates price; installments only for $1,000+; validation; order fallback to owner email with tier, plan and method; nothing charged |
 | R09 | Payment plans | Shown in pricing note and FAQ |
 | R10 | Demo lab | All 7 demos (incl. housekeeping) triage and approve |
@@ -68,7 +68,7 @@ REQUIRE_SYNC=1 python -m pytest -k R27            # after a promote: staging == 
 | R25 | Price consistency | Product prices match between home page and guide |
 | R26 | Audit tool pricing | Founding discount applied correctly ($2,500 → $1,875) |
 | R28 | Free trials | 14 trial buttons; trial modal hides payment fields; price shows “Free for 14 days, then…”; request goes to owner email |
-| R29 | Monthly plans | Essentials/Growth/Pro at $29/$59/$99 (standard) and $49/$99/$179 (property); $69 suite; trial mention |
+| R29 | Monthly plans | Essentials/Growth/Pro at $25/$49/$79 (standard) and $49/$99/$150 (property); $59 suite; trial mention |
 | R30 | Sale fine print | “Doesn’t combine…” on its own smaller line, not in the main sale sentence |
 | R31 | Hotel tools | WorkOrderDesk and IntakeDesk list hotels & resorts; HousekeepingDesk demo classifies a VIP checkout as high-priority Checkout clean |
 | R32 | Product prices | RewardsDesk $750, ReviewDesk $150, SocialDesk $750, LeadDesk $1,000, IntakeDesk $1,250, ComplianceDesk $2,500 |
@@ -99,3 +99,4 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R48 | Email-draft fallback keeps accents, symbols and dashes intact in subject and body |
 | R49 | Monthly plans stay between $25 and $150 (standard $25/$49/$79, per property $49/$99/$150) |
 | R50 | Privacy Policy page exists, is linked from the footer and the audit form |
+| R51 | With a PayPal.me handle set, "Pay in full" with PayPal links to paypal.me/<handle>/<amount> (sale price during the sale) |

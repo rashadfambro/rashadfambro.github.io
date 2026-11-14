@@ -1094,6 +1094,8 @@ const CONFIG = {
             {name:"Pro", price:150, note:"Per property · custom workflows · quarterly strategy call"} ]
   },
   trialDays: 14,
+  paypalMe: "",              // your PayPal.me handle (e.g. "RashadFambro") — "Pay in full" with PayPal then opens PayPal checkout for the exact amount
+
   // Paste PayPal and Square payment links here (see PAYMENTS.md). Empty = customer gets an emailed secure invoice instead.
   payLinks: {
     assess:{paypal:"",square:""}, bundle:{paypal:"",square:""}, care:{paypal:"",square:""}, pilot:{paypal:"",square:""},
@@ -1550,6 +1552,11 @@ function renderTierRadios(it){
   if(!it.tier) return;
   $("#tierRadios").innerHTML=CONFIG.tiers[it.tier].map((t,i)=>`<label><input type="radio" name="tier" value="${i}" ${i===0?"checked":""}> <b>${t.name}</b> — ${money2(t.price*(it.count||1))}/mo<span class="tnote">${esc(t.note)}</span></label>`).join("");
 }
+function payLinkFor(id, method){
+  const set=(CONFIG.payLinks[id]||{})[method.toLowerCase()]; if(set) return set;
+  const it=BUYABLE[id]; if(method==="PayPal" && CONFIG.paypalMe && it && it.price){ const amt=saleActive()?Math.round(it.price*(100-CONFIG.sale.pct)/100):it.price; return `https://paypal.me/${encodeURIComponent(CONFIG.paypalMe)}/${amt}USD`; }
+  return "";
+}
 function openBuy(id, mode){
   buyItem=id; buyMode=mode||"buy"; const it=BUYABLE[id]; if(!it) return;
   const trial = buyMode==="trial";
@@ -1559,7 +1566,7 @@ function openBuy(id, mode){
   const canPlan = !trial && (it.price||0) >= CONFIG.paymentPlan.minimum;
   $("#planOpt").hidden=!canPlan; if(!canPlan) $("input[name=plan][value='Pay in full']").checked=true;
   $("#payOpts").hidden = trial; $("#methodOpts").hidden = trial; $("#buyTerms").hidden = trial; $("#trialNote").hidden = !trial;
-  const hasLink = Object.values(CONFIG.payLinks[id]||{}).some(Boolean);
+  const hasLink = !!(payLinkFor(id,"PayPal")||payLinkFor(id,"Square"));
   $("#buyGo").textContent = trial ? "Start my free trial →" : hasLink ? "Continue to secure checkout →" : "Place my order →";
   $("#buyResult").hidden=true; $("#buyErr").textContent=""; $("#buyGo").hidden=false;
   $("#buyModal").hidden=false; setTimeout(()=>$("#buy_name").focus(),30);
@@ -1592,7 +1599,7 @@ $("#buyForm").addEventListener("submit",async e=>{
     $("#buyCopy").addEventListener("click",()=>copyText(body,"Request copied")); return;
   }
   const order=Object.assign({}, who, {Package:it.name+(tier?` (${tier})`:""), Workflow:`ORDER: ${it.name}${tier?" — "+tier+" plan":""} — ${priceText} — ${plan} via ${method}`, Budget:priceText, Start:"Order placed online"});
-  const link = plan==="Pay in full" && ((CONFIG.payLinks[buyItem]||{})[method.toLowerCase()]||"");
+  const link = plan==="Pay in full" && payLinkFor(buyItem, method);
   $("#buyGo").disabled=true;
   const sent = await sendLead("order", order);
   $("#buyGo").disabled=false;

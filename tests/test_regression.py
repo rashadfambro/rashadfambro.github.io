@@ -650,3 +650,15 @@ def test_R50_privacy_policy_page(make_page, base_url, home):
     for x in ["Privacy Policy", "What I Collect", "FormSubmit", "PayPal and Square", "delete", "Effective November 13, 2026"]:
         assert x in t, x
     assert w.errors == []
+
+
+def test_R51_paypal_me_checkout_link(make_page, base_url):
+    w = open_home(make_page, base_url, when=AFTER_SALE); pg = w.page
+    pg.evaluate("CONFIG.paypalMe='TestHandle'")
+    assert pg.evaluate("payLinkFor('assess','PayPal')") == "https://paypal.me/TestHandle/750USD"
+    assert pg.evaluate("payLinkFor('assess','Square')") == ""
+    pg.locator("[data-buy='assess']").first.click()
+    assert pg.inner_text("#buyGo") == "Continue to secure checkout →"
+    w2 = open_home(make_page, base_url, when=SALE_DAY)
+    w2.page.evaluate("CONFIG.paypalMe='TestHandle'")
+    assert w2.page.evaluate("payLinkFor('assess','PayPal')") == "https://paypal.me/TestHandle/675USD"
