@@ -34,6 +34,11 @@ def wait_js(pg, expr, timeout=5000):
         pg.wait_for_timeout(100)
     raise AssertionError("timed out waiting for: " + expr)
 
+
+def is_v15(pg):
+    """Staged release (featured tools, new estimator). Remove this helper after the promote."""
+    return pg.locator("#prodGridMore").count() > 0
+
 def dollars(n):
     import math
     return "${:,}".format(int(math.floor(n + 0.5)))   # rounds half up, like the site's JavaScript
@@ -64,6 +69,7 @@ def open_home(make_page, base_url, when=None, hash_="", **kw):
         w.page.clock.set_fixed_time(when)
     w.page.goto(base_url + "index.html" + hash_)
     w.page.wait_for_timeout(300)
+    w.page.evaluate("document.querySelectorAll('details.more-prod').forEach(d => d.open = true)")
     return w
 
 
@@ -250,8 +256,7 @@ def test_R13c_chat_lead_capture(home):
 
 
 # ---------------- calculators & forms ----------------
-def test_R14_roi_math(home):
-    pg = home.page
+def _legacy_R14(pg):
     for k, v in {"r1": 10, "r2": 5, "r3": 30, "r4": 40, "r5": 4, "r6": 1000}.items():
         pg.eval_on_selector(f"#{k}", f"(el) => {{ el.value = {v}; el.dispatchEvent(new Event('input')); }}")
     hrs = 10 * 5 * 0.40 * 4.33
@@ -260,6 +265,37 @@ def test_R14_roi_math(home):
     assert pg.inner_text("#roiLabor") == f"${labor:,}"
     assert pg.inner_text("#roiLeads") == f"${leads:,}"
     assert pg.inner_text("#roiTotal") == f"${labor + leads:,}"
+
+
+def test_R14_roi_math(home):
+    pg = home.page
+    if not is_v15(pg):
+        return _legacy_R14(pg)
+    pg.select_option("#roiTool", "property")
+    for k, v in {"r1": 10, "r2": 5, "r3": 30, "r4": 40, "r5": 4, "r6": 1000, "r7": 25, "r8": 50, "r9": 20}.items():
+        pg.eval_on_selector(f"#{k}", f"(el) => {{ el.value = {v}; el.dispatchEvent(new Event('input')); }}")
+    P = site_prices(pg)
+    hrs = 10 * 5 * 0.40 * 4.33
+    labor = hrs * 30; gp = 4 * 0.25 * 1000 * 0.5; setup = 3500; cost = P["prop"][0] + 20
+    net = labor + gp - cost
+    assert pg.inner_text("#roiHours") == f"{round(hrs):,}"
+    assert pg.inner_text("#roiLabor") == dollars(labor)
+    assert pg.inner_text("#roiLeads") == dollars(gp)
+    assert pg.inner_text("#roiCost") == dollars(cost) + "/mo"
+    assert pg.inner_text("#roiTotal") == dollars(net) + "/mo"
+    assert pg.inner_text("#roiPayback") == f"{setup / net:.1f} months"
+    assert pg.inner_text("#roiYear") == dollars(net * 12 - setup)
+    # ChatGPT's worked example: 200 requests x 5 min at $30/hr, $3,500 setup, $150/mo -> $350/mo net, 10-month payback
+    r = pg.evaluate("roiCalc({people:1,hours:200*5/60/4.33,rate:30,auto:100,missed:0,winback:0,sale:0,margin:0,usage:0,plan:150,setup:3500})")
+    assert round(r["net"]) == 350 and round(r["payback"]) == 10
+    # Zero or negative benefit shows no payback period
+    for k in ["r1", "r5"]:
+        pg.eval_on_selector(f"#{k}", "(el) => { el.value = el.min; el.dispatchEvent(new Event('input')); }")
+    pg.eval_on_selector("#r9", "(el) => { el.value = 200; el.dispatchEvent(new Event('input')); }")
+    pg.eval_on_selector("#r4", "(el) => { el.value = 10; el.dispatchEvent(new Event('input')); }")
+    pg.eval_on_selector("#r2", "(el) => { el.value = 1; el.dispatchEvent(new Event('input')); }")
+    assert pg.inner_text("#roiPayback") == "No payback at these inputs"
+    assert pg.inner_text("#roiTotal").startswith("−")
 
 
 def test_R15_roi_email_capture(home):
@@ -470,10 +506,11 @@ def test_R35_meaningful_defaults_without_interaction(make_page, base_url):
     pg.goto(base_url + "index.html")
     html = pg.content()
     assert "requests handled" not in html and ">0 hrs<" not in html
-    assert "$21,868" in pg.inner_text("#roiTotal") and "47" == pg.inner_text("#roiHours").strip()
+    assert ("$1,402/mo" in pg.inner_text("#roiTotal") and "1.1 months" in pg.inner_text("#roiPayback")) if is_v15(pg) else "$21,868" in pg.inner_text("#roiTotal")
+    assert "47" == pg.inner_text("#roiHours").strip()
     assert "Loading QR" not in html and pg.locator("#qr svg").count() == 1
     foot = pg.inner_text(".board-foot")
-    for x in ["<2 min", "100%", "2–6 wk"]:
+    for x in ["<2 min", "100%", "3–8 wk" if is_v15(pg) else "2–6 wk"]:
         assert x in foot, x
 
 
@@ -559,7 +596,7 @@ def test_R42_multi_industry_wording_and_packagedesk(home):
     ind = pg.inner_text("#industries")
     assert "Multi-industry solutions with workflow customizations" in ind
     assert "Current focus" not in ind and "first focus" not in ind.lower()
-    assert "PackageDesk" in pg.inner_text("#prodGrid")
+    assert "PackageDesk" in pg.inner_text("#products")
     assert "PackageDesk" in pg.inner_text(".tier-foot")
     pg.click("#labPick button[data-demo='package']")
     pg.fill("#labInput", "Refrigerated grocery delivery for apt 12C, resident isn't answering")
@@ -587,7 +624,7 @@ def test_R43_every_product_has_a_demo_or_prototype(home, base_url):
     for pid, file in PROTOS.items():
         href = pg.get_attribute(f"[data-proto-link='{pid}']", "href")
         assert href == f"prototypes/{file}"
-    assert "Ready to build" not in pg.inner_text("#prodGrid")
+    assert "Ready to build" not in pg.inner_text("#products")
 
 
 def test_R44_prototypes_load_branded_without_errors(make_page, base_url):
@@ -647,7 +684,7 @@ def test_R46_static_html_reads_clean_for_crawlers():
 def test_R47_order_button_matches_payment_setup(home):
     pg = home.page
     pg.locator("[data-buy='assess']").first.click()
-    assert pg.inner_text("#buyGo") == "Place my order →"
+    assert pg.inner_text("#buyGo") == ("Send my order request →" if is_v15(pg) else "Place my order →")
     pg.click("#buyClose")
     pg.evaluate("CONFIG.payLinks.assess.paypal='https://example.com/pay'")
     pg.locator("[data-buy='assess']").first.click()
@@ -822,3 +859,39 @@ def test_R59_client_owned_model_and_allowances(home):
     pg.click("text=Who Owns My Data and Accounts?")
     assert "invited admin" in pg.inner_text("#faq")
     assert not home.errors, home.errors
+
+
+def test_R60_featured_products_ctas_sample_audit_and_scope(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if not is_v15(pg):
+        pytest.skip("staged, not yet promoted")
+    # One main hero button; the demo is a secondary text link
+    assert pg.locator(".hero .btn").count() == 1 and "free workflow audit" in pg.inner_text(".hero .btn-primary").lower()
+    # Three featured tools; the other 12 are collapsed, with the full catalog in the Product Guide
+    names = pg.eval_on_selector_all("#prodGrid .prod h3", "els => els.map(e => e.textContent)")
+    assert names == ["WorkOrderDesk", "LeadDesk", "ChatDesk"], names
+    assert not pg.is_visible("#prodGridMore") and pg.locator("#prodGridMore .prod").count() == 12
+    pg.click("#moreProducts > summary")
+    assert pg.is_visible("#prodGridMore") and pg.locator("#moreProducts a[href='products.html']").count() == 1
+    # Button labels describe what happens next
+    assert pg.inner_text("[data-buy='chat']") == "Request order"
+    assert pg.inner_text("[data-buy='property']") == "Request a pilot"
+    assert pg.locator("text=Try demo").count() >= 1 and pg.locator("text=Try prototype ↗").count() >= 1
+    assert pg.locator("button:text('Buy')").count() == 0 and pg.locator("text=Buy the bundle").count() == 0
+    pg.locator("[data-buy='property']").first.click()
+    assert pg.text_content("#buyEyebrow") == "Request a Pilot" and pg.inner_text("#buyGo") == "Request my pilot →"
+    pg.click("#buyClose")
+    # Fictional sample audit with the four parts a real one has
+    pg.click("#sampleAudit > summary")
+    sa = pg.inner_text("#sampleAudit")
+    for x in ["Fictional example", "Biggest bottleneck", "Recommended first change", "Baseline to measure"]:
+        assert x in sa, x
+    # Pilot scope and timing agree across pricing, FAQ and chat
+    assert "Workflow & Automation Assessment" in pg.inner_text("#pricing") and "AI Readiness" not in pg.content()
+    pr = pg.text_content("#pricing")
+    assert "1 location, up to 2 workflows" in pr and "1–2 weeks of team testing" in pr
+    assert pg.evaluate("CONFIG.packages.find(p => p.id === 'pilot').note") == "3–8 weeks to launch"
+    assert "3–8 weeks: 2–6 weeks to build, then 1–2 weeks of testing" in pg.text_content("#faq")
+    pg.click("#chatFab"); assert "3–8 weeks" in chat(pg, "how long does it take?")
+    assert not w.errors, w.errors

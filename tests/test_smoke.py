@@ -33,7 +33,7 @@ def test_S04_packages_show_current_prices(home):
 
 
 def test_S05_product_grid_has_14_products(home):
-    assert home.page.locator("#prodGrid .prod").count() == 15
+    assert home.page.locator("#prodGrid .prod, #prodGridMore .prod").count() == 15
 
 
 def test_S06_chat_assistant_answers(home):

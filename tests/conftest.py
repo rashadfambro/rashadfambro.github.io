@@ -78,6 +78,7 @@ def home(make_page, base_url):
     w = make_page()
     w.page.goto(base_url + "index.html")
     w.page.wait_for_timeout(300)
+    w.page.evaluate("document.querySelectorAll('details.more-prod').forEach(d => d.open = true)")  # most tests reach every product; R60 covers the collapsed default
     return w
 
 
