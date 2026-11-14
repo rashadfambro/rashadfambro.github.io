@@ -97,6 +97,12 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R46 | Page source reads cleanly for crawlers: no fallback message, no empty phone row, footer year, no checkout promise in static HTML |
 | R47 | Order button says "Place my order" unless a payment link is set, then "Continue to secure checkout" |
 | R48 | Email-draft fallback keeps accents, symbols and dashes intact in subject and body |
-| R49 | Monthly plans stay between $25 and $150 (standard $25/$49/$79, per property $49/$99/$150) |
+| R49 | Plan prices are consistent: ascending tiers, per-property plans never below standard |
 | R50 | Privacy Policy page exists, is linked from the footer and the audit form |
 | R51 | With a PayPal.me handle set, "Pay in full" with PayPal links to paypal.me/<handle>/<amount> (sale price during the sale) |
+| R52 | Checkout prices for the assessment, pilot and care plan match the listed prices |
+| R53 | Every price, including sale prices, is a round number ending in 0 |
+| R54 | Hero, profile and About copy; Property Management Bundle (no ComplianceDesk); one cancellation policy |
+| R55 | Old #solutions links land on Products; the products note is readable on mobile |
+
+Price tests read prices from the site's CONFIG, so they keep passing when prices change.

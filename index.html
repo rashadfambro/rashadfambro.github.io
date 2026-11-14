@@ -58,7 +58,7 @@ h3{font-size:1.12rem;line-height:1.3}
 .btn-primary:hover{background:var(--sky-2)}
 .btn-dark{background:var(--ink);color:#fff}
 .btn-dark:hover{background:var(--ink-3)}
-details.more{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}details.more>summary{cursor:pointer;font-weight:800;color:var(--ink);list-style:none;display:inline-flex;gap:8px;align-items:center}details.more>summary::-webkit-details-marker{display:none}details.more>summary::after{content:"＋";font-weight:700}details.more[open]>summary::after{content:"－"}.dark details.more{border-color:#2f4766}.dark details.more>summary{color:#fff}.also{margin-top:14px;font-size:.95rem;color:var(--muted)}.also b{color:var(--ink)}.dark .deliver-grid .card{background:#14263f;border-color:#2f4766;color:#eef3f9}.dark .deliver-grid .card p{color:#c3cfdd}
+details.more{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}details.more>summary{cursor:pointer;font-weight:800;color:var(--ink);list-style:none;display:inline-flex;gap:8px;align-items:center}details.more>summary::-webkit-details-marker{display:none}details.more>summary::after{content:"＋";font-weight:700}details.more[open]>summary::after{content:"－"}.dark details.more{border-color:#2f4766}.dark details.more>summary{color:#fff}.also{margin-top:14px;font-size:.95rem;color:var(--muted)}.also b{color:var(--ink)}.dark .also{color:#c3cfdd}.dark .also b{color:#fff}.dark .deliver-grid .card{background:#14263f;border-color:#2f4766;color:#eef3f9}.dark .deliver-grid .card p{color:#c3cfdd}
 .btn-ghost{border-color:#4a6283;color:#eef3f9;background:transparent}
 .btn-ghost:hover{background:var(--ink-3)}
 .btn-line{border-color:#a8b6c7;background:#fff;color:var(--ink)}
@@ -469,7 +469,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
 .brandrel li{background:#132a47;border:1px solid #2c4568;border-radius:12px;padding:14px;font-size:.87rem;color:#c3cfdd}
 .brandrel li b{display:block;color:#fff;font-size:.95rem;margin-bottom:4px}
 .pricenote{margin-top:16px;font-size:.86rem;color:var(--muted);text-align:center}
-.offers{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+.offers{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}.offers>article:last-child:nth-child(odd){grid-column:1/-1}
 .offers h3{font:600 1.25rem var(--serif);margin:10px 0 6px}
 .offers p{font-size:.9rem;color:var(--muted)}
 .founding li b{color:var(--sky)}
@@ -512,7 +512,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         <button class="btn btn-ghost" type="button" data-open-chat="">Ask a question</button>
       </div>
       <ul class="hero-points">
-        <li>17 years building solutions with customers</li><li>Human-approved AI</li><li>Virtual or on-site</li><li>Pilots in weeks, not months</li>
+        <li>17 years building software products and solutions with customers</li><li>Human-Approved AI</li><li>Virtual or On-site</li><li>Pilots within weeks</li><li>Integration with existing systems</li>
       </ul>
     </div>
     <div class="board" aria-label="Animated example of an automated workflow">
@@ -572,9 +572,9 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <h3>Rashad Fambro</h3>
       <p class="role">Software Solutions Consultant</p>
       <ul>
-        <li><b>Experience</b> 17 years as an IT professional engineering &amp; testing software solutions</li>
+        <li><b>Experience</b> 17 years as an IT professional engineering &amp; testing software products and solutions</li>
         <li><b>Degree</b> B.S. Software Engineering</li>
-        <li><b>Meets</b> Virtually worldwide, or on-site at your business</li>
+        <li><b>Location</b> Available virtually worldwide, or on-site at your business</li>
         <li><b>Focus</b> AI solutions, automation, custom applications, launch &amp; support</li>
       </ul>
       <div class="row">
@@ -585,7 +585,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
     <div>
       <p class="eyebrow"><span class="n">02</span> About me</p>
       <h2>Customer-First Software Experience, Sized for Your Business</h2>
-      <p class="lede" style="margin-top:18px">I’m Rashad Fambro. For 17 years I’ve worked directly with customers to understand their problems and deliver software that solves them — across healthcare, finance, restaurants, retail, and defense. Most recently, as a Director of Quality Assurance, I led 50+ engineers supporting 80+ client organizations. Today I bring that same customer-first approach to businesses that want modern automation and AI without the risk, jargon, or enterprise price tag.</p>
+      <p class="lede" style="margin-top:18px">I’m Rashad Fambro. For 17 years I’ve worked directly with customers to understand their problems and deliver software products that solve them — across healthcare, finance, restaurants, retail, and defense. Most recently, as a Director of Quality Assurance, I led 50+ engineers supporting 80+ client organizations. Today I bring that same customer-first approach to businesses that want modern automation and AI without the risk, jargon, or enterprise price tag.</p>
       <p class="mission"><b>Mission:</b> Build AI solutions and tools that increase human productivity — so businesses earn more, teams move faster, and people stay in control.</p>
       <details class="more" id="aboutMore"><summary>Experience, Background &amp; How I Work</summary>
       <ol class="timeline">
@@ -613,7 +613,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div><p class="eyebrow"><span class="n">03</span> Products</p><h2>The Desk Suite: Ready-to-Adapt MVPs</h2></div>
       <p class="lede">Each product is a working prototype I tailor to your business, so you’re not paying to start from scratch. Try any of them in the demo lab below — all demos use fictional data.</p>
     </div>
-    <p class="also"><b>Beyond the Desk tools:</b> custom applications and staff portals, choosing and connecting the software you already pay for, dashboards and weekly reports, and testing, training and ongoing support.</p>
+    <span id="solutions" aria-hidden="true"></span><p class="also"><b>Beyond the Desk tools:</b> custom applications and staff portals, choosing and connecting the software you already pay for, dashboards and weekly reports, and testing, training and ongoing support.</p>
     <div class="prod-grid" id="prodGrid"></div>
     <div class="brandrel">
       <div><p class="eyebrow">Built for Your Brand</p><h3>Your Brand. Always Up to Date.</h3><p>Every tool is delivered as a managed service in your business’s name and kept current through a tested release process.</p><a class="btn btn-primary btn-sm" href="products.html">Read the full product guide →</a></div>
@@ -813,11 +813,11 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
     </div>
     <div class="pkg-grid" id="pkgGrid"></div>
     <div class="tiers" id="tiers">
-      <div class="tiers-head"><h3>Simple Monthly Plans for Every Tool</h3><p>Every tool starts with a <b>free 14-day trial</b>. Pick a plan when you’re ready — upgrade, downgrade, or cancel anytime.</p></div>
+      <div class="tiers-head"><h3>Simple Monthly Plans for Every Tool</h3><p>Every tool starts with a <b>free 14-day trial</b>. Pick a plan when you’re ready — upgrade, downgrade, or cancel anytime (billing stops at the end of that month).</p></div>
       <div class="tier-grid" id="tierGrid"></div>
-      <p class="tier-foot">Standard tools: ChatDesk, BookDesk, LeadDesk, IntakeDesk, RewardsDesk, ReviewDesk, SocialDesk, StaffDesk, InvoiceDesk, InsightDesk. Property &amp; hospitality tools (priced per property): WorkOrderDesk, GuestDesk, HousekeepingDesk, PackageDesk, ComplianceDesk. Text-message and phone-number fees are passed through at cost. <b>Small Business Suite:</b> any 3 standard tools on Essentials for $59/mo.</p>
+      <p class="tier-foot">Standard tools: ChatDesk, BookDesk, LeadDesk, IntakeDesk, RewardsDesk, ReviewDesk, SocialDesk, StaffDesk, InvoiceDesk, InsightDesk. Property &amp; hospitality tools (priced per property): WorkOrderDesk, GuestDesk, HousekeepingDesk, PackageDesk, ComplianceDesk. Text-message and phone-number fees are passed through at cost. <b>Small Business Suite:</b> any 3 standard tools on Essentials for $200/mo.</p>
     </div>
-    <p class="pricenote"><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with PayPal or Square — any debit or credit card accepted.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $125/hr · Every build gets a fixed, written quote before work starts.</p>
+    <p class="pricenote"><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with PayPal or Square — any debit or credit card accepted.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $150/hr · Every build gets a fixed, written quote before work starts.</p>
     <div class="founding" id="founding">
       <div>
         <p class="eyebrow">Founding Client Program</p>
@@ -834,8 +834,9 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div style="text-align:center"><div class="spots" id="spots">5</div><p style="margin:6px 0 16px">founding spots open</p><a class="btn btn-primary" href="#start">Apply as a founding client →</a></div>
     </div>
     <div class="offers">
-      <article class="card"><span class="chip live">Bundle</span><h3>Launch Bundle</h3><p><b>ChatDesk + BookDesk setup for $1,699</b> (save $301). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Buy the bundle</button></article>
-      <article class="card"><span class="chip live">Bundle</span><h3>Hotel Operations Bundle</h3><p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for $5,999</b> (save $1,501). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Buy the bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span><h3>Launch Bundle</h3><p><b>ChatDesk + BookDesk setup for $2,500</b> (save $500). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Buy the bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span><h3>Hotel Operations Bundle</h3><p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for $8,000</b> (save $2,500). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Buy the bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span><h3>Property Management Bundle</h3><p><b>WorkOrderDesk + PackageDesk + ChatDesk setup for $5,500</b> (save $1,500). Maintenance requests, package intake, and resident questions handled for apartment communities and property managers.</p><button type="button" class="btn btn-line btn-sm" data-buy="propbundle" style="margin-top:10px">Buy the bundle</button></article>
       <article class="card"><span class="chip live">Credit</span><h3>Assessment Credit</h3><p>The full <b>$750 assessment fee is credited</b> toward any build you start within 60 days.</p></article>
       <article class="card"><span class="chip live">Referral</span><h3>Referral Reward</h3><p>Refer a business that signs and get a <b>$150 credit</b> — or $150 paid to you if you’re not a client.</p></article>
     </div>
@@ -918,7 +919,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <details><summary>Do I Need to Be “Techy” to Work With You?</summary><p>No. I explain everything in plain language and set things up so your staff can use them with a short training session. You focus on running the business.</p></details>
       <details><summary>Will I Have to Replace the Software I Already Use?</summary><p>Usually not. I start with the tools you already pay for and connect or extend them. I only recommend new software when it clearly saves more than it costs.</p></details>
       <details><summary>How Do You Use AI?</summary><p>Only where it helps, and always with four rules: a person approves anything that matters (prices, promises, refunds, legal or medical answers); only the data needed for the job is used; tools are set up in your business’s own accounts, so you keep ownership; and every change is tested with your team first, with a manual fallback.</p></details>
-      <details><summary>How Much Does a Project Cost?</summary><p>Desk product setups start at $150 with monthly plans from $25. The AI Readiness Assessment is $750 (virtual), custom pilots start at $2,500, and the Care &amp; Growth Plan starts at $150/month. Every build gets a fixed, written quote first. Founding clients get 25% off their first setup or project and their first month free.</p></details>
+      <details><summary>How Much Does a Project Cost?</summary><p>Desk product setups run $500–$3,500, with fully managed monthly plans from $80. The AI Readiness Assessment is $750 (virtual), custom pilots start at $3,500, and the Care &amp; Growth Plan starts at $300/month. Every build gets a fixed, written quote first. Founding clients get 25% off their first setup or project and their first month free.</p></details>
       <details><summary>How Long Until We See Results?</summary><p>Most pilots launch in 2–6 weeks. We agree on a starting measure up front, like response time or staff minutes per request, so you can see the difference.</p></details>
       <details><summary>Is AI Safe for My Customers’ Information?</summary><p>We decide together what data the tools can see. Sensitive actions require staff approval, and I keep private information out of AI tools unless you’ve approved how it’s handled. For regulated businesses like dental or legal offices, we review your obligations before anything is built.</p></details>
       <details><summary>Do You Work With Businesses Outside Hospitality and Property?</summary><p>Yes — salons, barbershops, spas, restaurants, contractors, real estate, law and dental offices, retail, and more. If your team repeats the same tasks every day, there’s likely something worth automating.</p></details>
@@ -926,7 +927,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <details><summary>Will the Tools Carry My Brand?</summary><p>Yes. Every tool is branded for your business — your logo, colors, domain, and voice. Tools are delivered as a managed service: updates go out through a tested, versioned release process with release notes, staged rollouts, and the ability to roll back.</p></details>
       <details><summary>Why Keep a Human in the Loop?</summary><p>AI is fast but not perfect. Having staff approve prices, promises, and sensitive replies protects your customers and your reputation, catches mistakes before they go out, and keeps your team in charge. Routine, low-risk steps like reminders can run automatically.</p></details>
       <details><summary>Is There a Free Trial?</summary><p>Yes. Every tool includes a free 14-day trial with a license key — no payment details needed. At the end, choose a plan or let it expire; nothing is charged automatically.</p></details>
-      <details><summary>How Much Are the Monthly Plans?</summary><p>Standard tools are $25, $49, or $79 per month (Essentials, Growth, Pro). Property and hospitality tools are $49, $99, or $150 per property per month. Any 3 standard tools on Essentials are $59/month. Text-message and phone-number fees are passed through at cost.</p></details>
+      <details><summary>How Much Are the Monthly Plans?</summary><p>Standard tools are $80, $150, or $250 per month (Essentials, Growth, Pro). Property and hospitality tools are $150, $250, or $400 per property per month. Any 3 standard tools on Essentials are $200/month. Every plan is fully managed: hosting, updates, monitoring, testing, and support are included. Text-message and phone-number fees are passed through at cost.</p></details>
       <details><summary>Can I Pay Over Time?</summary><p>Yes. Any setup or project of $1,000 or more can be split into 3 interest-free monthly payments, with the first payment at signing. You can pay online with PayPal or Square; PayPal may also offer its own Pay Later options at checkout.</p></details>
       <details><summary>Can I Buy Directly on the Site?</summary><p>Yes. Tap <b>Buy</b> on any product or package, choose pay in full or a payment plan, and check out securely with PayPal or Square. Custom builds are quoted first; you can pay the deposit online once you accept the proposal.</p></details>
       <details><summary>What Happens After Launch?</summary><p>You get a 30-day results check included, plus the option of a monthly care plan for support, updates, and new improvements.</p></details>
@@ -955,7 +956,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         <ul>
           <li><b>Email</b><a id="vEmail" href="#" data-cfg="email">rashadfambro@gmail.com</a> <button class="linkbtn" data-copy="email">Copy</button></li>
           <li><b>LinkedIn</b><a data-cfg-href="linkedin" href="https://www.linkedin.com/in/rashadfambro/" target="_blank" rel="noopener">in/rashadfambro</a></li>
-          <li><b>Meets</b>Virtually worldwide · on-site visits available</li>
+          <li><b>Location</b>Available virtually worldwide, or on-site at your business</li>
         </ul>
       </div>
       <div class="qr-box">
@@ -1009,7 +1010,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div class="f full"><label for="buy_email">Email <span class="req">*</span></label><input id="buy_email" type="email" required autocomplete="email"></div>
     </div>
     <p class="hint" id="trialNote" hidden>Free for 14 days — no payment details needed. You’ll receive a license key and setup link by email. At the end of the trial, choose a plan or let it expire; nothing is charged automatically.</p>
-    <label class="buy-terms" id="buyTerms"><input type="checkbox" id="buy_ok"> I understand setup begins after a short kickoff call, and monthly plans can be canceled with 30 days’ notice.</label>
+    <label class="buy-terms" id="buyTerms"><input type="checkbox" id="buy_ok"> I understand setup begins after a short kickoff call, and monthly plans can be canceled anytime and stop at the end of the current billing month.</label>
     <div class="row" style="margin-top:14px"><button class="btn btn-dark" type="submit" id="buyGo">Place my order →</button><span class="hint" id="buyErr" role="alert" style="color:#b42318;margin:0"></span></div>
     <div class="result" id="buyResult" hidden></div>
   </form>
@@ -1048,21 +1049,21 @@ const CONFIG = {
       desc:"Find the one workflow costing you the most time or money.", items:["Live walkthrough of one workflow","Bottleneck map","Recommended first fix","One-page summary in 3 business days"], cta:"Book free audit", href:"#audit" },
     { id:"assess", name:"AI Readiness Assessment", price:"$750", note:"Virtual · 1–2 weeks", sub:"On-site: $1,500 + travel at cost",
       desc:"A deeper look across your workflows, tools, and data.", items:["Up to 5 workflows reviewed","AI & tool recommendations with costs","Prioritized roadmap with ROI","Credited toward your first build"], cta:"Choose assessment" },
-    { id:"pilot", name:"Pilot / Custom Build", price:"From $2,500", note:"Typically 2–6 weeks", featured:true, sub:"Desk product setups from $150",
+    { id:"pilot", name:"Pilot / Custom Build", price:"From $3,500", note:"Typically 2–6 weeks", featured:true, sub:"Desk product setups from $500",
       desc:"Build and launch one working solution, branded for your business.", items:["Desk product setup or custom application","Human-in-the-loop approval steps","Team testing (UAT) & training","30-day results review"], cta:"Choose pilot" },
-    { id:"care", name:"Care & Growth Plan", price:"From $150/mo", note:"Cancel anytime", sub:"Desk plans from $25/mo",
+    { id:"care", name:"Care & Growth Plan", price:"From $300/mo", note:"Cancel anytime", sub:"Desk plans from $80/mo",
       desc:"Hosting, managed releases, support, and ongoing improvements.", items:["Managed SaaS releases & monitoring","Monthly improvement hours","Quarterly results review","Priority support"], cta:"Choose care plan" }
   ],
-  rates: { advisory:"$125/hr", travel:"Travel billed at cost, approved in advance" },
+  rates: { advisory:"$150/hr", travel:"Travel billed at cost, approved in advance" },
   sale: { label:"Holiday & New Year Sale", pct:10, start:"2026-11-13", end:"2027-01-31" },  // set pct:0 to turn off
   paymentPlan: { minimum:1000, payments:3 },
   tiers: {
-    std:  [ {name:"Essentials", price:25, note:"Core features · up to 300 conversations or requests/mo · email support"},
-            {name:"Growth", price:49, note:"Up to 1,500/mo · integrations · priority support · monthly report"},
-            {name:"Pro", price:79, note:"High-volume fair use · custom workflows · quarterly strategy call"} ],
-    prop: [ {name:"Essentials", price:49, note:"Per property · core features · email support"},
-            {name:"Growth", price:99, note:"Per property · integrations · priority support · monthly report"},
-            {name:"Pro", price:150, note:"Per property · custom workflows · quarterly strategy call"} ]
+    std:  [ {name:"Essentials", price:80, note:"Core features · up to 300 conversations or requests/mo · email support"},
+            {name:"Growth", price:150, note:"Up to 1,500/mo · integrations · priority support · monthly report"},
+            {name:"Pro", price:250, note:"High-volume fair use · custom workflows · quarterly strategy call"} ],
+    prop: [ {name:"Essentials", price:150, note:"Per property · core features · email support"},
+            {name:"Growth", price:250, note:"Per property · integrations · priority support · monthly report"},
+            {name:"Pro", price:400, note:"Per property · custom workflows · quarterly strategy call"} ]
   },
   trialDays: 14,
   paypalMe: "",              // your PayPal.me handle (e.g. "RashadFambro") — "Pay in full" with PayPal then opens PayPal checkout for the exact amount
@@ -1091,7 +1092,8 @@ async function copyText(text, label="Copied"){
 }
 function saleActive(){ const c=CONFIG.sale; if(!c||!c.pct) return false; const now=new Date(); return now>=new Date(c.start+"T00:00:00") && now<=new Date(c.end+"T23:59:59"); }
 function saleEndText(){ return new Date(CONFIG.sale.end+"T12:00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}); }
-function discount(str){ return str.replace(/\$([\d,]+)/g,(m,n)=>{ const v=+n.replace(/,/g,""); if(!v) return m; return "$"+Math.round(v*(100-CONFIG.sale.pct)/100).toLocaleString("en-US"); }); }
+function saleAmt(v){ return Math.floor(v*(100-CONFIG.sale.pct)/1000)*10; }
+function discount(str){ return str.replace(/\$([\d,]+)/g,(m,n)=>{ const v=+n.replace(/,/g,""); if(!v) return m; return "$"+saleAmt(v).toLocaleString("en-US"); }); }
 function priceHTML(str){ return saleActive() && /\$[1-9]/.test(str) ? `<s class="was">${esc(str)}</s> <span class="now">${esc(discount(str))}</span>` : esc(str); }
 const mailto = (subject, body) => `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
@@ -1141,21 +1143,21 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(heroCyc
 
 /* ---------- products ---------- */
 const PRODUCTS = [
-  {id:"chat", wide:true, name:"ChatDesk", for:"Any business · website, text & social", status:"Live on this site", tier:"std", price:"Setup $1,000 · plans from $25/mo", desc:"An AI chat assistant trained on your business. It answers common questions instantly, day or night, captures leads, books appointments, and hands conversations to your staff when a person is needed.", items:["Answers FAQs from your own policies, prices & hours","Captures leads and sends them to your inbox or CRM","Books appointments and hands off to staff","Clear automated-assistant disclosure and cost limits"]},
-  {id:"property", name:"WorkOrderDesk", for:"Apartments · hotels & resorts · HOA · property managers", status:"Prototype", tier:"prop", price:"Setup $2,500 · plans from $49/mo", desc:"Maintenance requests from residents, guests, and staff in one queue — triaged by urgency and routed to the right tech or engineer.", items:["Urgency triage & after-hours escalation","Vendor dispatch & entry permission","Automatic resident status updates"]},
-  {id:"resort", name:"GuestDesk", for:"Hotels · resorts · timeshares · short-term rentals", status:"Prototype", tier:"prop", price:"Setup $2,500 · plans from $49/mo", desc:"Guest and owner requests routed to front desk, housekeeping, maintenance, or concierge with shift-change visibility.", items:["Department routing & handoff board","Drafted guest replies for staff approval","Owner / member service requests"]},
-  {id:"salon", name:"BookDesk", for:"Salons · barbers · spas · any appointment business", status:"Prototype", tier:"std", price:"Setup $1,000 · plans from $25/mo", desc:"An AI booking assistant that answers booking requests by text, chat, or DM around the clock, offers real open times from your calendar, and books within your rules.", items:["24/7 booking by text, chat & social DMs","Works with your calendar or booking app","Reminders, deposits & no-show reduction","Waitlist fill-ins and automatic rebooking"]},
-  {id:"housekeeping", name:"HousekeepingDesk", for:"Hotels · resorts · timeshares · short-term rentals", status:"Prototype", tier:"prop", price:"Setup $2,500 · plans from $49/mo", desc:"Housekeeping work orders and room dispatch: checkouts, stayovers, and guest requests prioritized by arrival time and assigned to attendants, with live room status for the front desk.", items:["Checkout & stayover room board","Auto-dispatch rooms to attendants by floor","Guest requests (towels, cribs, turndown)","Supervisor inspection before “Ready”"]},
-  {id:"package", name:"PackageDesk", for:"Apartments · hotels · resorts · timeshares", status:"Prototype", tier:"prop", price:"Setup $1,250 · plans from $49/mo", desc:"Package and mail-order intake for the front desk or mail room: every delivery logged in seconds, matched to the right resident or guest, and picked up with a code and signature.", items:["Log packages by label photo or scan","Instant pickup notices with a one-time code","Hold guest orders until check-in","Reminders, return-to-sender & audit trail"]},
-  {id:"service", name:"LeadDesk", for:"Contractors · real estate · restaurants · auto repair", status:"Prototype", tier:"std", price:"Setup $1,000 · plans from $25/mo", desc:"Every inquiry captured, assigned, and followed up — so quotes and showings don’t slip through the cracks.", items:["Lead capture from every channel","Quote & showing follow-up reminders","Pipeline view: inquiry → booked"]},
-  {id:"intake", name:"IntakeDesk", for:"Hotels & resorts · law · dental · tax & insurance", status:"Prototype", tier:"std", price:"Setup $1,250 · plans from $25/mo", desc:"Structured client intake that collects missing information, flags deadlines, and keeps sensitive details off the open inbox.", items:["Guided intake & document checklists","Deadline and appointment flags","Privacy-first: staff reviews everything"]},
-  {id:"compliance", name:"ComplianceDesk", for:"HUD-assisted housing · smoke shops · regulated retail", status:"Prototype", tier:"prop", price:"Setup $2,500 · plans from $49/mo", desc:"Recurring checklists, recertification reminders, and an audit trail so required tasks get done and documented.", items:["Recertification & inspection reminders","Checklists with sign-off history","Document collection tracking"]},
-  {id:"rewards", name:"RewardsDesk", for:"Smoke shops · salons · barbers · restaurants · retail", status:"Prototype", tier:"std", price:"Setup $750 · plans from $25/mo", desc:"A customer rewards program in your brand: points by phone number, birthday offers, and win-back messages that bring regulars back more often.", items:["Points & tiers by phone number — no app needed","Birthday, win-back & “we miss you” offers","Opt-in texting; age-verified where required","See repeat visits and top customers"]},
-  {id:"review", name:"ReviewDesk", for:"Any local business", status:"Prototype", tier:"std", price:"Setup $150 · plans from $25/mo", desc:"Ask happy customers for reviews at the right moment and get drafted, on-brand responses to every review for staff to approve.", items:["Automatic review requests after visits","Drafted replies to every review","Unhappy feedback routed privately to you"]},
-  {id:"social", name:"SocialDesk", for:"Any business on Instagram & Facebook", status:"Prototype", tier:"std", price:"Setup $750 · plans from $25/mo", desc:"Plan, draft, and schedule a month of posts in your brand voice, and auto-reply to common DMs with a link to book or buy.", items:["Monthly content calendar drafted by AI","Your approval before anything posts","DM keyword replies that capture leads"]},
-  {id:"staff", name:"StaffDesk", for:"Teams with shifts or high turnover", status:"Prototype", tier:"std", price:"Setup $1,250 · plans from $25/mo", desc:"An AI assistant that answers staff questions from your handbook and SOPs, plus shift swaps and onboarding checklists in one place.", items:["“Ask the handbook” answers for staff","Shift swap requests with manager approval","New-hire onboarding & training checklists"]},
-  {id:"invoice", name:"InvoiceDesk", for:"Service businesses · contractors · cleaners", status:"Prototype", tier:"std", price:"Setup $750 · plans from $25/mo", desc:"Quotes become invoices, invoices get paid: friendly payment reminders and a clear view of who owes what.", items:["Quote → invoice in one click","Polite automatic payment reminders","Works with your accounting app"]},
-  {id:"insight", name:"InsightDesk", for:"Owners & managers", status:"Prototype", tier:"std", price:"Setup $1,250 · plans from $25/mo", desc:"An owner dashboard that pulls numbers from your tools and sends a plain-English weekly summary: what changed, what needs attention.", items:["Bookings, leads, sales & response times","AI-written weekly summary by email","Alerts when something needs you"]}
+  {id:"chat", wide:true, name:"ChatDesk", for:"Any business · website, text & social", status:"Live on this site", tier:"std", price:"Setup $1,500 · plans from $80/mo", desc:"An AI chat assistant trained on your business. It answers common questions instantly, day or night, captures leads, books appointments, and hands conversations to your staff when a person is needed.", items:["Answers FAQs from your own policies, prices & hours","Captures leads and sends them to your inbox or CRM","Books appointments and hands off to staff","Clear automated-assistant disclosure and cost limits"]},
+  {id:"property", name:"WorkOrderDesk", for:"Apartments · hotels & resorts · HOA · property managers", status:"Prototype", tier:"prop", price:"Setup $3,500 · plans from $150/mo", desc:"Maintenance requests from residents, guests, and staff in one queue — triaged by urgency and routed to the right tech or engineer.", items:["Urgency triage & after-hours escalation","Vendor dispatch & entry permission","Automatic resident status updates"]},
+  {id:"resort", name:"GuestDesk", for:"Hotels · resorts · timeshares · short-term rentals", status:"Prototype", tier:"prop", price:"Setup $3,500 · plans from $150/mo", desc:"Guest and owner requests routed to front desk, housekeeping, maintenance, or concierge with shift-change visibility.", items:["Department routing & handoff board","Drafted guest replies for staff approval","Owner / member service requests"]},
+  {id:"salon", name:"BookDesk", for:"Salons · barbers · spas · any appointment business", status:"Prototype", tier:"std", price:"Setup $1,500 · plans from $80/mo", desc:"An AI booking assistant that answers booking requests by text, chat, or DM around the clock, offers real open times from your calendar, and books within your rules.", items:["24/7 booking by text, chat & social DMs","Works with your calendar or booking app","Reminders, deposits & no-show reduction","Waitlist fill-ins and automatic rebooking"]},
+  {id:"housekeeping", name:"HousekeepingDesk", for:"Hotels · resorts · timeshares · short-term rentals", status:"Prototype", tier:"prop", price:"Setup $3,500 · plans from $150/mo", desc:"Housekeeping work orders and room dispatch: checkouts, stayovers, and guest requests prioritized by arrival time and assigned to attendants, with live room status for the front desk.", items:["Checkout & stayover room board","Auto-dispatch rooms to attendants by floor","Guest requests (towels, cribs, turndown)","Supervisor inspection before “Ready”"]},
+  {id:"package", name:"PackageDesk", for:"Apartments · hotels · resorts · timeshares", status:"Prototype", tier:"prop", price:"Setup $2,000 · plans from $150/mo", desc:"Package and mail-order intake for the front desk or mail room: every delivery logged in seconds, matched to the right resident or guest, and picked up with a code and signature.", items:["Log packages by label photo or scan","Instant pickup notices with a one-time code","Hold guest orders until check-in","Reminders, return-to-sender & audit trail"]},
+  {id:"service", name:"LeadDesk", for:"Contractors · real estate · restaurants · auto repair", status:"Prototype", tier:"std", price:"Setup $1,500 · plans from $80/mo", desc:"Every inquiry captured, assigned, and followed up — so quotes and showings don’t slip through the cracks.", items:["Lead capture from every channel","Quote & showing follow-up reminders","Pipeline view: inquiry → booked"]},
+  {id:"intake", name:"IntakeDesk", for:"Hotels & resorts · law · dental · tax & insurance", status:"Prototype", tier:"std", price:"Setup $2,000 · plans from $80/mo", desc:"Structured client intake that collects missing information, flags deadlines, and keeps sensitive details off the open inbox.", items:["Guided intake & document checklists","Deadline and appointment flags","Privacy-first: staff reviews everything"]},
+  {id:"compliance", name:"ComplianceDesk", for:"HUD-assisted housing · smoke shops · regulated retail", status:"Prototype", tier:"prop", price:"Setup $3,500 · plans from $150/mo", desc:"Recurring checklists, recertification reminders, and an audit trail so required tasks get done and documented.", items:["Recertification & inspection reminders","Checklists with sign-off history","Document collection tracking"]},
+  {id:"rewards", name:"RewardsDesk", for:"Smoke shops · salons · barbers · restaurants · retail", status:"Prototype", tier:"std", price:"Setup $1,000 · plans from $80/mo", desc:"A customer rewards program in your brand: points by phone number, birthday offers, and win-back messages that bring regulars back more often.", items:["Points & tiers by phone number — no app needed","Birthday, win-back & “we miss you” offers","Opt-in texting; age-verified where required","See repeat visits and top customers"]},
+  {id:"review", name:"ReviewDesk", for:"Any local business", status:"Prototype", tier:"std", price:"Setup $500 · plans from $80/mo", desc:"Ask happy customers for reviews at the right moment and get drafted, on-brand responses to every review for staff to approve.", items:["Automatic review requests after visits","Drafted replies to every review","Unhappy feedback routed privately to you"]},
+  {id:"social", name:"SocialDesk", for:"Any business on Instagram & Facebook", status:"Prototype", tier:"std", price:"Setup $1,000 · plans from $80/mo", desc:"Plan, draft, and schedule a month of posts in your brand voice, and auto-reply to common DMs with a link to book or buy.", items:["Monthly content calendar drafted by AI","Your approval before anything posts","DM keyword replies that capture leads"]},
+  {id:"staff", name:"StaffDesk", for:"Teams with shifts or high turnover", status:"Prototype", tier:"std", price:"Setup $2,000 · plans from $80/mo", desc:"An AI assistant that answers staff questions from your handbook and SOPs, plus shift swaps and onboarding checklists in one place.", items:["“Ask the handbook” answers for staff","Shift swap requests with manager approval","New-hire onboarding & training checklists"]},
+  {id:"invoice", name:"InvoiceDesk", for:"Service businesses · contractors · cleaners", status:"Prototype", tier:"std", price:"Setup $1,000 · plans from $80/mo", desc:"Quotes become invoices, invoices get paid: friendly payment reminders and a clear view of who owes what.", items:["Quote → invoice in one click","Polite automatic payment reminders","Works with your accounting app"]},
+  {id:"insight", name:"InsightDesk", for:"Owners & managers", status:"Prototype", tier:"std", price:"Setup $2,000 · plans from $80/mo", desc:"An owner dashboard that pulls numbers from your tools and sends a plain-English weekly summary: what changed, what needs attention.", items:["Bookings, leads, sales & response times","AI-written weekly summary by email","Alerts when something needs you"]}
 ];
 const DEMO_IDS=["property","resort","housekeeping","package","salon","service","intake","compliance"];
 const PROTO_PAGES={rewards:"rewards.html",review:"reviews.html",social:"social.html",staff:"staff.html",invoice:"invoices.html",insight:"insights.html"};
@@ -1504,10 +1506,11 @@ const FALLBACK_NOTE = `It couldn’t be sent automatically just now. Open it in 
 /* ---------- buy / checkout ---------- */
 const BUYABLE = {
   assess:{name:"AI Readiness Assessment (virtual)", price:750},
-  bundle:{name:"Launch Bundle: ChatDesk + BookDesk setup", price:1699, tier:"std", count:2},
-  hotelbundle:{name:"Hotel Operations Bundle: GuestDesk + HousekeepingDesk + WorkOrderDesk setup", price:5999, tier:"prop", count:3},
-  care:{name:"Care & Growth Plan", monthly:150},
-  pilot:{name:"Pilot / Custom Build (deposit after proposal)", price:2500, quote:true}
+  bundle:{name:"Launch Bundle: ChatDesk + BookDesk setup", price:2500, tier:"std", count:2},
+  propbundle:{name:"Property Management Bundle: WorkOrderDesk + PackageDesk + ChatDesk setup", price:5500, monthly:380},
+  hotelbundle:{name:"Hotel Operations Bundle: GuestDesk + HousekeepingDesk + WorkOrderDesk setup", price:8000, tier:"prop", count:3},
+  care:{name:"Care & Growth Plan", monthly:300},
+  pilot:{name:"Pilot / Custom Build (deposit after proposal)", price:3500, quote:true}
 };
 PRODUCTS.forEach(p=>{ const m=p.price.match(/\$([\d,]+)/); if(m) BUYABLE[p.id]={name:p.name, price:+m[1].replace(/,/g,""), tier:p.tier, count:1}; });
 let buyItem=null, buyMode="buy";
@@ -1516,9 +1519,9 @@ const saleF=()=> saleActive() ? (100-CONFIG.sale.pct)/100 : 1;
 function tierPrice(it){ if(!it.tier) return 0; const t=CONFIG.tiers[it.tier][+($("input[name=tier]:checked")||{value:0}).value]; return t.price*(it.count||1); }
 function buyPriceText(it){
   const f=saleF(), parts=[];
-  if(it.price) parts.push((it.quote?"From ":"")+(f<1?`<s class="was">${money2(it.price)}</s> `:"")+money2(it.price*f)+(it.quote?"":" setup"));
+  if(it.price) parts.push((it.quote?"From ":"")+(f<1?`<s class="was">${money2(it.price)}</s> `:"")+money2(f<1?saleAmt(it.price):it.price)+(it.quote?"":" setup"));
   const mo = it.tier ? tierPrice(it) : (it.monthly||0);
-  if(mo) parts.push((f<1?`<s class="was">${money2(mo)}</s> `:"")+money2(mo*f)+"/mo");
+  if(mo) parts.push((f<1?`<s class="was">${money2(mo)}</s> `:"")+money2(f<1?saleAmt(mo):mo)+"/mo");
   return parts.join(" + ")+(f<1?` <span class="chip soon">${CONFIG.sale.pct}% off</span>`:"");
 }
 function renderTierRadios(it){
@@ -1528,7 +1531,7 @@ function renderTierRadios(it){
 }
 function payLinkFor(id, method){
   const set=(CONFIG.payLinks[id]||{})[method.toLowerCase()]; if(set) return set;
-  const it=BUYABLE[id]; if(method==="PayPal" && CONFIG.paypalMe && it && it.price){ const amt=saleActive()?Math.round(it.price*(100-CONFIG.sale.pct)/100):it.price; return `https://paypal.me/${encodeURIComponent(CONFIG.paypalMe)}/${amt}USD`; }
+  const it=BUYABLE[id]; if(method==="PayPal" && CONFIG.paypalMe && it && it.price){ const amt=saleActive()?saleAmt(it.price):it.price; return `https://paypal.me/${encodeURIComponent(CONFIG.paypalMe)}/${amt}USD`; }
   return "";
 }
 function openBuy(id, mode){
@@ -1852,7 +1855,7 @@ async function localReply(t) {
     return botSay(`You can email Rashad at <b>${esc(CONFIG.email)}</b>${CONFIG.phone ? ` or call <b>${esc(CONFIG.phone)}</b>` : ""}${CONFIG.calendarUrl ? `, or <a href="${esc(CONFIG.calendarUrl)}" target="_blank" rel="noopener">pick a time on his calendar</a>` : ""}. Or I can pass a message to him right now — he replies within one business day.`, ["Send Rashad a message", "Book a free audit"]);
   }
   if (/price|cost|how much|rate|charge|afford|budget|expensive|cheap/.test(s))
-    return botSay(`Clear pricing, fixed written quotes:<br>• <b>Free Workflow Audit</b> — $0<br>• <b>AI Readiness Assessment</b> — $750 virtual ($1,500 on-site + travel at cost), credited toward your build<br>• <b>Desk products</b> — setup from $150, monthly plans from <b>$25/mo</b> (Essentials · Growth · Pro), with a free 14-day trial<br>• <b>Pilot / Custom Build</b> — from $2,500<br>• <b>Care &amp; Growth Plan</b> — from $150/mo<br>${saleActive() ? `<b>${esc(CONFIG.sale.label)}: ${CONFIG.sale.pct}% off</b> everything through ${esc(saleEndText())}.<br>` : ""}Payment plans are available, and you can buy products online.`, ["Book a free audit", "Founding client program", "Payment plans"]);
+    return botSay(`Clear pricing, fixed written quotes:<br>• <b>Free Workflow Audit</b> — $0<br>• <b>AI Readiness Assessment</b> — $750 virtual ($1,500 on-site + travel at cost), credited toward your build<br>• <b>Desk products</b> — setup $500–$3,500, managed monthly plans from <b>$80/mo</b> (Essentials · Growth · Pro), with a free 14-day trial<br>• <b>Pilot / Custom Build</b> — from $3,500<br>• <b>Care &amp; Growth Plan</b> — from $300/mo<br>${saleActive() ? `<b>${esc(CONFIG.sale.label)}: ${CONFIG.sale.pct}% off</b> everything through ${esc(saleEndText())}.<br>` : ""}Payment plans are available, and you can buy products online.`, ["Book a free audit", "Founding client program", "Payment plans"]);
   if (/trial|try it free|free trial|test it/.test(s))
     return botSay(`Every tool comes with a <b>free ${CONFIG.trialDays}-day trial</b> — no payment details needed. Tap <b>14-day free trial</b> on any product and you’ll get a license key and setup link by email.`, ["Which product fits me?", "How much does it cost?"]);
   if (/payment plan|installment|pay over time|finance|monthly payments|split/.test(s))
@@ -1861,7 +1864,7 @@ async function localReply(t) {
   if (/founding|discount|deal|promo|sale|holiday|new year/.test(s) && saleActive() && /sale|holiday|new year/.test(s))
     return botSay(`The <b>${esc(CONFIG.sale.label)}</b> is on: <b>${CONFIG.sale.pct}% off</b> all listed products and services through ${esc(saleEndText())}. It doesn’t combine with the founding-client discount — you get whichever saves you more.`, ["How much does it cost?", "Book a free audit"]);
   if (/founding|discount|deal|promo/.test(s))
-    return botSay(`Rashad is taking on <b>${CONFIG.foundingSpots} founding clients</b>: <b>25% off</b> the first setup or project, <b>first month free</b> on any Desk plan, monthly price <b>locked for 12 months</b>, and priority scheduling. A short testimonial after launch is required. There’s also a <b>Launch Bundle</b>: ChatDesk + BookDesk setup for $1,699. Want me to put your name in?`, ["Yes, apply", "Book a free audit"]);
+    return botSay(`Rashad is taking on <b>${CONFIG.foundingSpots} founding clients</b>: <b>25% off</b> the first setup or project, <b>first month free</b> on any Desk plan, monthly price <b>locked for 12 months</b>, and priority scheduling. A short testimonial after launch is required. There’s also a <b>Launch Bundle</b>: ChatDesk + BookDesk setup for $2,500. Want me to put your name in?`, ["Yes, apply", "Book a free audit"]);
   if (/yes,? apply|apply/.test(s)) return startCapture("founding", prod);
   if (/see packages|packages/.test(s) && !(prod && prod.id === "package")) { location.hash = "pricing"; return botSay("I’ve scrolled you to the packages. Anything I can clarify?", MAIN_CHIPS); }
   if (/demo|see the demos|try/.test(s)) {

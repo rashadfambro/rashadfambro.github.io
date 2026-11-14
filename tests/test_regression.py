@@ -28,6 +28,12 @@ def dollars(n):
     return "${:,}".format(int(math.floor(n + 0.5)))   # rounds half up, like the site's JavaScript
 
 
+def sale_price(v, pct=10):
+    """Sale prices round down to the nearest $10, matching saleAmt() on the site."""
+    import math
+    return int(math.floor(v * (100 - pct) / 1000) * 10)
+
+
 def site_prices(pg):
     return pg.evaluate("""() => ({
       pkg: Object.fromEntries(CONFIG.packages.map(p => [p.id, p.price])),
@@ -100,7 +106,7 @@ def test_R05_offer_amounts(home):
 def test_R06_sale_banner_during_and_after(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
     assert w.page.is_visible("#saleBar") and "10% off" in w.page.inner_text("#saleBar")
-    P = site_prices(w.page); reg, sale = dollars(P["assess"]), dollars(P["assess"] * (100 - P["sale"]) / 100)
+    P = site_prices(w.page); reg, sale = dollars(P["assess"]), dollars(sale_price(P["assess"], P["sale"]))
     assert sale in w.page.inner_text("#pkgGrid")
     w2 = open_home(make_page, base_url, when=AFTER_SALE)
     assert not w2.page.is_visible("#saleBar")
@@ -111,8 +117,7 @@ def test_R07_sale_price_math_on_products(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
     chat_card = w.page.locator(".prod", has_text="ChatDesk").first.inner_text(); P = site_prices(w.page)
     setup = int(re.search(r"Setup \$([\d,]+)", P["products"]["ChatDesk"]).group(1).replace(",", ""))
-    f = (100 - P["sale"]) / 100
-    assert dollars(setup * f) in chat_card and dollars(P["std"][0] * f) + "/mo" in chat_card
+    assert dollars(sale_price(setup, P["sale"])) in chat_card and dollars(sale_price(P["std"][0], P["sale"])) + "/mo" in chat_card
 
 
 # ---------------- purchasing ----------------
@@ -684,7 +689,7 @@ def test_R51_paypal_me_checkout_link(make_page, base_url):
     assert pg.inner_text("#buyGo") == "Continue to secure checkout →"
     w2 = open_home(make_page, base_url, when=SALE_DAY)
     w2.page.evaluate("CONFIG.paypalMe='TestHandle'")
-    assert w2.page.evaluate("payLinkFor('assess','PayPal')") == f"https://paypal.me/TestHandle/{dollars(a * 0.9)[1:].replace(',', '')}USD"
+    assert w2.page.evaluate("payLinkFor('assess','PayPal')") == f"https://paypal.me/TestHandle/{sale_price(a)}USD"
 
 
 def test_R52_checkout_prices_match_listed_prices(home):
@@ -694,3 +699,40 @@ def test_R52_checkout_prices_match_listed_prices(home):
       return [[BUYABLE.assess.price, pk.assess], [BUYABLE.pilot.price, pk.pilot], [BUYABLE.care.monthly, pk.care]]; }""")
     for got, listed in pairs:
         assert got == listed, (got, listed)
+
+
+def test_R53_all_prices_are_round_numbers(home, make_page, base_url):
+    P = site_prices(home.page)
+    nums = P["std"] + P["prop"] + [P["assess"], P["bundle"], P["hotel"]]
+    nums += [int(x.replace(",", "")) for v in P["products"].values() for x in re.findall(r"\$([\d,]+)", v)]
+    nums += [int(x.replace(",", "")) for x in re.findall(r"\$([\d,]+)", home.page.inner_text("#pricing"))]
+    assert all(n % 10 == 0 for n in nums), [n for n in nums if n % 10]
+    w = open_home(make_page, base_url, when=SALE_DAY)   # sale prices stay round too
+    sale_nums = [int(x.replace(",", "")) for x in re.findall(r"\$([\d,]+)", w.page.inner_text("#products"))]
+    assert sale_nums and all(n % 10 == 0 for n in sale_nums)
+
+
+def test_R54_hero_profile_copy_and_bundles(home):
+    pg = home.page
+    hero = pg.inner_text(".hero")
+    for x in ["17 years building software products and solutions with customers", "Human-Approved AI", "Virtual or On-site", "Pilots within weeks", "Integration with existing systems"]:
+        assert x in hero, x
+    prof = pg.inner_text(".profile")
+    assert "engineering & testing software products and solutions" in prof and "Available virtually worldwide, or on-site at your business" in prof
+    assert "Meets" not in prof
+    assert "deliver software products that solve them" in pg.inner_text("#about")
+    offers = pg.inner_text(".offers")
+    assert "Property Management Bundle" in offers and "ComplianceDesk" not in offers
+    pg.locator("[data-buy='propbundle']").click()
+    assert "Property Management Bundle" in pg.inner_text("#buyTitle")
+    assert "30 days" not in pg.inner_text("#buyModal")
+
+
+def test_R55_old_solutions_link_and_readable_also_line(make_page, base_url):
+    w = make_page(width=390, height=844); pg = w.page
+    pg.goto(base_url + "index.html#solutions"); pg.wait_for_timeout(1800)
+    assert pg.locator("#solutions").count() == 1
+    y = pg.evaluate("document.getElementById('solutions').getBoundingClientRect().top")
+    assert abs(y) < 200      # lands at the products section, not the top of the page
+    col = pg.evaluate("getComputedStyle(document.querySelector('#products .also b')).color")
+    assert col == "rgb(255, 255, 255)"

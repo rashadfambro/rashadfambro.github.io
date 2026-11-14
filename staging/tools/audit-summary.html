@@ -88,24 +88,25 @@ button.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
 "use strict";
 const PRODUCTS={
   "None yet":null,
-  "ChatDesk — AI chat assistant":[1000,25],
-  "BookDesk — AI booking assistant":[1000,25],
-  "WorkOrderDesk — maintenance work orders":[2500,49],
-  "GuestDesk — guest & owner requests":[2500,49],
-  "HousekeepingDesk — housekeeping & room dispatch":[2500,49],
-  "PackageDesk — package & mail-order intake":[1250,49],
-  "LeadDesk — lead capture & follow-up":[1000,25],
-  "IntakeDesk — client intake":[1250,25],
-  "ComplianceDesk — compliance checklists":[2500,49],
-  "RewardsDesk — customer rewards":[750,25],
-  "ReviewDesk — reviews & reputation":[150,25],
-  "SocialDesk — social media assistant":[750,25],
-  "StaffDesk — staff handbook assistant":[1250,25],
-  "InvoiceDesk — invoices & reminders":[750,25],
-  "InsightDesk — owner dashboard":[1250,25],
-  "Launch Bundle — ChatDesk + BookDesk":[1699,50],
-  "Hotel Operations Bundle — GuestDesk + HousekeepingDesk + WorkOrderDesk":[5999,147],
-  "Pilot / Custom Build":[2500,150]
+  "ChatDesk — AI chat assistant":[1500,80],
+  "BookDesk — AI booking assistant":[1500,80],
+  "WorkOrderDesk — maintenance work orders":[3500,150],
+  "GuestDesk — guest & owner requests":[3500,150],
+  "HousekeepingDesk — housekeeping & room dispatch":[3500,150],
+  "PackageDesk — package & mail-order intake":[2000,150],
+  "LeadDesk — lead capture & follow-up":[1500,80],
+  "IntakeDesk — client intake":[2000,80],
+  "ComplianceDesk — compliance checklists":[3500,150],
+  "RewardsDesk — customer rewards":[1000,80],
+  "ReviewDesk — reviews & reputation":[500,80],
+  "SocialDesk — social media assistant":[1000,80],
+  "StaffDesk — staff handbook assistant":[2000,80],
+  "InvoiceDesk — invoices & reminders":[1000,80],
+  "InsightDesk — owner dashboard":[2000,80],
+  "Launch Bundle — ChatDesk + BookDesk":[2500,160],
+  "Property Management Bundle — WorkOrderDesk + PackageDesk + ChatDesk":[5500,380],
+  "Hotel Operations Bundle — GuestDesk + HousekeepingDesk + WorkOrderDesk":[8000,450],
+  "Pilot / Custom Build":[3500,300]
 };
 const $=s=>document.querySelector(s), ed=$("#ed");
 ed.product.innerHTML=Object.keys(PRODUCTS).map(k=>`<option>${k}</option>`).join("");
