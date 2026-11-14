@@ -736,3 +736,15 @@ def test_R55_old_solutions_link_and_readable_also_line(make_page, base_url):
     assert abs(y) < 200      # lands at the products section, not the top of the page
     col = pg.evaluate("getComputedStyle(document.querySelector('#products .also b')).color")
     assert col == "rgb(255, 255, 255)"
+
+
+def test_R56_tool_one_liners_and_clean_text(home):
+    pg = home.page
+    pg.click("#toolLines > summary")
+    t = pg.inner_text("#toolLines")
+    for x in ["ChatDesk — answers customer questions 24/7", "PackageDesk — package intake with pickup codes", "ComplianceDesk"]:
+        assert x in t, x
+    assert pg.locator(".tier-foot abbr").count() == 15
+    tc = pg.evaluate("document.body.textContent")
+    for bad in ["LocationAvailable", "Branded for Your BusinessYour", "wkpilot", "47staff", "0.3full"]:
+        assert bad not in tc, bad

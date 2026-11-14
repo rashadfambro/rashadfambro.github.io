@@ -104,5 +104,6 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R53 | Every price, including sale prices, is a round number ending in 0 |
 | R54 | Hero, profile and About copy; Property Management Bundle (no ComplianceDesk); one cancellation policy |
 | R55 | Old #solutions links land on Products; the products note is readable on mobile |
+| R56 | Pricing lists a one-line description for all 15 tools; page text has no run-together words |
 
 Price tests read prices from the site's CONFIG, so they keep passing when prices change.
