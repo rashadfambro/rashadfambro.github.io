@@ -97,3 +97,5 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R46 | Page source reads cleanly for crawlers: no fallback message, no empty phone row, footer year, no checkout promise in static HTML |
 | R47 | Order button says "Place my order" unless a payment link is set, then "Continue to secure checkout" |
 | R48 | Email-draft fallback keeps accents, symbols and dashes intact in subject and body |
+| R49 | Monthly plans stay between $25 and $150 (standard $25/$49/$79, per property $49/$99/$150) |
+| R50 | Privacy Policy page exists, is linked from the footer and the audit form |

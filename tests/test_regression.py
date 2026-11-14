@@ -95,7 +95,7 @@ def test_R06_sale_banner_during_and_after(make_page, base_url):
 def test_R07_sale_price_math_on_products(make_page, base_url):
     w = open_home(make_page, base_url, when=SALE_DAY)
     chat_card = w.page.locator(".prod", has_text="ChatDesk").first.inner_text()
-    assert "$900" in chat_card and "$26/mo" in chat_card
+    assert "$900" in chat_card and "$23/mo" in chat_card
 
 
 # ---------------- purchasing ----------------
@@ -116,7 +116,7 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
     assert pg.is_visible("#planOpt")              # $1,000 setup: installments offered
     assert pg.locator("input[name=tier]").count() == 3   # Essentials / Growth / Pro
     pg.check("input[name=tier][value='1']")
-    assert "$59/mo" in pg.inner_text("#buyPrice")
+    assert "$49/mo" in pg.inner_text("#buyPrice")
     pg.click("#buyGo")
     assert "required" in pg.inner_text("#buyErr")
     pg.fill("#buy_name", "Pat Buyer"); pg.fill("#buy_biz", "Pat Co"); pg.fill("#buy_email", "pat@example.com")
@@ -369,7 +369,7 @@ def test_R28_free_trial_flow(make_page, base_url):
 def test_R29_monthly_plan_tiers(make_page, base_url):
     w = open_home(make_page, base_url, when=AFTER_SALE)
     t = w.page.inner_text("#tiers")
-    for x in ["Essentials", "Growth", "Pro", "$29/mo", "$59/mo", "$99/mo", "$49/mo", "$179/mo", "$69/mo", "14-day trial"]:
+    for x in ["Essentials", "Growth", "Pro", "$25/mo", "$49/mo", "$79/mo", "$99/mo", "$150/mo", "$59/mo", "14-day trial"]:
         assert x in t, x
 
 
@@ -631,4 +631,22 @@ def test_R48_email_draft_fallback_is_clean(make_page, base_url):
     for part in ["José Núñez", "Café & Co — Downtown", "40% no-shows", "Two locations, it’s urgent"]:
         assert part in body
     assert "�" not in body and "%" not in body.replace("40%", "")
+    assert w.errors == []
+
+
+def test_R49_plan_prices_stay_between_25_and_150(home):
+    tiers = home.page.evaluate("CONFIG.tiers")
+    prices = [t["price"] for k in ("std", "prop") for t in tiers[k]]
+    assert min(prices) == 25 and max(prices) == 150
+    assert [t["price"] for t in tiers["std"]] == [25, 49, 79]
+    assert [t["price"] for t in tiers["prop"]] == [49, 99, 150]
+
+
+def test_R50_privacy_policy_page(make_page, base_url, home):
+    assert home.page.get_attribute("footer a[href='privacy.html']", "href") == "privacy.html"
+    assert home.page.locator("#auditForm a[href='privacy.html']").count() == 1
+    w = make_page(); w.page.goto(base_url + "privacy.html"); w.page.wait_for_timeout(200)
+    t = w.page.inner_text("body")
+    for x in ["Privacy Policy", "What I Collect", "FormSubmit", "PayPal and Square", "delete", "Effective November 13, 2026"]:
+        assert x in t, x
     assert w.errors == []
