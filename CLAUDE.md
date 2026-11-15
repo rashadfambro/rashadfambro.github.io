@@ -9,7 +9,7 @@ This repo is the public website (GitHub Pages) and the home of the agent team in
 **Growth pipeline:** pipeline-coordinator → lead-researcher → outreach-writer → scheduler → (audit + client-proposal skill) → billing-coordinator → client-success; social-media-manager weekly
 
 ## Non-negotiables
-- Human in the loop: anything customer-facing (emails, posts, invoices, prices, promises) is a draft until Rashad approves.
+- Human in the loop: anything customer-facing (emails, posts, invoices, prices, promises) is a draft until Rashad approves. Approved exception (Nov 15, 2026): the lead engine sends trial links, trial reminders, license links, renewal, past-due and pause notices automatically from fixed templates (lead-engine/README.md). Cold outreach stays draft-only.
 - Operating model: clients own their accounts, keys and data; Rashad owns the software and license and works as an invited admin only when needed. Never store client keys or customer data in this repo, email or chat. Fully Hosted is by request only. Details: OPERATING_MODEL in the Claude project and on EHD 2.
 - Published prices only; the site's `CONFIG` in index.html is the price source of truth.
 - Never name Rashad's former employers. Headings in Title Case. Global wording (not US-only).

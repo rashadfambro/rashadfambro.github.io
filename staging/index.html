@@ -864,9 +864,9 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div style="text-align:center"><div class="spots" id="spots">5</div><p style="margin:6px 0 16px">founding spots open</p><a class="btn btn-primary" href="#start">Apply as a founding client →</a></div>
     </div>
     <div class="offers">
-      <article class="card"><span class="chip live">Bundle</span> <h3>Launch Bundle</h3> <p><b>ChatDesk + BookDesk setup for <span class="bprice" data-price="2500" data-parts="1500,1500">$2,500</span></b> (save <span class="bsave">$500</span>). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Order this bundle</button></article>
-      <article class="card"><span class="chip live">Bundle</span> <h3>Hotel Operations Bundle</h3> <p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for <span class="bprice" data-price="8000" data-parts="3500,3500,3500">$8,000</span></b> (save <span class="bsave">$2,500</span>). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Order this bundle</button></article>
-      <article class="card"><span class="chip live">Bundle</span> <h3>Property Management Bundle</h3> <p><b>WorkOrderDesk + PackageDesk + ChatDesk setup for <span class="bprice" data-price="5500" data-parts="3500,2000,1500">$5,500</span></b> (save <span class="bsave">$1,500</span>). Maintenance requests, package intake, and resident questions handled for apartment communities and property managers.</p><button type="button" class="btn btn-line btn-sm" data-buy="propbundle" style="margin-top:10px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Launch Bundle</h3> <p><b>ChatDesk + BookDesk setup for <span class="bprice" data-price="2500" data-parts="1500,1500">$2,500</span></b> (save <span class="bsave">$500</span> vs. buying each tool separately). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Hotel Operations Bundle</h3> <p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for <span class="bprice" data-price="8000" data-parts="3500,3500,3500">$8,000</span></b> (save <span class="bsave">$2,500</span> vs. buying each tool separately). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Property Management Bundle</h3> <p><b>WorkOrderDesk + PackageDesk + ChatDesk setup for <span class="bprice" data-price="5500" data-parts="3500,2000,1500">$5,500</span></b> (save <span class="bsave">$1,500</span> vs. buying each tool separately). Maintenance requests, package intake, and resident questions handled for apartment communities and property managers.</p><button type="button" class="btn btn-line btn-sm" data-buy="propbundle" style="margin-top:10px">Order this bundle</button></article>
       <article class="card"><span class="chip live">Credit</span> <h3>Assessment Credit</h3> <p><b>Whatever you paid for the assessment is credited</b> toward any build you start within 60 days.</p></article>
       <article class="card"><span class="chip live">Referral</span> <h3>Referral Reward</h3> <p>Refer a business that signs and get a <b>$150 credit</b> — or $150 paid to you if you’re not a client.</p></article>
     </div>
@@ -963,7 +963,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <details><summary>What Exactly Am I Buying?</summary><p>You can see it before you pay: your free trial workspace is the same app you receive, branded for your business. After you order, you get the <b>Starter edition</b> to use right away (it saves to your device, with one-click backup, and copies approved messages for you to send), plus a written scope and acceptance checklist for the <b>Connected edition</b>. The Connected edition is finished when it passes that checklist with your team. Packages run as one Desk Suite app, and you can add tools to it later.</p></details>
       <details><summary>Who Owns My Data and Accounts?</summary><p>You do. Your tools run in accounts in your business’s name (for example Google Workspace or Microsoft 365, your texting provider, and your database), so your customer data and access keys stay with you. You pay those providers directly at their price, usually under $40 a month per tool for a small business, and I show you an estimate before setup. I keep the software, license, and updates, and work as an invited admin only when a task needs it. You can remove that access at any time. Prefer not to manage any accounts? Fully Hosted is available by request (see the note under the plans).</p></details>
       <details><summary>Can I Pay Over Time?</summary><p>Yes. Any setup or project of $1,000 or more can be split into 3 interest-free monthly payments, with the first payment at signing. You can pay online with PayPal or Square; PayPal may also offer its own Pay Later options at checkout.</p></details>
-      <details><summary>Can I Buy Directly on the Site?</summary><p>Yes. Tap <b>Buy</b> on any product or package, choose pay in full or a payment plan, and check out securely with PayPal or Square. Custom builds are quoted first; you can pay the deposit online once you accept the proposal.</p></details>
+      <details><summary>Can I Buy Directly on the Site?</summary><p>Yes. Tap <b>Order now</b> on any tool, or <b>Order this bundle</b> on a package, choose pay in full or a payment plan, and check out securely with PayPal or Square. Custom builds are quoted first; you can pay the deposit online once you accept the proposal.</p></details>
       <details><summary>What Happens After Launch?</summary><p>You get a 30-day results check included, plus the option of a monthly care plan for support, updates, and new improvements.</p></details>
     </div>
   </div>
@@ -1451,7 +1451,8 @@ function roi(){
   $("#roiCost").textContent=money(r.cost)+"/mo";
   $("#roiSetup").textContent=money(pl.setup);
   $("#roiCash").textContent=(r.cash<0?"−":"")+money(Math.abs(r.cash))+"/mo";
-  $("#roiCashPayback").textContent = r.cash<=0 ? "No cash payback at these inputs" : (pl.setup/r.cash)<1 ? "Under 1 month" : `${(pl.setup/r.cash).toFixed(1)} months`;
+  const cm = r.cash>0 ? pl.setup/r.cash : 0;
+  $("#roiCashPayback").textContent = r.cash<=0 ? "No cash payback at these inputs" : cm<1 ? "Under 1 month" : cm<=24 ? `${cm.toFixed(1)} months` : `About ${Math.round(cm/12)} years`;
   $("#roiTotal").textContent=(r.net<0?"−":"")+money(Math.abs(r.net))+"/mo";
   $("#roiPayback").textContent = r.payback===null ? "No payback at these inputs" : r.payback<1 ? "Under 1 month" : `${r.payback.toFixed(1)} months`;
   $("#roiYear").textContent=(r.year<0?"−":"")+money(Math.abs(r.year));
@@ -1668,7 +1669,7 @@ $("#buyForm").addEventListener("submit",async e=>{
     r.innerHTML=`<h4>One last step: press Send</h4><p class="hint" style="margin:0">It couldn’t be sent automatically just now. Send your trial request to <b>${esc(CONFIG.email)}</b>. You’ll get your trial workspace link within one business day.</p><div class="row" style="margin-top:10px"><a class="btn btn-primary btn-sm" href="${esc(mailto("Free trial: "+it.name, body))}">Open email draft</a><button type="button" class="btn btn-line btn-sm" id="buyCopy">Copy request</button></div>`;
     $("#buyCopy").addEventListener("click",()=>copyText(body,"Request copied")); return;
   }
-  const order=Object.assign({}, who, {Package:it.name+(tier?` (${tier})`:""), Workflow:`ORDER: ${it.name}${tier?" — "+tier+" plan":""} — ${priceText} — ${plan} via ${method}`, Budget:priceText, Start:"Order placed online"});
+  const order=Object.assign({}, who, {Package:it.name+(tier?` (${tier})`:""), Workflow:`ORDER: ${it.name}${tier?" — "+tier+" plan":""} — ${priceText} — ${plan} via ${method}`, Budget:priceText, "Amount due":String(dueNow(buyItem,plan)), Plan:plan, Method:method, Start:"Order placed online"});
   const link = payLinkFor(buyItem, method, plan);
   $("#buyGo").disabled=true;
   const sent = await sendLead("order", order);
@@ -1690,7 +1691,7 @@ $("#buyForm").addEventListener("submit",async e=>{
 if(new URLSearchParams(location.search).get("paid")){ setTimeout(()=>toast("Payment received — thank you! I’ll email you within one business day to schedule kickoff."),600); }
 function bundleSalePrices(){ if(!saleActive()) return;
   $$(".bprice").forEach(el=>{ const p=+el.dataset.price, s=saleAmt(p), sum=el.dataset.parts.split(",").reduce((a,v)=>a+saleAmt(+v),0);
-    el.innerHTML=`<s class="was">${money(p)}</s> ${money(s)}`; const sv=el.closest("p").querySelector(".bsave"); if(sv) sv.textContent=money(sum-s); }); }
+    el.innerHTML=`<s class="was">${money(p)}</s> ${money(s)}`; const sv=el.closest("p").querySelector(".bsave"); if(sv){ sv.textContent=money(sum-s); sv.title="Compared with buying each tool separately at today's holiday prices"; } }); }
 bundleSalePrices();
 function noteInterest(label){ try{ const k="rf-interest", a=JSON.parse(sessionStorage.getItem(k)||"[]"); if(a[a.length-1]!==label){ a.push(label); sessionStorage.setItem(k, JSON.stringify(a.slice(-8))); } }catch(e){} }
 function interestTrail(){ try{ return JSON.parse(sessionStorage.getItem("rf-interest")||"[]").join(" → "); }catch(e){ return ""; } }
