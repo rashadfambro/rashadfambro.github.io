@@ -135,7 +135,7 @@ function render(){
   const date=d.date?new Date(d.date+"T12:00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}):"";
   const ul=(arr,o)=>arr.length?`<${o?"ol":"ul"}>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</${o?"ol":"ul"}>`:`<p class="hint">—</p>`;
   $("#page").innerHTML=`
-  <header class="ph"><div class="brand"><span class="mark">RF</span><div><h1>Workflow Audit Summary</h1><small>Rashad Fambro Consulting · Software Solutions · Automation &amp; AI</small></div></div>
+  <header class="ph"><div class="brand"><span class="mark">RF</span><div><h1>Workflow Audit Summary</h1><small>Rashad Fambro Consulting · IT Software Consultant · Automation &amp; AI</small></div></div>
     <div class="meta"><b>${esc(d.business||"Client business")}</b><br>${esc(d.contact||"")}${d.industry?" · "+esc(d.industry):""}<br>${esc(date)} · ${esc(d.meeting)} audit${d.team?" · Team: "+esc(d.team):""}</div></header>
   <p><b>Workflow reviewed:</b> ${esc(d.workflow||"—")}${d.tools?` &nbsp;·&nbsp; <b>Tools today:</b> ${esc(d.tools)}`:""}</p>
   <div class="snap">
