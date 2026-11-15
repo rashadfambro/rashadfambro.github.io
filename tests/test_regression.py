@@ -778,7 +778,9 @@ def test_R53_all_prices_are_round_numbers(home, make_page, base_url):
 def test_R54_hero_profile_copy_and_bundles(home):
     pg = home.page
     hero = pg.inner_text(".hero")
-    for x in ["17 years building software products and solutions with customers", "Human-Approved AI", "Virtual or On-site", "Pilots within weeks", "Integration with existing systems"]:
+    v21 = "Any industry" in hero
+    lead = "17 years building software products and solutions" if v21 else "17 years building software products and solutions with customers"
+    for x in [lead, "Human-Approved AI", "Virtual or On-site", "Pilots within weeks", "Integration with existing systems"] + (["Any industry", "Free 14-day trial", "You own your data"] if v21 else []):
         assert x in hero, x
     prof = pg.inner_text(".profile")
     if "MORE_ORDER" not in pg.content():
@@ -1124,7 +1126,7 @@ def test_R67_after_sale_rates_paybacks_lead_path_and_banner(make_page, base_url)
     # Banner leads with the offer; rounding note is fine print
     if sale:
         l2 = pg.inner_text(".salebar .sale-l2")
-        assert l2.startswith("Founding clients (first 5)") and "rounded" not in l2
+        assert (l2.startswith("Founding clients (first 5)") or l2.startswith("Founding clients (first 5, ")) and "rounded" not in l2
     # Hero steps: number and text don't run together
     assert "1 Request captured" in pg.text_content("#heroPipe").replace("\n", " ")
     assert not w.errors, w.errors
@@ -1138,3 +1140,55 @@ def test_R68_leads_carry_site_activity(make_page, base_url):
     pg.evaluate("noteInterest('demo:property'); noteInterest('order:service')")
     pg.evaluate("sendLead('audit', {Name:'Test', Email:'t@example.com'})"); pg.wait_for_timeout(400)
     assert sent and "demo:property" in sent[0] and "order:service" in sent[0], sent
+
+
+def _is_v21(pg):
+    return pg.locator("#svcGrid").count() == 1
+
+
+def test_R69_website_and_growth_services_orderable(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if not _is_v21(pg):
+        pytest.skip("before v21")
+    names = pg.locator("#svcGrid h3").all_inner_texts()
+    assert names == ["Launch Website", "Booking Website", "30-Day Customer Comeback", "Site Care"], names
+    for sid, regular in [("site1", 500), ("site5", 1500), ("comeback", 750)]:
+        assert pg.evaluate(f"BUYABLE['{sid}'].price") == regular
+        for plan in (["Pay in full", "3 monthly payments"] if regular >= 1000 else ["Pay in full"]):
+            due = pg.evaluate(f"dueNow('{sid}', '{plan}')")
+            assert due % 10 == 0 and pg.evaluate(f"payLinkFor('{sid}', 'Square', '{plan}')").startswith("https://square.link/u/"), (sid, plan, due)
+        pg.click(f'#svcGrid [data-buy="{sid}"]')
+        assert not pg.locator("#buyModal").is_hidden()
+        pg.click("#buyClose")
+    assert "own hosting account" in pg.inner_text("#svcGrid") and "your domain and hosting" in pg.inner_text("#services")
+    assert not w.errors, w.errors
+
+
+def test_R70_cross_industry_positioning(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if not _is_v21(pg):
+        pytest.skip("before v21")
+    assert "Any industry" in pg.inner_text(".hero-points")
+    desc = pg.get_attribute('meta[name="description"]', "content") or ""
+    og = pg.get_attribute('meta[property="og:description"]', "content") or ""
+    assert "property" not in (desc + og).lower(), (desc, og)
+    chips = pg.locator(".card.focus h3").all_inner_texts()
+    assert len(chips) >= 4 and any("Salons" in c for c in chips) and any("Contractors" in c for c in chips), chips
+    outcomes = pg.locator(".prod .outcome").count()
+    assert outcomes == pg.locator(".prod").count() and outcomes >= 15, outcomes
+    assert "Annual prepay" in pg.inner_text("#pricing")
+
+
+def test_R71_founding_counter_follows_backend(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.context.route(re.compile(r"https://script\.google\.com/.*stats=founding.*"),
+                     lambda r: r.fulfill(status=200, body='{"ok":true,"foundingLeft":3}', content_type="application/json"))
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if not _is_v21(pg) or not pg.evaluate("CONFIG.backendUrl"):
+        pytest.skip("before v21 or no backend")
+    wait_js(pg, "document.getElementById('spots').textContent === '3'")
+    assert pg.locator(".fLeft").first.inner_text() == "3"
+    pg.evaluate("showFounding(0)")
+    assert pg.is_hidden("#founding")

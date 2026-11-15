@@ -72,3 +72,43 @@ def test_LE04_license_link_opens(make_page, base_url, tmp_path):
     assert "suite.html" in link["url"]
     text = _open(make_page, base_url, link["url"])
     assert "licensed to Glow Studio" in text and "isn't valid" not in text
+
+
+STATUS_HARNESS = r"""
+const fs=require('fs'); const src=fs.readFileSync(process.argv[2],'utf8');
+const pick=(re)=>{const m=src.match(re); if(!m) throw new Error('missing '+re); return m[0];};
+const fn=pick(/function detectStatus_[\s\S]*?\n}\n/), rank=pick(/const STATUS_RANK = [^;]*;/);
+const cases=JSON.parse(process.argv[3]); const out=[];
+for (const c of cases) {
+  globalThis.GmailApp={search:(q)=>c.hits.some(h=>q.indexOf(h)>=0)?[1]:[]};
+  globalThis.Utilities={formatDate:()=> '2026/11/01'}; globalThis.Session={getScriptTimeZone:()=> 'UTC'};
+  const detectStatus_=eval('('+fn.replace('function detectStatus_','function')+')');
+  out.push(detectStatus_(c.email,new Date(),c.won||{},c.trial||{}));
+}
+const STATUS_RANK=eval('('+rank.replace(/^const STATUS_RANK = /,'').replace(/;$/,'')+')'); console.log(JSON.stringify({out, rank:STATUS_RANK}));
+"""
+
+def test_LE05_pipeline_status_detection(tmp_path):
+    h = tmp_path / "s.js"; h.write_text(STATUS_HARNESS)
+    e = "owner@example.com"
+    cases = [
+        {"email": e, "hits": [], "won": {e: True}},
+        {"email": e, "hits": ["(STOP OR unsubscribe)"]},
+        {"email": e, "hits": ["subject:proposal"]},
+        {"email": e, "hits": [], "trial": {e: True}},
+        {"email": e, "hits": ["from:calendly.com"]},
+        {"email": e, "hits": ["-from:me"]},
+        {"email": e, "hits": ["in:sent to:" + e + " after:"]},
+        {"email": e, "hits": []},
+    ]
+    res = json.loads(subprocess.run([NODE, str(h), str(CODE), json.dumps(cases)], capture_output=True, text=True, check=True).stdout)
+    assert res["out"] == ["Won", "Do not contact", "Proposal sent", "Trial", "Booked", "Replied", "Contacted", ""]
+    r = res["rank"]
+    assert r["New"] < r["Contacted"] < r["Replied"] < r["Booked"] < r["Trial"] < r["Proposal sent"] < r["Won"]
+
+def test_LE06_subjects_are_plain_text():
+    src = CODE.read_text()
+    subjects = re.findall(r"(?:sendEmail|mail_)\([^,]+,\s*('(?:[^'\\]|\\.)*'|[^,]+),", src)
+    owner = re.search(r"function notifyOwner_[\s\S]*?const subject = ([^;]+);", src).group(1)
+    for s in subjects + [owner]:
+        assert not re.search(r"[\U0001F300-\U0001FAFF☀-➿↻]", s), s

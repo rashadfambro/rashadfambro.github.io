@@ -16,8 +16,13 @@
 | The day after paid through | Status becomes Past due and Rashad gets an alert. The app shows "renewal past due" |
 | 30 days past due | Status becomes Paused and the client is emailed. The app locks on its next online check, and data stays on the client's device |
 | You set Status to **Paused** or **Canceled** | Notice emailed. The app locks on its next online check |
+| Every 2 hours | Leads and Prospects move forward on their own: outreach email sent → Contacted, they reply → Replied, Calendly booking → Booked, trial started → Trial, email with "proposal" in the subject sent → Proposal sent, paid order or Active license → Won, "STOP" reply → Do not contact |
+| A founding client pays (or you use Desk ▸ Mark as founding client) | The website's "founding spots left" counter updates by itself within 10 minutes |
 
 Each automatic email can be turned off in `CFG`: `AUTO_SEND_TRIAL_LINKS`, `AUTO_SEND_LICENSE_LINKS`, `AUTO_MATCH_PAYMENTS`. Timing is set by `TRIAL_REMINDER_DAYS`, `RENEWAL_REMINDER_DAYS` and `PAUSE_AFTER_DAYS_PAST_DUE`.
+
+## Updating The Code Later
+Paste the new `Code.gs` over the old one and save. Click **Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy**. This keeps the same URL, so the website keeps working. If the update adds schedules or tabs, run **setup** once more.
 
 ## One-Time Setup (About 20 Minutes)
 
@@ -28,5 +33,9 @@ Each automatic email can be turned off in `CFG`: `AUTO_SEND_TRIAL_LINKS`, `AUTO_
 5. Paste the URL into `CONFIG.backendUrl` in index.html and into `DESK_BACKEND` in `scripts/generators/gen_prototypes.py`. Regenerate the prototypes, then release through staging.
 6. Optional: add `ANTHROPIC_API_KEY` under Project Settings ▸ Script properties for the AI chat.
 7. Run **testLead** to see the whole flow arrive in your own inbox.
+
+Owner alert subjects are plain text, like `[Trial] New 14-day trial: Glow Studio (score 20, trial)`. Emoji showed up as question marks in script-sent subjects.
+
+The Command Center (`command-center/`) uses the token-protected `admin` endpoint to record payments, resend links, pause, cancel and mark founding clients. Every call is logged in the **Log** tab.
 
 The links this script emails are tested against the real tool apps in `tests/test_lead_engine.py`.

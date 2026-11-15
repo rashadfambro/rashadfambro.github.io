@@ -30,6 +30,7 @@ const CFG = {
   SEND_PROSPECT_ACK: true,   // instant "got it" email to the prospect
   CREATE_REPLY_DRAFT: true,  // personalized reply saved to Gmail Drafts for you to send
   FOLLOW_UP_DAYS: [2, 5, 10],
+  FOUNDING_SPOTS: 5,         // founding-client spots shown on the website; each Licenses row whose Plan includes "Founding" fills one
   TRIAL_DAYS: 14,// days after the lead arrives; stops when they reply or you change Status
 
   // AI (optional). Add your key in Project Settings → Script properties as ANTHROPIC_API_KEY.
@@ -84,7 +85,10 @@ const CFG = {
 const LEAD_HEADERS = ['Received','Lead ID','Status','Score','Form','Name','Business','Email','Phone','Industry','Team size',
   'Need / goal','Package','Timeline','Budget','Current tools','Availability','Founding client','Source','Landing page',
   'Follow-ups sent','Last contact','Notes'];
-const STOP_STATUSES = ['Replied','Booked','Proposal sent','Won','Lost','Do not contact','Spam'];
+const STOP_STATUSES = ['Replied','Booked','Trial','Proposal sent','Won','Lost','Do not contact','Spam'];
+// Pipeline order: statuses only move forward automatically. Lost / Do not contact / Spam are never changed by the script.
+const STATUS_RANK = { 'New': 0, 'Contacted': 1, 'Replied': 2, 'Booked': 3, 'Trial': 4, 'Proposal sent': 5, 'Won': 6 };
+const PROSPECT_HEADERS = ['Added','Business','Contact','Email','Phone','City','Industry','Tools to pitch','Source','Status','Last activity','Next step','Notes'];
 
 /* ======================= web endpoints ======================= */
 
@@ -95,6 +99,7 @@ function doPost(e) {
     if (body.type === 'lead') return json_(handleLead_(body));
     if (body.type === 'chat') return json_(handleChat_(body));
     if (body.type === 'license') return json_(checkLicense_(body));
+    if (body.type === 'admin') return json_(adminAction_(body));
     return json_({ ok: false, error: 'unknown type' });
   } catch (err) {
     console.error(err);
@@ -105,6 +110,7 @@ function doPost(e) {
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.check && p.key) return json_(checkLicense_({ kind: p.check, key: p.key }));
+  if (p.stats === 'founding') return json_(foundingStats_());
   return json_({ ok: true, service: CFG.BUSINESS + ' lead engine' });
 }
 
@@ -221,8 +227,9 @@ function sendAck_(l) {
 }
 
 function notifyOwner_(l, returning) {
-  const subject = (/trial/i.test(l.form) ? '🧪 New 14-day trial' : /order/i.test(l.form) ? '💳 New order — send invoice' : returning ? '↻ Returning lead' : (l.score >= 60 ? '🔥 Hot lead' : 'New lead')) +
-    ' (' + l.score + ') — ' + (l.business || l.name || l.email) + ' · ' + l.form;
+  // Plain text only: Gmail shows emoji in script-sent subjects as question marks.
+  const subject = (/trial/i.test(l.form) ? '[Trial] New 14-day trial' : /order/i.test(l.form) ? '[Order] New order, awaiting payment' : returning ? '[Returning] Lead is back' : (l.score >= 60 ? '[Hot lead]' : '[Lead]')) +
+    ': ' + (l.business || l.name || l.email) + ' (score ' + l.score + ', ' + l.form + ')';
   const lines = Object.entries({
     Name: l.name, Business: l.business, Email: l.email, Phone: l.phone, Industry: l.industry, 'Team size': l.teamSize,
     Need: l.need, Package: l.packageName, Timeline: l.timeline, Budget: l.budget, Tools: l.tools,
@@ -310,7 +317,7 @@ function appLink_(kind, tools, biz, date, color) {
 function mail_(to, subject, body) {
   GmailApp.sendEmail(to, subject, body, { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
 }
-function note_(sh, row, text) { const c = sh.getRange(row, 10); c.setValue((c.getValue() ? c.getValue() + ' · ' : '') + stamp_() + ' ' + text); }
+function note_(sh, row, text, col) { const c = sh.getRange(row, col || 10); c.setValue((c.getValue() ? c.getValue() + ' · ' : '') + stamp_() + ' ' + text); }
 
 /** A trial request from the site (form "trial"): issue the branded trial link and email it. */
 function issueTrial_(l) {
@@ -336,7 +343,7 @@ function logOrder_(l) {
   const sh = sheet_('Orders', ORDER_HEADERS);
   const amount = Number(String(l.amountDue || '').replace(/[^\d.]/g, '')) || '';
   const id = 'O' + Utilities.formatDate(new Date(), 'UTC', 'yyMMddHHmmss');
-  sh.appendRow([new Date(), id, 'Awaiting payment', l.business, l.name, l.email, l.packageName, toolsFrom_(l.packageName), amount, l.plan || 'Pay in full', l.method, '', '']);
+  sh.appendRow([new Date(), id, 'Awaiting payment', l.business, l.name, l.email, l.packageName, toolsFrom_(l.packageName), amount, l.plan || 'Pay in full', l.method, '', l.founding ? 'founding' : '']);
   return id;
 }
 
@@ -367,6 +374,7 @@ function activateRow_(sh, row, opts) {
   sh.getRange(row, 1).setValue(link.key);
   sh.getRange(row, 5).setValue('Active');
   if (!v[5] || v[5] === 'Trial') sh.getRange(row, 6).setValue('Essentials');
+  CacheService.getScriptCache().remove('foundingLeft');
   sh.getRange(row, 8).setValue(new Date(until + 'T00:00:00'));
   sh.getRange(row, 11).setValue(link.url);
   note_(sh, row, (opts.renewal ? 'renewed' : 'activated') + ' through ' + until);
@@ -464,7 +472,9 @@ function matchPayments() {
       // find or create the license row, then activate
       const lv = lic.getDataRange().getValues(); let row = 0;
       for (let i = 1; i < lv.length; i++) if (String(lv[i][3]).toLowerCase() === String(ov[r][5]).toLowerCase() && lv[i][1] === ov[r][7]) row = i + 1;
-      if (!row) { lic.appendRow(['', ov[r][7], ov[r][3] || ov[r][4], ov[r][5], 'Trial', 'Essentials', new Date(), '', '', 'from order ' + ov[r][1], '', '#2f7fe0', ov[r][4], amount]); row = lic.getLastRow(); }
+      if (!row) { lic.appendRow(['', ov[r][7], ov[r][3] || ov[r][4], ov[r][5], 'Trial', /founding/i.test(ov[r][12]) ? 'Essentials (Founding)' : 'Essentials', new Date(), '', '', 'from order ' + ov[r][1], '', '#2f7fe0', ov[r][4], amount]); row = lic.getLastRow(); }
+      else if (/founding/i.test(ov[r][12]) && !/founding/i.test(lic.getRange(row, 6).getValue())) lic.getRange(row, 6).setValue(String(lic.getRange(row, 6).getValue() || 'Essentials').replace(/^Trial$/, 'Essentials') + ' (Founding)');
+      CacheService.getScriptCache().remove('foundingLeft');
       const link = activateRow_(lic, row);
       orders.getRange(r + 1, 3).setValue('Paid'); orders.getRange(r + 1, 12).setValue(link.key);
       orders.getRange(r + 1, 13).setValue('matched ' + stamp_() + ' from ' + msg.getFrom());
@@ -477,12 +487,129 @@ function matchPayments() {
   });
 }
 
+/** Founding spots left for the website counter (cached 10 minutes). A Licenses row counts when its
+ *  Plan includes "Founding" and it is Active, Past due or Paused. */
+function foundingStats_() {
+  const cache = CacheService.getScriptCache(), hit = cache.get('foundingLeft');
+  if (hit !== null) return { ok: true, foundingLeft: Number(hit) };
+  const rows = sheet_('Licenses', LICENSE_HEADERS).getDataRange().getValues().slice(1);
+  const taken = rows.filter(r => /founding/i.test(String(r[5])) && ['Active', 'Past due', 'Paused'].indexOf(r[4]) >= 0).length;
+  const left = Math.max(0, CFG.FOUNDING_SPOTS - taken);
+  cache.put('foundingLeft', String(left), 600);
+  return { ok: true, foundingLeft: left };
+}
+function markFoundingClient() {
+  const sh = SpreadsheetApp.getActiveSheet();
+  if (sh.getName() !== 'Licenses') { SpreadsheetApp.getUi().alert('Select a row on the Licenses tab first.'); return; }
+  const row = sh.getActiveRange().getRow(); if (row < 2) return;
+  const plan = String(sh.getRange(row, 6).getValue() || 'Essentials').replace(/\s*\(Founding\)/i, '');
+  sh.getRange(row, 6).setValue(plan + ' (Founding)'); note_(sh, row, 'marked founding client');
+  CacheService.getScriptCache().remove('foundingLeft');
+  SpreadsheetApp.getUi().alert('Marked as a founding client. The website shows ' + foundingStats_().foundingLeft + ' spot(s) left within a few minutes.');
+}
+
+/* ======================= admin actions (Command Center) ======================= */
+
+/** Called only by the private Command Center with the shared ADMIN_TOKEN (Script properties in both
+ *  projects). Runs the same steps as the Sheet menu, so emails and links go out exactly as usual.
+ *  Every call, allowed or refused, is written to the Log tab. */
+function adminAction_(b) {
+  const want = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+  const ok = want.length >= 24 && safeEqual_(String(b.token || ''), want);
+  const act = String(b.action || ''), key = String(b.key || '').trim().toUpperCase();
+  if (!ok) { log_('admin', act, key, 'refused: bad token'); return { ok: false, error: 'unauthorized' }; }
+  const lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try {
+    const sh = sheet_('Licenses', LICENSE_HEADERS), rows = sh.getDataRange().getValues();
+    let row = 0;
+    for (let r = 1; r < rows.length; r++) if (String(rows[r][0]).toUpperCase() === key) row = r + 1;
+    if (!row) { log_('admin', act, key, 'not found'); return { ok: false, error: 'license not found' }; }
+    const email = rows[row - 1][3], tools = rows[row - 1][1], biz = rows[row - 1][2], status = rows[row - 1][4];
+    let result;
+    if (act === 'record_payment') { const link = activateRow_(sh, row, { renewal: ['Active', 'Past due', 'Paused'].indexOf(status) >= 0 }); result = { key: link.key }; }
+    else if (act === 'pause' || act === 'cancel') {
+      const s = act === 'pause' ? 'Paused' : 'Canceled';
+      sh.getRange(row, 5).setValue(s);
+      onLicenseEdit({ range: sh.getRange(row, 5), value: s });   // same notice email as editing the cell by hand
+      result = { status: s };
+    }
+    else if (act === 'resend') {
+      mail_(email, 'Your ' + toolNames_(tools) + ' link for ' + biz, 'Hi,\n\nHere is your link again:\n' + rows[row - 1][10] + '\n\nBest,' + signature_());
+      note_(sh, row, 'link re-sent'); result = { sent: true };
+    }
+    else if (act === 'mark_founding') {
+      const plan = String(rows[row - 1][5] || 'Essentials').replace(/\s*\(Founding\)/i, '');
+      sh.getRange(row, 6).setValue(plan + ' (Founding)'); CacheService.getScriptCache().remove('foundingLeft'); result = foundingStats_();
+    }
+    else { log_('admin', act, key, 'unknown action'); return { ok: false, error: 'unknown action' }; }
+    log_('admin', act, key, 'ok');
+    return Object.assign({ ok: true }, result);
+  } catch (err) { log_('admin', act, key, 'error: ' + err); return { ok: false, error: 'server error' }; }
+  finally { lock.releaseLock(); }
+}
+function safeEqual_(a, b) { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; }
+function log_(source, action, target, result) {
+  try { sheet_('Log', ['Time', 'Source', 'Action', 'Target', 'Result']).appendRow([new Date(), source, action, target, result]); } catch (e) { console.error(e); }
+}
+
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Desk')
     .addItem('Record payment for selected license row', 'recordPaymentForSelectedRow')
+    .addItem('Mark selected license row as a founding client', 'markFoundingClient')
     .addItem('Run license checks now', 'runLicenses')
     .addItem('Match payment emails now', 'matchPayments')
+    .addItem('Update lead and prospect statuses now', 'syncPipeline')
     .addToUi();
+}
+
+/* ======================= automatic pipeline updates ======================= */
+
+/** Runs every 2 hours. Moves leads (and outbound prospects) forward on their own, from what already
+ *  happened in Gmail, Calendly and the Licenses/Orders tabs, so the sheets never need hand updates:
+ *  your outreach email sent → Contacted; they reply → Replied; Calendly booking → Booked;
+ *  trial started → Trial; email with "proposal" in the subject sent to them → Proposal sent;
+ *  paid order or Active license → Won; "STOP" or "unsubscribe" reply → Do not contact. */
+function syncPipeline() {
+  const lic = sheet_('Licenses', LICENSE_HEADERS).getDataRange().getValues().slice(1);
+  const ord = sheet_('Orders', ORDER_HEADERS).getDataRange().getValues().slice(1);
+  const won = {}, trial = {};
+  lic.forEach(r => { const e = String(r[3]).toLowerCase(); if (!e) return;
+    if (['Active', 'Past due', 'Paused'].indexOf(r[4]) >= 0) won[e] = true; else if (r[4] === 'Trial') trial[e] = true; });
+  ord.forEach(r => { if (r[2] === 'Paid') won[String(r[5]).toLowerCase()] = true; });
+  syncSheet_(sheet_('Leads', LEAD_HEADERS), 3, 8, 1, 23, won, trial);
+  syncSheet_(sheet_('Prospects', PROSPECT_HEADERS), 10, 4, 1, 13, won, trial, 11);
+}
+
+function syncSheet_(sh, statusCol, emailCol, sinceCol, notesCol, won, trial, activityCol) {
+  const rows = sh.getDataRange().getValues(); let checked = 0;
+  for (let r = 1; r < rows.length; r++) {
+    const email = String(rows[r][emailCol - 1] || '').trim().toLowerCase();
+    const status = String(rows[r][statusCol - 1] || 'New');
+    if (!email || !(status in STATUS_RANK) && status !== '') continue;           // Lost, Do not contact, Spam: leave alone
+    const since = rows[r][sinceCol - 1] ? new Date(rows[r][sinceCol - 1]) : addDays_(new Date(), -60);
+    if (status === 'Won' || daysUntil_(since) < -120) continue;                      // done, or gone quiet for 4 months
+    if (++checked > 120) break;                                                      // stays well inside Gmail's daily quota
+    const next = detectStatus_(email, since, won, trial);
+    if (!next) continue;
+    if (next === 'Do not contact' || (STATUS_RANK[next] || 0) > (STATUS_RANK[status] || 0)) {
+      sh.getRange(r + 1, statusCol).setValue(next);
+      note_(sh, r + 1, 'auto: ' + next, notesCol);
+      if (activityCol) sh.getRange(r + 1, activityCol).setValue(new Date());
+    }
+  }
+}
+
+function detectStatus_(email, since, won, trial) {
+  if (won[email]) return 'Won';
+  const after = ' after:' + Utilities.formatDate(new Date(since), Session.getScriptTimeZone(), 'yyyy/MM/dd');
+  const q = (s) => GmailApp.search(s + after, 0, 1).length > 0;
+  if (q('from:' + email + ' (STOP OR unsubscribe)')) return 'Do not contact';
+  if (q('in:sent to:' + email + ' subject:proposal')) return 'Proposal sent';
+  if (trial[email]) return 'Trial';
+  if (q('from:calendly.com "' + email + '"')) return 'Booked';
+  if (q('from:' + email + ' -from:me')) return 'Replied';
+  if (q('in:sent to:' + email)) return 'Contacted';
+  return '';
 }
 
 /* ======================= follow-ups & digest ======================= */
@@ -637,6 +764,8 @@ function setup() {
   ScriptApp.newTrigger('runLicenses').timeBased().everyDays(1).atHour(8).create();
   ScriptApp.newTrigger('weeklyDigest').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(7).create();
   ScriptApp.newTrigger('matchPayments').timeBased().everyHours(2).create();
+  ScriptApp.newTrigger('syncPipeline').timeBased().everyHours(2).create();
+  const pros = sheet_('Prospects', PROSPECT_HEADERS); pros.setFrozenRows(1);
   ScriptApp.newTrigger('onLicenseEdit').forSpreadsheet(SpreadsheetApp.getActive()).onEdit().create();
   const ord = sheet_('Orders', ORDER_HEADERS); ord.setFrozenRows(1);
   ord.getRange('C2:C').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Awaiting payment','Paid','Canceled'], true).build());

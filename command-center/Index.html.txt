@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<title>Command Center</title>
+<style>
+:root{--ink:#0d1a2d;--sky:#7cc4ff;--mint:#3ddc97;--amber:#f5b942;--red:#ff6b6b;--line:#d3dce7;--soft:#f5f8fc;--muted:#5d6b7c}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--soft)}
+header{background:var(--ink);color:#fff;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header h1{font:600 1.15rem Georgia,serif;margin:0}header small{color:#a9bbd0}
+nav{display:flex;gap:4px;flex-wrap:wrap}nav button{background:transparent;border:1px solid #2b4466;color:#dfe8f2;border-radius:999px;padding:6px 14px;cursor:pointer;font:600 .85rem inherit}
+nav button[aria-selected=true]{background:var(--sky);border-color:var(--sky);color:var(--ink)}
+main{max-width:1200px;margin:0 auto;padding:18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi b{display:block;font:600 1.6rem Georgia,serif}.kpi span{color:var(--muted);font-size:.85rem}
+h2{font:600 1.2rem Georgia,serif;margin:22px 0 10px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.88rem}
+th{background:var(--ink);color:#fff;text-align:left;padding:8px}td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#fafcfe}
+.alert{display:flex;gap:10px;align-items:baseline;padding:9px 12px;border-left:4px solid var(--sky);background:#fff;border-radius:8px;margin-bottom:6px}
+.alert.high{border-color:var(--red)}.alert.warn{border-color:var(--amber)}.alert .k{font-weight:700;min-width:110px}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;background:#e8f1fb;font-size:.8rem;font-weight:600}
+.btn{border:1px solid var(--ink);background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer;font:600 .8rem inherit;margin:2px}
+.btn.primary{background:var(--ink);color:#fff}.btn:disabled{opacity:.5}
+form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+label{display:flex;flex-direction:column;font-size:.8rem;font-weight:600;color:var(--muted);gap:3px}
+input,select,textarea{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+textarea{min-height:90px;width:100%}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;display:none;z-index:9}
+.muted{color:var(--muted)}.scroll{overflow-x:auto}
+@media (max-width:640px){main{padding:10px}.alert .k{min-width:0}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Command Center</h1><small id="updated">Loading…</small></div>
+  <nav role="tablist" id="tabs"></nav>
+  <button class="btn" id="refresh" type="button">Refresh</button>
+</header>
+<main id="main" aria-live="polite"><p class="muted">Loading your business…</p></main>
+<div id="toast" role="status"></div>
+<script>
+const TABS = [["today","Today"],["pipeline","Pipeline"],["clients","Clients & Licenses"],["finance","Finance"],["agents","Agent Team"],["log","Activity Log"]];
+let D = null, tab = "today";
+const $ = (s, r=document) => r.querySelector(s);
+const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = (n) => "$" + Math.round(Number(n)||0).toLocaleString("en-US");
+const when = (iso) => iso ? new Date(iso).toLocaleString([], {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"}) : "";
+const day = (iso) => iso ? new Date(iso).toLocaleDateString([], {month:"short", day:"numeric", year:"numeric"}) : "";
+function toast(t){ const el=$("#toast"); el.textContent=t; el.style.display="block"; clearTimeout(toast.t); toast.t=setTimeout(()=>el.style.display="none",3500); }
+function call(fn, ...args){ return new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(e => no(e && e.message || String(e)))[fn](...args)); }
+
+function load(){ $("#updated").textContent = "Loading…"; call("getDashboard").then(d => { D = d; $("#updated").textContent = "Updated " + when(d.generated); render(); }).catch(e => { $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)}</div>`; }); }
+function tabsHTML(){ $("#tabs").innerHTML = TABS.map(([id,l]) => `<button role="tab" type="button" data-tab="${id}" aria-selected="${id===tab}">${esc(l)}${id==="today"&&D?` (${D.summary.alerts.length})`:""}</button>`).join(""); }
+function table(cols, rows, empty){ if(!rows.length) return `<p class="muted">${esc(empty||"Nothing here yet.")}</p>`;
+  return `<div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${esc(c[0])}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }
+
+const VIEWS = {
+  today(){ const s=D.summary, c=s.counts, f=s.finance;
+    return `<div class="grid">
+      <div class="card kpi"><b>${c.newLeads}</b><span>new leads</span></div>
+      <div class="card kpi"><b>${c.trials}</b><span>trials running</span></div>
+      <div class="card kpi"><b>${c.activeClients}</b><span>active clients</span></div>
+      <div class="card kpi"><b>${money(f.mrrEstimate)}</b><span>est. monthly revenue</span></div>
+      <div class="card kpi"><b>${money(f.revenueMonth)}</b><span>revenue this month</span></div>
+      <div class="card kpi"><b>${c.openRequests}</b><span>open agent requests</span></div></div>
+      <h2>Alerts</h2>${s.alerts.length ? s.alerts.map(a=>`<div class="alert ${esc(a.level)}"><span class="k">${esc(a.kind)}</span><span>${esc(a.text)}</span></div>`).join("") : '<p class="muted">All clear.</p>'}
+      <h2>Meetings (Next 7 Days)</h2>${table([["When",e=>esc(when(e.start))],["Meeting",e=>esc(e.title)],["Where",e=>esc(e.where)]], D.calendar, "No meetings this week.")}
+      <h2>Inbox (Unread, Last 3 Days)</h2>${table([["",m=>m.business?'<span class="pill">Business</span>':""],["From",m=>esc(m.from)],["Subject",m=>`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.subject)}</a>`],["Received",m=>esc(when(m.date))]], D.inbox.slice().sort((a,b)=>b.business-a.business), "Inbox zero.")}`; },
+  pipeline(){ const s=D.summary, statuses=["New","Contacted","Replied","Booked","Trial","Proposal sent","Won","Lost","Do not contact","Spam"];
+    return `<div class="grid">${statuses.filter(k=>s.pipeline[k]).map(k=>`<div class="card kpi"><b>${s.pipeline[k]}</b><span>${esc(k)}</span></div>`).join("")}<div class="card kpi"><b>${s.conversion}%</b><span>lead to client</span></div></div>
+      <p class="muted">Statuses move forward on their own every 2 hours (replies, bookings, trials, proposals, payments). Change one by hand below if needed.</p>
+      <h2>Leads</h2>${table([["Received",l=>esc(day(l.Received))],["Business",l=>esc(l.Business||l.Name)],["Email",l=>esc(l.Email)],["Score",l=>esc(l.Score)],["Form",l=>esc(l.Form)],["Source",l=>esc(l.Source)],
+        ["Status",l=>`<select data-lead="${esc(l._row)}" aria-label="Status for ${esc(l.Business||l.Email)}">${statuses.map(x=>`<option${x===(l.Status||"New")?" selected":""}>${esc(x)}</option>`).join("")}</select>`]], D.leads, "No website leads yet.")}
+      <h2>Prospects (Outbound)</h2>${table([["Business",p=>esc(p.Business)],["City",p=>esc(p.City)],["Industry",p=>esc(p.Industry)],["Pitch",p=>esc(p["Tools to pitch"])],["Status",p=>`<span class="pill">${esc(p.Status||"New")}</span>`],["Last activity",p=>esc(day(p["Last activity"]))],["Next step",p=>esc(p["Next step"])]], D.prospects, "The weekly lead research adds prospects here.")}`; },
+  clients(){ const act=(k,a,l)=>`<button class="btn" type="button" data-act="${a}" data-key="${esc(k)}">${l}</button>`;
+    return `<p class="muted">Actions run through the lead engine, so clients get the same emails as always. Every action is logged.</p>
+      ${table([["Business",x=>esc(x.Business)],["Tools",x=>esc(x.Tools)],["Status",x=>`<span class="pill">${esc(x.Status)}</span>`],["Plan",x=>esc(x.Plan)],["Ends / paid through",x=>esc(day(x["Ends / paid through"]))],["Last check",x=>esc(when(x["Last check"]))],
+        ["Actions",x=>act(x.Key,"record_payment","Record payment")+act(x.Key,"resend","Resend link")+(x.Status!=="Paused"?act(x.Key,"pause","Pause"):"")+act(x.Key,"cancel","Cancel")+(/founding/i.test(x.Plan)?"":act(x.Key,"mark_founding","Founding"))]], D.licenses, "No trials or clients yet.")}
+      <h2>Orders</h2>${table([["Received",o=>esc(day(o.Received))],["Business",o=>esc(o.Business||o.Name)],["Item",o=>esc(o.Item)],["Amount due",o=>esc(money(o["Amount due"]))],["Plan",o=>esc(o.Plan)],["Method",o=>esc(o.Method)],["Status",o=>`<span class="pill">${esc(o.Status)}</span>`]], D.orders, "No orders yet.")}`; },
+  finance(){ const f=D.summary.finance;
+    return `<div class="grid"><div class="card kpi"><b>${money(f.mrrEstimate)}</b><span>est. monthly revenue (active plans)</span></div><div class="card kpi"><b>${money(f.revenueMonth)}</b><span>revenue this month</span></div><div class="card kpi"><b>${money(f.revenueYear)}</b><span>revenue this year</span></div><div class="card kpi"><b>${money(f.costsYear)}</b><span>costs this year</span></div><div class="card kpi"><b>${money(f.profitYear)}</b><span>profit this year</span></div></div>
+      <h2>Add Income or Expense</h2><form class="row card" id="finForm"><label>Type<select name="type"><option>Expense</option><option>Income</option></select></label><label>Date<input type="date" name="date"></label><label>Amount<input type="number" name="amount" min="0" step="0.01" required></label><label>Category<input name="category" placeholder="Software, ads, travel…"></label><label>Description<input name="description"></label><label>Client<input name="client"></label><button class="btn primary" type="submit">Save</button></form>
+      <h2>Ledger</h2>${table([["Date",x=>esc(day(x.Date))],["Type",x=>esc(x.Type)],["Category",x=>esc(x.Category)],["Description",x=>esc(x.Description)],["Amount",x=>esc(money(x.Amount))],["Client",x=>esc(x.Client)]], D.finance, "Paid orders count automatically; add other income and expenses here.")}`; },
+  agents(){ return `<form class="card" id="reqForm"><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><label>Agent<select name="agent">${D.agents.map(a=>`<option>${esc(a)}</option>`).join("")}</select></label><label>Priority<select name="priority"><option>Normal</option><option>High</option><option>Low</option></select></label><label style="flex:1">Client or topic<input name="topic" placeholder="e.g. Glow Studio launch"></label></div>
+      <label style="margin-top:8px">Request<textarea name="text" required placeholder="e.g. Weekly status report for Glow Studio · Release BookDesk update to staging · Draft a proposal from today's audit notes"></textarea></label><button class="btn primary" type="submit" style="margin-top:8px">Send to agent team</button></form>
+      <p class="muted">The agent team checks for new requests on its schedule and writes the answer here. Anything customer-facing comes back as a draft for your approval.</p>
+      ${table([["Sent",r=>esc(when(r.Time))],["Agent",r=>esc(r.Agent)],["Priority",r=>esc(r.Priority)],["Topic",r=>esc(r["Client / topic"])],["Request",r=>esc(r.Request)],["Status",r=>`<span class="pill">${esc(r.Status)}</span>`],["Response",r=>esc(r.Response)+(r.Link?` <a href="${esc(r.Link)}" target="_blank" rel="noopener">Open</a>`:"")]], D.requests, "No requests yet.")}`; },
+  log(){ return table([["Time",x=>esc(when(x.Time))],["Source",x=>esc(x.Source)],["Action",x=>esc(x.Action)],["Target",x=>esc(x.Target)],["Result",x=>esc(x.Result)]], D.log, "No activity yet."); }
+};
+function render(){ tabsHTML(); $("#main").innerHTML = VIEWS[tab](); }
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tab]"); if (t) { tab = t.dataset.tab; render(); return; }
+  const a = e.target.closest("[data-act]");
+  if (a) { const labels={record_payment:"Record a payment and email a renewed license link",resend:"Email the client their link again",pause:"Pause this license (client is emailed)",cancel:"Cancel this license (client is emailed)",mark_founding:"Mark as a founding client"};
+    if (!confirm(labels[a.dataset.act] + "?")) return;
+    a.disabled = true; call("licenseAction", a.dataset.act, a.dataset.key).then(() => { toast("Done"); load(); }).catch(err => { a.disabled=false; toast("Failed: " + err); }); }
+});
+$("#refresh").addEventListener("click", load);
+document.addEventListener("change", e => { const s = e.target.closest("[data-lead]"); if (!s) return;
+  call("setLeadStatus", Number(s.dataset.lead), s.value).then(() => toast("Status saved")).catch(err => toast("Failed: " + err)); });
+document.addEventListener("submit", e => { e.preventDefault(); const f = e.target, v = Object.fromEntries(new FormData(f));
+  const b = f.querySelector("button[type=submit]"); b.disabled = true;
+  const p = f.id === "reqForm" ? call("addRequest", v.agent, v.priority, v.topic, v.text) : call("addFinance", v);
+  p.then(() => { toast("Saved"); f.reset(); load(); }).catch(err => toast("Failed: " + err)).finally(() => b.disabled = false); });
+load(); setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>

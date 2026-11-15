@@ -10,7 +10,7 @@
 <meta property="og:url" content="https://rashadfambro.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Rashad Fambro | IT Software Consultant">
-<meta property="og:description" content="Workflow automation, business software, and custom applications and tools for property, hospitality, and small businesses. Free workflow audit.">
+<meta property="og:description" content="Workflow automation, business software, and custom applications and tools for service businesses in any industry. Free workflow audit.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1a2d'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Georgia,serif' font-size='28' fill='%237cc4ff'%3ERF%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -90,6 +90,12 @@ details.more{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}d
 .hero .lede{font-size:1.15rem;color:#c9d6e5}
 .hero-points{list-style:none;padding:0;margin:26px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;color:#a9bbd0;font-size:.86rem;font-weight:600}
 .hero-points li::before{content:"✓";color:var(--mint);margin-right:7px;font-weight:800}
+.hero-points .hp-lead{flex-basis:100%;color:#dfe8f2}
+@media (max-width:480px){.hero-points .hp-long{display:none}}
+.prod .outcome{margin:2px 0 8px;font-weight:700;color:var(--sky,#7cc4ff)}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:16px}
+.svc-grid .card{display:flex;flex-direction:column;gap:8px}
+.svc-grid .card .btn{align-self:flex-start;margin-top:auto}
 .board{background:linear-gradient(180deg,#152a46,#11233b);border:1px solid #33507a;border-radius:18px;box-shadow:0 40px 90px -30px #000c;overflow:hidden}
 .board-top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #2c4568;font-size:.72rem;font-weight:800;letter-spacing:.1em;color:#a9bbd0}
 .pulse{display:inline-flex;align-items:center;gap:8px;color:var(--mint)}
@@ -497,7 +503,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
   </div>
 </header>
 
-<div class="salebar" id="saleBar" hidden><div class="wrap"><b id="saleLabel"></b> <span id="saleText"></span><span class="sale-l2">Founding clients (first 5): 25% off your first setup + your first month free · <a href="#pricing">See prices →</a></span><small class="sale-fine"><span id="saleRound">Sale prices are rounded down to the nearest $10.</span> <span id="saleFine"></span></small></div></div>
+<div class="salebar" id="saleBar" hidden><div class="wrap"><b id="saleLabel"></b> <span id="saleText"></span><span class="sale-l2">Founding clients (first 5<span class="fLeftWrap">, <span class="fLeft">5</span> left</span>): 25% off your first setup + your first month free · <a href="#pricing">See prices →</a></span><small class="sale-fine"><span id="saleRound">Sale prices are rounded down to the nearest $10.</span> <span id="saleFine"></span></small></div></div>
 <main id="main">
 <!-- HERO -->
 <section class="hero" id="top">
@@ -511,17 +517,17 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         <a class="textlink" href="#demos">or try a live demo first</a>
       </div>
       <ul class="hero-points">
-        <li>17 years building software products and solutions with customers</li><li>Human-Approved AI</li><li>Virtual or On-site</li><li>Pilots within weeks</li><li>Integration with existing systems</li>
+        <li class="hp-lead">17 years building software<span class="hp-long"> products and solutions</span></li><li>Any industry</li><li>Human-Approved AI</li><li>Free 14-day trial</li><li>You own your data</li><li>Fixed-price quotes</li><li>Remote-first, worldwide</li><li>Virtual or On-site</li><li>Pilots within weeks</li><li>Integration with existing systems</li>
       </ul>
     </div>
     <div class="board" aria-label="Animated example of an automated workflow">
       <div class="board-top"><span>▦ LIVE WORKFLOW EXAMPLE</span><span class="pulse">RUNNING</span></div>
       <div class="board-body">
-        <div class="msg" id="heroMsg"><small id="heroSrc">Apartment resident · text message</small><span id="heroText">“Water is leaking under my kitchen sink in Unit 204. I can be home after 3.”</span></div>
+        <div class="msg" id="heroMsg"><small id="heroSrc">Nail salon client · website chat</small><span id="heroText">“Do you have anything Friday after 5 for a gel manicure and pedicure?”</span></div>
         <ol class="pipe" id="heroPipe">
           <li><i>1</i> Request captured<span>INBOX</span></li>
-          <li><i>2</i> <span style="margin:0;font-size:inherit;letter-spacing:0;font-weight:inherit" id="heroSort">Sorted: Plumbing · High priority</span><span>AUTO</span></li>
-          <li><i>3</i> <span style="margin:0;font-size:inherit;letter-spacing:0;font-weight:inherit" id="heroDraft">Work order &amp; reply drafted</span><span>AUTO</span></li>
+          <li><i>2</i> <span style="margin:0;font-size:inherit;letter-spacing:0;font-weight:inherit" id="heroSort">Sorted: Booking · 2 services · Fri PM</span><span>AUTO</span></li>
+          <li><i>3</i> <span style="margin:0;font-size:inherit;letter-spacing:0;font-weight:inherit" id="heroDraft">Open slots & booking reply drafted</span><span>AUTO</span></li>
           <li class="gate"><i>4</i>Staff reviews &amp; approves<span>HUMAN</span></li>
         </ol>
       </div>
@@ -639,9 +645,9 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
     <p class="eyebrow">Workflow customizations · Examples</p>
     <div class="focus-grid">
       <article class="card focus"><span class="chip">Property</span> <h3>Apartment Communities</h3><ul><li>Maintenance intake &amp; triage</li><li>Vendor dispatch &amp; resident updates</li><li>Leasing inquiry follow-up</li><li>Package &amp; mail-room intake</li></ul></article>
-      <article class="card focus"><span class="chip">Hospitality</span> <h3>Hotels</h3><ul><li>Guest requests routed to departments</li><li>Shift-change handoff boards</li><li>Review response drafting</li><li>Guest package &amp; mail-order holds</li></ul></article>
-      <article class="card focus"><span class="chip">Hospitality</span> <h3>Resorts</h3><ul><li>Activity &amp; amenity bookings</li><li>Pre-arrival guest messaging</li><li>Housekeeping &amp; maintenance queues</li><li>Upsell offers staff can approve</li></ul></article>
-      <article class="card focus"><span class="chip">Vacation ownership</span> <h3>Timeshares</h3><ul><li>Owner &amp; member service requests</li><li>Reservation &amp; exchange questions</li><li>Owner communication campaigns</li><li>Sales tour scheduling &amp; follow-up</li></ul></article>
+      <article class="card focus"><span class="chip">Hospitality</span> <h3>Hotels &amp; Resorts</h3><ul><li>Guest requests routed to departments</li><li>Housekeeping &amp; maintenance queues</li><li>Pre-arrival messaging &amp; upsells staff approve</li><li>Review response drafting</li></ul></article>
+      <article class="card focus"><span class="chip">Appointments</span> <h3>Salons, Spas &amp; Clinics</h3><ul><li>Online booking &amp; reminders</li><li>Waitlists that fill cancellations</li><li>Rebooking &amp; loyalty offers</li><li>More five-star reviews</li></ul></article>
+      <article class="card focus"><span class="chip">Home &amp; local services</span> <h3>Contractors, Auto &amp; Cleaning</h3><ul><li>Missed calls answered by text</li><li>Quote follow-up that never slips</li><li>Job status updates for customers</li><li>Invoices &amp; payment reminders</li></ul></article>
     </div>
     <p class="eyebrow">Also serving · choose your industry</p>
     <div class="ind-wrap">
@@ -847,7 +853,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       </details>
       <details class="more tool-lines" id="toolLines"><summary>What Each Tool Does</summary><div class="tool-cols"><div><p class="eyebrow" style="margin:10px 0 6px">Standard tools</p><ul><li><b>ChatDesk</b> — answers customer questions 24/7</li><li><b>BookDesk</b> — books appointments and fills cancellations</li><li><b>LeadDesk</b> — captures and follows up on inquiries</li><li><b>IntakeDesk</b> — secure client intake forms</li><li><b>RewardsDesk</b> — phone-number rewards program</li><li><b>ReviewDesk</b> — more reviews, faster replies</li><li><b>SocialDesk</b> — posts and DM replies you approve</li><li><b>StaffDesk</b> — handbook answers and shift swaps</li><li><b>InvoiceDesk</b> — invoices and payment reminders</li><li><b>InsightDesk</b> — owner dashboard and weekly summary</li></ul></div><div><p class="eyebrow" style="margin:10px 0 6px">Property &amp; hospitality tools</p><ul><li><b>WorkOrderDesk</b> — maintenance requests in one queue</li><li><b>GuestDesk</b> — routes guest and owner requests</li><li><b>HousekeepingDesk</b> — room dispatch and live status</li><li><b>PackageDesk</b> — package intake with pickup codes</li><li><b>ComplianceDesk</b> — recurring checklists and deadlines</li></ul></div></div></details>
     </div>
-    <p class="pricenote"><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with PayPal or Square — any debit or credit card accepted.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $150/hr · Every build gets a fixed, written quote before work starts.</p>
+    <p class="pricenote"><b>Annual prepay:</b> pay 12 months of any plan up front and get 2 months free.<br><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with PayPal or Square — any debit or credit card accepted.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $150/hr · Every build gets a fixed, written quote before work starts.</p>
     <div class="founding" id="founding">
       <div>
         <p class="eyebrow">Founding Client Program</p>
@@ -862,6 +868,11 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         </ul>
       </div>
       <div style="text-align:center"><div class="spots" id="spots">5</div><p style="margin:6px 0 16px">founding spots open</p><a class="btn btn-primary" href="#start">Apply as a founding client →</a></div>
+    </div>
+    <div class="svc" id="services">
+      <h3 style="margin-top:30px">Websites &amp; Marketing Services</h3>
+      <p class="hint" style="margin:4px 0 0">Built quickly with AI, finished and tested by me. Websites live in an account your business owns (your domain and hosting), so you're never locked in. For ongoing marketing, add SocialDesk (weekly posts) and ReviewDesk (more reviews) on a monthly plan.</p>
+      <div class="svc-grid" id="svcGrid"></div>
     </div>
     <div class="offers">
       <article class="card"><span class="chip live">Bundle</span> <h3>Launch Bundle</h3> <p><b>ChatDesk + BookDesk setup for <span class="bprice" data-price="2500" data-parts="1500,1500">$2,500</span></b> (save <span class="bsave">$500</span> vs. buying each tool separately). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Order this bundle</button></article>
@@ -1144,6 +1155,13 @@ $("#vEmail").href = "mailto:" + CONFIG.email;
 if (CONFIG.phone){ const li=document.createElement("li"); li.id="vPhoneRow"; li.innerHTML=`<b>Phone</b><a id="vPhone" href="tel:${CONFIG.phone.replace(/[^\d+]/g,"")}">${esc(CONFIG.phone)}</a>`; $("#vEmail").closest("li").after(li); }
 $("#spots").textContent = CONFIG.foundingSpots;
 if (!CONFIG.foundingSpots) $("#founding").hidden = true;
+function showFounding(left){
+  left=Math.max(0, Math.min(CONFIG.foundingSpots, left|0));
+  $("#spots").textContent=left; $$(".fLeft").forEach(x=>x.textContent=left);
+  if(!left){ $("#founding").hidden=true; $$(".sale-l2").forEach(x=>x.hidden=true); }
+}
+showFounding(CONFIG.foundingSpots);
+if (CONFIG.backendUrl) fetch(CONFIG.backendUrl+"?stats=founding",{cache:"no-store"}).then(r=>r.json()).then(j=>{ if(j&&j.ok&&typeof j.foundingLeft==="number") showFounding(j.foundingLeft); }).catch(()=>{});
 $("#yr").textContent = new Date().getFullYear();
 
 /* ---------- back to top / home ---------- */
@@ -1162,10 +1180,10 @@ $$("#nav a").forEach(a=>a.addEventListener("click",()=>{ nav.classList.remove("o
 
 /* ---------- hero animation ---------- */
 const heroSamples = [
-  {src:"Apartment resident · text message", text:"“Water is leaking under my kitchen sink in Unit 204. I can be home after 3.”", sort:"Sorted: Plumbing · High priority", draft:"Work order & resident reply drafted"},
-  {src:"Resort guest · app message", text:"“We land at 10am Saturday — any chance of early check-in? We’ll need a crib too.”", sort:"Sorted: Front desk + Housekeeping", draft:"Two tasks & guest reply drafted"},
   {src:"Nail salon client · website chat", text:"“Do you have anything Friday after 5 for a gel manicure and pedicure?”", sort:"Sorted: Booking · 2 services · Fri PM", draft:"Open slots & booking reply drafted"},
-  {src:"Contractor lead · web form", text:"“Looking for a quote to redo our back deck, about 300 sq ft. Hoping to start next month.”", sort:"Sorted: New lead · Deck · ~300 sq ft", draft:"Quote follow-up & reminder drafted"}
+  {src:"Contractor lead · web form", text:"“Looking for a quote to redo our back deck, about 300 sq ft. Hoping to start next month.”", sort:"Sorted: New lead · Deck · ~300 sq ft", draft:"Quote follow-up & reminder drafted"},
+  {src:"Apartment resident · text message", text:"“Water is leaking under my kitchen sink in Unit 204. I can be home after 3.”", sort:"Sorted: Plumbing · High priority", draft:"Work order & resident reply drafted"},
+  {src:"Resort guest · app message", text:"“We land at 10am Saturday — any chance of early check-in? We’ll need a crib too.”", sort:"Sorted: Front desk + Housekeeping", draft:"Two tasks & guest reply drafted"}
 ];
 let hi=0, handled=137;
 const pipe=$$("#heroPipe li");
@@ -1199,6 +1217,11 @@ const PRODUCTS = [
   {id:"invoice", name:"InvoiceDesk", for:"Service businesses · contractors · cleaners", status:"Starter ready", tier:"std", price:"Setup $1,000 · plans from $50/mo", desc:"Quotes become invoices, invoices get paid: friendly payment reminders and a clear view of who owes what.", items:["Quote → invoice in one click","Polite automatic payment reminders","Works with your accounting app"]},
   {id:"insight", name:"InsightDesk", for:"Owners & managers", status:"Starter ready", tier:"std", price:"Setup $2,000 · plans from $50/mo", desc:"An owner dashboard that pulls numbers from your tools and sends a plain-English weekly summary: what changed, what needs attention.", items:["Bookings, leads, sales & response times","AI-written weekly summary by email","Alerts when something needs you"]}
 ];
+const OUTCOMES={chat:"Answer every website visitor, day or night",service:"Never lose a job to a missed call or a forgotten quote",salon:"Fill empty chairs and cut no-shows",
+  property:"Fewer “any update?” calls and happier residents",resort:"Every guest request handled before it becomes a bad review",housekeeping:"Rooms turned faster, nothing missed between shifts",
+  review:"More five-star Google reviews, every month",rewards:"Bring regulars back more often",invoice:"Get paid faster with less chasing",social:"Post every week without thinking about it",
+  package:"No lost packages, no crowded mail room",staff:"New staff get answers without interrupting managers",insight:"Know your numbers every Monday morning",
+  intake:"Qualified clients, complete paperwork, less phone time",compliance:"Never miss a deadline or an inspection"};
 const DEMO_IDS=["property","resort","housekeeping","package","salon","service","intake","compliance"];
 const PROTO_PAGES={rewards:"rewards.html",review:"reviews.html",social:"social.html",staff:"staff.html",invoice:"invoices.html",insight:"insights.html",chat:"chat.html",property:"workorders.html",resort:"guests.html",salon:"bookings.html",housekeeping:"housekeeping.html",package:"packages.html",service:"leads.html",intake:"intake.html",compliance:"compliance.html"};
 const FEATURED=["property","chat","salon"];
@@ -1206,7 +1229,7 @@ const MORE_ORDER=["resort","housekeeping","rewards","invoice","service","package
 const prodCard = p=>`
   <article class="prod${p.wide?" wide":""}" id="p-${p.id}">
     <div class="top"><span class="for">${esc(p.for)}</span><span class="chip ${p.status==="Ready to build"?"soon2":"live"}">${esc(p.status)}</span></div>
-    <h3>${esc(p.name)}</h3><span class="price">${priceHTML(p.price)}</span><span class="eta">${p.status==="Live on this site"?"Ready now · about 1–2 weeks to launch":"Starter edition in 1–3 business days · Connected edition in 3–8 weeks"}</span><p>${esc(p.desc)}</p>
+    <h3>${esc(p.name)}</h3>${OUTCOMES[p.id]?`<p class="outcome">${esc(OUTCOMES[p.id])}</p>`:""}<span class="price">${priceHTML(p.price)}</span><span class="eta">${p.status==="Live on this site"?"Ready now · about 1–2 weeks to launch":"Starter edition in 1–3 business days · Connected edition in 3–8 weeks"}</span><p>${esc(p.desc)}</p>
     <ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
     <div class="row">${p.id==="chat"?'<button type="button" class="btn btn-primary btn-sm" data-open-chat="">Try it now — chat with me</button>':(DEMO_IDS.includes(p.id)?`<a class="btn btn-primary btn-sm" href="#demos" data-open-demo="${p.id}">Try demo</a>`:(PROTO_PAGES[p.id]?`<a class="btn btn-primary btn-sm" href="prototypes/${PROTO_PAGES[p.id]}" target="_blank" rel="noopener" data-proto-link="${p.id}">Try prototype ↗</a>`:`<button type="button" class="btn btn-primary btn-sm" data-open-chat="Tell me about ${esc(p.name)}">Ask about it</button>`))}<button type="button" class="btn btn-line btn-sm" data-trial="${p.id}">Request a branded trial</button><button type="button" class="btn btn-line btn-sm" data-buy="${p.id}">Order now</button>${(p.id==="chat"||DEMO_IDS.includes(p.id))&&PROTO_PAGES[p.id]?`<a class="protolink" href="prototypes/${PROTO_PAGES[p.id]}" target="_blank" rel="noopener">Full prototype ↗</a>`:""}</div>
   </article>`;
@@ -1541,6 +1564,13 @@ $("#bBack").addEventListener("click",()=>bShow(Math.max(0,bStep-1)));
 $("#bCopy").addEventListener("click",()=>copyText($("#bText").textContent,"Request copied"));
 
 /* ---------- packages ---------- */
+const SERVICES=[
+  {id:"site1", chip:"Website", name:"Launch Website", price:"$500", desc:"A fast, mobile-friendly one-page site with your services, hours, reviews and a clear call or booking button, plus a Google Business Profile cleanup. Ready in about 1 week."},
+  {id:"site5", chip:"Website", name:"Booking Website", price:"$1,500", desc:"Up to 5 pages with ChatDesk answering questions and BookDesk or LeadDesk capturing bookings and quotes (tool plans billed monthly). Ready in about 2–3 weeks."},
+  {id:"comeback", chip:"Marketing", name:"30-Day Customer Comeback", price:"$750", desc:"Win back customers who haven't visited in 60+ days with a personal offer, start review requests after every visit, and get a month of social posts. Every booking it brings in is tracked and reported at day 30."}
+];
+$("#svcGrid").innerHTML = SERVICES.map(v=>`<article class="card"><span class="chip live" style="align-self:flex-start">${esc(v.chip)}</span><h3>${esc(v.name)}</h3><div class="price">${priceHTML(v.price)}</div><p>${esc(v.desc)}</p><button type="button" class="btn btn-line btn-sm" data-buy="${v.id}">Order now</button></article>`).join("")
+  + `<article class="card"><span class="chip" style="align-self:flex-start">Optional</span><h3>Site Care</h3><div class="price">${priceHTML("$50/mo")}</div><p>Text and photo updates, new offers, and a monthly check that forms and links still work. Your site stays in your own hosting account; cancel anytime.</p></article>`;
 $("#pkgGrid").innerHTML = CONFIG.packages.map(p=>`
   <article class="card pkg ${p.featured?"feat":""}">
     ${p.featured?'<span class="chip live" style="align-self:flex-start">Most popular start</span>':'<span class="chip" style="align-self:flex-start">'+esc(p.note)+'</span>'}
@@ -1572,6 +1602,9 @@ const BUYABLE = {
   propbundle:{name:"Property Management Bundle: WorkOrderDesk + PackageDesk + ChatDesk setup", price:5500, monthly:230},
   hotelbundle:{name:"Hotel Operations Bundle: GuestDesk + HousekeepingDesk + WorkOrderDesk setup", price:8000, tier:"prop", count:3},
   care:{name:"Care & Growth Plan", monthly:150},
+  site1:{name:"Launch Website (1 page)", price:500},
+  site5:{name:"Booking Website (up to 5 pages)", price:1500},
+  comeback:{name:"30-Day Customer Comeback", price:750},
   pilot:{name:"Pilot / Custom Build (deposit after proposal)", price:3500, quote:true}
 };
 PRODUCTS.forEach(p=>{ const m=p.price.match(/\$([\d,]+)/); if(m) BUYABLE[p.id]={name:p.name, price:+m[1].replace(/,/g,""), tier:p.tier, count:1}; });
