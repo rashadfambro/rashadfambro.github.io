@@ -1,3 +1,4 @@
+import re
 """Regression suite: full feature coverage. Scenario IDs match TESTING.md."""
 import datetime, os, re
 from urllib.parse import urljoin, urlparse
@@ -455,7 +456,7 @@ def test_R30_sale_fine_print_on_its_own_line(make_page, base_url):
     assert "founding-client discount" not in w.page.inner_text("#saleText")
     fine = w.page.locator("#saleFine")
     assert "founding-client discount" in fine.inner_text()
-    assert w.page.evaluate("getComputedStyle(document.getElementById('saleFine')).display") == "block"
+    assert w.page.evaluate("getComputedStyle(document.getElementById('saleFine').closest('.sale-fine')).display") == "block"
 
 
 def test_R31_hotel_tools(home):
@@ -865,7 +866,7 @@ def test_R59_client_owned_model_and_allowances(home):
     pg = home.page
     if "Who Owns My Data" not in pg.content():
         pytest.skip("client-owned pricing is staged, not yet promoted")
-    pr = pg.inner_text("#pricing")
+    pr = pg.text_content("#pricing")
     for x in ["You own the accounts and the data", "$150/hour in 30-minute blocks", "Defect fixes are always free",
               "Fully Hosted (by request)", "1,000 AI conversations", "$10 per extra 500 texts"]:
         assert x in pr, x
@@ -1093,3 +1094,47 @@ def test_R66_bundle_sale_prices_checkout_opens_at_top_and_narrow_screens(make_pa
         p2.goto(base_url + "index.html"); p2.wait_for_timeout(300)
         assert p2.evaluate("document.documentElement.scrollWidth") <= width, width
     assert not w.errors, w.errors
+
+
+def test_R67_after_sale_rates_paybacks_lead_path_and_banner(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(400)
+    sale = pg.evaluate("saleActive()")
+    P = site_prices(pg)
+    # Checkout states the monthly rate after the sale and the Fully Hosted alternative
+    pg.evaluate("openBuy('property','buy')"); pg.wait_for_timeout(150)
+    note = pg.inner_text("#dueNote"); reg = P["prop"][0]
+    if sale:
+        assert f"then {dollars(reg)}/mo" in note, note
+    assert f"Fully Hosted: {dollars(reg + 150)}/mo" in note, note
+    pg.click("#buyClose")
+    # Estimator: payback with staff time and cash-only payback, both labeled
+    assert pg.inner_text("#roiPayback") == "1.1 months" and pg.inner_text("#roiCashPayback") == "5.4 months"
+    assert "counting staff time" in pg.inner_text("#roi") and "cash-only payback" in pg.inner_text("#roi")
+    pg.eval_on_selector("#r5", "(el) => { el.value = 0; el.dispatchEvent(new Event('input')); }")
+    assert pg.inner_text("#roiCashPayback") == "No cash payback at these inputs"
+    # Trial buttons set expectations; quote-driven visitors get a direct path to LeadDesk
+    assert pg.locator("[data-trial]").first.inner_text() == "Request a branded trial"
+    pg.click("[data-goto='service']"); pg.wait_for_timeout(900)
+    assert pg.evaluate("document.getElementById('moreProducts').open") and pg.is_visible("#p-service")
+    assert "path:service" in pg.evaluate("sessionStorage.getItem('rf-interest')")
+    # Packages: simple comparison first, billing rules tucked into a panel
+    assert "Client-Owned" in pg.inner_text(".host-compare") and "Fully Hosted" in pg.inner_text(".host-compare")
+    assert not pg.is_visible("#billingDetails p")
+    # Banner leads with the offer; rounding note is fine print
+    if sale:
+        l2 = pg.inner_text(".salebar .sale-l2")
+        assert l2.startswith("Founding clients (first 5)") and "rounded" not in l2
+    # Hero steps: number and text don't run together
+    assert "1 Request captured" in pg.text_content("#heroPipe").replace("\n", " ")
+    assert not w.errors, w.errors
+
+
+def test_R68_leads_carry_site_activity(make_page, base_url):
+    w = make_page(); pg = w.page
+    sent = []
+    pg.context.route(re.compile(r"https://formsubmit\.co/.*"), lambda r: (sent.append(r.request.post_data or ""), r.fulfill(status=200, body='{"success":"true"}', content_type="application/json")))
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    pg.evaluate("noteInterest('demo:property'); noteInterest('order:service')")
+    pg.evaluate("sendLead('audit', {Name:'Test', Email:'t@example.com'})"); pg.wait_for_timeout(400)
+    assert sent and "demo:property" in sent[0] and "order:service" in sent[0], sent

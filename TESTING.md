@@ -115,6 +115,8 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R64 | Starter edition: every tool and bundle can be ordered and paid now, delivery note in checkout, paid license links open the branded Starter edition (or Desk Suite) with backup/restore, overdue licenses pause, tampered links rejected |
 | R65 | Square checkout has a link for every amount due now (full, sale, first of 3) on every orderable item |
 | R66 | Bundle cards show sale prices and honest savings; checkout opens at the top with focus on its title; sale-banner arrow never wraps; estimator counts usage for every tool in a bundle; no sideways scroll at 320–430 px |
+| R67 | Checkout states the monthly rate after the sale and the Fully Hosted price; estimator shows payback with staff time and cash-only payback; branded-trial button; LeadDesk path; Client-Owned vs Fully Hosted comparison; banner leads with the founding offer; hero step spacing |
+| R68 | Lead submissions include the visitor's site activity (which demos, trials or orders they opened) |
 
 Price tests read prices from the site's CONFIG, so they keep passing when prices change.
 
