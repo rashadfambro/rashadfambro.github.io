@@ -18,9 +18,9 @@ NOW = "2026-11-20T17:00:00.000Z"
 XSS = '<img src=x onerror="window.__xss=1">'
 SAMPLE = {
     "leads": [
-        {"_row": 2, "Received": "2026-11-19T10:00:00Z", "Status": "New", "Score": 72, "Form": "audit", "Business": "Glow Studio", "Email": "a@glow.test"},
-        {"_row": 3, "Received": "2026-11-10T10:00:00Z", "Status": "Won", "Score": 50, "Form": "trial", "Business": XSS, "Email": "b@x.test"},
-        {"_row": 4, "Received": "2026-11-11T10:00:00Z", "Status": "Replied", "Score": 30, "Form": "website", "Business": "Sun Auto", "Email": "c@sun.test"},
+        {"_row": 2, "Received": "2026-11-19T10:00:00Z", "Status": "New", "Score": 72, "Form": "audit", "Business": "Glow Studio", "Email": "glow@example.com"},
+        {"_row": 3, "Received": "2026-11-10T10:00:00Z", "Status": "Won", "Score": 50, "Form": "trial", "Business": XSS, "Email": "bx@example.com"},
+        {"_row": 4, "Received": "2026-11-11T10:00:00Z", "Status": "Replied", "Score": 30, "Form": "website", "Business": "Sun Auto", "Email": "sun@example.com"},
     ],
     "prospects": [{"_row": 2, "Business": "702 PlumbAIR", "City": "Henderson", "Status": "Contacted"}],
     "licenses": [
@@ -105,7 +105,7 @@ def test_CC03_page_renders_and_wires_actions(make_page, tmp_path):
         "leads": SAMPLE["leads"], "prospects": SAMPLE["prospects"], "licenses": SAMPLE["licenses"], "orders": SAMPLE["orders"],
         "finance": SAMPLE["finance"], "requests": SAMPLE["requests"], "log": [{"Time": NOW, "Source": "command-center", "Action": "setup", "Target": XSS, "Result": "ok"}],
         "calendar": [{"title": "Audit: Glow Studio", "start": NOW, "end": NOW, "where": "Zoom"}],
-        "inbox": [{"from": "Calendly <no-reply@calendly.com>", "subject": "New event: Glow Studio", "date": NOW, "business": True, "link": "https://mail.google.com/x"}],
+        "inbox": [{"from": "Calendly", "subject": "New event: Glow Studio", "date": NOW, "business": True, "link": "https://mail.google.com/x"}],
         "agents": ["chief-of-staff", "project-manager", "release-manager"], "generated": NOW,
     }
     html = INDEX.read_text().replace("<head>", "<head>" + STUB % json.dumps(data), 1)
