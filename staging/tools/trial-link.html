@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'"><meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow">
-<title>Trial Link Generator · Internal</title><link rel="icon" href="../icon.svg">
+<title>Trial &amp; License Link Generator · Internal</title><link rel="icon" href="../icon.svg">
 <style>
 body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#1a2533;background:#f5f8fc}
 main{max-width:760px;margin:0 auto;padding:24px}h1{font-size:24px;margin:0 0 4px}.muted{color:#56606c;font-size:13.5px}
@@ -13,15 +13,16 @@ label{display:block;font-weight:700;font-size:13.5px;margin:10px 0 4px}input,sel
 textarea{min-height:170px}code{word-break:break-all}
 </style><!--STAGING-START--><meta name="robots" content="noindex, nofollow"><style>.stg-ribbon{position:fixed;right:0;top:50%;z-index:9999;transform:rotate(-90deg) translateY(-100%);transform-origin:right top;background:#ff5a5a;color:#fff;font:800 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:8px 8px 0 0}</style><!--STAGING-END--></head>
 <body><!--STAGING-START--><div class="stg-ribbon" aria-hidden="true">STAGING</div><!--STAGING-END--><main>
-<h1>Trial Link Generator</h1>
-<p class="muted">Internal tool for Rashad. Makes a branded 14-day trial link for one tool or a package. The trial runs in the client's browser with sample data and anything they enter; nothing connects to their accounts until they choose a plan. Paste the email into Gmail and send it yourself.</p>
+<h1>Trial &amp; License Link Generator</h1>
+<p class="muted">Internal tool for Rashad. Makes a branded <b>14-day trial</b> link, or a paid <b>Starter edition license</b> link after payment, for one tool or a package (packages open as one Desk Suite). The trial runs in the client's browser with sample data and anything they enter; nothing connects to their accounts until they choose a plan. Paste the email into Gmail and send it yourself.</p>
 <div class="card">
  <label for="biz">Business name</label><input id="biz" placeholder="e.g. Lakeview Apartments">
  <label for="contact">Contact first name</label><input id="contact" placeholder="e.g. Dana">
  <label for="color">Brand color</label><input id="color" type="color" value="#2f7fe0" style="width:70px;padding:2px">
  <label for="preset">Package</label><select id="preset"><option value="">Pick tools below</option><option value="chat,salon">Launch Bundle (ChatDesk + BookDesk)</option><option value="property,package,chat">Property Management Bundle</option><option value="resort,housekeeping,property">Hotel Operations Bundle</option></select>
  <p style="font-weight:700;font-size:13.5px;margin:12px 0 4px">Tools</p><div class="tools" id="tools"></div>
- <label for="start">Trial start date</label><input id="start" type="date">
+ <label for="kind">Link type</label><select id="kind"><option value="trial">14-day free trial</option><option value="license">Paid Starter edition license</option></select>
+ <label for="start" id="startLbl">Trial start date</label><input id="start" type="date">
  <button class="btn" id="make" type="button">Make trial link</button>
 </div>
 <div class="card" id="out" hidden><p><b>Trial link</b> <span class="muted" id="ends"></span></p><p><code id="link"></code></p><label for="email">Email to send (edit before sending)</label><textarea id="email"></textarea><button class="btn" id="copy" type="button">Copy email</button></div>
@@ -35,12 +36,20 @@ const $=s=>document.querySelector(s);
 $("#tools").innerHTML=T.map(t=>`<label><input type="checkbox" value="${t[0]}"> ${t[1]}</label>`).join("");
 $("#start").value=new Date().toISOString().slice(0,10);
 $("#preset").onchange=()=>{const v=$("#preset").value.split(",");document.querySelectorAll("#tools input").forEach(i=>i.checked=v.includes(i.value))};
+function licenseKey(tools,biz,until){return "RFL-"+until.replace(/-/g,"")+"-"+trialHash("L|"+tools+"|"+biz.trim().toLowerCase()+"|"+until)}
+function addMonths(d,n){const x=new Date(d+"T00:00:00");x.setMonth(x.getMonth()+n);return x.toISOString().slice(0,10)}
+$("#kind").onchange=()=>{const lic=$("#kind").value==="license";$("#startLbl").textContent=lic?"Paid through (renewal date)":"Trial start date";$("#start").value=lic?addMonths(new Date().toISOString().slice(0,10),1):new Date().toISOString().slice(0,10)};
+function makeLicense(biz,color,tools,until){const one=tools.length===1,page=one?T.find(t=>t[0]===tools[0])[2]:"suite.html",ts=tools.join(",");
+ const q=new URLSearchParams({license:licenseKey(ts,biz,until),biz,color,until,tools:ts});return SITE+page+"?"+q.toString()}
 function makeLink(biz,color,tools,start){const one=tools.length===1,page=one?T.find(t=>t[0]===tools[0])[2]:"suite.html",ts=tools.join(",");
  const q=new URLSearchParams({trial:trialKey(ts,biz,start),biz,color,start,tools:ts});return SITE+page+"?"+q.toString()}
 $("#make").onclick=()=>{const biz=$("#biz").value.trim(),tools=[...document.querySelectorAll("#tools input:checked")].map(i=>i.value);
  if(!biz||!tools.length){alert("Add a business name and at least one tool.");return}
- const start=$("#start").value,link=makeLink(biz,$("#color").value,tools,start),end=new Date(new Date(start+"T00:00:00").getTime()+14*864e5);
- const names=tools.map(t=>T.find(x=>x[0]===t)[1]).join(", "),who=$("#contact").value.trim()||"there";
+ const start=$("#start").value,names=tools.map(t=>T.find(x=>x[0]===t)[1]).join(", "),who=$("#contact").value.trim()||"there";
+ if($("#kind").value==="license"){const link=makeLicense(biz,$("#color").value,tools,start);$("#link").textContent=link;$("#ends").textContent="· renews "+start;
+  $("#email").value=`Hi ${who},\n\nWelcome aboard! Here is your Starter edition of ${names}, branded for ${biz}:\n${link}\n\nBookmark it on the computer or tablet your team will use. A few things to know:\n- Your data is saved on that device. Use "Download backup" once a week and keep the file somewhere safe; "Restore backup" brings it back on a new device.\n- When you approve a message, it is copied so you can paste it into your text or email app. Live sending from your own accounts comes with the Connected edition.\n- Your plan renews on ${start}. I'll send a new link each time it renews.\n\nLet's schedule your 30-minute setup call to load your services, hours, and team. Reply with a couple of times that work.\n\nRashad`;
+  $("#out").hidden=false;return}
+ const link=makeLink(biz,$("#color").value,tools,start),end=new Date(new Date(start+"T00:00:00").getTime()+14*864e5);
  $("#link").textContent=link;$("#ends").textContent="· ends "+end.toLocaleDateString();
  $("#email").value=`Hi ${who},\n\nHere's your free 14-day trial of ${names}, branded for ${biz}:\n${link}\n\nYou can try it with the sample data or enter your own. It runs in your browser and nothing is sent to your customers. Your trial ends ${end.toLocaleDateString()}, and nothing is charged automatically.\n\nIf you'd like, we can do a free 30-minute setup call to load your real services, hours, and team. Just reply with a couple of times that work.\n\nRashad`;
  $("#out").hidden=false};

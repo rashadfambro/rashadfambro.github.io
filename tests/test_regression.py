@@ -626,7 +626,7 @@ def _proto(make_page, base_url, file):
 
 def test_R43_every_product_has_a_demo_or_prototype(home, base_url):
     pg = home.page
-    assert pg.evaluate("PRODUCTS.every(p => p.status === 'Prototype' || p.status.startsWith('Live'))")
+    assert pg.evaluate("PRODUCTS.every(p => ['Prototype', 'Starter ready'].includes(p.status) || p.status.startsWith('Live'))")
     for pid, file in PROTOS.items():
         href = pg.get_attribute(f"[data-proto-link='{pid}']", "href")
         assert href == f"prototypes/{file}"
@@ -890,11 +890,12 @@ def test_R60_featured_products_ctas_sample_audit_and_scope(make_page, base_url):
     pg.click("#moreProducts > summary")
     assert pg.is_visible("#prodGridMore") and pg.locator("#moreProducts a[href='products.html']").count() == 1
     # Button labels describe what happens next
-    assert pg.inner_text("[data-buy='chat']") == "Request order"
-    assert pg.inner_text("[data-buy='property']") == "Request a pilot"
+    v17 = _v17()
+    assert pg.inner_text("[data-buy='chat']") == ("Order now" if v17 else "Request order")
+    assert pg.inner_text("[data-buy='property']") == ("Order now" if v17 else "Request a pilot")
     assert pg.locator("text=Try demo").count() >= 1 and pg.locator("text=Try prototype ↗").count() >= 1
     assert pg.locator("button:text('Buy')").count() == 0 and pg.locator("text=Buy the bundle").count() == 0
-    pg.locator("[data-buy='property']").first.click()
+    pg.locator(f"[data-buy='{'pilot' if v17 else 'property'}']").first.click()
     assert pg.text_content("#buyEyebrow") == "Request a Pilot" and pg.inner_text("#buyGo") == "Request my pilot →"
     pg.click("#buyClose")
     # Fictional sample audit with the four parts a real one has
@@ -910,6 +911,10 @@ def test_R60_featured_products_ctas_sample_audit_and_scope(make_page, base_url):
     assert "3–8 weeks: 2–6 weeks to build, then 1–2 weeks of testing" in pg.text_content("#faq")
     pg.click("#chatFab"); assert "3–8 weeks" in chat(pg, "how long does it take?")
     assert not w.errors, w.errors
+
+
+def _v17():
+    return "Starter edition" in open(site_file("index.html"), encoding="utf-8").read()
 
 
 def _v16(base_url_page):
@@ -987,8 +992,11 @@ def test_R63_payments_profile_banner_and_product_order(make_page, base_url):
     sale = pg.evaluate("saleActive()")
     full = sale_price(1500) if sale else 1500
     assert pg.evaluate("payLinkFor('chat','PayPal','Pay in full')") == f"https://paypal.me/RFambro/{int(full)}USD"
-    assert pg.evaluate("payLinkFor('property','PayPal','Pay in full')") == ""
-    pg.evaluate("openBuy('property','buy')"); pg.wait_for_timeout(200)
+    v17 = _v17(); held = "pilot" if v17 else "property"
+    if v17:
+        assert pg.evaluate("payLinkFor('property','PayPal','Pay in full')") == f"https://paypal.me/RFambro/{int(sale_price(3500) if sale else 3500)}USD"
+    assert pg.evaluate(f"payLinkFor('{held}','PayPal','Pay in full')") == ""
+    pg.evaluate(f"openBuy('{held}','buy')"); pg.wait_for_timeout(200)
     assert not pg.is_visible("#methodOpts") and pg.is_visible("#pilotNote") and "No payment now" in pg.inner_text("#pilotNote")
     pg.click("#buyClose"); pg.evaluate("openBuy('chat','buy')"); pg.wait_for_timeout(200)
     assert pg.is_visible("#methodOpts") and pg.inner_text("#buyGo") == "Continue to secure checkout →"
@@ -1004,4 +1012,41 @@ def test_R63_payments_profile_banner_and_product_order(make_page, base_url):
     # Google polish: one back-to-top control; honeypot text not in the page
     assert "Back to top ↑" not in pg.inner_text("footer") and "Leave this field empty" not in pg.content()
     assert pg.inner_text("#roiYear") == "$15,324" and pg.inner_text("#roiCash") == "$280/mo"
+    assert not w.errors, w.errors
+
+
+def test_R64_starter_edition_orders_and_license_links(make_page, base_url):
+    if not _v17():
+        pytest.skip("staged, not yet promoted")
+    import datetime
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    # Every tool and bundle can be ordered and paid now; only custom pilots wait for a quote
+    for pid in ["property", "resort", "salon", "service", "package", "bundle", "propbundle", "hotelbundle", "assess"]:
+        assert pg.evaluate(f"payLinkFor('{pid}','PayPal','Pay in full')").startswith("https://paypal.me/RFambro/"), pid
+    pg.evaluate("openBuy('propbundle','buy')"); pg.wait_for_timeout(200)
+    note = pg.inner_text("#deliveryNote")
+    assert "Starter edition" in note and "1–3 business days" in note and "Desk Suite" in note and "acceptance checklist" in note
+    assert pg.is_visible("#methodOpts") and pg.text_content("#buyEyebrow") == "Order Online"
+    pg.click("#buyClose")
+    assert "Starter edition in 1–3 business days" in pg.inner_text("#prodGrid")
+    assert "What Exactly Am I Buying?" in pg.text_content("#faq")
+    # A paid license link opens the branded Starter edition with backup and restore
+    pg.goto(base_url + "prototypes/workorders.html"); pg.wait_for_timeout(200)
+    until = (datetime.date.today() + datetime.timedelta(days=30)).isoformat()
+    key = pg.evaluate(f"licenseKey('property,package,chat','Lakeview Apartments','{until}')")
+    pg.goto(base_url + f"prototypes/suite.html?license={key}&biz=Lakeview%20Apartments&color=%23225588&until={until}&tools=property,package,chat"); pg.wait_for_timeout(600)
+    b = pg.inner_text(".banner")
+    assert "Starter edition · licensed to Lakeview Apartments" in b and "Download backup" in b and "Restore backup" in b
+    pg.goto(base_url + "prototypes/packages.html"); pg.wait_for_timeout(300)
+    assert "licensed to Lakeview Apartments" in pg.inner_text(".banner") and not pg.is_visible("#reset")
+    # Overdue more than 30 days: paused, data kept
+    pg.evaluate("localStorage.clear()")
+    old = (datetime.date.today() - datetime.timedelta(days=40)).isoformat()
+    key = pg.evaluate(f"licenseKey('package','Lakeview Apartments','{old}')")
+    pg.goto(base_url + f"prototypes/packages.html?license={key}&biz=Lakeview%20Apartments&until={old}&tools=package"); pg.wait_for_timeout(300)
+    assert pg.is_visible("#trialEnd") and "Renew" in pg.inner_text("#trialEnd")
+    # Tampered license rejected
+    pg.goto(base_url + f"prototypes/packages.html?license={key}&biz=Other%20Co&until={old}&tools=package"); pg.wait_for_timeout(300)
+    assert "isn't valid" in pg.inner_text(".banner")
     assert not w.errors, w.errors
