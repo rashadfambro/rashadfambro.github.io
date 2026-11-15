@@ -96,7 +96,7 @@ function readTrial(){const q=new URLSearchParams(location.search);
 function trialDaysLeft(t){const s=new Date(t.start+"T00:00:00"),end=new Date(s.getTime()+TRIAL_DAYS*864e5);return Math.ceil((end-new Date())/864e5)}
 function exportData(){const data={exported:new Date().toISOString(),brand:brand(),trial:readTrial(),tools:{}};
  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith("proto-"))data.tools[k]=localStorage.getItem(k)}}catch(e){}
- const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download="desk-trial-data.json";a.click();toast("Your data was downloaded")}
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download=(document.body.classList.contains("licensed")?"desk-backup-":"desk-trial-data-")+new Date().toISOString().slice(0,10)+".json";a.click();toast("Your data was downloaded")}
 function applyTrial(){if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("embedded");
  const t=readTrial(),b=$(".banner");if(!t||!b)return;
  if(t.invalid){b.classList.add("trial","end");$("#btext").innerHTML="<b>This trial link isn't valid.</b> Please use the exact link from your email, or ask for a new one.";return}
@@ -105,7 +105,31 @@ function applyTrial(){if(new URLSearchParams(location.search).get("embed")==="1"
  else{b.classList.add("end");$("#btext").innerHTML=`<b>Your trial for ${esc(t.biz)} has ended.</b> Your entries are still here and you can download them.`;
   const o=document.createElement("div");o.id="trialEnd";o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="teH"><h2 id="teH">Your ${TRIAL_DAYS}-Day Trial Has Ended</h2><p class="small">Thanks for trying it, ${esc(t.biz)}. Nothing is charged automatically. Choose a plan to keep going with live connections to your own accounts, or download what you entered.</p><div class="row"><a class="btn" href="../index.html#pricing">Choose a plan</a><button class="btn alt" type="button" id="teExport">Download my data</button><a class="btn alt" href="../index.html#audit">Talk to Rashad</a></div></div>`;document.body.appendChild(o);$("#teExport").onclick=exportData}
  const x=document.createElement("button");x.type="button";x.className="btn alt sm";x.textContent="Download my data";x.onclick=exportData;b.appendChild(x)}
-document.addEventListener("DOMContentLoaded",()=>{applyTrial();tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+function licenseKey(tools,biz,until){return "RFL-"+until.replace(/-/g,"")+"-"+trialHash("L|"+tools+"|"+biz.trim().toLowerCase()+"|"+until)}
+function readLicense(){const q=new URLSearchParams(location.search);
+ if(q.get("license")){const l={key:q.get("license"),biz:q.get("biz")||"",color:q.get("color")||"#2f7fe0",until:q.get("until")||"",tools:q.get("tools")||document.body.dataset.proto};
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(l.until)||l.key!==licenseKey(l.tools,l.biz,l.until))return {invalid:true};
+  try{localStorage.setItem("proto-license",JSON.stringify(l));localStorage.setItem("proto-brand",JSON.stringify({name:l.biz,color:l.color}));localStorage.removeItem("proto-trial")}catch(e){}return l}
+ try{const l=JSON.parse(localStorage.getItem("proto-license")||"null");if(l&&(l.tools.split(",").includes(document.body.dataset.proto)||document.body.dataset.proto==="suite"))return l}catch(e){}return null}
+function licenseDaysLeft(l){return Math.ceil((new Date(l.until+"T23:59:59")-new Date())/864e5)}
+function restoreData(file){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||typeof d.tools!=="object")throw 0;
+  Object.entries(d.tools).forEach(([k,v])=>{if(k.startsWith("proto-")&&k!=="proto-license"&&k!=="proto-trial")localStorage.setItem(k,v)});toast("Backup restored");setTimeout(()=>location.reload(),600)}catch(e){toast("That file isn't a Desk backup")}};r.readAsText(file)}
+function starterCopy(e){const b=e.target.closest("button");if(!b||!/^Approve/.test(b.textContent.trim()))return;
+ const box=b.closest(".list>div, .card, [data-post]"),ta=box&&box.querySelector("textarea");if(!ta||!ta.value.trim())return;
+ try{navigator.clipboard&&navigator.clipboard.writeText(ta.value)}catch(err){}setTimeout(()=>toast("Approved and copied: paste it into your text or email app"),2300)}
+function applyLicense(){const l=readLicense(),b=$(".banner");if(!l||!b)return false;
+ if(l.invalid){b.classList.add("trial","end");$("#btext").innerHTML="<b>This license link isn't valid.</b> Please use the exact link from your welcome email.";return true}
+ document.body.classList.add("licensed");const left=licenseDaysLeft(l);b.classList.add("trial");
+ const lock=left<-30;if(left<0)b.classList.add("end");
+ $("#btext").innerHTML=left>=0?`<b>Starter edition · licensed to ${esc(l.biz)}</b> · renews ${esc(l.until)} · data is saved on this device: download a backup weekly · approved messages are copied for you to send`
+  :`<b>Your license renewal is past due${lock?"":` (${-left} day${left===-1?"":"s"})`}.</b> ${lock?"The app is paused until the plan is renewed; your data is kept.":"Please renew to keep updates and support."}`;
+ const d=document.createElement("button");d.type="button";d.className="btn alt sm";d.textContent="Download backup";d.onclick=exportData;b.appendChild(d);
+ const lab=document.createElement("label");lab.className="btn alt sm";lab.textContent="Restore backup";const f=document.createElement("input");f.type="file";f.accept="application/json";f.hidden=true;f.onchange=()=>f.files[0]&&restoreData(f.files[0]);lab.appendChild(f);b.appendChild(lab);
+ const rs=$("#reset");if(rs)rs.hidden=true;
+ document.addEventListener("click",starterCopy,true);
+ if(lock){const o=document.createElement("div");o.id="trialEnd";o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="lkH"><h2 id="lkH">Your Plan Needs Renewal</h2><p class="small">Your data is safe and still on this device. Renew your monthly plan to unlock the app, or download a backup.</p><div class="row"><a class="btn" href="../index.html#pricing">Renew my plan</a><button class="btn alt" type="button" id="lkExport">Download backup</button></div></div>`;document.body.appendChild(o);$("#lkExport").onclick=exportData}
+ return true}
+document.addEventListener("DOMContentLoaded",()=>{if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("embedded");if(!applyLicense())applyTrial();tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
  $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
 
 
