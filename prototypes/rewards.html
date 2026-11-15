@@ -98,7 +98,7 @@ function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").
 function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
 function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
 const TRIAL_DAYS=14;
-const DESK_BACKEND="";  // lead-engine web app URL (…/exec). Empty = no online check.
+const DESK_BACKEND="https://script.google.com/macros/s/AKfycbzc37BsdGGlGZes-TCeo7p22rJe5USt2oPx0oxrlSA3Iw1FjllEjXwsitP03UXnF8tngw/exec";  // lead-engine web app URL (…/exec). Empty = no online check.
 function remindOnce(key,html){try{const k="proto-remind-"+key+"-"+new Date().toISOString().slice(0,10);if(localStorage.getItem(k))return;localStorage.setItem(k,"1")}catch(e){return}
  if(document.body.classList.contains("embedded"))return;const o=document.createElement("div");o.id="trialRemind";o.style.cssText="position:fixed;inset:0;background:rgba(13,26,45,.55);display:grid;place-items:center;z-index:19;padding:20px";
  o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="trH" style="max-width:480px">${html}<div class="row"><a class="btn" href="../index.html#pricing">Choose a plan</a><button class="btn alt" type="button" id="trClose">Remind me tomorrow</button></div></div>`;
