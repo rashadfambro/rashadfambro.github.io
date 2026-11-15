@@ -123,7 +123,7 @@ details.more{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}d
 /* about */
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(32px,5vw,72px);align-items:start}
 .profile{background:var(--ink);color:#eef3f9;border-radius:20px;padding:30px;position:sticky;top:96px}
-.avatar.photo{object-fit:cover;display:block;background:none}.vphoto{width:64px;height:64px;border-radius:16px;object-fit:cover;float:right;margin:0 0 8px 12px}.profile li.nowrap{white-space:nowrap;font-size:.92em}@media(max-width:420px){.profile li.nowrap{white-space:normal}}.avatar{width:92px;height:92px;border-radius:24px;background:linear-gradient(140deg,var(--sky),#3d8bff);display:grid;place-items:center;font:500 2.2rem var(--serif);color:var(--ink);margin-bottom:18px}
+.avatar.photo{object-fit:cover;display:block;background:none}.vphoto{width:64px;height:64px;border-radius:16px;object-fit:cover;float:right;margin:0 0 8px 12px}.profile li.nowrap{white-space:nowrap;font-size:.92em}@media(max-width:640px){.profile li.nowrap{white-space:normal;font-size:inherit}}.avatar{width:92px;height:92px;border-radius:24px;background:linear-gradient(140deg,var(--sky),#3d8bff);display:grid;place-items:center;font:500 2.2rem var(--serif);color:var(--ink);margin-bottom:18px}
 .profile h3{font:500 1.7rem var(--serif)}
 .profile .role{color:var(--sky-2);font-weight:700;font-size:.9rem;margin:4px 0 16px}
 .profile ul{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:8px;font-size:.9rem;color:#c3cfdd}
@@ -431,7 +431,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 /* v5 additions */
 .salebar{background:linear-gradient(90deg,#ffc46b,#ffd99a);color:var(--ink);font-size:.9rem;text-align:center}
 .salebar .wrap{padding:9px 0}
-.salebar a{font-weight:800;margin-left:8px}.salebar .sale-l2{display:block;margin-top:2px}.salebar .sale-l2 small{font-size:.8em}
+.salebar a{font-weight:800;margin-left:8px}.salebar .sale-l2{display:block;margin-top:2px}.salebar .sale-l2 a{white-space:nowrap}#buyTitle:focus{outline:none}.salebar .sale-l2 small{font-size:.8em}
 s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
 .prod s.was{color:#7f93ab}
 .now{color:inherit}
@@ -711,7 +711,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         <div class="field"><label for="r7">Share of those inquiries you could win back <output id="o7"></output></label><input type="range" id="r7" min="0" max="50" step="5" value="25"></div>
         <div class="field"><label for="r6">Average sale value of a new customer or booking <output id="o6"></output></label><input type="range" id="r6" min="50" max="5000" step="50" value="350"></div>
         <div class="field"><label for="r8">Your gross margin on that sale <output id="o8"></output></label><input type="range" id="r8" min="10" max="90" step="5" value="50"></div>
-        <div class="field"><label for="roiTool">Tool you’re considering</label><select id="roiTool"><option value="chat">ChatDesk</option><option value="service">LeadDesk</option><option value="salon">BookDesk</option><option value="property">WorkOrderDesk (1 property)</option><option value="bundle">Launch Bundle</option><option value="propbundle">Property Management Bundle</option></select></div>
+        <div class="field"><label for="roiTool">Tool you’re considering</label><select id="roiTool"><option value="chat">ChatDesk</option><option value="service">LeadDesk</option><option value="salon">BookDesk</option><option value="property">WorkOrderDesk (1 property)</option><option value="bundle">Launch Bundle</option><option value="propbundle">Property Management Bundle</option><option value="hotelbundle">Hotel Operations Bundle (1 property)</option></select></div>
         <div class="field" style="margin-bottom:0"><label for="r9">Provider usage you pay directly (texts, AI, storage), per month <output id="o9"></output></label><input type="range" id="r9" min="0" max="200" step="10" value="20"></div>
       </div>
       <div class="roi-out" aria-live="polite">
@@ -856,9 +856,9 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div style="text-align:center"><div class="spots" id="spots">5</div><p style="margin:6px 0 16px">founding spots open</p><a class="btn btn-primary" href="#start">Apply as a founding client →</a></div>
     </div>
     <div class="offers">
-      <article class="card"><span class="chip live">Bundle</span> <h3>Launch Bundle</h3> <p><b>ChatDesk + BookDesk setup for $2,500</b> (save $500). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Order this bundle</button></article>
-      <article class="card"><span class="chip live">Bundle</span> <h3>Hotel Operations Bundle</h3> <p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for $8,000</b> (save $2,500). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Order this bundle</button></article>
-      <article class="card"><span class="chip live">Bundle</span> <h3>Property Management Bundle</h3> <p><b>WorkOrderDesk + PackageDesk + ChatDesk setup for $5,500</b> (save $1,500). Maintenance requests, package intake, and resident questions handled for apartment communities and property managers.</p><button type="button" class="btn btn-line btn-sm" data-buy="propbundle" style="margin-top:10px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Launch Bundle</h3> <p><b>ChatDesk + BookDesk setup for <span class="bprice" data-price="2500" data-parts="1500,1500">$2,500</span></b> (save <span class="bsave">$500</span>). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Hotel Operations Bundle</h3> <p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for <span class="bprice" data-price="8000" data-parts="3500,3500,3500">$8,000</span></b> (save <span class="bsave">$2,500</span>). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Property Management Bundle</h3> <p><b>WorkOrderDesk + PackageDesk + ChatDesk setup for <span class="bprice" data-price="5500" data-parts="3500,2000,1500">$5,500</span></b> (save <span class="bsave">$1,500</span>). Maintenance requests, package intake, and resident questions handled for apartment communities and property managers.</p><button type="button" class="btn btn-line btn-sm" data-buy="propbundle" style="margin-top:10px">Order this bundle</button></article>
       <article class="card"><span class="chip live">Credit</span> <h3>Assessment Credit</h3> <p><b>Whatever you paid for the assessment is credited</b> toward any build you start within 60 days.</p></article>
       <article class="card"><span class="chip live">Referral</span> <h3>Referral Reward</h3> <p>Refer a business that signs and get a <b>$150 credit</b> — or $150 paid to you if you’re not a client.</p></article>
     </div>
@@ -1018,7 +1018,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
   <form class="modal-card" id="buyForm" novalidate><div class="hp" aria-hidden="true"><input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-label="Company website"></div>
     <button type="button" class="modal-x" id="buyClose" aria-label="Close">×</button>
     <p class="eyebrow" style="margin-bottom:4px" id="buyEyebrow">Request an Order</p>
-    <h3 id="buyTitle">Buy</h3>
+    <h3 id="buyTitle" tabindex="-1">Buy</h3>
     <p class="buy-price" id="buyPrice"></p>
     <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
     <fieldset class="buy-opts" id="tierOpts"><legend>Monthly plan</legend><div id="tierRadios"></div></fieldset>
@@ -1422,7 +1422,7 @@ const money=n=>"$"+Math.round(n).toLocaleString();
 function roiPlan(id){
   const it=BUYABLE[id]||{}; const tiers=CONFIG.tiers[it.tier||"std"];
   const monthly = it.monthly || (it.tier ? tiers[0].price*(it.count||1) : 0);
-  return {setup: it.price||0, monthly, tools: it.count||1};
+  return {setup: it.price||0, monthly, tools: it.count||({bundle:2, propbundle:3, hotelbundle:3}[id])||1};
 }
 function roiCalc(x){
   const hrs=x.people*x.hours*(x.auto/100)*4.33, labor=hrs*x.rate;
@@ -1613,7 +1613,7 @@ function openBuy(id, mode){
   $("#pilotNote").hidden = !pilot;
   $("#buyGo").textContent = trial ? "Start my free trial →" : hasLink ? "Continue to secure checkout →" : pilot ? "Request my pilot →" : "Send my order request →";
   $("#buyResult").hidden=true; $("#buyErr").textContent=""; $("#buyGo").hidden=false; updateDue();
-  $("#buyModal").hidden=false; setTimeout(()=>$("#buy_name").focus(),30);
+  $("#buyModal").hidden=false; $("#buyModal").scrollTop=0; $("#buyForm").scrollTop=0; setTimeout(()=>{ $("#buyForm").scrollTop=0; $("#buyTitle").focus({preventScroll:true}); },30);
 }
 $("#tierRadios").addEventListener("change",()=>{ const it=BUYABLE[buyItem]; const trial=buyMode==="trial"; $("#buyPrice").innerHTML = trial ? `Free for ${CONFIG.trialDays} days, then ${buyPriceText(it)}` : buyPriceText(it); updateDue(); });
 function updateDue(){
@@ -1674,6 +1674,10 @@ $("#buyForm").addEventListener("submit",async e=>{
 });
 
 if(new URLSearchParams(location.search).get("paid")){ setTimeout(()=>toast("Payment received — thank you! I’ll email you within one business day to schedule kickoff."),600); }
+function bundleSalePrices(){ if(!saleActive()) return;
+  $$(".bprice").forEach(el=>{ const p=+el.dataset.price, s=saleAmt(p), sum=el.dataset.parts.split(",").reduce((a,v)=>a+saleAmt(+v),0);
+    el.innerHTML=`<s class="was">${money(p)}</s> ${money(s)}`; const sv=el.closest("p").querySelector(".bsave"); if(sv) sv.textContent=money(sum-s); }); }
+bundleSalePrices();
 /* ---------- monthly plan cards ---------- */
 $("#tierGrid").innerHTML = CONFIG.tiers.std.map((t,i)=>{ const pt=CONFIG.tiers.prop[i]; return `<article class="card tier ${i===1?"feat":""}">
   ${i===1?'<span class="chip live" style="align-self:flex-start">Most popular</span>':''}<h3>${t.name}</h3>

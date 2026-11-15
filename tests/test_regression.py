@@ -1067,3 +1067,29 @@ def test_R65_square_checkout_covers_every_amount_due(make_page, base_url):
     assert not missing, missing
     assert len(pg.evaluate("Object.keys(CONFIG.squareLinks)")) >= 28
     assert not w.errors, w.errors
+
+
+def test_R66_bundle_sale_prices_checkout_opens_at_top_and_narrow_screens(make_page, base_url):
+    w = make_page(width=390, height=700); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(400)
+    sale = pg.evaluate("saleActive()")
+    for bid, price, parts in [("bundle", 2500, [1500, 1500]), ("hotelbundle", 8000, [3500, 3500, 3500]), ("propbundle", 5500, [3500, 2000, 1500])]:
+        card = pg.locator(f"[data-buy='{bid}']").first.locator("xpath=ancestor::article[1]").inner_text()
+        if sale:
+            s = sale_price(price)
+            assert dollars(s) in card and f"save {dollars(sum(sale_price(x) for x in parts) - s)}" in card, card
+        # Checkout opens at the top: title and close button visible, focus on the title
+        pg.locator(f"[data-buy='{bid}']").first.scroll_into_view_if_needed(); pg.locator(f"[data-buy='{bid}']").first.click(); pg.wait_for_timeout(200)
+        assert pg.evaluate("document.activeElement.id") == "buyTitle"
+        assert pg.evaluate("document.getElementById('buyClose').getBoundingClientRect().top >= 0 && document.getElementById('buyTitle').getBoundingClientRect().top >= 0")
+        pg.click("#buyClose")
+    if sale:
+        assert pg.evaluate("document.querySelector('.salebar .sale-l2 a').getClientRects().length") == 1   # arrow stays with its words
+    # Estimator: setup and monthly follow the tool; bundles count usage for every tool
+    pg.select_option("#roiTool", "propbundle")
+    assert pg.inner_text("#roiSetup") == "$5,500" and pg.inner_text("#roiCost") == dollars(pg.evaluate("BUYABLE.propbundle.monthly") + 60) + "/mo"
+    for width in (320, 375, 390, 414, 430):
+        w2 = make_page(width=width, height=800); p2 = w2.page
+        p2.goto(base_url + "index.html"); p2.wait_for_timeout(300)
+        assert p2.evaluate("document.documentElement.scrollWidth") <= width, width
+    assert not w.errors, w.errors
