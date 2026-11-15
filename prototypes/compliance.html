@@ -48,7 +48,7 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 #toast.on{opacity:1}
 footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;color:var(--muted)}
-.banner.trial{background:#e8f6ef;border-color:#b7e2cc;color:#0b4f36}.banner.trial.end{background:#ffe9e9;border-color:#f3c2c2;color:#7a1414}
+.banner.trial{background:#e8f6ef;border-color:#b7e2cc;color:#0b4f36}.banner.trial.soon{background:#fff4e0;border-color:#f3d39a;color:#6b4100}.banner.trial.end{background:#ffe9e9;border-color:#f3c2c2;color:#7a1414}
 #trialEnd{position:fixed;inset:0;background:rgba(13,26,45,.72);display:grid;place-items:center;z-index:20;padding:20px}
 #trialEnd .card{max-width:520px}
 body.embedded header,body.embedded .banner,body.embedded footer{display:none}
@@ -82,6 +82,13 @@ function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").
 function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
 function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
 const TRIAL_DAYS=14;
+const DESK_BACKEND="";  // lead-engine web app URL (…/exec). Empty = no online check.
+function remindOnce(key,html){try{const k="proto-remind-"+key+"-"+new Date().toISOString().slice(0,10);if(localStorage.getItem(k))return;localStorage.setItem(k,"1")}catch(e){return}
+ if(document.body.classList.contains("embedded"))return;const o=document.createElement("div");o.id="trialRemind";o.style.cssText="position:fixed;inset:0;background:rgba(13,26,45,.55);display:grid;place-items:center;z-index:19;padding:20px";
+ o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="trH" style="max-width:480px">${html}<div class="row"><a class="btn" href="../index.html#pricing">Choose a plan</a><button class="btn alt" type="button" id="trClose">Remind me tomorrow</button></div></div>`;
+ document.body.appendChild(o);$("#trClose").onclick=()=>o.remove()}
+async function onlineCheck(kind,key){if(!DESK_BACKEND||!key)return;try{const r=await fetch(DESK_BACKEND+"?check="+encodeURIComponent(kind)+"&key="+encodeURIComponent(key),{cache:"no-store"});const j=await r.json();
+ if(j&&j.ok&&(j.status==="Paused"||j.status==="Canceled")){const o=document.createElement("div");o.id="trialEnd";o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="psH"><h2 id="psH">This License Is ${j.status==="Paused"?"Paused":"Canceled"}</h2><p class="small">Your data is safe on this device. Contact Rashad to turn it back on, or download a backup.</p><div class="row"><a class="btn" href="../index.html#contact">Contact Rashad</a><button class="btn alt" type="button" id="psExport">Download backup</button></div></div>`;document.body.appendChild(o);$("#psExport").onclick=exportData}}catch(e){}}
 function trialHash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36).toUpperCase().padStart(6,"0").slice(0,6)}
 function trialKey(tools,biz,start){return "RF-"+start.replace(/-/g,"")+"-"+trialHash(tools+"|"+biz.trim().toLowerCase()+"|"+start)}
 function readTrial(){const q=new URLSearchParams(location.search);
@@ -97,6 +104,8 @@ function applyTrial(){if(new URLSearchParams(location.search).get("embed")==="1"
  const t=readTrial(),b=$(".banner");if(!t||!b)return;
  if(t.invalid){b.classList.add("trial","end");$("#btext").innerHTML="<b>This trial link isn't valid.</b> Please use the exact link from your email, or ask for a new one.";return}
  const left=trialDaysLeft(t);b.classList.add("trial");
+ if(left>0&&left<=3){b.classList.add("soon");remindOnce("trial",`<h2 id="trH">Your Trial Ends in ${left} Day${left===1?"":"s"}</h2><p class="small">Choose a plan to keep using it with ${esc(t.biz)}'s data, or let it end. Nothing is charged automatically, and you can download your data anytime.</p>`)}
+ onlineCheck("trial",t.key);
  if(left>0){$("#btext").innerHTML=`<b>Free ${TRIAL_DAYS}-day trial for ${esc(t.biz)}</b> · ${left} day${left===1?"":"s"} left · your entries stay in this browser · live connections to your own accounts start when you choose a plan`;}
  else{b.classList.add("end");$("#btext").innerHTML=`<b>Your trial for ${esc(t.biz)} has ended.</b> Your entries are still here and you can download them.`;
   const o=document.createElement("div");o.id="trialEnd";o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="teH"><h2 id="teH">Your ${TRIAL_DAYS}-Day Trial Has Ended</h2><p class="small">Thanks for trying it, ${esc(t.biz)}. Nothing is charged automatically. Choose a plan to keep going with live connections to your own accounts, or download what you entered.</p><div class="row"><a class="btn" href="../index.html#pricing">Choose a plan</a><button class="btn alt" type="button" id="teExport">Download my data</button><a class="btn alt" href="../index.html#audit">Talk to Rashad</a></div></div>`;document.body.appendChild(o);$("#teExport").onclick=exportData}
@@ -115,9 +124,9 @@ function starterCopy(e){const b=e.target.closest("button");if(!b||!/^Approve/.te
  try{navigator.clipboard&&navigator.clipboard.writeText(ta.value)}catch(err){}setTimeout(()=>toast("Approved and copied: paste it into your text or email app"),2300)}
 function applyLicense(){const l=readLicense(),b=$(".banner");if(!l||!b)return false;
  if(l.invalid){b.classList.add("trial","end");$("#btext").innerHTML="<b>This license link isn't valid.</b> Please use the exact link from your welcome email.";return true}
- document.body.classList.add("licensed");const left=licenseDaysLeft(l);b.classList.add("trial");
+ document.body.classList.add("licensed");const left=licenseDaysLeft(l);onlineCheck("license",l.key);if(left>=0&&left<=5)b.classList.add("soon");b.classList.add("trial");
  const lock=left<-30;if(left<0)b.classList.add("end");
- $("#btext").innerHTML=left>=0?`<b>Starter edition · licensed to ${esc(l.biz)}</b> · renews ${esc(l.until)} · data is saved on this device: download a backup weekly · approved messages are copied for you to send`
+ $("#btext").innerHTML=left>=0?`<b>Starter edition · licensed to ${esc(l.biz)}</b> · ${left<=5?`<b>renews in ${left} day${left===1?"":"s"} (${esc(l.until)})</b>`:`renews ${esc(l.until)}`} · data is saved on this device: download a backup weekly · approved messages are copied for you to send`
   :`<b>Your license renewal is past due${lock?"":` (${-left} day${left===-1?"":"s"})`}.</b> ${lock?"The app is paused until the plan is renewed; your data is kept.":"Please renew to keep updates and support."}`;
  const d=document.createElement("button");d.type="button";d.className="btn alt sm";d.textContent="Download backup";d.onclick=exportData;b.appendChild(d);
  const lab=document.createElement("label");lab.className="btn alt sm";lab.textContent="Restore backup";const f=document.createElement("input");f.type="file";f.accept="application/json";f.hidden=true;f.onchange=()=>f.files[0]&&restoreData(f.files[0]);lab.appendChild(f);b.appendChild(lab);
