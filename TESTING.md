@@ -114,3 +114,36 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R63 | Product order; PayPal pays the amount due now for ready products; pilot requests ask for no payment; profile, photo, sale banner second line; one back-to-top; ROI rounding and cash view |
 
 Price tests read prices from the site's CONFIG, so they keep passing when prices change.
+
+## Security, Performance and Load Suites
+Run any suite on its own: `python -m pytest -m security` (or `performance`, `load`). CI runs all five suites against production and staging on every push.
+
+| ID | Security check |
+|---|---|
+| SEC01 | Every page has a strict Content Security Policy (no third-party scripts, no eval, object-src none) and a strict referrer policy |
+| SEC02 | Every link that opens a new tab uses rel="noopener" |
+| SEC03 | No insecure http:// resources |
+| SEC04 | No secrets (API keys, tokens, private keys) or unexpected email addresses in any committed file |
+| SEC05 | No eval, new Function or document.write in site code |
+| SEC06 | The chat shows injected HTML as text and never runs it |
+| SEC07 | Five tool apps (and the brand-name field) never run injected HTML |
+| SEC08 | The hidden spam trap drops bot submissions without sending anything |
+| SEC09 | Tampered trial links are rejected |
+| SEC10 | Internal pages (trial-link generator) and staging are hidden from search engines |
+
+| ID | Performance budget |
+|---|---|
+| PERF01 | Page weight: home ≤ 320 KB, Product Guide ≤ 80 KB, each tool app, industry page and image ≤ 60 KB |
+| PERF02 | Home, Product Guide, WorkOrderDesk and Desk Suite: DOMContentLoaded, load and first paint within budget |
+| PERF03 | Home page loads with ≤ 15 requests (≤ 8 from the site itself) |
+| PERF04 | Estimator updates in < 16 ms, checkout opens in < 100 ms, chat replies in < 2.5 s |
+| PERF05 | WorkOrderDesk renders 1,000 work orders in < 800 ms |
+| PERF06 | No sideways scrolling at phone width on key pages |
+
+| ID | Load check (local test server, never GitHub Pages) |
+|---|---|
+| LOAD01 | 600 requests from 30 concurrent visitors: no errors, median < 500 ms, p95 < 1.5 s |
+| LOAD02 | 10 browser sessions use the home page, estimator and checkout at the same time |
+| LOAD03 | 8 trial users work in different tool apps at once with no errors and their data saved |
+
+For a gentle check of the live site, run `python3 scripts/load_check.py` by hand (capped at 500 requests).
