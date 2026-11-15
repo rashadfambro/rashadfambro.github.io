@@ -113,6 +113,7 @@ Tests never send real emails: `tests/conftest.py` blocks formsubmit.co unless a 
 | R62 | Trial links: branded countdown, end-of-trial screen after 14 days, tampered links rejected; a package opens as one Desk Suite |
 | R63 | Product order; PayPal pays the amount due now for ready products; pilot requests ask for no payment; profile, photo, sale banner second line; one back-to-top; ROI rounding and cash view |
 | R64 | Starter edition: every tool and bundle can be ordered and paid now, delivery note in checkout, paid license links open the branded Starter edition (or Desk Suite) with backup/restore, overdue licenses pause, tampered links rejected |
+| R65 | Square checkout has a link for every amount due now (full, sale, first of 3) on every orderable item |
 
 Price tests read prices from the site's CONFIG, so they keep passing when prices change.
 

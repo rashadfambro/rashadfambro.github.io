@@ -1096,7 +1096,7 @@ const CONFIG = {
   trialDays: 14,
   paypalMe: "RFambro",       // PayPal.me handle: PayPal checkout opens for the exact amount due now (update when the business PayPal is ready)
   // Square payment links, keyed "item:amount" (amount due now: full, sale, or first of 3 payments). Created in Square; recreate when the business account changes.
-  squareLinks: {},
+  squareLinks: {"300":"https://square.link/u/dSSrM0n1","340":"https://square.link/u/8idR41YM","450":"https://square.link/u/7BInRv7s","500":"https://square.link/u/hzWSyYFg","600":"https://square.link/u/kHqTpiIB","670":"https://square.link/u/rrJgKeTu","750":"https://square.link/u/KHDoufBB","840":"https://square.link/u/KCHC3u6o","900":"https://square.link/u/3N5MjA2N","1000":"https://square.link/u/vADoFNfO","1050":"https://square.link/u/RO6ALoX8","1170":"https://square.link/u/9zR6wygu","1350":"https://square.link/u/0OBIrFu5","1500":"https://square.link/u/VtS2Ouqp","1650":"https://square.link/u/6S17zgrb","1800":"https://square.link/u/T8HKZWJ6","1840":"https://square.link/u/3KSyndsQ","2000":"https://square.link/u/CzIwe9lI","2250":"https://square.link/u/vM8wfHY2","2400":"https://square.link/u/7crFCdDS","2500":"https://square.link/u/yZXxGFdq","2670":"https://square.link/u/binh8zhn","3150":"https://square.link/u/J8xUqBqj","3500":"https://square.link/u/am2Tw7Tl","4950":"https://square.link/u/vtI2HlgU","5500":"https://square.link/u/XdNGMzMz","7200":"https://square.link/u/7QG6wCXy","8000":"https://square.link/u/TyovaTSh"},
 
   // Paste PayPal and Square payment links here (see PAYMENTS.md). Empty = customer gets an emailed secure invoice instead.
   payLinks: {
@@ -1587,7 +1587,7 @@ function dueNow(id, plan){
 function payLinkFor(id, method, plan){
   if(isPilot(id)) return "";
   const amt=dueNow(id, plan||"Pay in full"); if(!amt) return "";
-  if(method==="Square") return CONFIG.squareLinks[`${id}:${amt}`]||"";
+  if(method==="Square") return CONFIG.squareLinks[`${id}:${amt}`]||CONFIG.squareLinks[String(amt)]||"";
   if(method==="PayPal" && CONFIG.paypalMe) return `https://paypal.me/${encodeURIComponent(CONFIG.paypalMe)}/${amt}USD`;
   return "";
 }

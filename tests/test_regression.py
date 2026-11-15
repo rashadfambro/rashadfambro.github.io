@@ -693,7 +693,7 @@ def test_R47_order_button_matches_payment_setup(home):
         pg.locator("[data-buy='assess']").first.click()
         assert pg.inner_text("#buyGo") == "Continue to secure checkout →"   # PayPal.me covers any amount
         pg.click("#buyClose")
-        pg.evaluate("CONFIG.paypalMe=''")
+        pg.evaluate("CONFIG.paypalMe=''; CONFIG.squareLinks={}")   # no hosted checkout configured: falls back to an emailed invoice
         pg.locator("[data-buy='assess']").first.click()
         assert pg.inner_text("#buyGo") == "Send my order request →"
         return
@@ -746,7 +746,7 @@ def test_R51_paypal_me_checkout_link(make_page, base_url):
     pg.evaluate("CONFIG.paypalMe='TestHandle'")
     a = site_prices(pg)["assess"]
     assert pg.evaluate("payLinkFor('assess','PayPal')") == f"https://paypal.me/TestHandle/{a}USD"
-    assert pg.evaluate("payLinkFor('assess','Square')") == ""
+    assert pg.evaluate("payLinkFor('assess','Square')").startswith("https://square.link/u/")   # one Square link per amount
     pg.locator("[data-buy='assess']").first.click()
     assert pg.inner_text("#buyGo") == "Continue to secure checkout →"
     w2 = open_home(make_page, base_url, when=SALE_DAY)
@@ -1049,4 +1049,21 @@ def test_R64_starter_edition_orders_and_license_links(make_page, base_url):
     # Tampered license rejected
     pg.goto(base_url + f"prototypes/packages.html?license={key}&biz=Other%20Co&until={old}&tools=package"); pg.wait_for_timeout(300)
     assert "isn't valid" in pg.inner_text(".banner")
+    assert not w.errors, w.errors
+
+
+def test_R65_square_checkout_covers_every_amount_due(make_page, base_url):
+    """Every orderable item has a Square link for each amount due now: full, sale and first of 3 payments."""
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    missing = pg.evaluate("""(() => { const out = [];
+      for (const [id, it] of Object.entries(BUYABLE)) { if (!it.price || isPilot(id) || it.quote) continue;
+        const plans = it.price >= CONFIG.paymentPlan.minimum ? ["Pay in full", "3 monthly payments"] : ["Pay in full"];
+        for (const plan of plans) { const amt = dueNow(id, plan);
+          if (!amt) continue;
+          const link = payLinkFor(id, "Square", plan);
+          if (!/^https:\\/\\/square\\.link\\/u\\/[A-Za-z0-9]+$/.test(link)) out.push(`${id} ${plan} $${amt}`); } }
+      return out; })()""")
+    assert not missing, missing
+    assert len(pg.evaluate("Object.keys(CONFIG.squareLinks)")) >= 28
     assert not w.errors, w.errors
