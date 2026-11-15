@@ -41,9 +41,19 @@ def browser():
         if os.environ.get("CHROME_PATH"):
             kw["executable_path"] = os.environ["CHROME_PATH"]
         b = p.chromium.launch(**kw)
+        # Never reach the real lead engine (Google Apps Script) from tests: every context gets it blocked.
+        # Tests that need a backend answer add their own route, which takes priority over this one.
+        _new_context = b.new_context
+        def guarded_context(*a, **k):
+            c = _new_context(*a, **k)
+            c.route(LIVE_BACKEND, lambda r: r.abort())
+            return c
+        b.new_context = guarded_context
         yield b
         b.close()
 
+
+LIVE_BACKEND = re.compile(r"https://script\.(google|googleusercontent)\.com/.*")
 
 IGNORED_CONSOLE = re.compile(r"Failed to load resource|net::ERR_|fonts\.(googleapis|gstatic)|cdnjs", re.I)
 
