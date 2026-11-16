@@ -217,7 +217,7 @@ details.more{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}d
 .check{margin-top:12px;background:#fff8e8;border:1px solid #f3d7a6;border-radius:10px;padding:10px 12px;font-size:.86rem}
 .check b{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#8a5a0b;margin-bottom:4px}
 .check ul{margin:0;padding-left:18px}
-.lab-actions{margin-top:16px}
+.lab-biz{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.85rem;font-weight:700;margin:0 0 10px}.lab-biz input{flex:1;min-width:180px;max-width:320px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font:inherit}.lab-full{margin:10px 0 0}.lab-all{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}.lab-all a{font-size:.8rem;font-weight:700;padding:5px 10px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--ink);background:#fff}.lab-actions{margin-top:16px}
 .status{margin-top:10px;font-size:.86rem;color:var(--muted);min-height:1.5em}
 
 /* roi */
@@ -272,7 +272,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 .pkg .btn{margin-top:auto}
 .founding{margin-top:26px;background:linear-gradient(120deg,#0d1a2d,#1d3a63);color:#fff;border-radius:18px;padding:clamp(22px,4vw,36px);display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center}
 .founding h3{font:500 clamp(1.5rem,2.6vw,2.1rem) var(--serif);margin-bottom:8px}
-.founding p{color:#c3cfdd}
+.founding p{color:#c3cfdd}.founding-full{margin:18px 0 0;padding:12px 16px;border:1px dashed var(--line);border-radius:12px;background:#fff;font-weight:600;text-align:center}
 .founding ul{margin:12px 0 0;padding-left:18px;color:#dfe8f2;font-size:.92rem}
 .spots{font:500 3.6rem/1 var(--serif);color:var(--sky)}
 
@@ -517,7 +517,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
         <a class="textlink" href="#demos">or try a live demo first</a>
       </div>
       <ul class="hero-points">
-        <li class="hp-lead">17 years building software<span class="hp-long"> products and solutions</span></li><li>Any industry</li><li>Human-Approved AI</li><li>Free 14-day trial</li><li>You own your data</li><li>Fixed-price quotes</li><li>Remote-first, worldwide</li><li>Virtual or On-site</li><li>Pilots within weeks</li><li>Integration with existing systems</li>
+        <li class="hp-lead">17 years building software<span class="hp-long"> products and solutions</span></li><li>Any industry</li><li>Client implementations &amp; support</li><li>Human-Approved AI</li><li>Free 14-day trial</li><li>You own your data</li><li>Fixed-price quotes</li><li>Remote-first, worldwide</li><li>Virtual or On-site</li><li>Pilots within weeks</li><li>Integration with existing systems</li>
       </ul>
     </div>
     <div class="board" aria-label="Animated example of an automated workflow">
@@ -671,6 +671,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
           <div><p class="eyebrow" id="labSector" style="margin-bottom:4px">Apartment operations</p><h3 id="labTitle">WorkOrderDesk</h3></div>
           <span class="chip soon">Simulation</span>
         </div>
+        <label class="lab-biz" for="labBiz">Your business name <input id="labBiz" type="text" maxlength="60" placeholder="e.g. Glow Studio" autocomplete="organization"></label>
         <div class="lab-cols">
           <div class="pane">
             <label for="labInput">Incoming message</label>
@@ -695,6 +696,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
           <button class="btn btn-line" id="labRevise" hidden>Request changes</button>
           <button class="btn btn-line" id="labReset" hidden>Reset</button>
         </div>
+        <p class="hint lab-full" id="labFull"></p>
         <p class="status" id="labStatus" role="status">This demo uses a rule-based simulation and fictional data. It doesn’t send messages or create real tickets.</p>
       </div>
     </div>
@@ -854,6 +856,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <details class="more tool-lines" id="toolLines"><summary>What Each Tool Does</summary><div class="tool-cols"><div><p class="eyebrow" style="margin:10px 0 6px">Standard tools</p><ul><li><b>ChatDesk</b> — answers customer questions 24/7</li><li><b>BookDesk</b> — books appointments and fills cancellations</li><li><b>LeadDesk</b> — captures and follows up on inquiries</li><li><b>IntakeDesk</b> — secure client intake forms</li><li><b>RewardsDesk</b> — phone-number rewards program</li><li><b>ReviewDesk</b> — more reviews, faster replies</li><li><b>SocialDesk</b> — posts and DM replies you approve</li><li><b>StaffDesk</b> — handbook answers and shift swaps</li><li><b>InvoiceDesk</b> — invoices and payment reminders</li><li><b>InsightDesk</b> — owner dashboard and weekly summary</li></ul></div><div><p class="eyebrow" style="margin:10px 0 6px">Property &amp; hospitality tools</p><ul><li><b>WorkOrderDesk</b> — maintenance requests in one queue</li><li><b>GuestDesk</b> — routes guest and owner requests</li><li><b>HousekeepingDesk</b> — room dispatch and live status</li><li><b>PackageDesk</b> — package intake with pickup codes</li><li><b>ComplianceDesk</b> — recurring checklists and deadlines</li></ul></div></div></details>
     </div>
     <p class="pricenote"><b>Annual prepay:</b> pay 12 months of any plan up front and get 2 months free.<br><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with PayPal or Square — any debit or credit card accepted.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $150/hr · Every build gets a fixed, written quote before work starts.</p>
+    <p class="founding-full" id="foundingFull" hidden>All 5 founding client spots are filled. Thank you to our first clients! The holiday and seasonal offers below still apply.</p>
     <div class="founding" id="founding">
       <div>
         <p class="eyebrow">Founding Client Program</p>
@@ -1158,7 +1161,9 @@ if (!CONFIG.foundingSpots) $("#founding").hidden = true;
 function showFounding(left){
   left=Math.max(0, Math.min(CONFIG.foundingSpots, left|0));
   $("#spots").textContent=left; $$(".fLeft").forEach(x=>x.textContent=left);
-  if(!left){ $("#founding").hidden=true; $$(".sale-l2").forEach(x=>x.hidden=true); }
+  const full=!left; $("#founding").hidden=full; $("#foundingFull").hidden=!full;
+  $$(".sale-l2").forEach(x=>{ if(full){ x.innerHTML='Founding client spots: all 5 filled. Thank you! <a href="#pricing">See prices &rarr;</a>'; } });
+  const bf=$("#b_found"); if(bf){ const lab=bf.closest("label"); if(lab) lab.hidden=full; if(full) bf.checked=false; }
 }
 showFounding(CONFIG.foundingSpots);
 if (CONFIG.backendUrl) fetch(CONFIG.backendUrl+"?stats=founding",{cache:"no-store"}).then(r=>r.json()).then(j=>{ if(j&&j.ok&&typeof j.foundingLeft==="number") showFounding(j.foundingLeft); }).catch(()=>{});
@@ -1340,18 +1345,67 @@ const DEMOS = {
     def:["Checklist item","Manager queue"],
     urgent:/due|deadline|overdue|not working|next week|tomorrow|today|inspection/i,
     reply:(d)=>`Task created: ${d.cat}${d.unit?" · Unit "+d.unit:""}${d.date?" · due "+d.date:""}. Assigned to ${d.teams.join(" and ")}. ${d.cat==="Recertification"?"A reminder with the document checklist will go to the resident after staff approval.":"Checklist updated and the owner will see it on today’s dashboard."}`,
-    checks:(d)=>["Confirm the due date against your official schedule", d.cat==="Recertification"?"Verify which documents are required for this resident":"Assign an owner and a completion date","Record sign-off so there’s an audit trail"]}
+    checks:(d)=>["Confirm the due date against your official schedule", d.cat==="Recertification"?"Verify which documents are required for this resident":"Assign an owner and a completion date","Record sign-off so there’s an audit trail"]},
+  chat:{sector:"Any business with a website", title:"ChatDesk", label:"Website chat", short:"Customer questions",
+    samples:["Hi, are you open on Sunday and do you take walk-ins?","How much is a basic oil change and how long does it take?","Do you offer payment plans? I'm interested but want to know the options first."],
+    cats:[["Hours & location",/open|hours|close|sunday|saturday|holiday|where are you|address|parking/i,"Website assistant · approved answer"],["Pricing",/how much|price|cost|rate|quote|payment plan|financ/i,"Website assistant · price list"],["Booking",/book|appointment|walk.?in|availability|schedule/i,"Website assistant · booking link"],["Needs a person",/complain|refund|problem|manager|speak to|lawyer|medical/i,"Owner / front desk"]],
+    def:["General question","Front desk"],
+    urgent:/today|now|asap|urgent|tonight/i,
+    reply:(d)=>`Thanks for asking! ${d.cat==="Pricing"?"Here are our current prices from the approved price list:":d.cat==="Hours & location"?"Here are our hours and how to find us:":d.cat==="Booking"?"You can grab the next open time here:":"I'm passing this to a team member, who will reply shortly."} [approved answer inserted]`,
+    checks:(d)=>["Answers come only from the approved answer list", d.cat==="Needs a person"?"A person replies; nothing is promised automatically":"Keep prices and hours current in the answer list", "Unanswered questions become a lead for follow-up"]},
+  review:{sector:"Reviews & reputation", title:"ReviewDesk", label:"Reviews", short:"Review replies",
+    samples:["5 stars. Fast, friendly and they explained everything. Ask for Jordan!","2 stars. Waited 40 minutes past my appointment and nobody said sorry.","4 stars. Great work, a little pricey, but I'll be back."],
+    cats:[["Low rating (1-2 stars)",/\b[12] stars?|waited|rude|never|worst|disappointed|nobody/i,"Owner · personal reply first"],["Mixed (3-4 stars)",/\b[34] stars?|but|pricey|a little/i,"Manager · thank and address"],["Top rating (5 stars)",/\b5 stars?|great|amazing|love|best|friendly/i,"Drafted thank-you"]],
+    def:["Review","Manager"],
+    urgent:/\b[12] stars?|rude|refund|never again|worst/i,
+    reply:(d)=>d.cat.startsWith("Low")?"Thank you for telling us, and I'm sorry about the wait. That's not the experience we want for you. I'd like to make it right; please reach me directly at [phone or email].":d.cat.startsWith("Mixed")?"Thank you for the kind words and the honest feedback! We appreciate you, and we'll see you next time.":`Thank you so much! We'll pass your kind words along${d.staff?" to "+d.staff:""}. See you next time!`,
+    checks:(d)=>["The owner approves every public reply", d.cat.startsWith("Low")?"Reach out privately before replying publicly":"Never offer discounts in exchange for reviews", "Every customer gets the same review invitation, happy or not"]},
+  social:{sector:"Social media", title:"SocialDesk", label:"Social & DMs", short:"DM replies",
+    samples:["PRICE - how much for a full set?","Do you have any openings this Saturday? DM me","DEMO please, saw your post about the booking tool"],
+    cats:[["Keyword: PRICE",/\bprice\b|how much|cost/i,"Auto-reply with price list link"],["Keyword: DEMO / TRIAL",/\bdemo\b|\btrial\b/i,"Auto-reply with demo link"],["Booking request",/opening|available|book|appointment|saturday|sunday|today|tomorrow/i,"Booking link + staff follow-up"]],
+    def:["General DM","Owner inbox"],
+    urgent:/today|tonight|asap/i,
+    reply:(d)=>d.cat.startsWith("Keyword: PRICE")?"Thanks for reaching out! Here's our current price list: [link]. Want me to save you a spot?":d.cat.startsWith("Keyword: DEMO")?"Thanks! Here's a 2-minute demo and a free trial link: [link]. Any questions, just reply here.":"We'd love to see you! Here are the next open times: [booking link]. Reply with the one that works.",
+    checks:()=>["The owner approves each new reply template","Keyword replies use approved wording only","Booking requests also land in the lead list"]},
+  staff:{sector:"Team & HR", title:"StaffDesk", label:"Staff questions", short:"Handbook & shifts",
+    samples:["Can I swap my Saturday shift with Jess? I have a family thing.","How many sick days do I get per year?","I'll be 20 minutes late tomorrow, car trouble."],
+    cats:[["Shift swap",/swap|switch|cover|trade|shift/i,"Manager approval"],["Policy question",/sick|vacation|pto|policy|handbook|dress code|break/i,"Handbook answer"],["Late / absence",/late|absent|can't make|sick today|call out/i,"Manager · schedule update"]],
+    def:["Staff question","Manager"],
+    urgent:/today|tomorrow|tonight|late/i,
+    reply:(d)=>d.cat==="Shift swap"?"Got it. I've sent your swap request to your manager. You'll get a confirmation once it's approved.":d.cat==="Policy question"?"From the employee handbook: [approved policy text]. Questions? Your manager can help.":"Thanks for the heads-up. Your manager has been notified and the schedule is updated.",
+    checks:()=>["Answers come only from your handbook","Managers approve every swap","No personal or medical details are stored"]},
+  rewards:{sector:"Loyalty & repeat visits", title:"RewardsDesk", label:"Rewards", short:"Points & offers",
+    samples:["How many points do I have? My number is 555-201-3344.","Can I use my free drink reward today?","I keep forgetting my punch card, can it be on my phone?"],
+    cats:[["Points balance",/points|balance|how many/i,"Rewards lookup"],["Redeem reward",/use my|redeem|free|reward/i,"Front counter · verify"],["Sign up",/punch card|sign up|join|phone/i,"Rewards signup"]],
+    def:["Rewards question","Front counter"],
+    urgent:/today|now/i,
+    reply:(d)=>d.cat==="Points balance"?"You have [points] points: 2 more visits until your next reward!":d.cat==="Redeem reward"?"Yes! Show this text at the counter and we'll apply your reward.":"Good news: your rewards live on your phone number now. No card needed. You're signed up!",
+    checks:()=>["Staff verifies the phone number before applying a reward","Customers opt in to texts","Offers follow your reward rules"]},
+  invoice:{sector:"Invoices & payments", title:"InvoiceDesk", label:"Invoices", short:"Payment questions",
+    samples:["Can I pay invoice 1042 next Friday instead?","I already paid by card yesterday, why did I get a reminder?","Can you resend the invoice? I can't find it."],
+    cats:[["Payment extension",/next (?:week|friday|month)|instead|extension|later|split/i,"Owner approval"],["Already paid",/already paid|paid yesterday|paid by/i,"Bookkeeping · match payment"],["Resend invoice",/resend|can't find|copy|send again/i,"Auto-resend"]],
+    def:["Billing question","Bookkeeping"],
+    urgent:/today|overdue|final notice/i,
+    reply:(d)=>d.cat==="Payment extension"?"Thanks for letting us know. I've asked the owner to confirm the new date and will reply shortly.":d.cat==="Already paid"?"Thank you! We're matching your payment now, and you'll get a receipt once it's confirmed. Sorry for the extra reminder.":"Here's a fresh link to your invoice: [secure link].",
+    checks:()=>["The owner approves any change to due dates","Payments are matched before reminders stop","Card numbers are never typed into messages"]}
 };
 let demoKey="property", demoState="idle";
 const labInput=$("#labInput");
-$("#labPick").innerHTML = Object.entries(DEMOS).map(([k,d],i)=>`<button type="button" data-demo="${k}" aria-pressed="${i===0}"><small>0${i+1} · ${esc(d.label)}</small><strong>${esc(d.title)}</strong></button>`).join("");
+$("#labPick").innerHTML = Object.entries(DEMOS).map(([k,d],i)=>`<button type="button" data-demo="${k}" aria-pressed="${i===0}"><small>${String(i+1).padStart(2,"0")} · ${esc(d.label)}</small><strong>${esc(d.title)}</strong></button>`).join("");
+const LAB_APPS={property:["workorders","WorkOrderDesk"],chat:["chat","ChatDesk"],salon:["bookings","BookDesk"],resort:["guests","GuestDesk"],housekeeping:["housekeeping","HousekeepingDesk"],rewards:["rewards","RewardsDesk"],invoice:["invoices","InvoiceDesk"],service:["leads","LeadDesk"],package:["packages","PackageDesk"],social:["social","SocialDesk"],review:["reviews","ReviewDesk"],staff:["staff","StaffDesk"],insight:["insights","InsightDesk"],intake:["intake","IntakeDesk"],compliance:["compliance","ComplianceDesk"]};
+function labBiz(){ const v=($("#labBiz")&&$("#labBiz").value||"").trim().slice(0,60); return v; }
+function appLink(k){ const a=LAB_APPS[k]; if(!a) return ""; const b=labBiz(); return `prototypes/${a[0]}.html${b?`?brand=${encodeURIComponent(b)}`:""}`; }
+function labFull(){ const a=LAB_APPS[demoKey]; $("#labFull").innerHTML = (a?`<a href="${appLink(demoKey)}">Open the full ${esc(a[1])} app${labBiz()?" for "+esc(labBiz()):""} &rarr;</a>`:"") +
+  `<span class="lab-all" aria-label="Every tool as a full app"><b style="font-size:.8rem;align-self:center">All 15 tools as full apps:</b>${Object.keys(LAB_APPS).map(k=>`<a href="${appLink(k)}">${esc(LAB_APPS[k][1])}</a>`).join("")}</span>`; }
+try{ const saved=localStorage.getItem("lab-biz"); if(saved && $("#labBiz")) $("#labBiz").value=saved; }catch(_){}
+$("#labBiz").addEventListener("input",()=>{ try{ localStorage.setItem("lab-biz", labBiz()); }catch(_){} labFull(); if(demoState!=="idle") $("#labRun").click(); });
 function setDemo(k){
   demoKey=k; const d=DEMOS[k];
   $$("#labPick button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.demo===k));
   $("#labSector").textContent=d.sector; $("#labTitle").textContent=d.title;
   labInput.value=d.samples[0];
   $("#labSamples").innerHTML = d.samples.map((s,i)=>`<button type="button" class="btn btn-line btn-sm" data-sample="${i}">Example ${i+1}</button>`).join("");
-  resetDemo();
+  resetDemo(); labFull();
 }
 $("#labPick").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) setDemo(b.dataset.demo); });
 $("#labSamples").addEventListener("click",e=>{ const b=e.target.closest("[data-sample]"); if(b){ labInput.value=DEMOS[demoKey].samples[+b.dataset.sample]; resetDemo(); } });
@@ -1412,7 +1466,8 @@ function render(r,revised){
   $("#labDl").innerHTML=rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join("");
   let reply=D.reply(r);
   if(revised) reply = reply.replace(/ ?We’ll plan around[^.]*\.| ?Here are[^:]*:.*$/,"") + "\n\n[Revised: holding firm times and prices until a team member confirms them.]";
-  $("#labDraft").textContent="Draft reply\n\n"+reply;
+  const biz=labBiz(); if(biz){ reply=reply.replace(/\bour office\b/g, biz).replace(/\bwe’d love\b/i,"We’d love"); reply += `\n\n— ${biz}`; }
+  $("#labDraft").textContent="Draft reply"+(biz?" from "+biz:"")+"\n\n"+reply;
   $("#labCheck").innerHTML=D.checks(r).map(c=>`<li>${esc(c)}</li>`).join("");
 }
 $("#labRun").addEventListener("click",()=>{
@@ -1590,7 +1645,7 @@ document.addEventListener("click",e=>{
 if (saleActive()) {
   $("#saleBar").hidden = false;
   $("#saleLabel").textContent = CONFIG.sale.label + ":";
-  $("#saleText").textContent = `${CONFIG.sale.pct}% or more off all listed products and services through ${saleEndText()}`;
+  $("#saleText").textContent = `${CONFIG.sale.pct}% or more off all listed products and services through ${saleEndText()}. Monthly plans keep the holiday rate for 12 months`;
   $("#saleFine").textContent = "Doesn’t combine with the founding-client discount — you get the better deal.";
 }
 
@@ -1662,13 +1717,13 @@ $("#tierRadios").addEventListener("change",()=>{ const it=BUYABLE[buyItem]; cons
 function updateDue(){
   const it=BUYABLE[buyItem], el=$("#dueNote"); if(!it||!el) return;
   if(buyMode==="trial"){ el.hidden=true; return; }
-  if(isPilot(buyItem)){ const it2=BUYABLE[buyItem], f2=saleF(), s2=it2.price?(f2<1?saleAmt(it2.price):it2.price):0, m0=it2.tier?tierPrice(it2):(it2.monthly||0), m2=m0?(f2<1?saleAmt(m0):m0):0; el.innerHTML=`<b>Price if you go ahead:</b> ${money2(s2)} setup${it2.quote?" (starting price)":""}${m2?` + ${money2(m2)}/mo`:""}${m2&&f2<1?` (holiday rate for months billed through ${saleEndText()}, then ${money2(m0)}/mo)`:""}, plus usage billed by your own providers (usually under $40/mo per tool).${m2&&it2.tier?`<br><b>Or Fully Hosted:</b> ${money2(m0+(it2.tier==="prop"?150:100)*(it2.count||1))}/mo with usage included up to your allowance (by request).`:" Fully Hosted is available by request."}`; el.hidden=false; return; }
+  if(isPilot(buyItem)){ const it2=BUYABLE[buyItem], f2=saleF(), s2=it2.price?(f2<1?saleAmt(it2.price):it2.price):0, m0=it2.tier?tierPrice(it2):(it2.monthly||0), m2=m0?(f2<1?saleAmt(m0):m0):0; el.innerHTML=`<b>Price if you go ahead:</b> ${money2(s2)} setup${it2.quote?" (starting price)":""}${m2?` + ${money2(m2)}/mo`:""}${m2&&f2<1?` (holiday rate locked for your first 12 months when you order by ${saleEndText()}, then ${money2(m0)}/mo)`:""}, plus usage billed by your own providers (usually under $40/mo per tool).${m2&&it2.tier?`<br><b>Or Fully Hosted:</b> ${money2(m0+(it2.tier==="prop"?150:100)*(it2.count||1))}/mo with usage included up to your allowance (by request).`:" Fully Hosted is available by request."}`; el.hidden=false; return; }
   const f=saleF(), setup=it.price?(f<1?saleAmt(it.price):it.price):0, mo0=it.tier?tierPrice(it):(it.monthly||0), mo=mo0?(f<1?saleAmt(mo0):mo0):0;
   const plan=($("input[name=plan]:checked")||{}).value||"Pay in full", parts=[];
   if(setup) parts.push(plan==="3 monthly payments" ? `<b>Due at kickoff:</b> ${money2(Math.ceil(setup/30)*10)} (first of 3 payments)` : `<b>Due at kickoff:</b> ${money2(setup)}${it.quote?" (starting price; final amount is in your written quote)":""}`);
   if(mo){
     const host = it.tier ? (it.tier==="prop"?150:100)*(it.count||1) : 0;
-    const after = f<1 ? ` (holiday rate for months billed through ${saleEndText()}, then ${money2(mo0)}/mo)` : "";
+    const after = f<1 ? ` (holiday rate locked for your first 12 months when you order by ${saleEndText()}, then ${money2(mo0)}/mo)` : "";
     parts.push(`<b>Monthly:</b> ${money2(mo)}/mo${after}, starting the month your tool goes live, plus usage billed by your own providers (usually under $40/mo per tool)`);
     if(host) parts.push(`<b>Or Fully Hosted:</b> ${money2(mo0+host)}/mo with usage included up to your allowance (by request)`);
   }

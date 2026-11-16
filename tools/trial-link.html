@@ -21,7 +21,8 @@ textarea{min-height:170px}code{word-break:break-all}
  <label for="color">Brand color</label><input id="color" type="color" value="#2f7fe0" style="width:70px;padding:2px">
  <label for="preset">Package</label><select id="preset"><option value="">Pick tools below</option><option value="chat,salon">Launch Bundle (ChatDesk + BookDesk)</option><option value="property,package,chat">Property Management Bundle</option><option value="resort,housekeeping,property">Hotel Operations Bundle</option></select>
  <p style="font-weight:700;font-size:13.5px;margin:12px 0 4px">Tools</p><div class="tools" id="tools"></div>
- <label for="kind">Link type</label><select id="kind"><option value="trial">14-day free trial</option><option value="license">Paid Starter edition license</option></select>
+ <label for="kind">Link type</label><select id="kind"><option value="trial">14-day free trial</option><option value="license">Paid Starter edition license</option><option value="preview">Meeting preview (no trial, opens with their brand)</option></select>
+ <label for="logo">Logo image link (optional, https://…)</label><input id="logo" placeholder="https://their-site.com/logo.png">
  <label for="start" id="startLbl">Trial start date</label><input id="start" type="date">
  <button class="btn" id="make" type="button">Make trial link</button>
 </div>
@@ -46,6 +47,10 @@ function makeLink(biz,color,tools,start){const one=tools.length===1,page=one?T.f
 $("#make").onclick=()=>{const biz=$("#biz").value.trim(),tools=[...document.querySelectorAll("#tools input:checked")].map(i=>i.value);
  if(!biz||!tools.length){alert("Add a business name and at least one tool.");return}
  const start=$("#start").value,names=tools.map(t=>T.find(x=>x[0]===t)[1]).join(", "),who=$("#contact").value.trim()||"there";
+ if($("#kind").value==="preview"){const ts=tools,one=ts.length===1,page=one?T.find(t=>t[0]===ts[0])[2]:"suite.html",q=new URLSearchParams({brand:biz,color:$("#color").value});const lg=$("#logo").value.trim();if(/^https:\/\//.test(lg))q.set("logo",lg);if(!one)q.set("tools",ts.join(","));const link=SITE+page+"?"+q.toString();
+  $("#link").textContent=link;$("#ends").textContent="· for your meeting";
+  $("#email").value=`Meeting prep for ${biz}:\n1. Open this link on your iPad or phone the night before:\n${link}\n2. Tap Share, then Add to Home Screen. It opens full screen like an app, with ${biz}'s name and color.\n3. Load 3-4 realistic examples from their reviews or website (their services, staff names, hours).\n4. After the meeting, send them a 14-day trial link (choose "14-day free trial" above) so they can keep using it.`;
+  $("#out").hidden=false;return}
  if($("#kind").value==="license"){const link=makeLicense(biz,$("#color").value,tools,start);$("#link").textContent=link;$("#ends").textContent="· renews "+start;
   $("#email").value=`Hi ${who},\n\nWelcome aboard! Here is your Starter edition of ${names}, branded for ${biz}:\n${link}\n\nBookmark it on the computer or tablet your team will use. A few things to know:\n- Your data is saved on that device. Use "Download backup" once a week and keep the file somewhere safe; "Restore backup" brings it back on a new device.\n- When you approve a message, it is copied so you can paste it into your text or email app. Live sending from your own accounts comes with the Connected edition.\n- Your plan renews on ${start}. I'll send a new link each time it renews.\n\nLet's schedule your 30-minute setup call to load your services, hours, and team. Reply with a couple of times that work.\n\nRashad`;
   $("#out").hidden=false;return}
