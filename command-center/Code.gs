@@ -38,12 +38,12 @@ function doGet() {
       '<h2>Command Center: Not Authorized</h2><p>This page only opens for the owner account. Google reported: <b>' +
       String(seen).replace(/[<>&"]/g, '') + '</b>.</p><p>Fixes: open the link in a browser window signed in to only your business Google account ' +
       '(or a private window), and check the deployment is set to <b>Execute as: Me</b> and <b>Who has access: Only myself</b>.</p></div>')
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DENY);
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
   }
   return HtmlService.createTemplateFromFile('Index').evaluate()
     .setTitle('Command Center · Rashad Fambro Consulting')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DENY);
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
 
 function isOwner_() {

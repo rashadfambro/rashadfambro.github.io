@@ -77,7 +77,7 @@ def test_CC02_security_rules_in_code():
             continue
         body = re.search(r"^function " + name + r"\([^)]*\)\s*\{([\s\S]*?)\n\}", src, re.M).group(1)
         assert "guard_()" in body.split("\n")[1], f"{name} must call guard_() first"
-    assert "XFrameOptionsMode.DENY" in src
+    assert "XFrameOptionsMode.DENY" not in src and "XFrameOptionsMode.DEFAULT" in src   # DENY does not exist in Apps Script (it crashed the live page)
     assert not re.search(r"(sk-ant-|AKfyc[\w-]{20,}|ADMIN_TOKEN\s*[:=]\s*['\"][^'\"]+)", src), "secrets must live in Script properties"
     html = INDEX.read_text()
     assert ".innerHTML" in html and "esc(" in html and "eval(" not in html

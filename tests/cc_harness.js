@@ -15,12 +15,13 @@ let USER = 'rashadfambro@gmail.com';
 const props = { LEADS_SHEET_ID: 'SHEET1', LEAD_ENGINE_URL: 'https://script.google.com/macros/s/TEST/exec', ADMIN_TOKEN: 'x'.repeat(32) };
 const userProps = {};
 const triggers = [];
+function xfo(m) { if (m == null) throw new Error('Argument cannot be null: mode'); return this; }   // same check as Google
 const ctx = {
   console, JSON, Math, Number, String, Object, Array, RegExp, Error, Date,
   Session: { getActiveUser: () => ({ getEmail: () => USER }) },
   PropertiesService: { getScriptProperties: () => ({ getProperty: (k) => props[k] || null }), getUserProperties: () => ({ getProperty: (k) => userProps[k] || null, setProperty: (k, v) => { userProps[k] = v; } }) },
   SpreadsheetApp: { openById: (id) => { if (id !== 'SHEET1') throw new Error('bad id'); return book; } },
-  HtmlService: { createHtmlOutput: (h) => ({ html: h, setXFrameOptionsMode() { return this; } }), createTemplateFromFile: () => ({ evaluate: () => ({ html: 'INDEX', setTitle() { return this; }, addMetaTag() { return this; }, setXFrameOptionsMode() { return this; } }) }), XFrameOptionsMode: { DENY: 'DENY' } },
+  HtmlService: { createHtmlOutput: (h) => ({ html: h, setXFrameOptionsMode: xfo }), createTemplateFromFile: () => ({ evaluate: () => ({ html: 'INDEX', setTitle() { return this; }, addMetaTag() { return this; }, setXFrameOptionsMode: xfo }) }), XFrameOptionsMode: { ALLOWALL: 'ALLOWALL', DEFAULT: 'DEFAULT' } },   // the only two modes Google provides
   UrlFetchApp: { fetch: (url, opts) => { out.fetches.push({ url, payload: JSON.parse(opts.payload) }); return { getContentText: () => '{"ok":true,"key":"RFL-20261220-AAAAAA"}', getResponseCode: () => 200 }; } },
   CalendarApp: { getDefaultCalendar: () => ({ getEvents: () => [{ getTitle: () => 'Free audit: Glow Studio', getStartTime: () => new Date('2026-11-20T18:00:00Z'), getEndTime: () => new Date('2026-11-20T18:30:00Z'), getLocation: () => 'Meet' }] }) },
   GmailApp: { search: () => [], sendEmail: (to, subject, body) => out.mails.push({ to, subject, body }) },
