@@ -17,6 +17,7 @@ main{max-width:1100px;margin:0 auto;padding:20px}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
 .tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}
 .tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.htabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--text)}.htabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .panel[hidden]{display:none}
 .grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
 @media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
@@ -47,6 +48,10 @@ footer{max-width:1100px;margin:10px auto 30px;padding:0 20px;font-size:12.5px;co
 #trialEnd{position:fixed;inset:0;background:rgba(13,26,45,.72);display:grid;place-items:center;z-index:20;padding:20px}
 #trialEnd .card{max-width:520px}
 body.embedded header,body.embedded .banner,body.embedded footer{display:none}
+#helpBox{position:fixed;inset:0;background:rgba(13,26,45,.6);display:grid;place-items:center;z-index:21;padding:16px}#helpBox[hidden]{display:none}
+#helpBox .card{max-width:720px;width:100%;max-height:86vh;overflow:auto}#helpBox h3{font-size:15px;margin:14px 0 6px}#helpBox ol,#helpBox ul{margin:0 0 8px;padding-left:20px}#helpBox li{margin:3px 0}
+.helpbtn{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
+#envBadge{position:fixed;left:10px;bottom:10px;z-index:30;background:#b42318;color:#fff;font:700 11px/1.3 var(--sans);padding:4px 8px;border-radius:7px;pointer-events:none;opacity:.92}
 </style></head>
 <body><header><div class="logo" style="background:var(--sky);color:var(--ink)">RF</div><div><h1>Product Prototypes</h1><div class="sub">Rashad Fambro Consulting · try each tool with sample data</div></div></header>
 <div class="banner"><span>Each prototype uses sample data and sends nothing. Put your own business name in the header to see it branded.</span><span class="sp"></span><a href="../index.html#products">← Back to the website</a></div>
