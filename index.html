@@ -437,7 +437,7 @@ input[type=range]{width:100%;accent-color:#2f7fe0}
 /* v5 additions */
 .salebar{background:linear-gradient(90deg,#ffc46b,#ffd99a);color:var(--ink);font-size:.9rem;text-align:center}
 .salebar .wrap{padding:9px 0}
-.salebar a{font-weight:800;margin-left:8px}.salebar .sale-l2{display:block;margin-top:2px}.salebar .sale-l2 a{white-space:nowrap}.host-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 10px}.hc{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}.hc h4{font-size:1.05rem;margin:8px 0 4px}.hc p{font-size:.9rem;color:var(--muted);margin:0 0 6px}.hc .hc-price{color:var(--ink);font-weight:700;margin:0}@media(max-width:640px){.host-compare{grid-template-columns:minmax(0,1fr)}}#buyTitle:focus{outline:none}.salebar .sale-l2 small{font-size:.8em}
+.salebar a{font-weight:800;margin-left:8px}.salebar .sale-l2{display:block;margin-top:2px}.salebar .sale-l2 a{white-space:nowrap}.host-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 10px}.hc{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}.hc h4{font-size:1.05rem;margin:8px 0 4px}.hc p{font-size:.9rem;color:var(--muted);margin:0 0 6px}.hc .hc-price{color:var(--ink);font-weight:700;margin:0}@media(max-width:640px){.host-compare{grid-template-columns:minmax(0,1fr)}}#buyTitle:focus{outline:none}.salebar .sale-l2 small{font-size:.8em}.tier-base{margin:0 0 14px;font-size:.95rem}
 s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
 .prod s.was{color:#7f93ab}
 .now{color:inherit}
@@ -842,6 +842,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
     <div class="pkg-grid" id="pkgGrid"></div>
     <div class="tiers" id="tiers">
       <div class="tiers-head"><h3>Low Monthly License &amp; Support Plans</h3> <p>Every tool starts with a <b>free 14-day trial workspace</b>, branded for your business. Pay once for setup, then a low monthly license &amp; support plan. Upgrade, downgrade, or cancel anytime (billing stops at the end of that month).</p></div>
+      <p class="tier-base" id="tierBase"></p>
       <div class="tier-grid" id="tierGrid"></div>
       <p class="tier-foot">Standard tools: <abbr title="answers customer questions 24/7">ChatDesk</abbr>, <abbr title="books appointments and fills cancellations">BookDesk</abbr>, <abbr title="captures and follows up on inquiries">LeadDesk</abbr>, <abbr title="secure client intake forms">IntakeDesk</abbr>, <abbr title="phone-number rewards program">RewardsDesk</abbr>, <abbr title="more reviews, faster replies">ReviewDesk</abbr>, <abbr title="posts and DM replies you approve">SocialDesk</abbr>, <abbr title="handbook answers and shift swaps">StaffDesk</abbr>, <abbr title="invoices and payment reminders">InvoiceDesk</abbr>, <abbr title="owner dashboard and weekly summary">InsightDesk</abbr>. Property &amp; hospitality tools (priced per property): <abbr title="maintenance requests in one queue">WorkOrderDesk</abbr>, <abbr title="routes guest and owner requests">GuestDesk</abbr>, <abbr title="room dispatch and live status">HousekeepingDesk</abbr>, <abbr title="package intake with pickup codes">PackageDesk</abbr>, <abbr title="recurring checklists and deadlines">ComplianceDesk</abbr>. <b>Small Business Suite:</b> any 3 standard tools on Essentials for $120/mo.</p>
       <div class="host-compare">
@@ -856,7 +857,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <details class="more tool-lines" id="toolLines"><summary>What Each Tool Does</summary><div class="tool-cols"><div><p class="eyebrow" style="margin:10px 0 6px">Standard tools</p><ul><li><b>ChatDesk</b> — answers customer questions 24/7</li><li><b>BookDesk</b> — books appointments and fills cancellations</li><li><b>LeadDesk</b> — captures and follows up on inquiries</li><li><b>IntakeDesk</b> — secure client intake forms</li><li><b>RewardsDesk</b> — phone-number rewards program</li><li><b>ReviewDesk</b> — more reviews, faster replies</li><li><b>SocialDesk</b> — posts and DM replies you approve</li><li><b>StaffDesk</b> — handbook answers and shift swaps</li><li><b>InvoiceDesk</b> — invoices and payment reminders</li><li><b>InsightDesk</b> — owner dashboard and weekly summary</li></ul></div><div><p class="eyebrow" style="margin:10px 0 6px">Property &amp; hospitality tools</p><ul><li><b>WorkOrderDesk</b> — maintenance requests in one queue</li><li><b>GuestDesk</b> — routes guest and owner requests</li><li><b>HousekeepingDesk</b> — room dispatch and live status</li><li><b>PackageDesk</b> — package intake with pickup codes</li><li><b>ComplianceDesk</b> — recurring checklists and deadlines</li></ul></div></div></details>
     </div>
     <p class="pricenote"><b>Annual prepay:</b> pay 12 months of any plan up front and get 2 months free.<br><b>Payment plans:</b> split any setup or project of $1,000+ into 3 interest-free monthly payments. Pay securely with PayPal or Square — any debit or credit card accepted.<br>All prices in USD. Virtual by default · On-site visits available worldwide — travel billed at cost and approved in advance · Advisory hours $150/hr · Every build gets a fixed, written quote before work starts.</p>
-    <p class="founding-full" id="foundingFull" hidden>All 5 founding client spots are filled. Thank you to our first clients! The holiday and seasonal offers below still apply.</p>
+    <p class="founding-full" id="foundingFull" hidden></p>
     <div class="founding" id="founding">
       <div>
         <p class="eyebrow">Founding Client Program</p>
@@ -878,9 +879,9 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div class="svc-grid" id="svcGrid"></div>
     </div>
     <div class="offers">
-      <article class="card"><span class="chip live">Bundle</span> <h3>Launch Bundle</h3> <p><b>ChatDesk + BookDesk setup for <span class="bprice" data-price="2500" data-parts="1500,1500">$2,500</span></b> (save <span class="bsave">$500</span> vs. buying each tool separately). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Order this bundle</button></article>
-      <article class="card"><span class="chip live">Bundle</span> <h3>Hotel Operations Bundle</h3> <p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for <span class="bprice" data-price="8000" data-parts="3500,3500,3500">$8,000</span></b> (save <span class="bsave">$2,500</span> vs. buying each tool separately). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Order this bundle</button></article>
-      <article class="card"><span class="chip live">Bundle</span> <h3>Property Management Bundle</h3> <p><b>WorkOrderDesk + PackageDesk + ChatDesk setup for <span class="bprice" data-price="5500" data-parts="3500,2000,1500">$5,500</span></b> (save <span class="bsave">$1,500</span> vs. buying each tool separately). Maintenance requests, package intake, and resident questions handled for apartment communities and property managers.</p><button type="button" class="btn btn-line btn-sm" data-buy="propbundle" style="margin-top:10px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Launch Bundle</h3> <p><b>ChatDesk + BookDesk setup for <span class="bprice" data-price="2500" data-parts="1500,1500">$2,500</span></b> (save <span class="bsave">$500</span> vs. buying each tool separately at regular prices). Answer questions and book appointments around the clock from day one.</p><button type="button" class="btn btn-line btn-sm" data-buy="bundle" style="margin-top:12px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Hotel Operations Bundle</h3> <p><b>GuestDesk + HousekeepingDesk + WorkOrderDesk setup for <span class="bprice" data-price="8000" data-parts="3500,3500,3500">$8,000</span></b> (save <span class="bsave">$2,500</span> vs. buying each tool separately at regular prices). Guest requests, room turns, and maintenance in one connected system.</p><button type="button" class="btn btn-line btn-sm" data-buy="hotelbundle" style="margin-top:12px">Order this bundle</button></article>
+      <article class="card"><span class="chip live">Bundle</span> <h3>Property Management Bundle</h3> <p><b>WorkOrderDesk + PackageDesk + ChatDesk setup for <span class="bprice" data-price="5500" data-parts="3500,2000,1500">$5,500</span></b> (save <span class="bsave">$1,500</span> vs. buying each tool separately at regular prices). Maintenance requests, package intake, and resident questions handled for apartment communities and property managers.</p><button type="button" class="btn btn-line btn-sm" data-buy="propbundle" style="margin-top:10px">Order this bundle</button></article>
       <article class="card"><span class="chip live">Credit</span> <h3>Assessment Credit</h3> <p><b>Whatever you paid for the assessment is credited</b> toward any build you start within 60 days.</p></article>
       <article class="card"><span class="chip live">Referral</span> <h3>Referral Reward</h3> <p>Refer a business that signs and get a <b>$150 credit</b> — or $150 paid to you if you’re not a client.</p></article>
     </div>
@@ -892,7 +893,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
   <div class="wrap">
     <div class="head">
       <div><p class="eyebrow"><span class="n">10</span> Start a project</p><h2>Ready to Move Forward? Request Your Proposal</h2></div>
-      <p class="lede">Answer four quick questions. I’ll reply within one business day with next steps, a proposal, and an agreement you can sign electronically.</p>
+      <p class="lede">For when you’re ready for a quote. Answer four quick questions and I’ll reply within one business day with a fixed-price proposal and an agreement you can sign electronically. Not sure yet? <a href="#audit">Start with the free audit</a>.</p>
     </div>
     <details class="more" id="startMore"><summary>Open the 4-Step Proposal Request</summary>
     <div class="builder" style="margin-top:14px">
@@ -1058,7 +1059,7 @@ s.was{color:#8a96a6;font-weight:600;text-decoration-thickness:1px}
       <div class="f"><label for="buy_biz">Business name <span class="req">*</span></label><input id="buy_biz" required autocomplete="organization"></div>
       <div class="f full"><label for="buy_email">Email <span class="req">*</span></label><input id="buy_email" type="email" required autocomplete="email"></div>
     </div>
-    <p class="hint" id="trialNote" hidden>Free for 14 days, no payment details needed. Within one business day you’ll get a link to your own trial workspace, branded with your business name, with sample data and room for your own entries, plus an optional free 30-minute setup call. Live connections to your accounts start when you choose a plan. On day 14, choose a plan or let it expire; nothing is charged automatically.</p>
+    <p class="hint" id="trialNote" hidden><b>No payment details required. No automatic charges.</b> Within one business day you’ll get a link to your own trial workspace, branded with your business name, with sample data and room for your own entries, plus an optional free 30-minute setup call. Live connections to your accounts start when you choose a plan. On day 14 the trial simply expires unless you choose a paid plan.</p>
     <p class="hint" id="dueNote"></p>
     <p class="hint" id="deliveryNote" hidden></p>
     <p class="hint" id="pilotNote" hidden>No payment now. I’ll reply within one business day to confirm scope and a launch date (custom builds typically take 3–8 weeks, including testing with your team). You pay the kickoff amount only after you approve the plan, by Square or PayPal.</p>
@@ -1161,7 +1162,7 @@ if (!CONFIG.foundingSpots) $("#founding").hidden = true;
 function showFounding(left){
   left=Math.max(0, Math.min(CONFIG.foundingSpots, left|0));
   $("#spots").textContent=left; $$(".fLeft").forEach(x=>x.textContent=left);
-  const full=!left; $("#founding").hidden=full; $("#foundingFull").hidden=!full;
+  const full=!left; $("#founding").hidden=full; $("#foundingFull").hidden=!full; $("#foundingFull").textContent = full ? `All ${CONFIG.foundingSpots} founding client spots are filled. Thank you to our first clients! The holiday and seasonal offers below still apply.` : "";
   $$(".sale-l2").forEach(x=>{ if(full){ x.innerHTML='Founding client spots: all 5 filled. Thank you! <a href="#pricing">See prices &rarr;</a>'; } });
   const bf=$("#b_found"); if(bf){ const lab=bf.closest("label"); if(lab) lab.hidden=full; if(full) bf.checked=false; }
 }
@@ -1573,6 +1574,7 @@ auditForm.addEventListener("submit",async e=>{
   const sent=await sendLead("audit",data);
   aBtn.disabled=false; aBtn.textContent=aLbl;
   $("#auditResult").hidden=false;
+  toast(sent ? "Audit request sent. I’ll reply within one business day." : "Almost done: send the email draft below to finish your request");
   if(sent){ $("#auditResult h4").textContent="Thanks — your request was received"; $("#auditResultNote").textContent="I’ll reply within one business day. A copy of your request is below."; $("#auditMail").hidden=true; $("#auditCopy").hidden=true; }
   else { $("#auditResult h4").textContent="Almost Done — One Last Step"; $("#auditResultNote").innerHTML=FALLBACK_NOTE; $("#auditMail").hidden=false; $("#auditCopy").hidden=false; }
   $("#auditResult").scrollIntoView({behavior:"smooth",block:"nearest"});
@@ -1611,6 +1613,7 @@ $("#bNext").addEventListener("click",async()=>{
   const sent=await sendLead("project",d);
   $("#bNext").disabled=false; $("#bResult").hidden=false;
   bLis.forEach(l=>l.className="done"); $("#bNext").hidden=true;
+  toast(sent ? "Proposal request sent. I’ll reply within one business day." : "Almost done: send the email draft below to finish your request");
   if(sent){ $("#bResult h4").textContent="Thanks — your request was received"; $("#bResultNote").textContent="I’ll reply within one business day. A copy of your request is below."; $("#bMail").hidden=true; $("#bCopy").hidden=true; }
   else { $("#bResult h4").textContent="Almost Done — One Last Step"; $("#bResultNote").innerHTML=FALLBACK_NOTE; $("#bMail").hidden=false; $("#bCopy").hidden=false; }
   $("#bResult").scrollIntoView({behavior:"smooth",block:"nearest"});
@@ -1702,7 +1705,7 @@ function openBuy(id, mode){
     : (prod || bundleIds[id]) ? "<b>What you get:</b> the <b>Starter edition</b>, branded for your business, within 1–3 business days of payment" + (bundleIds[id] ? ", with every tool in one Desk Suite app" : "") + ". Then the <b>Connected edition</b> (live texting, email and calendar in your own accounts) in 3–8 weeks, checked against a written acceptance checklist with your team." : "";
   $("#deliveryNote").hidden = !$("#deliveryNote").innerHTML;
   renderTierRadios(it);
-  $("#buyPrice").innerHTML = trial ? `Free for ${CONFIG.trialDays} days, then ${buyPriceText(it)}` : buyPriceText(it);
+  $("#buyPrice").innerHTML = trial ? `Free for ${CONFIG.trialDays} days. If you choose a paid plan: ${buyPriceText(it)}` : buyPriceText(it);
   const canPlan = !trial && (it.price||0) >= CONFIG.paymentPlan.minimum;
   $("#planOpt").hidden=!canPlan; if(!canPlan) $("input[name=plan][value='Pay in full']").checked=true;
   $("#payOpts").hidden = trial; $("#methodOpts").hidden = trial; $("#buyTerms").hidden = trial; $("#trialNote").hidden = !trial;
@@ -1713,7 +1716,7 @@ function openBuy(id, mode){
   $("#buyResult").hidden=true; $("#buyErr").textContent=""; $("#buyGo").hidden=false; updateDue();
   $("#buyModal").hidden=false; $("#buyModal").scrollTop=0; $("#buyForm").scrollTop=0; setTimeout(()=>{ $("#buyForm").scrollTop=0; $("#buyTitle").focus({preventScroll:true}); },30);
 }
-$("#tierRadios").addEventListener("change",()=>{ const it=BUYABLE[buyItem]; const trial=buyMode==="trial"; $("#buyPrice").innerHTML = trial ? `Free for ${CONFIG.trialDays} days, then ${buyPriceText(it)}` : buyPriceText(it); updateDue(); });
+$("#tierRadios").addEventListener("change",()=>{ const it=BUYABLE[buyItem]; const trial=buyMode==="trial"; $("#buyPrice").innerHTML = trial ? `Free for ${CONFIG.trialDays} days. If you choose a paid plan: ${buyPriceText(it)}` : buyPriceText(it); updateDue(); });
 function updateDue(){
   const it=BUYABLE[buyItem], el=$("#dueNote"); if(!it||!el) return;
   if(buyMode==="trial"){ el.hidden=true; return; }
@@ -1751,7 +1754,7 @@ $("#buyForm").addEventListener("submit",async e=>{
   const r=$("#buyResult");
   if(trial){
     const req=Object.assign({}, who, {Package:it.name+(tier?` (${tier})`:""), Workflow:`TRIAL REQUEST: ${it.name}${tier?" — "+tier+" plan":""} — ${CONFIG.trialDays}-day free trial`, Start:"Free trial requested online"});
-    $("#buyGo").disabled=true; const sent=await sendLead("trial", req); $("#buyGo").disabled=false; r.hidden=false;
+    $("#buyGo").disabled=true; const sent=await sendLead("trial", req); $("#buyGo").disabled=false; r.hidden=false; toast(sent ? "Trial request sent. Your link arrives within one business day." : "Almost done: send the email draft below");
     if(sent){ r.innerHTML=`<h4>Your trial is on its way!</h4><p class="hint" style="margin:0">A link to your branded ${CONFIG.trialDays}-day trial workspace for <b>${esc(it.name)}</b> will be emailed to <b>${esc(who.Email)}</b> within one business day.</p>`; $("#buyGo").hidden=true; return; }
     const body=`Hi Rashad,\n\nI'd like to start a ${CONFIG.trialDays}-day free trial.\n\nProduct: ${it.name}${tier?"\nPlan after trial: "+tier:""}\nName: ${who.Name}\nBusiness: ${who.Business}\nEmail: ${who.Email}\n\nPlease send my trial workspace link.`;
     r.innerHTML=`<h4>One last step: press Send</h4><p class="hint" style="margin:0">It couldn’t be sent automatically just now. Send your trial request to <b>${esc(CONFIG.email)}</b>. You’ll get your trial workspace link within one business day.</p><div class="row" style="margin-top:10px"><a class="btn btn-primary btn-sm" href="${esc(mailto("Free trial: "+it.name, body))}">Open email draft</a><button type="button" class="btn btn-line btn-sm" id="buyCopy">Copy request</button></div>`;
@@ -1768,6 +1771,7 @@ $("#buyForm").addEventListener("submit",async e=>{
     window.location.href = link; return;
   }
   if(sent){
+    toast("Order received. Nothing has been charged yet.");
     r.innerHTML=`<h4>Order received — thank you!</h4><p class="hint" style="margin:0">A secure ${esc(method)} ${plan==="Pay in full"?"invoice":"payment-plan invoice"} for <b>${esc(it.name)}</b> will be emailed to <b>${esc(order.Email)}</b> within one business day. Nothing has been charged yet.</p>`;
     $("#buyGo").hidden=true; return;
   }
@@ -1779,7 +1783,7 @@ $("#buyForm").addEventListener("submit",async e=>{
 if(new URLSearchParams(location.search).get("paid")){ setTimeout(()=>toast("Payment received — thank you! I’ll email you within one business day to schedule kickoff."),600); }
 function bundleSalePrices(){ if(!saleActive()) return;
   $$(".bprice").forEach(el=>{ const p=+el.dataset.price, s=saleAmt(p), sum=el.dataset.parts.split(",").reduce((a,v)=>a+saleAmt(+v),0);
-    el.innerHTML=`<s class="was">${money(p)}</s> ${money(s)}`; const sv=el.closest("p").querySelector(".bsave"); if(sv){ sv.textContent=money(sum-s); sv.title="Compared with buying each tool separately at today's holiday prices"; } }); }
+    el.innerHTML=`<s class="was">${money(p)}</s> ${money(s)}`; const sv=el.closest("p").querySelector(".bsave"); if(sv){ sv.textContent=money(sum-s); sv.title="Compared with buying each tool separately at today's holiday prices"; const b=sv.nextSibling; if(b&&b.nodeType===3) b.textContent=b.textContent.replace("at regular prices)","at holiday prices)"); } }); }
 bundleSalePrices();
 function noteInterest(label){ try{ const k="rf-interest", a=JSON.parse(sessionStorage.getItem(k)||"[]"); if(a[a.length-1]!==label){ a.push(label); sessionStorage.setItem(k, JSON.stringify(a.slice(-8))); } }catch(e){} }
 function interestTrail(){ try{ return JSON.parse(sessionStorage.getItem("rf-interest")||"[]").join(" → "); }catch(e){ return ""; } }
@@ -1792,6 +1796,7 @@ document.addEventListener("click", e=>{
   noteInterest((x.dataset.buy?"order:":x.dataset.trial?"trial:":"demo:")+id);
 }, true);
 /* ---------- monthly plan cards ---------- */
+$("#tierBase").innerHTML = `<b>Regular monthly prices:</b> standard tools ${CONFIG.tiers.std.map(t=>"$"+t.price).join(" / ")} per tool; property &amp; hospitality tools ${CONFIG.tiers.prop.map(t=>"$"+t.price).join(" / ")} per property (Essentials / Growth / Pro); any 3 standard tools on Essentials $120/mo.${saleActive()?` Holiday rates below apply for your first 12 months when you order by ${saleEndText()}.`:""}`;
 $("#tierGrid").innerHTML = CONFIG.tiers.std.map((t,i)=>{ const pt=CONFIG.tiers.prop[i]; return `<article class="card tier ${i===1?"feat":""}">
   ${i===1?'<span class="chip live" style="align-self:flex-start">Most popular</span>':''}<h3>${t.name}</h3>
   <div class="price">${priceHTML("$"+t.price+"/mo")}<small>per standard tool · ${priceHTML("$"+pt.price+"/mo")} per property for hospitality tools</small></div>
