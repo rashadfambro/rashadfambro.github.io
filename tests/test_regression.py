@@ -433,7 +433,7 @@ def test_R28_free_trial_flow(make_page, base_url):
     pg.locator("[data-trial='housekeeping']").click()
     assert "14-Day Trial" in pg.inner_text("#buyTitle")
     assert not pg.is_visible("#methodOpts") and not pg.is_visible("#buyTerms") and pg.is_visible("#trialNote")
-    assert "Free for 14 days, then" in pg.inner_text("#buyPrice") and dollars(site_prices(pg)["prop"][0]) + "/mo" in pg.inner_text("#buyPrice")
+    assert ("Free for 14 days, then" in pg.inner_text("#buyPrice") or "If you choose a paid plan:" in pg.inner_text("#buyPrice")) and dollars(site_prices(pg)["prop"][0]) + "/mo" in pg.inner_text("#buyPrice")
     pg.fill("#buy_name", "Tia Trial"); pg.fill("#buy_biz", "Seaside Resort"); pg.fill("#buy_email", "tia@example.com")
     pg.click("#buyGo")
     wait_js(pg, "document.getElementById('buyResult').innerText.trim().length > 0", 10000)
@@ -1270,4 +1270,26 @@ def test_R75_support_snapshot_hides_personal_data_and_reloads(make_page, base_ur
     pg.set_input_files("#snapLoad", str(path)); pg.wait_for_timeout(1200)
     restored = json.loads(pg.evaluate("localStorage.getItem('proto-salon-test')"))
     assert restored["settings"]["slot"] == 30 and restored["appointments"][0]["name"].startswith("Person ")
+    assert not w.errors, w.errors
+
+
+def test_R76_review_fixes_founding_text_tiers_trial_bundles_toasts(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if pg.locator("#tierBase").count() == 0:
+        pytest.skip("before v24")
+    text = pg.evaluate("(() => { const b = document.body.cloneNode(true); b.querySelectorAll('script,style').forEach(x => x.remove()); return b.textContent; })()")
+    assert "founding client spots are filled" not in text.lower()          # no contradictory page text, hidden or not
+    base = pg.inner_text("#tierBase")
+    for price in ("$50 / $90 / $150", "$90 / $150 / $250", "$120/mo"):
+        assert price in base, price
+    for card in pg.locator(".bsave").all():
+        txt = card.evaluate("e => e.parentElement.innerText")
+        assert ("at holiday prices)" in txt) if pg.evaluate("saleF()") < 1 else ("at regular prices)" in txt)
+    pg.evaluate("openBuy('chat','trial')")
+    pg.wait_for_timeout(200)
+    m = pg.inner_text("#buyModal")
+    assert "No payment details required. No automatic charges." in m and "If you choose a paid plan" in m and ", then " not in pg.inner_text("#buyPrice")
+    pg.evaluate("showFounding(0)")
+    assert "filled" in pg.inner_text("#foundingFull")
     assert not w.errors, w.errors
