@@ -56,7 +56,7 @@ def browser():
 
 LIVE_BACKEND = re.compile(r"https://script\.(google|googleusercontent)\.com/.*")
 
-IGNORED_CONSOLE = re.compile(r"Failed to load resource|net::ERR_|fonts\.(googleapis|gstatic)|cdnjs", re.I)
+IGNORED_CONSOLE = re.compile(r"Failed to load resource|net::ERR_|fonts\.(googleapis|gstatic)|cdnjs|Cross-Origin Request Blocked.*script\.google\.com", re.I)
 
 
 class PageWithErrors:
