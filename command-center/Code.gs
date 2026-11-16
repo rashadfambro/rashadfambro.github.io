@@ -78,10 +78,16 @@ function tab_(name, headers) {
   if (!sh && headers) { sh = ss.insertSheet(name); sh.appendRow(headers); sh.setFrozenRows(1); sh.getRange(1, 1, 1, headers.length).setFontWeight('bold'); }
   return sh;
 }
-function values_(name) {
+/** Rows of a tab as objects. tail = only the last N rows (fast for long tabs like Log). _row is the real sheet row. */
+function values_(name, tail) {
   const sh = tab_(name); if (!sh) return [];
-  const v = sh.getDataRange().getValues(); const h = v.shift() || [];
-  return v.filter(r => r.some(c => c !== '')).map((r, i) => { const o = { _row: i + 2 }; h.forEach((k, j) => o[k] = r[j] instanceof Date ? r[j].toISOString() : r[j]); return o; });
+  const last = sh.getLastRow(), cols = sh.getLastColumn ? sh.getLastColumn() : 0;
+  if (last < 2 || !cols) return [];
+  const h = sh.getRange(1, 1, 1, cols).getValues()[0];
+  const first = tail ? Math.max(2, last - tail + 1) : 2;
+  const v = sh.getRange(first, 1, last - first + 1, cols).getValues();
+  return v.map((r, i) => { const o = { _row: first + i }; h.forEach((k, j) => o[k] = r[j] instanceof Date ? r[j].toISOString() : r[j]); return o; })
+    .filter(o => h.some(k => k && o[k] !== ''));
 }
 function log_(action, target, result) {
   tab_('Log', ['Time', 'Source', 'Action', 'Target', 'Result']).appendRow([new Date(), 'command-center', action, String(target).slice(0, 200), String(result).slice(0, 500)]);
@@ -95,7 +101,7 @@ function getDashboard(env) {
   setEnv_(env);
   const data = {
     leads: values_('Leads'), prospects: values_('Prospects'), licenses: values_('Licenses'), orders: values_('Orders'),
-    finance: values_('Finance'), requests: values_('Requests'), log: values_('Log').slice(-60).reverse()
+    finance: values_('Finance', 300), requests: values_('Requests', 150), log: values_('Log', 60).reverse()
   };
   const summary = summarize_(data, new Date().toISOString(), CC);
   return {
@@ -103,9 +109,16 @@ function getDashboard(env) {
     leads: data.leads.slice(-200).reverse(), prospects: data.prospects.slice(-200).reverse(),
     licenses: data.licenses, orders: data.orders.slice(-100).reverse(), finance: data.finance.slice(-200).reverse(),
     requests: data.requests.slice(-100).reverse(), log: data.log,
-    calendar: calendar_(), inbox: inbox_(contacts_(data)), agents: CC.AGENTS, generated: new Date().toISOString(), env: ENV_, stages: CC.STAGES,
+    agents: CC.AGENTS, generated: new Date().toISOString(), env: ENV_, stages: CC.STAGES,
     theme: PropertiesService.getUserProperties().getProperty('theme') || 'dark'
   };
+}
+
+/** The slower parts (Gmail and Calendar), loaded after the dashboard is already on screen. */
+function getExtras(env) {
+  guard_(); setEnv_(env);
+  const data = { leads: values_('Leads'), prospects: values_('Prospects'), licenses: values_('Licenses'), orders: values_('Orders', 300) };
+  return { calendar: calendar_(), inbox: inbox_(contacts_(data)) };
 }
 
 /** Pure function (no Google services), so it can be unit-tested. */
@@ -175,9 +188,10 @@ function isBusinessMail_(from, subject, contacts, cfg) {
 /** Unread business email from the last 3 days. Personal mail never appears. */
 function inbox_(contacts) {
   try {
-    const out = [];
-    GmailApp.search(CC.ALERT_QUERY, 0, 60).forEach(t => {
-      const m = t.getMessages()[t.getMessageCount() - 1];
+    const out = [], threads = GmailApp.search(CC.ALERT_QUERY, 0, 40);
+    const msgs = GmailApp.getMessagesForThreads ? GmailApp.getMessagesForThreads(threads) : threads.map(t => t.getMessages());   // one batch call, not one per thread
+    threads.forEach((t, i) => {
+      const m = msgs[i][msgs[i].length - 1];
       if (!isBusinessMail_(m.getFrom(), m.getSubject(), contacts || {}, CC)) return;
       out.push({ from: m.getFrom(), subject: m.getSubject(), date: m.getDate().toISOString(), business: true, link: 'https://mail.google.com/mail/u/0/#inbox/' + t.getId() });
     });

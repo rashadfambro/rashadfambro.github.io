@@ -28,12 +28,12 @@ const ctx = {
   UrlFetchApp: { fetch: (url, opts) => { out.fetches.push({ url, payload: JSON.parse(opts.payload) }); return { getContentText: () => '{"ok":true,"key":"RFL-20261220-AAAAAA"}', getResponseCode: () => 200 }; } },
   CalendarApp: { getDefaultCalendar: () => ({ getEvents: () => [{ getTitle: () => 'Free audit: Glow Studio', getStartTime: () => new Date('2026-11-20T18:00:00Z'), getEndTime: () => new Date('2026-11-20T18:30:00Z'), getLocation: () => 'Meet' }] }) },
   GmailApp: { search: () => INBOX.map(([from, subject], i) => ({ getId: () => 'T' + i, getMessageCount: () => 1, getMessages: () => [{ getFrom: () => from, getSubject: () => subject, getDate: () => new Date('2026-11-16T15:00:00Z') }] })),
-    sendEmail: (to, subject, body) => out.mails.push({ to, subject, body, kind: 'sent' }), createDraft: (to, subject, body) => out.mails.push({ to, subject, body, kind: 'draft' }) },
+    getMessagesForThreads: (ts) => { out.batchCalls = (out.batchCalls || 0) + 1; return ts.map(t => t.getMessages()); }, sendEmail: (to, subject, body) => out.mails.push({ to, subject, body, kind: 'sent' }), createDraft: (to, subject, body) => out.mails.push({ to, subject, body, kind: 'draft' }) },
   Utilities: { formatDate: (d) => new Date(d).toISOString().slice(0, 16).replace('T', ' ') },
   ScriptApp: { getProjectTriggers: () => [], deleteTrigger() {}, newTrigger: (fn) => { const t = { timeBased() { return t; }, everyDays() { return t; }, atHour() { return t; }, inTimezone() { return t; }, create() { triggers.push(fn); } }; return t; }, getService: () => ({ getUrl: () => 'https://script.google.com/macros/s/CC/exec' }) },
 };
 vm.createContext(ctx);
-vm.runInContext(src + '\n;globalThis.__api = { doGet, getDashboard, licenseAction, setLeadStatus, addRequest, addFinance, setTheme, dailyBrief, setupCommandCenter, saveContact, addNote, addProspect, emailContact, startTrial };', ctx);
+vm.runInContext(src + '\n;globalThis.__api = { doGet, getDashboard, getExtras, licenseAction, setLeadStatus, addRequest, addFinance, setTheme, dailyBrief, setupCommandCenter, saveContact, addNote, addProspect, emailContact, startTrial };', ctx);
 const A = ctx.__api;
 const tryIt = (name, f) => { try { return f(); } catch (e) { out.errors[name] = e.message; return null; } };
 
@@ -63,7 +63,7 @@ out.log = sheets.Log.rows.slice(1).map(r => r[2]);
 
 // Prospects: add, edit, note, email (send and draft), trial, safety checks, and the test-data switch
 const PH = ['Added', 'Business', 'Contact', 'Email', 'Phone', 'City', 'Industry', 'Tools to pitch', 'Source', 'Status', 'Last activity', 'Next step', 'Notes'];
-out.inbox = A.getDashboard().inbox.map(m => m.subject);
+out.inbox = A.getExtras().inbox.map(m => m.subject); out.dashHasNoInbox = !('inbox' in A.getDashboard());
 out.addP = A.addProspect({ Business: 'Sunrise Apartments', Contact: 'Lee Park', Email: 'lee@example.com', Phone: '702-555-0100', City: 'Henderson', 'Tools to pitch': 'WorkOrderDesk', Notes: 'Met at the leasing office' });
 tryIt('addNoBiz', () => A.addProspect({ Email: 'x@example.com' }));
 tryIt('addBadEmail', () => A.addProspect({ Business: 'X', Email: 'not-an-email' }));
@@ -97,7 +97,7 @@ out.liveProspects = sheets.Prospects.rows.slice(1).map(r => r[1]);
 // Stranger
 USER = 'someone@example.com';
 out.strangerPage = A.doGet().html;
-for (const [n, f] of Object.entries({ saveContact: () => A.saveContact('prospect', { row: 2, email: 'lee@example.com' }, { Status: 'Won' }), addNote: () => A.addNote('prospect', { row: 2 }, 'x'), addProspect: () => A.addProspect({ Business: 'X' }), emailContact: () => A.emailContact('prospect', { row: 2 }, 'a', 'b', 'send'), startTrial: () => A.startTrial('prospect', { row: 2 }, 'x'), getDashboard: () => A.getDashboard(), licenseAction: () => A.licenseAction('pause', 'RFL-20261220-AAAAAA'), setLeadStatus: () => A.setLeadStatus(2, 'Won'), addRequest: () => A.addRequest('qa-engineer', 'Normal', '', 'x'), addFinance: () => A.addFinance({ amount: 5 }), setTheme: () => A.setTheme('dark') }))
+for (const [n, f] of Object.entries({ getExtras: () => A.getExtras(), saveContact: () => A.saveContact('prospect', { row: 2, email: 'lee@example.com' }, { Status: 'Won' }), addNote: () => A.addNote('prospect', { row: 2 }, 'x'), addProspect: () => A.addProspect({ Business: 'X' }), emailContact: () => A.emailContact('prospect', { row: 2 }, 'a', 'b', 'send'), startTrial: () => A.startTrial('prospect', { row: 2 }, 'x'), getDashboard: () => A.getDashboard(), licenseAction: () => A.licenseAction('pause', 'RFL-20261220-AAAAAA'), setLeadStatus: () => A.setLeadStatus(2, 'Won'), addRequest: () => A.addRequest('qa-engineer', 'Normal', '', 'x'), addFinance: () => A.addFinance({ amount: 5 }), setTheme: () => A.setTheme('dark') }))
   tryIt('stranger:' + n, f);
 out.fetchesAfterStranger = out.fetches.length;
 console.log(JSON.stringify(out));

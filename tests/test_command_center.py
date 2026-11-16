@@ -90,7 +90,7 @@ window.__calls = []; window.confirm = () => true;
 const DATA = %s;
 function runner(){ let ok = ()=>{}, no = ()=>{}, p;
   const r = { withSuccessHandler(f){ ok=f; return p; }, withFailureHandler(f){ no=f; return p; } };
-  p = new Proxy(r, { get(t, k){ if (k in t) return t[k]; return (...a) => { window.__calls.push([k, ...a]); setTimeout(() => ok(k === "getDashboard" ? DATA : true), 0); }; } });
+  p = new Proxy(r, { get(t, k){ if (k in t) return t[k]; return (...a) => { window.__calls.push([k, ...a]); setTimeout(() => ok(k === "getDashboard" || k === "getExtras" ? DATA : true), 0); }; } });
   return p;
 }
 window.google = { script: { get run(){ return runner(); } } };
@@ -112,7 +112,7 @@ def test_CC03_page_renders_and_wires_actions(make_page, tmp_path):
     html = INDEX.read_text().replace("<head>", "<head>" + STUB % json.dumps(data), 1)
     f = tmp_path / "cc.html"; f.write_text(html)
     w = make_page(width=1200); pg = w.page
-    pg.goto(f.as_uri()); pg.wait_for_selector(".kpi")
+    pg.goto(f.as_uri()); pg.wait_for_selector(".kpi"); pg.wait_for_selector("text=Audit: Glow Studio")
     assert "440" in pg.inner_text("main") and "Audit: Glow Studio" in pg.inner_text("main")
     assert "Today (1)" in pg.inner_text("#tabs")
     for t, expect in [("pipeline", "Glow Studio"), ("clients", "Record payment"), ("finance", "Ledger"), ("agents", "Send to agent team"), ("log", "setup")]:
@@ -201,10 +201,11 @@ def test_CC04_server_functions_owner_and_stranger():
     assert d["fetches"][0]["payload"] == {"type": "admin", "env": "production", "token": "x" * 32, "action": "pause", "key": "RFL-20261220-AAAAAA"}
     assert e["badKey"] == "Bad license key" and e["badAction"] == "Unknown action"
     assert d["themeAfter"] == "contrast" and e["badTheme"]
-    for fn in ("getDashboard", "licenseAction", "setLeadStatus", "addRequest", "addFinance", "setTheme", "saveContact", "addNote", "addProspect", "emailContact", "startTrial"):
+    for fn in ("getDashboard", "getExtras", "licenseAction", "setLeadStatus", "addRequest", "addFinance", "setTheme", "saveContact", "addNote", "addProspect", "emailContact", "startTrial"):
         assert e["stranger:" + fn] == "Not authorized", fn
     assert d["fetchesAfterStranger"] == 3
     # business-only inbox: personal, bank and shopping mail never appear
+    assert d["dashHasNoInbox"] and d["batchCalls"] == 1          # dashboard returns fast; email loads in one batch afterwards
     assert d["inbox"] == ["New Event: Glow Studio", "Re: Quick idea", "[Lead] Glow Studio (score 72)", "You received $250.00"]
     # prospects: add, edit (only allowed fields), notes, email, trial, safety
     assert d["addP"]["ok"] and e["addNoBiz"] and e["addBadEmail"]

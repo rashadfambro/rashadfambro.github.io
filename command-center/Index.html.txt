@@ -76,7 +76,10 @@ try{ ENV = localStorage.getItem("cc-env") === "test" ? "test" : "live"; }catch(_
 $("#env").value = ENV; document.body.classList.toggle("testenv", ENV === "test");
 $("#env").addEventListener("change", e => { ENV = e.target.value; try{ localStorage.setItem("cc-env", ENV); }catch(_){} document.body.classList.toggle("testenv", ENV === "test"); load(); });
 $("#theme").addEventListener("change", e => { applyTheme(e.target.value); call("setTheme", e.target.value).catch(() => {}); });
-function load(){ $("#updated").textContent = "Loading…"; call("getDashboard", ENV).then(d => { D = d; if (d.theme) applyTheme(d.theme); $("#updated").textContent = "Updated " + when(d.generated) + (ENV === "test" ? " · TEST DATA" : ""); render(); if (OPEN) openContact(OPEN.kind, OPEN.row, OPEN.email, true); }).catch(e => { $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)}</div>`; }); }
+function load(){ $("#updated").textContent = "Loading…"; const t0 = Date.now(), slow = setTimeout(() => { if (!D) $("#main").innerHTML = '<div class="card">Still loading. Google can be slow for a moment. <button class="btn" type="button" id="retry">Try again</button></div>'; }, 15000);
+  call("getDashboard", ENV).then(d => { clearTimeout(slow); const keep = D && D.env === d.env ? {calendar: D.calendar, inbox: D.inbox} : {calendar: null, inbox: null}; D = Object.assign({}, d, keep); if (d.theme) applyTheme(d.theme); $("#updated").textContent = "Updated " + when(d.generated) + (ENV === "test" ? " · TEST DATA" : ""); render(); if (OPEN) openContact(OPEN.kind, OPEN.row, OPEN.email, true);
+    call("getExtras", ENV).then(x => { if (!D) return; D.calendar = x.calendar || []; D.inbox = x.inbox || []; if (tab === "today") render(); }).catch(() => { if (!D) return; D.calendar = D.calendar || []; D.inbox = D.inbox || []; if (tab === "today") render(); });
+  }).catch(e => { clearTimeout(slow); $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)} <button class="btn" type="button" id="retry">Try again</button></div>`; $("#updated").textContent = "Not loaded"; }); }
 function tabsHTML(){ $("#tabs").innerHTML = TABS.map(([id,l]) => `<button role="tab" type="button" data-tab="${id}" aria-selected="${id===tab}">${esc(l)}${id==="today"&&D?` (${D.summary.alerts.length})`:""}</button>`).join(""); }
 function table(cols, rows, empty){ if(!rows.length) return `<p class="muted">${esc(empty||"Nothing here yet.")}</p>`;
   return `<div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${esc(c[0])}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }
@@ -91,8 +94,8 @@ const VIEWS = {
       <div class="card kpi"><b>${money(f.revenueMonth)}</b><span>revenue this month</span></div>
       <div class="card kpi"><b>${c.openRequests}</b><span>open agent requests</span></div></div>
       <h2>Alerts</h2>${s.alerts.length ? s.alerts.map(a=>`<div class="alert ${esc(a.level)}"><span class="k">${esc(a.kind)}</span><span>${esc(a.text)}</span></div>`).join("") : '<p class="muted">All clear.</p>'}
-      <h2>Meetings (Next 7 Days)</h2>${table([["When",e=>esc(when(e.start))],["Meeting",e=>esc(e.title)],["Where",e=>esc(e.where)]], D.calendar, "No meetings this week.")}
-      <h2>Business Inbox (Unread, Last 3 Days)</h2><p class="muted">Only business mail: clients, prospects, bookings, payments, orders and the website. Personal email stays out.</p>${table([["From",m=>esc(m.from)],["Subject",m=>`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.subject)}</a>`],["Received",m=>esc(when(m.date))]], D.inbox, "No unread business email.")}`; },
+      <h2>Meetings (Next 7 Days)</h2>${D.calendar===null?'<p class="muted">Loading meetings…</p>':table([["When",e=>esc(when(e.start))],["Meeting",e=>esc(e.title)],["Where",e=>esc(e.where)]], D.calendar||[], "No meetings this week.")}
+      <h2>Business Inbox (Unread, Last 3 Days)</h2><p class="muted">Only business mail: clients, prospects, bookings, payments, orders and the website. Personal email stays out.</p>${D.inbox===null?'<p class="muted">Loading business email…</p>':table([["From",m=>esc(m.from)],["Subject",m=>`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.subject)}</a>`],["Received",m=>esc(when(m.date))]], D.inbox||[], "No unread business email.")}`; },
   pipeline(){ const all = contacts(), shown = all.filter(c => (SRC==="all" || c.kind===SRC) && (!Q || c.hay.indexOf(Q) >= 0));
     const won = all.filter(c => c.status==="Won").length, open = all.filter(c => ["Won","Lost","Do not contact","Spam"].indexOf(c.status) < 0).length;
     return `<div class="grid"><div class="card kpi"><b>${all.length}</b><span>leads + prospects</span></div><div class="card kpi"><b>${open}</b><span>open in the pipeline</span></div><div class="card kpi"><b>${won}</b><span>clients won</span></div><div class="card kpi"><b>${all.length?Math.round(100*won/all.length):0}%</b><span>win rate</span></div></div>
@@ -174,6 +177,7 @@ document.addEventListener("click", e => {
     a.disabled = true; call("licenseAction", a.dataset.act, a.dataset.key, ENV).then(() => { toast("Done"); load(); }).catch(err => { a.disabled=false; toast("Failed: " + err); }); }
 });
 $("#refresh").addEventListener("click", load);
+document.addEventListener("click", e => { if (e.target.id === "retry") load(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#drawer").hidden) { $("#drawer").hidden = true; OPEN = null; } });
 document.addEventListener("input", e => { if (e.target.id === "pq") { Q = e.target.value.trim().toLowerCase(); const pos = e.target.selectionStart; render(); const q = $("#pq"); q.focus(); q.setSelectionRange(pos, pos); } });
 document.addEventListener("change", e => {
