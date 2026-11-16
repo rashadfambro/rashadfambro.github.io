@@ -90,11 +90,29 @@ const STOP_STATUSES = ['Replied','Booked','Trial','Proposal sent','Ordered','Won
 const STATUS_RANK = { 'New': 0, 'Not contacted': 0, 'Draft ready': 0, 'Contacted': 1, 'Replied': 2, 'Booked': 3, 'Trial': 4, 'Proposal sent': 5, 'Ordered': 5.5, 'Won': 6 };
 const PROSPECT_HEADERS = ['Added','Business','Contact','Email','Phone','City','Industry','Tools to pitch','Source','Status','Last activity','Next step','Notes'];
 
+/* ======================= test environment ======================= */
+// Staging, local and test traffic sends env:"staging". It is stored in separate "TEST ..." tabs, and every email it
+// would send goes to the owner instead, marked [TEST to <address>]. Production tabs and real customers are never touched.
+const TEST_PREFIX = 'TEST ';
+let ENV_ = 'production';
+function setEnv_(v) { ENV_ = v === 'staging' ? 'staging' : 'production'; return ENV_; }
+function isTest_() { return ENV_ === 'staging'; }
+function withTest_(fn) { const before = ENV_; ENV_ = 'staging'; try { fn(); } catch (e) { console.error(e); } finally { ENV_ = before; } }
+function hasTestData_() { return !!SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TEST_PREFIX + 'Licenses') || !!SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TEST_PREFIX + 'Leads'); }
+/** Menu: removes every TEST tab so the next test run starts clean. */
+function clearTestData() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ss.getSheets().filter(sh => sh.getName().indexOf(TEST_PREFIX) === 0).forEach(sh => ss.deleteSheet(sh));
+}
+/** Menu: runs the daily license checks and follow-ups on the TEST tabs right now (emails go to you). */
+function runTestCycle() { withTest_(() => { runLicenses(); runFollowUps(); syncPipeline(); }); }
+
 /* ======================= web endpoints ======================= */
 
 function doPost(e) {
   try {
     const body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    setEnv_(body.env);
     if (body.website) return json_({ ok: true });            // honeypot: bots fill hidden field
     if (body.type === 'lead') return json_(handleLead_(body));
     if (body.type === 'chat') return json_(handleChat_(body));
@@ -109,6 +127,7 @@ function doPost(e) {
 
 function doGet(e) {
   const p = (e && e.parameter) || {};
+  setEnv_(p.env);
   if (p.check && p.key) return json_(checkLicense_({ kind: p.check, key: p.key }));
   if (p.stats === 'founding') return json_(foundingStats_());
   return json_({ ok: true, service: CFG.BUSINESS + ' lead engine' });
@@ -299,8 +318,9 @@ function plain_(s) {
   s = s.normalize ? s.normalize('NFKD').replace(/[̀-ͯ]/g, '') : s;   // café -> cafe
   return s.replace(/[^\x09\x0A\x0D\x20-\x7E]/g, '');                            // drop anything else (emoji)
 }
-function send_(to, subject, body, opts) { GmailApp.sendEmail(to, plain_(subject).replace(/\s+/g, ' ').trim(), plain_(body), opts || {}); }
-function draft_(to, subject, body, opts) { return GmailApp.createDraft(to, plain_(subject).replace(/\s+/g, ' ').trim(), plain_(body), opts || {}); }
+function testRoute_(to, subject) { return isTest_() ? [CFG.OWNER_EMAIL, '[TEST to ' + to + '] ' + subject] : [to, subject]; }
+function send_(to, subject, body, opts) { const r = testRoute_(to, subject); GmailApp.sendEmail(r[0], plain_(r[1]).replace(/\s+/g, ' ').trim(), plain_(body), opts || {}); }
+function draft_(to, subject, body, opts) { const r = testRoute_(to, subject); return GmailApp.createDraft(r[0], plain_(r[1]).replace(/\s+/g, ' ').trim(), plain_(body), opts || {}); }
 
 /* ======================= trials & licenses (v2, Nov 15 2026) =======================
  * Licenses tab, one row per client (a package is one row listing several tools):
@@ -434,7 +454,8 @@ function activateRow_(sh, row, opts) {
 function onLicenseEdit(e) {
   try {
     const sh = e.range.getSheet();
-    if (sh.getName() !== 'Licenses' || e.range.getColumn() !== 5 || e.range.getRow() < 2) return;
+    if (sh.getName() === TEST_PREFIX + 'Licenses') ENV_ = 'staging'; else if (sh.getName() !== 'Licenses') return;
+    if (e.range.getColumn() !== 5 || e.range.getRow() < 2) return;
     const row = e.range.getRow(), status = e.value, email = sh.getRange(row, 4).getValue(), tools = sh.getRange(row, 2).getValue(), biz = sh.getRange(row, 3).getValue();
     if (status === 'Active') activateRow_(sh, row);
     if ((status === 'Paused' || status === 'Canceled') && email) {
@@ -457,6 +478,7 @@ function recordPaymentForSelectedRow() {
 
 /** Runs daily: trial reminders and expiry; renewal reminders, Past due, and automatic pause. */
 function runLicenses() {
+  if (!isTest_() && hasTestData_()) withTest_(runLicenses);   // test licenses get the same checks (emails go to you)
   const sh = sheet_('Licenses', LICENSE_HEADERS), rows = sh.getDataRange().getValues();
   for (let r = 1; r < rows.length; r++) {
     const [key, tools, biz, email, status, plan, , ends, , notes, link, , contact] = rows[r];
@@ -613,6 +635,9 @@ function onOpen() {
     .addItem('Match payment emails now', 'matchPayments')
     .addItem('Update lead and prospect statuses now', 'syncPipeline')
     .addItem('Back up this Sheet now', 'backupSheet')
+    .addSeparator()
+    .addItem('Test environment: run reminders and checks now', 'runTestCycle')
+    .addItem('Test environment: clear all TEST tabs', 'clearTestData')
     .addToUi();
 }
 
@@ -624,6 +649,7 @@ function onOpen() {
  *  trial started → Trial; email with "proposal" in the subject sent to them → Proposal sent;
  *  paid order or Active license → Won; "STOP" or "unsubscribe" reply → Do not contact. */
 function syncPipeline() {
+  if (!isTest_() && hasTestData_()) withTest_(syncPipeline);
   const lic = sheet_('Licenses', LICENSE_HEADERS).getDataRange().getValues().slice(1);
   const ord = sheet_('Orders', ORDER_HEADERS).getDataRange().getValues().slice(1);
   const won = {}, trial = {};
@@ -670,6 +696,7 @@ function detectStatus_(email, since, won, trial) {
 
 /** Runs daily (installed by setup). Sends the next follow-up unless the lead replied or you changed Status. */
 function runFollowUps() {
+  if (!isTest_() && hasTestData_()) withTest_(runFollowUps);
   const sh = sheet_('Leads', LEAD_HEADERS);
   const rows = sh.getDataRange().getValues();
   const now = new Date();
@@ -838,6 +865,7 @@ function testLead() {
 
 function sheet_(name, headers) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (isTest_() && name.indexOf(TEST_PREFIX) !== 0) name = TEST_PREFIX + name;
   let sh = ss.getSheetByName(name);
   if (!sh) { sh = ss.insertSheet(name); sh.appendRow(headers); sh.getRange(1, 1, 1, headers.length).setFontWeight('bold'); }
   return sh;

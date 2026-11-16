@@ -33,20 +33,35 @@ input,select,textarea{font:inherit;padding:7px 9px;border:1px solid var(--line);
 textarea{min-height:90px;width:100%}
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--accentInk);padding:10px 16px;border-radius:10px;display:none;z-index:9}
 .muted{color:var(--muted)}.scroll{overflow-x:auto}
-@media (max-width:640px){main{padding:10px}.alert .k{min-width:0}}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:10px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px;min-height:120px}.col h3{font-size:.85rem;margin:2px 4px 8px;display:flex;justify-content:space-between}
+.col.over{outline:2px dashed var(--accent)}
+.pc{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:8px 10px;margin-bottom:8px;cursor:pointer;font-size:.85rem;width:100%;text-align:left;color:var(--ink);font-family:inherit}
+.pc.lead{border-left-color:var(--mint)}.pc b{display:block;font-size:.92rem}.pc .muted{font-size:.78rem}.pc:focus-visible{outline:2px solid var(--accent)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin:6px 0 12px}
+#drawer{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:flex-end;z-index:8}#drawer[hidden]{display:none}
+#drawer .sheet{background:var(--panel);color:var(--ink);width:min(640px,100%);height:100%;overflow:auto;padding:18px;border-left:1px solid var(--line)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fgrid label{min-width:0}.fgrid input,.fgrid select{width:100%}
+.notes{list-style:none;padding:0;margin:0;font-size:.85rem}.notes li{border-top:1px solid var(--line);padding:6px 0}
+.envpick{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}body.testenv header{box-shadow:inset 0 -4px 0 var(--amber)}
+#envNote{display:none;background:var(--amber);color:#000;font-weight:700;text-align:center;padding:4px;font-size:.85rem}body.testenv #envNote{display:block}
+@media (max-width:640px){main{padding:10px}.alert .k{min-width:0}.fgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
   <div><h1>Command Center</h1><small id="updated">Loading…</small></div>
   <nav role="tablist" id="tabs"></nav>
-  <span style="display:flex;gap:8px;align-items:center"><label class="themepick">Theme <select id="theme" aria-label="Color theme"><option value="dark">Dark</option><option value="light">Light</option><option value="midnight">Midnight</option><option value="contrast">High contrast</option></select></label><button class="btn" id="refresh" type="button">Refresh</button></span>
+  <span style="display:flex;gap:8px;align-items:center"><label class="envpick">Data <select id="env" aria-label="Which data to show"><option value="live">Live</option><option value="test">Test (staging)</option></select></label><label class="themepick">Theme <select id="theme" aria-label="Color theme"><option value="dark">Dark</option><option value="light">Light</option><option value="midnight">Midnight</option><option value="contrast">High contrast</option></select></label><button class="btn" id="refresh" type="button">Refresh</button></span>
 </header>
+<div id="envNote">Test data: the TEST tabs from the staging site. Emails go to you, never to customers.</div>
 <main id="main" aria-live="polite"><p class="muted">Loading your business…</p></main>
+<div id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="dTitle"><div class="sheet" id="dSheet"></div></div>
 <div id="toast" role="status"></div>
 <script>
-const TABS = [["today","Today"],["pipeline","Pipeline"],["clients","Clients & Licenses"],["finance","Finance"],["agents","Agent Team"],["log","Activity Log"]];
-let D = null, tab = "today";
+const TABS = [["today","Today"],["pipeline","Prospects & Pipeline"],["clients","Clients & Licenses"],["finance","Finance"],["agents","Agent Team"],["log","Activity Log"]];
+let D = null, tab = "today", ENV = "live", Q = "", SRC = "all", OPEN = null;
+const BOARD = [["New",["New","Not contacted","Draft ready"]],["Contacted",["Contacted"]],["Replied",["Replied"]],["Booked",["Booked"]],["Trial",["Trial"]],["Proposal sent",["Proposal sent","Ordered"]],["Client (Won)",["Won"]],["Closed",["Lost","Do not contact","Spam"]]];
 const $ = (s, r=document) => r.querySelector(s);
 const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money = (n) => "$" + Math.round(Number(n)||0).toLocaleString("en-US");
@@ -57,8 +72,11 @@ function call(fn, ...args){ return new Promise((ok, no) => google.script.run.wit
 
 function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); $("#theme").value = t; try{ localStorage.setItem("cc-theme", t); }catch(_){} }
 try{ const t0 = localStorage.getItem("cc-theme"); if (t0) applyTheme(t0); }catch(_){}
+try{ ENV = localStorage.getItem("cc-env") === "test" ? "test" : "live"; }catch(_){}
+$("#env").value = ENV; document.body.classList.toggle("testenv", ENV === "test");
+$("#env").addEventListener("change", e => { ENV = e.target.value; try{ localStorage.setItem("cc-env", ENV); }catch(_){} document.body.classList.toggle("testenv", ENV === "test"); load(); });
 $("#theme").addEventListener("change", e => { applyTheme(e.target.value); call("setTheme", e.target.value).catch(() => {}); });
-function load(){ $("#updated").textContent = "Loading…"; call("getDashboard").then(d => { D = d; if (d.theme) applyTheme(d.theme); $("#updated").textContent = "Updated " + when(d.generated); render(); }).catch(e => { $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)}</div>`; }); }
+function load(){ $("#updated").textContent = "Loading…"; call("getDashboard", ENV).then(d => { D = d; if (d.theme) applyTheme(d.theme); $("#updated").textContent = "Updated " + when(d.generated) + (ENV === "test" ? " · TEST DATA" : ""); render(); if (OPEN) openContact(OPEN.kind, OPEN.row, OPEN.email, true); }).catch(e => { $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)}</div>`; }); }
 function tabsHTML(){ $("#tabs").innerHTML = TABS.map(([id,l]) => `<button role="tab" type="button" data-tab="${id}" aria-selected="${id===tab}">${esc(l)}${id==="today"&&D?` (${D.summary.alerts.length})`:""}</button>`).join(""); }
 function table(cols, rows, empty){ if(!rows.length) return `<p class="muted">${esc(empty||"Nothing here yet.")}</p>`;
   return `<div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${esc(c[0])}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }
@@ -74,13 +92,15 @@ const VIEWS = {
       <div class="card kpi"><b>${c.openRequests}</b><span>open agent requests</span></div></div>
       <h2>Alerts</h2>${s.alerts.length ? s.alerts.map(a=>`<div class="alert ${esc(a.level)}"><span class="k">${esc(a.kind)}</span><span>${esc(a.text)}</span></div>`).join("") : '<p class="muted">All clear.</p>'}
       <h2>Meetings (Next 7 Days)</h2>${table([["When",e=>esc(when(e.start))],["Meeting",e=>esc(e.title)],["Where",e=>esc(e.where)]], D.calendar, "No meetings this week.")}
-      <h2>Inbox (Unread, Last 3 Days)</h2>${table([["",m=>m.business?'<span class="pill">Business</span>':""],["From",m=>esc(m.from)],["Subject",m=>`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.subject)}</a>`],["Received",m=>esc(when(m.date))]], D.inbox.slice().sort((a,b)=>b.business-a.business), "Inbox zero.")}`; },
-  pipeline(){ const s=D.summary, statuses=["New","Contacted","Replied","Booked","Trial","Proposal sent","Won","Lost","Do not contact","Spam"];
-    return `<div class="grid">${statuses.filter(k=>s.pipeline[k]).map(k=>`<div class="card kpi"><b>${s.pipeline[k]}</b><span>${esc(k)}</span></div>`).join("")}<div class="card kpi"><b>${s.conversion}%</b><span>lead to client</span></div></div>
-      <p class="muted">Statuses move forward on their own every 2 hours (replies, bookings, trials, proposals, payments). Change one by hand below if needed.</p>
-      <h2>Leads</h2>${table([["Received",l=>esc(day(l.Received))],["Business",l=>esc(l.Business||l.Name)],["Email",l=>esc(l.Email)],["Score",l=>esc(l.Score)],["Form",l=>esc(l.Form)],["Source",l=>esc(l.Source)],
-        ["Status",l=>`<select data-lead="${esc(l._row)}" aria-label="Status for ${esc(l.Business||l.Email)}">${statuses.map(x=>`<option${x===(l.Status||"New")?" selected":""}>${esc(x)}</option>`).join("")}</select>`]], D.leads, "No website leads yet.")}
-      <h2>Prospects (Outbound)</h2>${table([["Business",p=>esc(p.Business)],["City",p=>esc(p.City)],["Industry",p=>esc(p.Industry)],["Pitch",p=>esc(p["Tools to pitch"])],["Status",p=>`<span class="pill">${esc(p.Status||"New")}</span>`],["Last activity",p=>esc(day(p["Last activity"]))],["Next step",p=>esc(p["Next step"])]], D.prospects, "The weekly lead research adds prospects here.")}`; },
+      <h2>Business Inbox (Unread, Last 3 Days)</h2><p class="muted">Only business mail: clients, prospects, bookings, payments, orders and the website. Personal email stays out.</p>${table([["From",m=>esc(m.from)],["Subject",m=>`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.subject)}</a>`],["Received",m=>esc(when(m.date))]], D.inbox, "No unread business email.")}`; },
+  pipeline(){ const all = contacts(), shown = all.filter(c => (SRC==="all" || c.kind===SRC) && (!Q || c.hay.indexOf(Q) >= 0));
+    const won = all.filter(c => c.status==="Won").length, open = all.filter(c => ["Won","Lost","Do not contact","Spam"].indexOf(c.status) < 0).length;
+    return `<div class="grid"><div class="card kpi"><b>${all.length}</b><span>leads + prospects</span></div><div class="card kpi"><b>${open}</b><span>open in the pipeline</span></div><div class="card kpi"><b>${won}</b><span>clients won</span></div><div class="card kpi"><b>${all.length?Math.round(100*won/all.length):0}%</b><span>win rate</span></div></div>
+      <div class="toolbar"><label>Search<input id="pq" type="search" value="${esc(Q)}" placeholder="Business, name, city, phone…"></label>
+        <label>Show<select id="psrc"><option value="all"${SRC==="all"?" selected":""}>Everyone</option><option value="prospect"${SRC==="prospect"?" selected":""}>Outbound prospects</option><option value="lead"${SRC==="lead"?" selected":""}>Website leads</option></select></label>
+        <button class="btn primary" type="button" id="addP">+ Add prospect</button><span class="muted">Drag a card to move it, or open it to email, call, add notes and start a trial. Stages also move on their own every 2 hours.</span></div>
+      <div class="board" role="list">${BOARD.map(([label, sts]) => { const cards = shown.filter(c => sts.indexOf(c.status) >= 0);
+        return `<section class="col" data-drop="${esc(sts[0])}" role="listitem" aria-label="${esc(label)}"><h3><span>${esc(label)}</span><span class="pill">${cards.length}</span></h3>${cards.slice(0,80).map(card).join("") || '<p class="muted" style="margin:4px">None</p>'}</section>`; }).join("")}</div>`; },
   clients(){ const act=(k,a,l)=>`<button class="btn" type="button" data-act="${a}" data-key="${esc(k)}">${l}</button>`;
     return `<p class="muted">Actions run through the lead engine, so clients get the same emails as always. Every action is logged.</p>
       ${table([["Business",x=>esc(x.Business)],["Tools",x=>esc(x.Tools)],["Status",x=>`<span class="pill">${esc(x.Status)}</span>`],["Plan",x=>esc(x.Plan)],["Ends / paid through",x=>esc(day(x["Ends / paid through"]))],["Last check",x=>esc(when(x["Last check"]))],
@@ -96,19 +116,84 @@ const VIEWS = {
       ${table([["Sent",r=>esc(when(r.Time))],["Agent",r=>esc(r.Agent)],["Priority",r=>esc(r.Priority)],["Topic",r=>esc(r["Client / topic"])],["Request",r=>esc(r.Request)],["Status",r=>`<span class="pill">${esc(r.Status)}</span>`],["Response",r=>esc(r.Response)+(r.Link?` <a href="${esc(r.Link)}" target="_blank" rel="noopener">Open</a>`:"")]], D.requests, "No requests yet.")}`; },
   log(){ return table([["Time",x=>esc(when(x.Time))],["Source",x=>esc(x.Source)],["Action",x=>esc(x.Action)],["Target",x=>esc(x.Target)],["Result",x=>esc(x.Result)]], D.log, "No activity yet."); }
 };
+function contacts(){
+  const L = (D.leads||[]).map(l => ({kind:"lead", row:l._row, email:l.Email||"", business:l.Business||l.Name||l.Email||"(no name)", person:l.Name||"", phone:l.Phone||"", city:l.City||"", industry:l.Industry||"", tools:l.Package||"", next:"", status:l.Status||"New", notes:l.Notes||"", src:"Website · "+(l.Form||"form"), r:l}));
+  const P = (D.prospects||[]).map(p => ({kind:"prospect", row:p._row, email:p.Email||"", business:p.Business||"(no name)", person:p.Contact||"", phone:p.Phone||"", city:p.City||"", industry:p.Industry||"", tools:p["Tools to pitch"]||"", next:p["Next step"]||"", status:p.Status||"New", notes:p.Notes||"", src:p.Source||"Outbound", r:p}));
+  return L.concat(P).map(c => Object.assign(c, {hay:[c.business,c.person,c.email,c.phone,c.city,c.industry,c.tools].join(" ").toLowerCase()}));
+}
+function card(c){ return `<button type="button" class="pc ${c.kind}" draggable="true" data-open="${c.kind}" data-row="${esc(c.row)}" data-email="${esc(c.email)}"><b>${esc(c.business)}</b>${c.person?`<span>${esc(c.person)}</span><br>`:""}<span class="muted">${esc([c.city, c.phone].filter(Boolean).join(" · "))}</span>${c.next?`<br><span class="muted">Next: ${esc(c.next)}</span>`:""}<br><span class="muted">${c.kind==="lead"?"Website lead":"Prospect"}${c.tools?" · "+esc(c.tools):""}</span></button>`; }
+const TEMPLATES = {
+  intro: c => [`Quick idea for ${c.business}`, `Hi ${(c.person||"there").split(" ")[0]},\n\nI'm Rashad Fambro, an IT Software Consultant who builds simple automation for ${c.industry||"local businesses"}. ${c.tools?`I think ${c.tools} could save your team time on the everyday back-and-forth.`:"I help teams cut down on missed messages, manual scheduling and slow follow-up."}\n\nWould you be open to a free 30-minute workflow audit? You'll get a short written summary of what could be automated, whether or not we work together.\n\nYou can see examples here: https://rashadfambro.github.io/\n\nThanks,\nRashad Fambro\nRashad Fambro Consulting`],
+  follow: c => [`Following up: ${c.business}`, `Hi ${(c.person||"there").split(" ")[0]},\n\nJust following up on my last note. If a free workflow audit would help ${c.business}, reply with a time that works and I'll send an invite.\n\nThanks,\nRashad Fambro`],
+  book: c => [`Booking our call`, `Hi ${(c.person||"there").split(" ")[0]},\n\nThanks for your reply. Here's my booking page for a free 30-minute workflow audit: https://rashadfambro.github.io/#audit\n\nIf none of the times work, reply with two options and I'll make one of them work.\n\nThanks,\nRashad Fambro`],
+  blank: c => ["", ""]
+};
+function openContact(kind, row, email, keep){
+  const c = contacts().find(x => x.kind===kind && String(x.row)===String(row) && (!email || x.email===email)) || contacts().find(x => x.kind===kind && email && x.email===email);
+  if (!c) { $("#drawer").hidden = true; OPEN = null; return; }
+  OPEN = {kind:c.kind, row:c.row, email:c.email};
+  const f = (name, label, val, type) => `<label>${esc(label)}<input name="${esc(name)}" type="${type||"text"}" value="${esc(val)}"></label>`;
+  const notes = String(c.notes||"").split(" · ").filter(Boolean).reverse();
+  const stages = (D.stages||["New","Not contacted","Draft ready","Contacted","Replied","Booked","Trial","Proposal sent","Ordered","Won","Lost","Do not contact","Spam"]).map(x => `<option${x===c.status?" selected":""}>${esc(x)}</option>`).join("");
+  $("#dSheet").innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><h2 id="dTitle" style="margin:0">${esc(c.business)}</h2><span class="muted">${c.kind==="lead"?"Website lead":"Outbound prospect"} · ${esc(c.src)}</span></div><button class="btn" type="button" id="dClose">Close</button></div>
+    <p style="margin:10px 0">${c.phone?`<a class="btn primary" href="tel:${esc(String(c.phone).replace(/[^\d+]/g,""))}">Call ${esc(c.phone)}</a> <button class="btn" type="button" data-copy="${esc(c.phone)}">Copy phone</button>`:'<span class="muted">No phone yet</span>'}
+      ${c.email?` <button class="btn" type="button" data-copy="${esc(c.email)}">Copy email</button>`:""}</p>
+    <form id="cForm" class="card"><h3 style="margin:0 0 8px">Details &amp; Stage</h3><div class="fgrid">
+      ${c.kind==="lead" ? f("Name","Name",c.person) : f("Contact","Contact name",c.person)}${f("Business","Business",c.business)}${f("Email","Email",c.email,"email")}${f("Phone","Phone",c.phone,"tel")}
+      ${c.kind==="prospect" ? f("City","City",c.city)+f("Tools to pitch","Tools to pitch",c.tools)+f("Next step","Next step",c.next) : ""}${f("Industry","Industry",c.industry)}
+      <label>Stage<select name="Status">${stages}</select></label></div><button class="btn primary" type="submit" style="margin-top:8px">Save changes</button>
+      <span style="float:right"><button class="btn" type="button" data-stage="Won">Mark as client (Won)</button><button class="btn" type="button" data-stage="Lost">Mark lost</button></span></form>
+    <form id="mForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Email ${esc(c.email||"(add an email above)")}</h3>
+      <label>Template<select id="mTpl"><option value="blank">Blank</option><option value="intro">Introduction</option><option value="follow">Follow-up</option><option value="book">Book the free audit</option></select></label>
+      <label style="margin-top:6px">Subject<input name="subject" required></label><label style="margin-top:6px">Message<textarea name="body" required style="min-height:160px"></textarea></label>
+      <div style="margin-top:8px"><button class="btn primary" type="submit" data-mode="send">Send now</button><button class="btn" type="submit" data-mode="draft">Save as Gmail draft</button>${ENV==="test"?' <span class="muted">Test data: goes to you</span>':""}</div></form>
+    <form id="tForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Start a 14-Day Trial</h3><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><label style="flex:1">Tool(s)<input name="tools" value="${esc(c.tools)}" placeholder="e.g. BookDesk, ChatDesk"></label><button class="btn primary" type="submit">Start trial &amp; email the link</button></div><p class="muted" style="margin:6px 0 0">The lead engine creates the trial and emails the link from the standard template.</p></form>
+    <form id="nForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Notes</h3><div style="display:flex;gap:8px"><input name="note" style="flex:1" placeholder="e.g. Spoke with the owner, call back Tuesday" aria-label="New note"><button class="btn primary" type="submit">Add note</button></div>
+      <ul class="notes">${notes.map(n=>`<li>${esc(n)}</li>`).join("") || '<li class="muted">No notes yet.</li>'}</ul></form>`;
+  $("#drawer").hidden = false; if (!keep) $("#dClose").focus();
+}
+function ref(){ return {row: OPEN.row, email: OPEN.email}; }
+function act(p, okMsg, btn){ if (btn) btn.disabled = true; return p.then(() => { toast(okMsg); load(); return true; }).catch(err => { toast("Failed: " + err); return false; }).finally(() => { if (btn) btn.disabled = false; }); }
+function addProspectForm(){ OPEN = null;
+  $("#dSheet").innerHTML = `<div style="display:flex;justify-content:space-between"><h2 id="dTitle" style="margin:0">Add a Prospect</h2><button class="btn" type="button" id="dClose">Close</button></div>
+    <form id="aForm" class="card" style="margin-top:10px"><div class="fgrid">${["Business","Contact","Email","Phone","City","Industry","Tools to pitch","Source","Next step"].map(k=>`<label>${esc(k)}${k==="Business"?" (required)":""}<input name="${esc(k)}"${k==="Business"?" required":""}${k==="Email"?' type="email"':""}${k==="Source"?' placeholder="Walk-in, referral, event…"':""}></label>`).join("")}</div>
+    <label style="margin-top:8px">First note<textarea name="Notes" style="min-height:70px"></textarea></label><button class="btn primary" type="submit" style="margin-top:8px">Add prospect</button></form>`;
+  $("#drawer").hidden = false; $("#aForm [name=Business]").focus(); }
 function render(){ tabsHTML(); $("#main").innerHTML = VIEWS[tab](); }
 
 document.addEventListener("click", e => {
   const t = e.target.closest("[data-tab]"); if (t) { tab = t.dataset.tab; render(); return; }
+  const o = e.target.closest("[data-open]"); if (o) { openContact(o.dataset.open, o.dataset.row, o.dataset.email); return; }
+  if (e.target.closest("#addP")) { addProspectForm(); return; }
+  if (e.target.closest("#dClose") || e.target === $("#drawer")) { $("#drawer").hidden = true; OPEN = null; return; }
+  const cp = e.target.closest("[data-copy]"); if (cp) { try { navigator.clipboard.writeText(cp.dataset.copy); toast("Copied"); } catch(_) { toast(cp.dataset.copy); } return; }
+  const st = e.target.closest("[data-stage]"); if (st && OPEN) { if (!confirm("Move to " + st.dataset.stage + "?")) return; act(call("saveContact", OPEN.kind, ref(), {Status: st.dataset.stage}, ENV), "Moved to " + st.dataset.stage, st); return; }
   const a = e.target.closest("[data-act]");
   if (a) { const labels={record_payment:"Record a payment and email a renewed license link",resend:"Email the client their link again",pause:"Pause this license (client is emailed)",cancel:"Cancel this license (client is emailed)",mark_founding:"Mark as a founding client"};
     if (!confirm(labels[a.dataset.act] + "?")) return;
-    a.disabled = true; call("licenseAction", a.dataset.act, a.dataset.key).then(() => { toast("Done"); load(); }).catch(err => { a.disabled=false; toast("Failed: " + err); }); }
+    a.disabled = true; call("licenseAction", a.dataset.act, a.dataset.key, ENV).then(() => { toast("Done"); load(); }).catch(err => { a.disabled=false; toast("Failed: " + err); }); }
 });
 $("#refresh").addEventListener("click", load);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#drawer").hidden) { $("#drawer").hidden = true; OPEN = null; } });
+document.addEventListener("input", e => { if (e.target.id === "pq") { Q = e.target.value.trim().toLowerCase(); const pos = e.target.selectionStart; render(); const q = $("#pq"); q.focus(); q.setSelectionRange(pos, pos); } });
+document.addEventListener("change", e => {
+  if (e.target.id === "psrc") { SRC = e.target.value; render(); return; }
+  if (e.target.id === "mTpl") { const c = contacts().find(x => x.kind===OPEN.kind && String(x.row)===String(OPEN.row)); const [sub, body] = TEMPLATES[e.target.value](c); $("#mForm [name=subject]").value = sub; $("#mForm [name=body]").value = body; return; } });
+document.addEventListener("dragstart", e => { const c = e.target.closest && e.target.closest(".pc"); if (!c) return; e.dataTransfer.setData("text/plain", JSON.stringify({kind:c.dataset.open, row:c.dataset.row, email:c.dataset.email})); });
+document.addEventListener("dragover", e => { const col = e.target.closest && e.target.closest("[data-drop]"); if (col) { e.preventDefault(); col.classList.add("over"); } });
+document.addEventListener("dragleave", e => { const col = e.target.closest && e.target.closest("[data-drop]"); if (col) col.classList.remove("over"); });
+document.addEventListener("drop", e => { const col = e.target.closest && e.target.closest("[data-drop]"); if (!col) return; e.preventDefault(); col.classList.remove("over");
+  let d; try { d = JSON.parse(e.dataTransfer.getData("text/plain")); } catch(_) { return; }
+  act(call("saveContact", d.kind, {row: Number(d.row), email: d.email}, {Status: col.dataset.drop}, ENV), "Moved to " + col.dataset.drop); });
 document.addEventListener("change", e => { const s = e.target.closest("[data-lead]"); if (!s) return;
   call("setLeadStatus", Number(s.dataset.lead), s.value).then(() => toast("Status saved")).catch(err => toast("Failed: " + err)); });
 document.addEventListener("submit", e => { e.preventDefault(); const f = e.target, v = Object.fromEntries(new FormData(f));
+  if (f.id === "cForm") return act(call("saveContact", OPEN.kind, ref(), v, ENV), "Saved", f.querySelector("button[type=submit]"));
+  if (f.id === "nForm") { if (!v.note.trim()) return; return act(call("addNote", OPEN.kind, ref(), v.note, ENV), "Note added", f.querySelector("button[type=submit]")); }
+  if (f.id === "aForm") return act(call("addProspect", v, ENV), "Prospect added", f.querySelector("button[type=submit]")).then(ok => { if (ok) $("#drawer").hidden = true; });
+  if (f.id === "tForm") { if (!confirm("Start a 14-day trial and email the trial link to this contact?")) return; return act(call("startTrial", OPEN.kind, ref(), v.tools, ENV), "Trial started; the link is on its way", f.querySelector("button[type=submit]")); }
+  if (f.id === "mForm") { const mode = (e.submitter && e.submitter.dataset.mode) || "draft"; if (mode === "send" && !confirm("Send this email now from your Gmail?")) return;
+    return act(call("emailContact", OPEN.kind, ref(), v.subject, v.body, mode, ENV), mode === "send" ? "Email sent" : "Saved to Gmail Drafts", e.submitter); }
   const b = f.querySelector("button[type=submit]"); b.disabled = true;
   const p = f.id === "reqForm" ? call("addRequest", v.agent, v.priority, v.topic, v.text) : call("addFinance", v);
   p.then(() => { toast("Saved"); f.reset(); load(); }).catch(err => toast("Failed: " + err)).finally(() => b.disabled = false); });

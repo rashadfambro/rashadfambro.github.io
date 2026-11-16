@@ -23,14 +23,14 @@ class Sheet {
   setFrozenRows() { return this; } getActiveRange() { return new Range(this, 2, 1); }
 }
 const drive = { folders: [], files: [] };
-const book = { getId: () => 'SHEET1', getName: () => 'Leads - Rashad Fambro Consulting', sheets: {}, getSheetByName(n) { return this.sheets[n] || null; }, insertSheet(n) { return (this.sheets[n] = new Sheet(n)); }, getUrl() { return 'https://docs.google.com/spreadsheets/d/TEST/edit'; } };
+const book = { getId: () => 'SHEET1', getName: () => 'Leads - Rashad Fambro Consulting', sheets: {}, getSheetByName(n) { return this.sheets[n] || null; }, insertSheet(n) { return (this.sheets[n] = new Sheet(n)); }, getUrl() { return 'https://docs.google.com/spreadsheets/d/TEST/edit'; }, getSheets() { return Object.values(this.sheets); }, deleteSheet(sh) { delete this.sheets[sh.name]; } };
 const cache = {};
 const RealDate = Date;
 class FakeDate extends RealDate { constructor(...a) { if (a.length === 0) super(NOW.getTime()); else super(...a); } static now() { return NOW.getTime(); } }
 const ctx = {
   console, JSON, Math, Number, String, Object, Array, RegExp, Error, encodeURIComponent, isNaN, parseInt, parseFloat,
   Date: FakeDate,
-  SpreadsheetApp: { getActiveSpreadsheet: () => book, getActive: () => book, getActiveSheet: () => book.sheets.Licenses, getUi: () => ({ alert() {}, createMenu() { const m = { addItem() { return m; }, addToUi() {} }; return m; } }),
+  SpreadsheetApp: { getActiveSpreadsheet: () => book, getActive: () => book, getActiveSheet: () => book.sheets.Licenses, getUi: () => ({ alert() {}, createMenu() { const m = { addItem() { return m; }, addSeparator() { return m; }, addToUi() {} }; return m; } }),
     newDataValidation: () => { const b = { requireValueInList() { return b; }, build() { return {}; } }; return b; }, flush() {} },
   GmailApp: {
     sendEmail(to, subject, body, opts) { sent.push({ kind: 'email', to, subject, body, name: (opts || {}).name || '' }); },
@@ -55,7 +55,7 @@ const ctx = {
   UrlFetchApp: { fetch: () => ({ getContentText: () => '{}', getResponseCode: () => 200 }) },
 };
 vm.createContext(ctx);
-vm.runInContext(src + '\n;globalThis.__api = { handleLead_, issueTrial_, activateRow_, onLicenseEdit, runLicenses, runFollowUps, weeklyDigest, adminAction_, sheet_, matchPayments, syncPipeline, backupSheet, checkLicense_, CFG, LICENSE_HEADERS, LEAD_HEADERS, ORDER_HEADERS, PROSPECT_HEADERS };', ctx);
+vm.runInContext(src + '\n;globalThis.__api = { doPost, doGet, clearTestData, runTestCycle, handleLead_, issueTrial_, activateRow_, onLicenseEdit, runLicenses, runFollowUps, weeklyDigest, adminAction_, sheet_, matchPayments, syncPipeline, backupSheet, checkLicense_, CFG, LICENSE_HEADERS, LEAD_HEADERS, ORDER_HEADERS, PROSPECT_HEADERS };', ctx);
 const A = ctx.__api;
 A.CFG.BOOKING_URL = 'https://calendly.com/example/free-workflow-audit';
 A.CFG.CREATE_REPLY_DRAFT = true;
@@ -127,4 +127,25 @@ for (let i = 0; i < 32; i++) A.backupSheet();
 const bf = drive.folders.find(f => f.name === 'RF Lead Engine Backups');
 result.backups = { kept: bf.files.filter(f => !f.trashed).length, trashed: bf.files.filter(f => f.trashed).length };
 
+// 8. Test environment: staging traffic goes to TEST tabs and every email goes to the owner
+const before = { leads: leads.rows.length, licenses: lic.rows.length, orders: ordersSh.rows.length, mails: sent.length };
+const post = (b) => JSON.parse(A.doPost({ postData: { contents: JSON.stringify(b) } }));
+result.testPost = post({ type: 'lead', env: 'staging', form: 'trial', Name: 'Real Person', Business: 'Staging Spa', Email: 'customer@example.com', Package: 'BookDesk (Essentials plan)' });
+post({ type: 'lead', env: 'staging', form: 'order', Name: 'Real Person', Business: 'Staging Spa', Email: 'customer@example.com', Package: 'BookDesk setup', 'Amount due': '1350', Plan: 'Pay in full', Method: 'Square' });
+const testLic = book.sheets['TEST Licenses'];
+testLic.rows[1][7] = new Date(NOW.getTime() + 1 * day);
+A.runLicenses();   // production run also checks TEST tabs, in test mode
+const testMails = sent.slice(before.mails);
+result.test = {
+  tabs: Object.keys(book.sheets).filter(n => n.startsWith('TEST ')).sort(),
+  prodUnchanged: leads.rows.length === before.leads && lic.rows.length === before.licenses && ordersSh.rows.length === before.orders,
+  allToOwner: testMails.length > 0 && testMails.every(m => m.to === 'rashadfambro@gmail.com'),
+  tagged: testMails.filter(m => /^\[TEST to customer@example\.com\]/.test(m.subject)).length,
+  reminder: testMails.some(m => /^\[TEST to customer@example\.com\].*trial ends in 1 day/.test(m.subject)),
+  check: JSON.parse(A.doGet({ parameter: { env: 'staging', check: 'trial', key: testLic.rows[1][0] } })).valid,
+  checkInProd: JSON.parse(A.doGet({ parameter: { check: 'trial', key: testLic.rows[1][0] } })).status,
+};
+tag('test environment');
+A.clearTestData();
+result.test.cleared = !Object.keys(book.sheets).some(n => n.startsWith('TEST '));
 console.log(JSON.stringify({ mails: sent, result }));

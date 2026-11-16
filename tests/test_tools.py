@@ -7,6 +7,7 @@ T-REG       a valid trial link opens a branded trial; a valid license link opens
 T-SEC       strict Content-Security-Policy, no third-party scripts, hostile ?brand= text is shown as text.
 T-PERF      page under 60 KB and interactive in under 2.5 s locally.
 T-LOAD      8 copies open at once without errors.
+T-HELP      built-in Help: product overview, user guide (with the app's own sections) and release notes.
 """
 import re, time, datetime, pathlib, subprocess, json, shutil
 import pytest
@@ -99,3 +100,31 @@ def test_T_LOAD_parallel_opens(browser, base_url, tid, page, name):
         assert not errs, errs
     finally:
         ctx.close()
+
+
+@pytest.mark.regression
+@pytest.mark.parametrize("tid,page,name", APPS + [("suite", "suite.html", "Desk Suite")], ids=IDS + ["DeskSuite"])
+def test_T_HELP_overview_guide_and_release_notes(make_page, base_url, tid, page, name):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/" + page); pg.wait_for_timeout(300)
+    if pg.locator("#helpBtn").count() == 0:
+        pytest.skip("before v25")
+    assert pg.is_hidden("#helpBox")
+    pg.click("#helpBtn"); pg.wait_for_timeout(100)
+    box = pg.inner_text("#helpBox")
+    assert name + " Help" in box and "Product Overview" in box and "User Guide" in box and "Release Notes" in box
+    pg.click('[data-htab="guide"]'); pg.wait_for_timeout(50)
+    guide = pg.inner_text('[data-hp="guide"]')
+    assert "Getting Started" in guide and "Approvals" in guide and "Your Data" in guide
+    if tid != "suite":
+        for tab in pg.eval_on_selector_all("main .tabs button", "els => els.map(e => e.textContent.trim())"):
+            assert tab in guide, tab
+        assert "How It Works" in guide
+    pg.click('[data-htab="notes"]'); pg.wait_for_timeout(50)
+    notes = pg.inner_text('[data-hp="notes"]')
+    assert re.search(r"Version 1\.5 · November 16, 2026", notes) and "Version 1.0" in notes
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(50)
+    assert pg.is_hidden("#helpBox")
+    pg.goto(base_url + "prototypes/" + page + "#release-notes"); pg.wait_for_timeout(300)
+    assert pg.is_visible('[data-hp="notes"]')
+    assert not w.errors, w.errors

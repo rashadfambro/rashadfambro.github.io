@@ -437,7 +437,7 @@ def test_R28_free_trial_flow(make_page, base_url):
     pg.fill("#buy_name", "Tia Trial"); pg.fill("#buy_biz", "Seaside Resort"); pg.fill("#buy_email", "tia@example.com")
     pg.click("#buyGo")
     wait_js(pg, "document.getElementById('buyResult').innerText.trim().length > 0", 10000)
-    assert "press Send" in pg.inner_text("#buyResult")
+    assert "press send" in pg.inner_text("#buyResult").lower()
     href = pg.get_attribute("#buyResult a", "href")
     assert href.startswith(f"mailto:{OWNER_EMAIL}") and "free%20trial" in href.lower()
     assert w.errors == []
@@ -592,7 +592,7 @@ def test_R41_order_and_trial_send_directly(make_page, base_url):
     pg.fill("#buy_name", "Pat Package"); pg.fill("#buy_biz", "Lakeside Apartments"); pg.fill("#buy_email", "pat@example.com")
     pg.click("#buyGo")
     wait_js(pg, "document.getElementById('buyResult').innerText.trim().length > 0", 15000)
-    assert "on its way" in pg.inner_text("#buyResult")
+    assert "on its way" in pg.inner_text("#buyResult").lower()
     assert seen[-1][1]["_subject"].startswith("Trial request") and "PackageDesk" in seen[-1][1]["Workflow"]
 
 
@@ -1292,4 +1292,45 @@ def test_R76_review_fixes_founding_text_tiers_trial_bundles_toasts(make_page, ba
     assert "No payment details required. No automatic charges." in m and "If you choose a paid plan" in m and ", then " not in pg.inner_text("#buyPrice")
     pg.evaluate("showFounding(0)")
     assert "filled" in pg.inner_text("#foundingFull")
+    assert not w.errors, w.errors
+
+
+
+def test_R77_copy_tiers_estimator_title_case_and_test_environment(make_page, base_url):
+    w = make_page(); pg = w.page
+    sent = []
+    pg.route("**/macros/s/**", lambda r: (sent.append(r.request.post_data or r.request.url), r.fulfill(status=200, content_type="application/json", body='{"ok":true}')))
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(400)
+    if pg.locator("#r1n").count() == 0:
+        pytest.skip("before v25")
+    body = pg.inner_text("body")
+    assert "Clients supported across multiple products and industries" in body
+    assert "with teams across 4 countries" in body and "across multiple industries, including:" in pg.inner_text("#about")
+    assert "defense communications" in pg.inner_text("#about") and "Retail & retail media" not in body
+    # standard, property and suite pricing on separate lines
+    lines = pg.eval_on_selector_all("#tiers .tier-foot .tl", "els => els.map(e => e.textContent)")
+    assert lines[0].startswith("Standard Tools:") and lines[1].startswith("Property & Hospitality Tools") and lines[2].startswith("Small Business Suite")
+    assert pg.locator("#tierBase .tl").count() >= 3
+    # estimator: every tool and bundle, and typed numbers drive the result
+    opts = pg.eval_on_selector_all("#roiTool option", "els => els.map(e => e.value)")
+    assert len(opts) == 18 and {"property", "chat", "salon", "compliance", "insight", "bundle", "propbundle", "hotelbundle"} <= set(opts)
+    before = pg.inner_text("#roiTotal")
+    pg.fill("#r1n", "40"); pg.wait_for_timeout(50)
+    assert pg.input_value("#r1") == "40" and pg.inner_text("#roiTotal") != before
+    pg.fill("#r1n", "999"); pg.wait_for_timeout(50)
+    assert pg.input_value("#r1") == "50"                       # kept inside the slider's range
+    pg.evaluate("document.getElementById('r6').value=1000; document.getElementById('r6').dispatchEvent(new Event('input'))")
+    assert pg.input_value("#r6n") == "1000"
+    for tool in opts:
+        pg.select_option("#roiTool", tool); pg.wait_for_timeout(10)
+        assert "$NaN" not in pg.inner_text("#roiTotal") + pg.inner_text("#roiSetup"), tool
+    # Title Case on section labels
+    for label in ("About Me", "Demo Lab", "Savings Estimator", "Free Workflow Audit", "How We Work Together", "Start a Project", "Get in Touch"):
+        assert pg.locator(f'.eyebrow:has-text("{label}")').count() >= 1, label
+    # staging / local runs are a test environment: badge shown, leads sent with env "staging"
+    assert pg.is_visible("#envBadge")
+    pg.evaluate("sendLead('audit', {Name:'Test', Email:'t@example.com'})"); pg.wait_for_timeout(300)
+    posts = [x for x in sent if x and x.startswith("{")]
+    assert posts and all(json.loads(x)["env"] == "staging" for x in posts)
+    assert any("env=staging" in x for x in sent if x and "stats=founding" in x)
     assert not w.errors, w.errors

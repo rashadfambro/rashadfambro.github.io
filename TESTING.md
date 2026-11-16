@@ -160,6 +160,7 @@ For a gentle check of the live site, run `python3 scripts/load_check.py` by hand
 | **Development** | Your working copy: `python3 scripts/release.py serve` then http://localhost:8000/ (and /staging/). Work on a branch for anything larger than a fix | Building and trying changes |
 | **Test** | GitHub Actions on every push and pull request: all suites against production and staging files, plus Safari (WebKit) and Firefox smoke runs. The lead engine and Command Center run in simulators (`tests/email_harness.js`, `tests/cc_harness.js`) with a fake Sheet, Gmail, Drive and Calendar | Proving a change works before it reaches anyone |
 | **Staging** | https://rashadfambro.github.io/staging/ | Release candidate; reviewed before promote |
+| **Staging test data** (Nov 16) | Everything except the live site (staging, localhost, test runs) sends `env: "staging"`. The lead engine writes it to separate **TEST** tabs (TEST Leads, TEST Licenses, TEST Orders, …) and sends every email to Rashad, marked `[TEST to <address>]`. Trials, orders, license checks, reminders and follow-ups all work end to end. A red "Test environment" badge shows on staging pages and apps. In the Command Center, switch **Data → Test (staging)** to work the test pipeline. Sheet menu **Desk → Test environment** runs the daily checks now or clears all TEST tabs | Testing every flow, emails included, without touching real data or customers |
 | **Production** | https://rashadfambro.github.io/ | Live site and tool apps |
 
 Apps Script backends (lead engine, Command Center) follow the same path: simulators in Test, then **Deploy → Manage deployments → New version** (same URL) only after the suites pass. Read-only live checks (`tests/test_live_backend.py`) confirm the deployed lead engine answers after every push.
@@ -167,10 +168,10 @@ Apps Script backends (lead engine, Command Center) follow the same path: simulat
 ## Suites By Area
 | Area | Smoke | Regression | Security | Performance | Load | Backups |
 |---|---|---|---|---|---|---|
-| Website (index, products, industries, privacy) | test_smoke | test_regression R01-R75 | test_security | test_performance | test_load | `backup/prod-*` branch on every promote + zip on EHD 2 |
-| All 15 tool apps + Desk Suite | test_tools T-SMOKE | T-REG (trial, license, forged key, snapshot) + R75 | T-SEC (CSP, no third-party scripts, hostile input) | T-PERF | T-LOAD (8 parallel) | Client: Download backup / Restore backup; support snapshot (anonymized) |
-| Lead engine (Apps Script) | LIVE01-02 (read-only, live) | LE02-LE08 (every email, payments, status sync, backups) | LE06, LE08 (admin token refused and logged) | - | quotas documented | Nightly Sheet copy, 30 kept; code in git and EHD 2 |
-| Command Center (Apps Script) | CC03 | CC01, CC03, CC04 | CC02, CC04 (owner-only on every function) | - | - | Same Sheet backup; code in git |
+| Website (index, products, industries, privacy) | test_smoke | test_regression R01-R77 | test_security | test_performance | test_load | `backup/prod-*` branch on every promote + zip on EHD 2 |
+| All 15 tool apps + Desk Suite | test_tools T-SMOKE | T-REG (trial, license, forged key, snapshot) + T-HELP (overview, user guide, release notes) + R75 | T-SEC (CSP, no third-party scripts, hostile input) | T-PERF | T-LOAD (8 parallel) | Client: Download backup / Restore backup; support snapshot (anonymized) |
+| Lead engine (Apps Script) | LIVE01-02 (read-only, live) | LE02-LE09 (every email, payments, status sync, backups, test-data isolation) | LE06, LE08 (admin token refused and logged) | - | quotas documented | Nightly Sheet copy, 30 kept; code in git and EHD 2 |
+| Command Center (Apps Script) | CC03 | CC01, CC03 (pipeline board, drawer, email, trial, test-data switch), CC04 (business-only inbox, prospect actions, test data) | CC02, CC04 (owner-only on every function) | - | - | Same Sheet backup; code in git |
 
 ## Reproducing A Client Setup
 Every tool app has **Create support snapshot** in the footer: it downloads the client's setup and data with names, phone numbers, emails and free-text notes replaced. Open the same app with `?support=1` and use **Load snapshot (support mode)** to reproduce the issue locally or on staging, then fix, test and release as usual. Add the anonymized snapshot as a test fixture when the fix needs a regression test.

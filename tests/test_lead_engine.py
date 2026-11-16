@@ -157,3 +157,16 @@ def test_LE08_payments_status_sync_admin_and_backups():
                              "Sent Co": "Contacted", "Lost Co": "Lost", "Quiet Co": "Not contacted"}
     assert r["adminBad"] == {"ok": False, "error": "unauthorized"} and r["adminLogged"]
     assert r["backups"] == {"kept": 30, "trashed": 2}
+
+
+def test_LE09_staging_test_environment_is_isolated():
+    """env:"staging" requests (staging site, local runs, staging apps) write only to TEST tabs, never email a
+    customer (every email goes to the owner, tagged [TEST to ...]), and still get the daily reminder checks."""
+    out = subprocess.run([NODE, str(ROOT / "tests" / "email_harness.js"), str(CODE)], capture_output=True, text=True, check=True).stdout
+    t = json.loads(out)["result"]["test"]
+    r = json.loads(out)["result"]
+    assert r["testPost"]["ok"]
+    assert {"TEST Leads", "TEST Licenses", "TEST Orders"} <= set(t["tabs"]), t["tabs"]
+    assert t["prodUnchanged"] and t["allToOwner"] and t["tagged"] >= 3 and t["reminder"]
+    assert t["check"] is True and t["checkInProd"] == "Unknown"      # production has no record of test licenses
+    assert t["cleared"]
