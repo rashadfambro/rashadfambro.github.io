@@ -85,9 +85,9 @@ const CFG = {
 const LEAD_HEADERS = ['Received','Lead ID','Status','Score','Form','Name','Business','Email','Phone','Industry','Team size',
   'Need / goal','Package','Timeline','Budget','Current tools','Availability','Founding client','Source','Landing page',
   'Follow-ups sent','Last contact','Notes'];
-const STOP_STATUSES = ['Replied','Booked','Trial','Proposal sent','Won','Lost','Do not contact','Spam'];
+const STOP_STATUSES = ['Replied','Booked','Trial','Proposal sent','Ordered','Won','Lost','Do not contact','Spam'];
 // Pipeline order: statuses only move forward automatically. Lost / Do not contact / Spam are never changed by the script.
-const STATUS_RANK = { 'New': 0, 'Contacted': 1, 'Replied': 2, 'Booked': 3, 'Trial': 4, 'Proposal sent': 5, 'Won': 6 };
+const STATUS_RANK = { 'New': 0, 'Not contacted': 0, 'Draft ready': 0, 'Contacted': 1, 'Replied': 2, 'Booked': 3, 'Trial': 4, 'Proposal sent': 5, 'Ordered': 5.5, 'Won': 6 };
 const PROSPECT_HEADERS = ['Added','Business','Contact','Email','Phone','City','Industry','Tools to pitch','Source','Status','Last activity','Next step','Notes'];
 
 /* ======================= web endpoints ======================= */
@@ -148,11 +148,13 @@ function handleLead_(d) {
       lead.availability, lead.founding, lead.source, lead.page, 0, new Date(), '']);
   }
 
-  if (/trial/i.test(lead.form)) { issueTrial_(lead); }
-  else if (/order/i.test(lead.form)) { logOrder_(lead); if (CFG.SEND_PROSPECT_ACK && !existing) sendAck_(lead); }
+  const row = existing || sh.getLastRow();
+  const isTrial = /trial/i.test(lead.form), isOrder = /order/i.test(lead.form);
+  if (isTrial) { issueTrial_(lead); bumpStatus_(sh, row, 'Trial'); }                  // trial emails replace audit follow-ups
+  else if (isOrder) { const id = logOrder_(lead); sendOrderAck_(lead, id); bumpStatus_(sh, row, 'Ordered'); }
   else if (CFG.SEND_PROSPECT_ACK && !existing) sendAck_(lead);
   notifyOwner_(lead, !!existing);
-  if (CFG.CREATE_REPLY_DRAFT) createDraft_(lead);
+  if (CFG.CREATE_REPLY_DRAFT && !isTrial && !isOrder) createDraft_(lead);
   return { ok: true, id: lead.id };
 }
 
@@ -199,6 +201,26 @@ function score_(l) {
 
 /* ======================= email ======================= */
 
+/** Moves a lead forward (never backward, never out of Lost / Do not contact / Spam). */
+function bumpStatus_(sh, row, status) {
+  const cur = String(sh.getRange(row, 3).getValue() || 'New');
+  if (cur in STATUS_RANK && STATUS_RANK[status] > STATUS_RANK[cur]) sh.getRange(row, 3).setValue(status);
+}
+
+/** Confirmation for an order placed on the site (payment happens on Square or PayPal; the license link follows automatically). */
+function sendOrderAck_(l, orderId) {
+  const amount = Number(String(l.amountDue || '').replace(/[^\d.]/g, ''));
+  send_(l.email, 'Order received: ' + (l.packageName || 'your order') + ' for ' + (l.business || 'your business'),
+    ['Hi ' + first_(l.name) + ',', '',
+     'Thanks for your order' + (l.business ? ' for ' + l.business : '') + '. Here are the details:', '',
+     '- Item: ' + (l.packageName || 'see your order'),
+     amount ? '- Amount due now: $' + amount.toLocaleString('en-US') + (l.plan ? ' (' + l.plan + ')' : '') : null,
+     l.method ? '- Payment method: ' + l.method : null,
+     '- Order number: ' + orderId, '',
+     'If the checkout page didn\'t finish, reply to this email and I\'ll send a secure payment link. As soon as payment arrives, your Starter edition link is emailed to you automatically, and I\'ll reach out to schedule a 30-minute setup call.', '',
+     'Questions? Just reply.', '', 'Best,' + signature_()].filter(x => x !== null).join('\n'),
+    { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
+}
 function first_(name) { return (name || '').split(/\s+/)[0] || 'there'; }
 function signature_() {
   return '\n' + [CFG.OWNER_NAME, CFG.TITLE + ' · ' + CFG.BUSINESS, CFG.PHONE, CFG.SITE_URL, CFG.LINKEDIN].filter(Boolean).join('\n');
@@ -223,13 +245,13 @@ function sendAck_(l) {
     'Talk soon,' + signature_(), '',
     '(Reply STOP if you’d rather not get follow-up emails.)'
   ].filter(x => x !== null).join('\n');
-  GmailApp.sendEmail(l.email, subject, body, { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
+  send_(l.email, subject, body, { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
 }
 
 function notifyOwner_(l, returning) {
   // Plain text only: Gmail shows emoji in script-sent subjects as question marks.
   const subject = (/trial/i.test(l.form) ? '[Trial] New 14-day trial' : /order/i.test(l.form) ? '[Order] New order, awaiting payment' : returning ? '[Returning] Lead is back' : (l.score >= 60 ? '[Hot lead]' : '[Lead]')) +
-    ': ' + (l.business || l.name || l.email) + ' (score ' + l.score + ', ' + l.form + ')';
+    (/^\[(Hot lead|Lead)\]$/.test(returning ? '' : (l.score >= 60 ? '[Hot lead]' : '[Lead]')) && !/trial|order/i.test(l.form) ? ' ' : ': ') + (l.business || l.name || l.email) + ' (score ' + l.score + ', ' + l.form + ')';
   const lines = Object.entries({
     Name: l.name, Business: l.business, Email: l.email, Phone: l.phone, Industry: l.industry, 'Team size': l.teamSize,
     Need: l.need, Package: l.packageName, Timeline: l.timeline, Budget: l.budget, Tools: l.tools,
@@ -238,7 +260,7 @@ function notifyOwner_(l, returning) {
   const body = lines.join('\n') + '\n\n' +
     (CFG.CREATE_REPLY_DRAFT ? 'A personalized reply is waiting in your Gmail Drafts.\n' : '') +
     'Lead sheet: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
-  GmailApp.sendEmail(CFG.OWNER_EMAIL, subject, body, { name: CFG.BUSINESS + ' Leads' });
+  send_(CFG.OWNER_EMAIL, subject, body, { name: CFG.BUSINESS + ' Leads' });
 }
 
 function createDraft_(l) {
@@ -261,9 +283,24 @@ function createDraft_(l) {
       'In 30 minutes we’ll map where the time goes, and I’ll send you a one-page summary with the first change I’d make — yours to keep either way.\n\n' +
       bookingLine_() + '\n\nBest,';
   }
-  GmailApp.createDraft(l.email, 'Re: your ' + (/project/i.test(l.form) ? 'project request' : 'workflow audit request'),
+  draft_(l.email, 'Re: your ' + (/project/i.test(l.form) ? 'project request' : 'workflow audit request'),
     text.replace(/\s+$/, '') + (/Best,$/.test(text) ? '' : '\n\nBest,') + signature_(), { name: CFG.OWNER_NAME });
 }
+
+/* ======================= email sending ======================= */
+
+/** Every email goes through here. Subjects and bodies are converted to plain characters first:
+ *  emoji and some symbols arrived as "??????" in script-sent subjects, and plain text reads the same everywhere. */
+const ASCII_MAP_ = [[/[‘’‚′]/g, "'"], [/[“”„″]/g, '"'], [/[–—−]/g, '-'], [/…/g, '...'],
+  [/[•·▸►‣]/g, '-'], [/→/g, '->'], [/ /g, ' '], [/™/g, '(TM)'], [/©/g, '(c)'], [/×/g, 'x']];
+function plain_(s) {
+  s = String(s == null ? '' : s);
+  ASCII_MAP_.forEach(m => { s = s.replace(m[0], m[1]); });
+  s = s.normalize ? s.normalize('NFKD').replace(/[̀-ͯ]/g, '') : s;   // café -> cafe
+  return s.replace(/[^\x09\x0A\x0D\x20-\x7E]/g, '');                            // drop anything else (emoji)
+}
+function send_(to, subject, body, opts) { GmailApp.sendEmail(to, plain_(subject).replace(/\s+/g, ' ').trim(), plain_(body), opts || {}); }
+function draft_(to, subject, body, opts) { return GmailApp.createDraft(to, plain_(subject).replace(/\s+/g, ' ').trim(), plain_(body), opts || {}); }
 
 /* ======================= trials & licenses (v2, Nov 15 2026) =======================
  * Licenses tab, one row per client (a package is one row listing several tools):
@@ -315,7 +352,7 @@ function appLink_(kind, tools, biz, date, color) {
   return { key: key, url: CFG.PROTOTYPES_URL + page + '?' + q };
 }
 function mail_(to, subject, body) {
-  GmailApp.sendEmail(to, subject, body, { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
+  send_(to, subject, body, { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
 }
 function note_(sh, row, text, col) { const c = sh.getRange(row, col || 10); c.setValue((c.getValue() ? c.getValue() + ' · ' : '') + stamp_() + ' ' + text); }
 
@@ -331,7 +368,7 @@ function issueTrial_(l) {
       'Hi ' + first_(l.name) + ',\n\nHere is your free ' + CFG.TRIAL_DAYS + '-day trial of ' + toolNames_(tools) + ', branded for ' + biz + ':\n' + link.url +
       '\n\nTry it with the sample data or enter your own. It runs in your browser and nothing is sent to your customers. ' +
       'Your trial ends ' + prettyDate_(ends) + ', and nothing is charged automatically. I\'ll send a reminder before it ends.\n\n' +
-      'Want help loading your real services, hours and team? Reply with a couple of times for a free 30-minute setup call. ' + bookingLine_() +
+      'Want help loading your real services, hours and team? ' + (CFG.BOOKING_URL ? 'Book a free 30-minute setup call: ' + CFG.BOOKING_URL : 'Reply with a couple of times for a free 30-minute setup call.') +
       '\n\nBest,' + signature_());
     note_(sh, sh.getLastRow(), 'trial link emailed');
   }
@@ -385,7 +422,7 @@ function activateRow_(sh, row, opts) {
       '\n\nBookmark it on the computer or tablet your team uses. Your plan is paid through ' + prettyDate_(until) + '.\n' +
       '- Your data is saved on that device. Use "Download backup" weekly; "Restore backup" brings it back on a new device.\n' +
       '- When you approve a message, it\'s copied so you can paste it into your text or email app. Live sending comes with the Connected edition.\n' +
-      (opts.renewal ? '' : '\nLet\'s schedule your 30-minute setup call. ' + bookingLine_() + '\n') +
+      (opts.renewal ? '' : '\n' + (CFG.BOOKING_URL ? 'Book your 30-minute setup call: ' + CFG.BOOKING_URL : 'Reply with a couple of times for your 30-minute setup call.') + '\n') +
       '\nBest,' + signature_());
     note_(sh, row, 'license link emailed');
   }
@@ -628,7 +665,7 @@ function runFollowUps() {
     const days = (now - new Date(received)) / 86400000;
     if (days < CFG.FOLLOW_UP_DAYS[sent]) continue;
     const msg = followUpText_(sent, name, business);
-    GmailApp.sendEmail(email, msg.subject, msg.body + '\nBest,' + signature_() + '\n\n(Reply STOP to opt out.)', { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
+    send_(email, msg.subject, msg.body + '\nBest,' + signature_() + '\n\n(Reply STOP to opt out.)', { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
     sh.getRange(r + 1, 21).setValue(sent + 1);
     sh.getRange(r + 1, 22).setValue(now);
     if (status === 'New') sh.getRange(r + 1, 3).setValue('Contacted');
@@ -672,7 +709,7 @@ function weeklyDigest() {
     'Chat messages logged (all time): ' + Math.max(0, chats) + '\n\nTop open leads:\n' +
     (open.map(r => '• [' + r[3] + '] ' + (r[6] || r[5]) + ' — ' + r[2] + ' — ' + (r[11] || '').slice(0, 80)).join('\n') || '• none yet') +
     '\n\nSheet: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
-  GmailApp.sendEmail(CFG.OWNER_EMAIL, 'Weekly pipeline — ' + fresh.length + ' new lead(s)', body, { name: CFG.BUSINESS + ' Leads' });
+  send_(CFG.OWNER_EMAIL, 'Weekly pipeline — ' + fresh.length + ' new lead(s)', body, { name: CFG.BUSINESS + ' Leads' });
 }
 
 /* ======================= AI chat ======================= */

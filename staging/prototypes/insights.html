@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formsubmit.co https://script.google.com https://script.googleusercontent.com; frame-src 'self' https://calendly.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formsubmit.co https://script.google.com https://script.googleusercontent.com; frame-src 'self' https://calendly.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="apple-touch-icon" href="../icon-192.png">
 <title>InsightDesk Prototype · Rashad Fambro Consulting</title>
 <meta name="description" content="Your key numbers on one page and a plain-English summary every Monday. Clickable prototype with sample data.">
 <link rel="icon" href="../icon.svg"><link rel="canonical" href="https://rashadfambro.github.io/prototypes/insights.html">
@@ -11,7 +11,7 @@
 *{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
 a{color:inherit}button,input,select,textarea{font:inherit}
 header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}
+header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}header .logo.img{background:#fff center/contain no-repeat;border:1px solid #d3dce7}
 header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
 header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
 header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
@@ -78,8 +78,9 @@ function load(def){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)}
 function brand(){let b={name:"Your Business",color:"#2f7fe0"};try{b=Object.assign(b,JSON.parse(localStorage.getItem("proto-brand")||"{}"))}catch(e){}return b}
-function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);$(".logo").textContent=(b.name.trim()[0]||"Y").toUpperCase();$$("[data-biz]").forEach(e=>e.textContent=b.name)}
-function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
+function applyBrand(){const b=brand();$("#bizName").value=b.name;$("#bizColor").value=b.color;document.documentElement.style.setProperty("--brand",b.color);const lg=$(".logo");if(b.logo&&/^https:\/\/[^\s"'()]+$/.test(b.logo)){lg.textContent="";lg.style.backgroundImage=`url("${b.logo}")`;lg.classList.add("img")}else{lg.style.backgroundImage="";lg.classList.remove("img");lg.textContent=(b.name.trim()[0]||"Y").toUpperCase()}$$("[data-biz]").forEach(e=>e.textContent=b.name)}
+function applyPreview(){const q=new URLSearchParams(location.search),name=(q.get("brand")||"").trim().slice(0,60);if(!name||q.get("trial")||q.get("license"))return;const b={name:name,color:/^#[0-9a-f]{6}$/i.test(q.get("color")||"")?q.get("color"):brand().color,logo:/^https:\/\//.test(q.get("logo")||"")?q.get("logo"):""};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}}
+function setBrand(){const b={name:$("#bizName").value||"Your Business",color:$("#bizColor").value,logo:brand().logo||""};try{localStorage.setItem("proto-brand",JSON.stringify(b))}catch(e){}applyBrand();if(typeof render==="function")render()}
 function tabs(){$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{$$(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab)}))}
 const TRIAL_DAYS=14;
 const DESK_BACKEND="https://script.google.com/macros/s/AKfycbzc37BsdGGlGZes-TCeo7p22rJe5USt2oPx0oxrlSA3Iw1FjllEjXwsitP03UXnF8tngw/exec";  // lead-engine web app URL (…/exec). Empty = no online check.
@@ -134,7 +135,7 @@ function applyLicense(){const l=readLicense(),b=$(".banner");if(!l||!b)return fa
  document.addEventListener("click",starterCopy,true);
  if(lock){const o=document.createElement("div");o.id="trialEnd";o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="lkH"><h2 id="lkH">Your Plan Needs Renewal</h2><p class="small">Your data is safe and still on this device. Renew your monthly plan to unlock the app, or download a backup.</p><div class="row"><a class="btn" href="../index.html#pricing">Renew my plan</a><button class="btn alt" type="button" id="lkExport">Download backup</button></div></div>`;document.body.appendChild(o);$("#lkExport").onclick=exportData}
  return true}
-document.addEventListener("DOMContentLoaded",()=>{if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("embedded");if(!applyLicense())applyTrial();tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+document.addEventListener("DOMContentLoaded",()=>{if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("embedded");applyPreview();if(!applyLicense())applyTrial();tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
  $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
 
 

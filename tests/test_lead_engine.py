@@ -110,5 +110,34 @@ def test_LE06_subjects_are_plain_text():
     src = CODE.read_text()
     subjects = re.findall(r"(?:sendEmail|mail_)\([^,]+,\s*('(?:[^'\\]|\\.)*'|[^,]+),", src)
     owner = re.search(r"function notifyOwner_[\s\S]*?const subject = ([^;]+);", src).group(1)
-    for s in subjects + [owner]:
+    for s in subjects + [owner]:  # emoji never reach a subject (send_ also cleans them)
         assert not re.search(r"[\U0001F300-\U0001FAFF☀-➿↻]", s), s
+
+
+def test_LE07_every_email_is_clean_and_correct():
+    """Runs the real Code.gs against a simulated Sheet/Gmail (tests/email_harness.js) and checks every email it sends."""
+    out = subprocess.run([NODE, str(ROOT / "tests" / "email_harness.js"), str(CODE)], capture_output=True, text=True, check=True).stdout
+    mails = json.loads(out)
+    labels = {m["label"] for m in mails}
+    assert {"lead: audit", "lead: project", "lead: order", "lead: trial", "licenses: daily run", "license: activated",
+            "license: renewed", "license: canceled", "license: resend", "follow-ups", "weekly digest"} <= labels, labels
+    for m in mails:
+        for f in ("subject", "body"):
+            s = m[f]
+            assert re.fullmatch(r"[\x09\x0a\x0d\x20-\x7e]*", s), (m["label"], f, [c for c in s if ord(c) > 126][:5])
+            for bad in ("undefined", "null", "NaN", "[object", "Invalid Date", "  ,"):
+                assert bad not in s, (m["label"], f, bad)
+        assert 5 < len(m["subject"]) <= 110 and m["subject"] == m["subject"].strip(), m["subject"]
+        if m["to"] != "rashadfambro@gmail.com" and m["kind"] == "email":
+            assert "Rashad Fambro" in m["body"] and "https://rashadfambro.github.io/" in m["body"], m["subject"]
+    subj = lambda label: [m["subject"] for m in mails if m["label"] == label]
+    # orders get an order confirmation, not the audit reply; trials and orders get no audit draft or audit follow-ups
+    assert any(s.startswith("Order received") for s in subj("lead: order"))
+    assert not any(m["kind"] == "draft" for m in mails if m["label"] in ("lead: order", "lead: trial"))
+    fu = [m["to"] for m in mails if m["label"] == "follow-ups"]
+    assert "ana@example.com" not in fu and "tom@example.com" not in fu and fu.count("maria@example.com") == 3
+    daily = subj("licenses: daily run")
+    for want in ("trial ends in 3 days", "trial ends in 1 day", "trial has ended", "plan renews", "Past due:", "license is paused"):
+        assert any(want in s for s in daily), (want, daily)
+    alerts = [m["subject"] for m in mails if m["to"] == "rashadfambro@gmail.com"]
+    assert any(s.startswith("[Lead] ") for s in alerts) and any(s.startswith("[Trial] ") for s in alerts) and any(s.startswith("[Order] ") for s in alerts)

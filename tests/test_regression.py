@@ -1192,3 +1192,57 @@ def test_R71_founding_counter_follows_backend(make_page, base_url):
     assert pg.locator(".fLeft").first.inner_text() == "3"
     pg.evaluate("showFounding(0)")
     assert pg.is_hidden("#founding")
+
+
+def _is_v22(pg):
+    return pg.locator("#labBiz").count() == 1
+
+
+def test_R72_demo_lab_covers_every_tool_and_uses_business_name(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if not _is_v22(pg):
+        pytest.skip("before v22")
+    demos = pg.locator("#labPick button strong").all_inner_texts()
+    assert demos[0] == "WorkOrderDesk" and len(demos) >= 14, demos
+    for t in ["ChatDesk", "BookDesk", "ReviewDesk", "SocialDesk", "StaffDesk", "RewardsDesk", "InvoiceDesk", "LeadDesk", "IntakeDesk"]:
+        assert t in demos, t
+    apps = pg.locator("#labFull .lab-all a")
+    assert apps.count() == 15
+    pg.fill("#labBiz", "Glow Studio")
+    for k in ["review", "chat", "intake"]:
+        pg.click(f'#labPick [data-demo="{k}"]'); pg.click("#labRun"); pg.wait_for_selector("#labOut:not([hidden])", timeout=8000)
+        draft = pg.inner_text("#labDraft")
+        assert draft.startswith("Draft reply from Glow Studio") and draft.rstrip().endswith("Glow Studio"), draft
+    assert "brand=Glow%20Studio" in pg.get_attribute("#labFull a", "href")
+    assert all("brand=Glow%20Studio" in h for h in apps.evaluate_all("els => els.map(e => e.getAttribute('href'))"))
+    assert not w.errors, w.errors
+
+
+def test_R73_founding_filled_note_and_holiday_rate_wording(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if not _is_v22(pg):
+        pytest.skip("before v22")
+    assert pg.is_hidden("#foundingFull") and not pg.is_hidden("#founding")
+    pg.evaluate("showFounding(0)")
+    assert pg.is_hidden("#founding") and not pg.is_hidden("#foundingFull")
+    assert "filled" in pg.inner_text("#foundingFull") and "all 5 filled" in pg.inner_text(".sale-l2")
+    assert pg.evaluate("document.getElementById('b_found').closest('label').hidden")
+    if pg.evaluate("saleF()") < 1:
+        assert "keep the holiday rate for 12 months" in pg.inner_text("#saleText")
+        pg.click('[data-buy="chat"]'); pg.wait_for_timeout(200)
+        assert "locked for your first 12 months" in pg.inner_text("#buyModal")
+    assert not w.errors, w.errors
+
+
+def test_R74_tool_apps_preview_with_client_branding(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/bookings.html?brand=Glow%20Studio&color=%23aa3366"); pg.wait_for_timeout(400)
+    if pg.locator('meta[name="apple-mobile-web-app-capable"]').count() == 0:
+        pytest.skip("before v22")
+    assert pg.inner_text("[data-biz]") == "Glow Studio" and pg.input_value("#bizColor") == "#aa3366"
+    assert pg.inner_text("header .logo") == "G"
+    pg.goto(base_url + "prototypes/bookings.html?brand=%3Cimg%20src%3Dx%3E"); pg.wait_for_timeout(300)
+    assert pg.locator("header img").count() == 0
+    assert not w.errors, w.errors

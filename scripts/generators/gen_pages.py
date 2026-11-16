@@ -86,7 +86,7 @@ for p in PRODUCTS:
     </div>
   </div>
 </article>''')
-body = f'''<section class="hero"><div class="wrap"><span class="eb">Product Guide</span><h1>AI Tools That Help Your Business Earn More and Your Team Move Faster</h1><p>Each product is a ready-to-adapt solution, branded for your business and delivered as a managed service. Below: how each one works, how it saves money, how it wins more business, and where people stay in control. Every tool includes a free 14-day trial, and fully managed monthly plans start at $80.</p><div class="toc">{toc}</div></div></section>
+body = f'''<section class="hero"><div class="wrap"><span class="eb">Product Guide</span><h1>AI Tools That Help Your Business Earn More and Your Team Move Faster</h1><p>Each product is a ready-to-adapt solution, branded for your business and delivered as a managed service. Below: how each one works, how it saves money, how it wins more business, and where people stay in control. Every tool includes a free 14-day trial, and monthly plans start at $50.</p><div class="toc">{toc}</div></div></section>
 <section class="sec"><div class="wrap">
 <div class="grid2" style="margin-bottom:26px">
   <div class="card"><h3>Branded for Your Business</h3><p>{e(COMMON['brand'])}</p></div>
