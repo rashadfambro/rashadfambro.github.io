@@ -82,6 +82,10 @@ def test_CC02_security_rules_in_code():
     assert not re.search(r"(sk-ant-|AKfyc[\w-]{20,}|ADMIN_TOKEN\s*[:=]\s*['\"][^'\"]+)", src), "secrets must live in Script properties"
     html = INDEX.read_text()
     assert ".innerHTML" in html and "esc(" in html and "eval(" not in html
+    # Google's page server treats "//" inside an inline script as a comment and cuts the rest of the line,
+    # which broke the live page once (a web address in an email template). No "//" anywhere in the script.
+    script = html[html.index("<script>"):]
+    assert "//" not in script, [l.strip()[:80] for l in script.splitlines() if "//" in l]
 
 
 STUB = """
