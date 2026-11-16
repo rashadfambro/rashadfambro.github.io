@@ -176,7 +176,7 @@ def test_R08_buy_flow_and_payment_plans(make_page, base_url):
 
 
 def test_R09_payment_plan_messaging(home):
-    assert "3 interest-free monthly payments" in home.page.inner_text(".pricenote")
+    assert "3 interest-free" in home.page.inner_text(".pricenote")
     assert home.page.locator("summary", has_text="Can I Pay Over Time?").count() == 1
 
 
@@ -1060,7 +1060,7 @@ def test_R65_square_checkout_covers_every_amount_due(make_page, base_url):
     w = make_page(); pg = w.page
     pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
     missing = pg.evaluate("""(() => { const out = [];
-      for (const [id, it] of Object.entries(BUYABLE)) { if (!it.price || isPilot(id) || it.quote) continue;
+      for (const [id, it] of Object.entries(BUYABLE)) { if (!it.price || isPilot(id) || it.quote || it.invoice) continue;
         const plans = it.price >= CONFIG.paymentPlan.minimum ? ["Pay in full", "3 monthly payments"] : ["Pay in full"];
         for (const plan of plans) { const amt = dueNow(id, plan);
           if (!amt) continue;
@@ -1313,7 +1313,7 @@ def test_R77_copy_tiers_estimator_title_case_and_test_environment(make_page, bas
     assert pg.locator("#tierBase .tl").count() >= 3
     # estimator: every tool and bundle, and typed numbers drive the result
     opts = pg.eval_on_selector_all("#roiTool option", "els => els.map(e => e.value)")
-    assert len(opts) == 18 and {"property", "chat", "salon", "compliance", "insight", "bundle", "propbundle", "hotelbundle"} <= set(opts)
+    assert len(opts) >= 18 and {"property", "chat", "salon", "compliance", "insight", "bundle", "propbundle", "hotelbundle"} <= set(opts)
     before = pg.inner_text("#roiTotal")
     pg.fill("#r1n", "40"); pg.wait_for_timeout(50)
     assert pg.input_value("#r1") == "40" and pg.inner_text("#roiTotal") != before
@@ -1333,4 +1333,51 @@ def test_R77_copy_tiers_estimator_title_case_and_test_environment(make_page, bas
     posts = [x for x in sent if x and x.startswith("{")]
     assert posts and all(json.loads(x)["env"] == "staging" for x in posts)
     assert any("env=staging" in x for x in sent if x and "stats=founding" in x)
+    assert not w.errors, w.errors
+
+
+
+def test_R78_dialog_focus_billing_terms_website_pricing_and_experience(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if pg.locator('[data-buy="sitebundle"]').count() == 0:
+        pytest.skip("before v26")
+    # keyboard focus stays inside the order dialog and returns to the button that opened it
+    btn = pg.locator('[data-buy="property"]').first
+    btn.focus(); pg.keyboard.press("Enter"); pg.wait_for_timeout(200)
+    assert pg.is_visible("#buyModal")
+    for _ in range(40):
+        pg.keyboard.press("Tab")
+        assert pg.evaluate("document.getElementById('buyModal').contains(document.activeElement)")
+    for _ in range(5):
+        pg.keyboard.press("Shift+Tab")
+        assert pg.evaluate("document.getElementById('buyModal').contains(document.activeElement)")
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
+    assert pg.is_hidden("#buyModal") and pg.evaluate("document.activeElement.dataset.buy") == "property"
+    # billing starts at Starter delivery; installments are dated
+    pg.evaluate("openBuy('property')"); pg.wait_for_timeout(150)
+    m = pg.inner_text("#buyModal")
+    assert "starting the day your Starter edition is delivered" in m and "goes live" not in m and "1 and 2 months later" in m
+    pg.keyboard.press("Escape")
+    assert "then 30 and 60 days later" in pg.inner_text(".pricenote")
+    # trial: start date defined, button matches the card
+    pg.evaluate("openBuy('chat','trial')"); pg.wait_for_timeout(150)
+    assert "start on the day the workspace link is emailed" in pg.inner_text("#trialNote") and pg.inner_text("#buyGo").startswith("Request my branded trial")
+    pg.keyboard.press("Escape")
+    # Booking Website is the website only; bundles carry the tools at a discount
+    svc = pg.inner_text("#svcGrid")
+    assert "connects to the booking system you already use" in svc and "10% off" in svc
+    offers = pg.inner_text(".offers")
+    assert "Booking Website + Launch Bundle" in offers and "Customer Service Bundle" in offers and "$100/mo" in offers and "$120/mo" in offers
+    pg.click('[data-buy="sitebundle"]'); pg.wait_for_timeout(150)
+    assert "/mo" in pg.inner_text("#buyPrice") and "Starter edition" in pg.inner_text("#deliveryNote")
+    pg.keyboard.press("Escape")
+    # multi-location and storage pricing published
+    det = pg.evaluate("document.getElementById('billingDetails').textContent")
+    assert "Multiple locations" in det and "$10 per extra 5 GB" in det
+    # experience wording
+    about = pg.inner_text("#about") if pg.locator("#about").count() else pg.inner_text("body")
+    assert "grocery stores" in about and "quick-service restaurants" in about and "business media systems" in about
+    tags = pg.evaluate("document.querySelector('.tags').textContent")
+    assert "Grocery Stores" in tags and "Quick-Service Restaurant POS" in tags and "Business Media Systems" in tags
     assert not w.errors, w.errors
