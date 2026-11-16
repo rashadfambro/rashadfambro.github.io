@@ -124,4 +124,11 @@ if __name__ == "__main__":
     elif cmd == "promote": promote()
     elif cmd == "rollback" and len(sys.argv) > 2: rollback(sys.argv[2])
     elif cmd == "check": sys.exit(check())
+    elif cmd == "serve":
+        # Development environment: your working copy at http://localhost:8000/ (production files) and /staging/
+        import http.server, functools, socketserver
+        port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
+        h = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(ROOT))
+        print(f"Development: http://localhost:{port}/  (staging copy: http://localhost:{port}/staging/)  Ctrl+C to stop")
+        socketserver.TCPServer(("127.0.0.1", port), h).serve_forever()
     else: print(__doc__)

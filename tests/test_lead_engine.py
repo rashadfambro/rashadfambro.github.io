@@ -117,7 +117,7 @@ def test_LE06_subjects_are_plain_text():
 def test_LE07_every_email_is_clean_and_correct():
     """Runs the real Code.gs against a simulated Sheet/Gmail (tests/email_harness.js) and checks every email it sends."""
     out = subprocess.run([NODE, str(ROOT / "tests" / "email_harness.js"), str(CODE)], capture_output=True, text=True, check=True).stdout
-    mails = json.loads(out)
+    mails = json.loads(out)["mails"]
     labels = {m["label"] for m in mails}
     assert {"lead: audit", "lead: project", "lead: order", "lead: trial", "licenses: daily run", "license: activated",
             "license: renewed", "license: canceled", "license: resend", "follow-ups", "weekly digest"} <= labels, labels
@@ -141,3 +141,19 @@ def test_LE07_every_email_is_clean_and_correct():
         assert any(want in s for s in daily), (want, daily)
     alerts = [m["subject"] for m in mails if m["to"] == "rashadfambro@gmail.com"]
     assert any(s.startswith("[Lead] ") for s in alerts) and any(s.startswith("[Trial] ") for s in alerts) and any(s.startswith("[Order] ") for s in alerts)
+
+
+def test_LE08_payments_status_sync_admin_and_backups():
+    """Payment emails are matched to orders and issue a license; statuses move forward from Gmail activity
+    (never backward, never touching Lost); bad admin tokens are refused and logged; backups keep 30 copies."""
+    out = subprocess.run([NODE, str(ROOT / "tests" / "email_harness.js"), str(CODE)], capture_output=True, text=True, check=True).stdout
+    d = json.loads(out); r = d["result"]
+    assert r["orderStatus"] == "Paid" and r["orderKey"].startswith("RFL-") and r["licenseActive"]
+    assert r["checkActive"]["valid"] and r["checkActive"]["status"] == "Active"
+    pay = [m for m in d["mails"] if m["label"] == "payments"]
+    assert any(m["to"] == "ana@example.com" and "link for Glow Studio" in m["subject"] for m in pay)
+    assert any(m["to"] == "rashadfambro@gmail.com" and "match it by hand ($999.00)" in m["subject"] for m in pay)
+    assert r["statuses"] == {"Replied Co": "Replied", "Booked Co": "Booked", "Proposal Co": "Proposal sent", "Stop Co": "Do not contact",
+                             "Sent Co": "Contacted", "Lost Co": "Lost", "Quiet Co": "Not contacted"}
+    assert r["adminBad"] == {"ok": False, "error": "unauthorized"} and r["adminLogged"]
+    assert r["backups"] == {"kept": 30, "trashed": 2}

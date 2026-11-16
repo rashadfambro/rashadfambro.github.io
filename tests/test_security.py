@@ -52,7 +52,8 @@ def test_SEC04_no_secrets_or_private_data_committed():
     secret = re.compile(r"AKIA[0-9A-Z]{16}|sk_live_[0-9a-zA-Z]{10,}|sk-ant-[0-9a-zA-Z-]{10,}|ghp_[0-9A-Za-z]{30,}|xox[baprs]-[0-9A-Za-z-]{10,}"
                         r"|-----BEGIN [A-Z ]*PRIVATE KEY-----|EAAG[0-9A-Za-z]{20,}|sq0atp-[0-9A-Za-z_-]{10,}|EAAA[0-9A-Za-z_-]{40,}")
     email = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z]{2,})+")
-    allowed = {OWNER_EMAIL, "noreply@anthropic.com", "you@business.com", "you@company.com", "name@business.com"}
+    allowed = {OWNER_EMAIL, "noreply@anthropic.com", "you@business.com", "you@company.com", "name@business.com",
+               "noreply@messaging.squareup.com", "service@paypal.com"}   # public payment-provider senders used in test fixtures
     problems = []
     for rel in files:
         if not rel.endswith((".html", ".js", ".py", ".md", ".json", ".yml", ".txt", ".webmanifest", ".gs", ".ini")):

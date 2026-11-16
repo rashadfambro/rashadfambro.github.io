@@ -14,7 +14,7 @@ CSS = r"""
 *{box-sizing:border-box}body{margin:0;font:15px/1.5 var(--sans);color:var(--text);background:var(--paper)}
 a{color:inherit}button,input,select,textarea{font:inherit}
 header{background:var(--ink);color:#eef3f9;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}header .logo.img{background:#fff center/contain no-repeat;border:1px solid #d3dce7}
+footer .linkbtn{background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit}header .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800;color:#fff}header .logo.img{background:#fff center/contain no-repeat;border:1px solid #d3dce7}
 header h1{font:600 20px/1.1 var(--serif);margin:0}header .sub{font-size:12.5px;color:#a9bbd0}
 header .sp{flex:1}header label{font-size:12px;color:#a9bbd0;display:flex;gap:6px;align-items:center}
 header input[type=text]{background:#14263f;border:1px solid #2f4766;color:#fff;border-radius:8px;padding:6px 8px;width:170px}
@@ -86,6 +86,19 @@ function readTrial(){const q=new URLSearchParams(location.search);
   try{localStorage.setItem("proto-trial",JSON.stringify(t));localStorage.setItem("proto-brand",JSON.stringify({name:t.biz,color:t.color}))}catch(e){}return t}
  try{const t=JSON.parse(localStorage.getItem("proto-trial")||"null");if(t&&(t.tools.split(",").includes(document.body.dataset.proto)||document.body.dataset.proto==="suite"))return t}catch(e){}return null}
 function trialDaysLeft(t){const s=new Date(t.start+"T00:00:00"),end=new Date(s.getTime()+TRIAL_DAYS*864e5);return Math.ceil((end-new Date())/864e5)}
+const PII_KEY=/name|phone|email|mail|address|street|note|notes|msg|message|text|body|guest|resident|tenant|client|customer|patient|owner|contact|dob|birth|comment|review|reply/i;
+function anonymize(v,key,map){if(Array.isArray(v))return v.map(x=>anonymize(x,key,map));
+ if(v&&typeof v==="object"){const o={};for(const k of Object.keys(v))o[k]=anonymize(v[k],k,map);return o}
+ if(typeof v!=="string")return v;
+ let s=v.replace(/[\w.+-]+@[\w-]+\.[\w.-]+/g,"user@example.com").replace(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g,"555-0100");
+ if(key&&PII_KEY.test(key)&&s.trim()){if(!map[s])map[s]=(/name|guest|resident|tenant|client|customer|patient|owner|contact/i.test(key)?"Person ":"Text ")+(Object.keys(map).length+1);return map[s]}
+ return s}
+function supportSnapshot(){const map={},data={kind:"support-snapshot",tool:document.body.dataset.proto,created:new Date().toISOString(),app:location.pathname.split("/").pop(),
+  brand:brand(),setup:{trial:!!readTrial(),licensed:document.body.classList.contains("licensed"),screen:innerWidth+"x"+innerHeight,browser:navigator.userAgent},tools:{}};
+ try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!k.startsWith("proto-")||k==="proto-license"||k==="proto-trial")continue;
+  let v=localStorage.getItem(k);try{v=JSON.stringify(anonymize(JSON.parse(v),"",map))}catch(e){v=anonymize(v,k,map)}data.tools[k]=v}}catch(e){}
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download="desk-support-snapshot-"+data.tool+"-"+new Date().toISOString().slice(0,10)+".json";a.click();
+ toast("Support snapshot downloaded: names, phones and emails are replaced");return data}
 function exportData(){const data={exported:new Date().toISOString(),brand:brand(),trial:readTrial(),tools:{}};
  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith("proto-"))data.tools[k]=localStorage.getItem(k)}}catch(e){}
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download=(document.body.classList.contains("licensed")?"desk-backup-":"desk-trial-data-")+new Date().toISOString().slice(0,10)+".json";a.click();toast("Your data was downloaded")}
@@ -123,7 +136,7 @@ function applyLicense(){const l=readLicense(),b=$(".banner");if(!l||!b)return fa
  document.addEventListener("click",starterCopy,true);
  if(lock){const o=document.createElement("div");o.id="trialEnd";o.innerHTML=`<div class="card" role="dialog" aria-modal="true" aria-labelledby="lkH"><h2 id="lkH">Your Plan Needs Renewal</h2><p class="small">Your data is safe and still on this device. Renew your monthly plan to unlock the app, or download a backup.</p><div class="row"><a class="btn" href="../index.html#pricing">Renew my plan</a><button class="btn alt" type="button" id="lkExport">Download backup</button></div></div>`;document.body.appendChild(o);$("#lkExport").onclick=exportData}
  return true}
-document.addEventListener("DOMContentLoaded",()=>{if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("embedded");applyPreview();if(!applyLicense())applyTrial();tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);$("#bizColor").addEventListener("input",setBrand);
+document.addEventListener("DOMContentLoaded",()=>{if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("embedded");applyPreview();if(!applyLicense())applyTrial();tabs();applyBrand();$("#bizName").addEventListener("input",setBrand);const sb=$("#snapBtn");if(sb)sb.onclick=supportSnapshot;if(new URLSearchParams(location.search).get("support")==="1"&&sb){const lab=document.createElement("label");lab.className="linkbtn";lab.textContent=" Load snapshot (support mode)";const f=document.createElement("input");f.type="file";f.accept="application/json";f.hidden=true;f.id="snapLoad";f.onchange=()=>f.files[0]&&restoreData(f.files[0]);lab.appendChild(f);sb.after(lab)}$("#bizColor").addEventListener("input",setBrand);
  $("#reset").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=structuredClone(DEF);render();toast("Sample data restored")});render()});
 """
 
@@ -145,7 +158,7 @@ def shell(pid, name, tagline, tabs, body, js):
 <main><nav class="tabs" aria-label="{name} sections">{tabs_html}</nav>
 {body}
 </main>
-<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval.</footer>
+<footer>Built by Rashad Fambro Consulting. People stay in control: nothing goes to customers without approval. <button type="button" class="linkbtn" id="snapBtn" title="Creates a file with your setup and sample of your data, with names, phone numbers and emails replaced, so support can reproduce an issue">Create support snapshot</button></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>{COMMON_JS}
 {js}</script></body></html>

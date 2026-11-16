@@ -1,4 +1,4 @@
-import re
+import re, json
 """Regression suite: full feature coverage. Scenario IDs match TESTING.md."""
 import datetime, os, re
 from urllib.parse import urljoin, urlparse
@@ -1245,4 +1245,29 @@ def test_R74_tool_apps_preview_with_client_branding(make_page, base_url):
     assert pg.inner_text("header .logo") == "G"
     pg.goto(base_url + "prototypes/bookings.html?brand=%3Cimg%20src%3Dx%3E"); pg.wait_for_timeout(300)
     assert pg.locator("header img").count() == 0
+    assert not w.errors, w.errors
+
+
+def test_R75_support_snapshot_hides_personal_data_and_reloads(make_page, base_url, tmp_path):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "prototypes/bookings.html"); pg.wait_for_timeout(300)
+    if pg.locator("#snapBtn").count() == 0:
+        pytest.skip("before v23")
+    pg.evaluate("""localStorage.setItem('proto-salon-test', JSON.stringify({appointments:[{name:'Jasmine Carter', phone:'702-555-8899', email:'jasmine@example.com', service:'Gel manicure', note:'Allergic to acetone'}], settings:{hours:'9-5', slot:30}}))""")
+    with pg.expect_download() as dl:
+        pg.click("#snapBtn")
+    path = tmp_path / "snap.json"; dl.value.save_as(path)
+    snap = json.loads(path.read_text())
+    raw = path.read_text()
+    assert snap["kind"] == "support-snapshot" and snap["tool"] == "salon"
+    for secret in ("Jasmine Carter", "702-555-8899", "jasmine@example.com", "acetone"):
+        assert secret not in raw, secret
+    data = json.loads(snap["tools"]["proto-salon-test"])
+    assert data["settings"] == {"hours": "9-5", "slot": 30} and data["appointments"][0]["service"] == "Gel manicure"
+    assert "proto-license" not in snap["tools"] and "proto-trial" not in snap["tools"]
+    pg.evaluate("localStorage.clear()")
+    pg.goto(base_url + "prototypes/bookings.html?support=1"); pg.wait_for_timeout(300)
+    pg.set_input_files("#snapLoad", str(path)); pg.wait_for_timeout(1200)
+    restored = json.loads(pg.evaluate("localStorage.getItem('proto-salon-test')"))
+    assert restored["settings"]["slot"] == 30 and restored["appointments"][0]["name"].startswith("Person ")
     assert not w.errors, w.errors

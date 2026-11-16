@@ -30,3 +30,25 @@ jobs:
         env:
           SITE_PATH: ${{ matrix.env == 'staging' && '/staging/' || '/' }}
         run: python -m pytest -m ${{ matrix.suite }} -q -rs
+
+  cross-browser:
+    name: smoke · production · ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    continue-on-error: true   # report-only until the first green run in each engine
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [webkit, firefox]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test tools
+        run: |
+          pip install pytest playwright
+          python -m playwright install --with-deps ${{ matrix.browser }}
+      - name: Run smoke suite in ${{ matrix.browser }} (Safari / Firefox engines)
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: python -m pytest -m smoke -q -rs tests/test_smoke.py tests/test_tools.py

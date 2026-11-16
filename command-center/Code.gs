@@ -32,7 +32,14 @@ const FINANCE_HEADERS = ['Date', 'Type', 'Category', 'Description', 'Amount', 'C
 /* ======================= web app ======================= */
 
 function doGet() {
-  if (!isOwner_()) return HtmlService.createHtmlOutput('Not authorized.');
+  if (!isOwner_()) {
+    const seen = Session.getActiveUser().getEmail() || 'no signed-in Google account was shared with this app';
+    return HtmlService.createHtmlOutput('<div style="font:16px system-ui;max-width:560px;margin:40px auto;line-height:1.5">' +
+      '<h2>Command Center: Not Authorized</h2><p>This page only opens for the owner account. Google reported: <b>' +
+      String(seen).replace(/[<>&"]/g, '') + '</b>.</p><p>Fixes: open the link in a browser window signed in to only your business Google account ' +
+      '(or a private window), and check the deployment is set to <b>Execute as: Me</b> and <b>Who has access: Only myself</b>.</p></div>')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DENY);
+  }
   return HtmlService.createTemplateFromFile('Index').evaluate()
     .setTitle('Command Center · Rashad Fambro Consulting')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
@@ -79,7 +86,8 @@ function getDashboard() {
     leads: data.leads.slice(-200).reverse(), prospects: data.prospects.slice(-200).reverse(),
     licenses: data.licenses, orders: data.orders.slice(-100).reverse(), finance: data.finance.slice(-200).reverse(),
     requests: data.requests.slice(-100).reverse(), log: data.log,
-    calendar: calendar_(), inbox: inbox_(), agents: CC.AGENTS, generated: new Date().toISOString()
+    calendar: calendar_(), inbox: inbox_(), agents: CC.AGENTS, generated: new Date().toISOString(),
+    theme: PropertiesService.getUserProperties().getProperty('theme') || 'dark'
   };
 }
 
@@ -148,6 +156,15 @@ function inbox_() {
 
 /* ======================= actions ======================= */
 
+/** Saves the chosen color theme for this Google account. */
+function setTheme(theme) {
+  guard_();
+  if (['dark', 'light', 'midnight', 'contrast'].indexOf(theme) < 0) throw new Error('Unknown theme');
+  PropertiesService.getUserProperties().setProperty('theme', theme);
+  return theme;
+}
+
+
 /** License actions go through the lead engine so the usual emails go out. action: record_payment | pause | cancel | resend | mark_founding */
 function licenseAction(action, key) {
   guard_();
@@ -209,11 +226,11 @@ function dailyBrief() {
   const d = getDashboardForBrief_();
   const s = d.summary, f = s.finance;
   const lines = ['Good morning. Here is today:', '',
-    'Alerts (' + s.alerts.length + '):'].concat(s.alerts.slice(0, 15).map(a => '  • ' + a.kind + ': ' + a.text))
-    .concat(['', 'Meetings next 7 days: ' + d.calendar.length].concat(d.calendar.slice(0, 8).map(e => '  • ' + Utilities.formatDate(new Date(e.start), CC.TIMEZONE, 'EEE MMM d, h:mm a') + '  ' + e.title)))
-    .concat(['', 'Pipeline: ' + Object.keys(s.pipeline).map(k => k + ' ' + s.pipeline[k]).join(' · '),
-      'Clients: ' + s.counts.activeClients + ' active, ' + s.counts.trials + ' in trial · Est. monthly revenue $' + f.mrrEstimate,
-      'Revenue this month $' + f.revenueMonth + ' · Year to date $' + f.revenueYear + ' · Costs YTD $' + f.costsYear,
+    'Alerts (' + s.alerts.length + '):'].concat(s.alerts.slice(0, 15).map(a => '  - ' + a.kind + ': ' + a.text))
+    .concat(['', 'Meetings next 7 days: ' + d.calendar.length].concat(d.calendar.slice(0, 8).map(e => '  - ' + Utilities.formatDate(new Date(e.start), CC.TIMEZONE, 'EEE MMM d, h:mm a') + '  ' + e.title)))
+    .concat(['', 'Pipeline: ' + Object.keys(s.pipeline).map(k => k + ' ' + s.pipeline[k]).join(', '),
+      'Clients: ' + s.counts.activeClients + ' active, ' + s.counts.trials + ' in trial, Est. monthly revenue $' + f.mrrEstimate,
+      'Revenue this month $' + f.revenueMonth + ', Year to date $' + f.revenueYear + ', Costs YTD $' + f.costsYear,
       'Open agent requests: ' + s.counts.openRequests, '', 'Open the Command Center: ' + ScriptApp.getService().getUrl()]);
   GmailApp.sendEmail(CC.OWNER_EMAIL, '[Daily brief] ' + s.alerts.length + ' alert(s), ' + d.calendar.length + ' meeting(s) this week', lines.join('\n'), { name: 'Command Center' });
 }

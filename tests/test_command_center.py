@@ -127,7 +127,15 @@ def test_CC03_page_renders_and_wires_actions(make_page, tmp_path):
     pg.fill('#reqForm textarea', "Release BookDesk 1.2 to staging"); pg.click('#reqForm button[type=submit]'); pg.wait_for_timeout(50)
     # ledger → addFinance({...})
     pg.click('[data-tab="finance"]'); pg.fill('#finForm [name=amount]', "29"); pg.fill('#finForm [name=category]', "Software"); pg.click('#finForm button[type=submit]'); pg.wait_for_timeout(50)
+    # themes: dark by default, switchable to 3 others, saved to the account
+    assert pg.get_attribute("html", "data-theme") == "dark"
+    for th in ("light", "midnight", "contrast"):
+        pg.select_option("#theme", th); pg.wait_for_timeout(30)
+        assert pg.get_attribute("html", "data-theme") == th
+        bg = pg.evaluate("getComputedStyle(document.body).backgroundColor"); ink = pg.evaluate("getComputedStyle(document.body).color")
+        assert bg != ink, th
     calls = pg.evaluate("window.__calls")
+    assert ["setTheme", "contrast"] in calls
     names = [c[0] for c in calls]
     assert ["licenseAction", "pause", "RFL-20261215-DEF456"] in calls
     assert ["setLeadStatus", 4, "Booked"] in calls
@@ -138,3 +146,24 @@ def test_CC03_page_renders_and_wires_actions(make_page, tmp_path):
     assert not w.errors, w.errors
     pg.set_viewport_size({"width": 390, "height": 800})
     assert pg.evaluate("document.documentElement.scrollWidth <= 392")
+
+
+@pytest.mark.skipif(not NODE, reason="node not installed")
+def test_CC04_server_functions_owner_and_stranger():
+    """Runs command-center/Code.gs in a simulated Google account (tests/cc_harness.js)."""
+    out = subprocess.run([NODE, str(ROOT / "tests" / "cc_harness.js"), str(CODE)], capture_output=True, text=True, check=True).stdout
+    d = json.loads(out.strip().splitlines()[-1])
+    e = d["errors"]
+    assert d["page"] == "INDEX" and "Not Authorized" in d["strangerPage"]
+    assert d["leadAfter"] == "Booked" and e["badStatus"] == "Unknown status" and e["badRow"] == "Bad row"
+    assert d["requests"] == [["release-manager", "High", "New"], ["chief-of-staff", "Normal", "New"]] and e["emptyReq"]
+    assert d["finance"] == [["Expense", -29]] and e["badAmount"]
+    assert d["fetches"][0]["payload"] == {"type": "admin", "token": "x" * 32, "action": "pause", "key": "RFL-20261220-AAAAAA"}
+    assert e["badKey"] == "Bad license key" and e["badAction"] == "Unknown action"
+    assert d["themeAfter"] == "contrast" and e["badTheme"]
+    for fn in ("getDashboard", "licenseAction", "setLeadStatus", "addRequest", "addFinance", "setTheme"):
+        assert e["stranger:" + fn] == "Not authorized", fn
+    assert d["fetchesAfterStranger"] == 1
+    assert d["triggers"] == ["dailyBrief"] and d["log"][:2] == ["setup", "lead:status"]
+    brief = d["mails"][0]
+    assert brief["subject"].startswith("[Daily brief]") and re.fullmatch(r"[\x09\x0a\x0d\x20-\x7e]*", brief["subject"] + brief["body"])

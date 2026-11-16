@@ -152,3 +152,25 @@ Run any suite on its own: `python -m pytest -m security` (or `performance`, `loa
 | LOAD03 | 8 trial users work in different tool apps at once with no errors and their data saved |
 
 For a gentle check of the live site, run `python3 scripts/load_check.py` by hand (capped at 500 requests).
+
+
+## Environments (Nov 15, 2026)
+| Environment | Where | Used for |
+|---|---|---|
+| **Development** | Your working copy: `python3 scripts/release.py serve` then http://localhost:8000/ (and /staging/). Work on a branch for anything larger than a fix | Building and trying changes |
+| **Test** | GitHub Actions on every push and pull request: all suites against production and staging files, plus Safari (WebKit) and Firefox smoke runs. The lead engine and Command Center run in simulators (`tests/email_harness.js`, `tests/cc_harness.js`) with a fake Sheet, Gmail, Drive and Calendar | Proving a change works before it reaches anyone |
+| **Staging** | https://rashadfambro.github.io/staging/ | Release candidate; reviewed before promote |
+| **Production** | https://rashadfambro.github.io/ | Live site and tool apps |
+
+Apps Script backends (lead engine, Command Center) follow the same path: simulators in Test, then **Deploy → Manage deployments → New version** (same URL) only after the suites pass. Read-only live checks (`tests/test_live_backend.py`) confirm the deployed lead engine answers after every push.
+
+## Suites By Area
+| Area | Smoke | Regression | Security | Performance | Load | Backups |
+|---|---|---|---|---|---|---|
+| Website (index, products, industries, privacy) | test_smoke | test_regression R01-R75 | test_security | test_performance | test_load | `backup/prod-*` branch on every promote + zip on EHD 2 |
+| All 15 tool apps + Desk Suite | test_tools T-SMOKE | T-REG (trial, license, forged key, snapshot) + R75 | T-SEC (CSP, no third-party scripts, hostile input) | T-PERF | T-LOAD (8 parallel) | Client: Download backup / Restore backup; support snapshot (anonymized) |
+| Lead engine (Apps Script) | LIVE01-02 (read-only, live) | LE02-LE08 (every email, payments, status sync, backups) | LE06, LE08 (admin token refused and logged) | - | quotas documented | Nightly Sheet copy, 30 kept; code in git and EHD 2 |
+| Command Center (Apps Script) | CC03 | CC01, CC03, CC04 | CC02, CC04 (owner-only on every function) | - | - | Same Sheet backup; code in git |
+
+## Reproducing A Client Setup
+Every tool app has **Create support snapshot** in the footer: it downloads the client's setup and data with names, phone numbers, emails and free-text notes replaced. Open the same app with `?support=1` and use **Load snapshot (support mode)** to reproduce the issue locally or on staging, then fix, test and release as usual. Add the anonymized snapshot as a test fixture when the fix needs a regression test.

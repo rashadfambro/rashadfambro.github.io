@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <base target="_top">
 <meta charset="utf-8">
 <title>Command Center</title>
 <style>
-:root{--ink:#0d1a2d;--sky:#7cc4ff;--mint:#3ddc97;--amber:#f5b942;--red:#ff6b6b;--line:#d3dce7;--soft:#f5f8fc;--muted:#5d6b7c}
-*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--soft)}
-header{background:var(--ink);color:#fff;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
-header h1{font:600 1.15rem Georgia,serif;margin:0}header small{color:#a9bbd0}
-nav{display:flex;gap:4px;flex-wrap:wrap}nav button{background:transparent;border:1px solid #2b4466;color:#dfe8f2;border-radius:999px;padding:6px 14px;cursor:pointer;font:600 .85rem inherit}
-nav button[aria-selected=true]{background:var(--sky);border-color:var(--sky);color:var(--ink)}
+:root,[data-theme=dark]{--bg:#0b1220;--panel:#121c2e;--panel2:#16233a;--ink:#e6edf6;--muted:#9fb0c6;--line:#24344f;--head:#0d1729;--accent:#7cc4ff;--accentInk:#06111f;--th:#1b2a44;--rowAlt:#0f192b;--mint:#3ddc97;--amber:#f5b942;--red:#ff6b6b;--btn:#e6edf6;--btnInk:#0b1220}
+[data-theme=light]{--bg:#f5f8fc;--panel:#ffffff;--panel2:#ffffff;--ink:#0d1a2d;--muted:#5d6b7c;--line:#d3dce7;--head:#ffffff;--accent:#2f7fe0;--accentInk:#ffffff;--th:#e8eef6;--rowAlt:#fafcfe;--mint:#1f9d67;--amber:#c98a12;--red:#d64545;--btn:#0d1a2d;--btnInk:#ffffff}
+[data-theme=midnight]{--bg:#0d1a2d;--panel:#14243d;--panel2:#1a2e4d;--ink:#eef4fb;--muted:#a9bbd0;--line:#2b4466;--head:#08121f;--accent:#3ddc97;--accentInk:#07150e;--th:#22395c;--rowAlt:#112035;--mint:#3ddc97;--amber:#ffc46b;--red:#ff8080;--btn:#3ddc97;--btnInk:#07150e}
+[data-theme=contrast]{--bg:#000000;--panel:#000000;--panel2:#0a0a0a;--ink:#ffffff;--muted:#e0e0e0;--line:#ffffff;--head:#000000;--accent:#ffd400;--accentInk:#000000;--th:#1a1a1a;--rowAlt:#0a0a0a;--mint:#00ff95;--amber:#ffd400;--red:#ff5c5c;--btn:#ffd400;--btnInk:#000000}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:var(--head);color:var(--ink);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header h1{font:600 1.15rem Georgia,serif;margin:0}header small{color:var(--muted)}a{color:var(--accent)}.themepick{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+nav{display:flex;gap:4px;flex-wrap:wrap}nav button{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;font:600 .85rem inherit}
+nav button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:var(--accentInk)}
 main{max-width:1200px;margin:0 auto;padding:18px}
 .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
 .kpi b{display:block;font:600 1.6rem Georgia,serif}.kpi span{color:var(--muted);font-size:.85rem}
 h2{font:600 1.2rem Georgia,serif;margin:22px 0 10px}
-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.88rem}
-th{background:var(--ink);color:#fff;text-align:left;padding:8px}td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
-tr:nth-child(even) td{background:#fafcfe}
-.alert{display:flex;gap:10px;align-items:baseline;padding:9px 12px;border-left:4px solid var(--sky);background:#fff;border-radius:8px;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.88rem}
+th{background:var(--th);color:var(--ink);text-align:left;padding:8px}td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:var(--rowAlt)}
+.alert{display:flex;gap:10px;align-items:baseline;padding:9px 12px;border-left:4px solid var(--accent);background:var(--panel);border-radius:8px;margin-bottom:6px}
 .alert.high{border-color:var(--red)}.alert.warn{border-color:var(--amber)}.alert .k{font-weight:700;min-width:110px}
-.pill{display:inline-block;padding:1px 9px;border-radius:999px;background:#e8f1fb;font-size:.8rem;font-weight:600}
-.btn{border:1px solid var(--ink);background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer;font:600 .8rem inherit;margin:2px}
-.btn.primary{background:var(--ink);color:#fff}.btn:disabled{opacity:.5}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);font-size:.8rem;font-weight:600}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:8px;padding:4px 10px;cursor:pointer;font:600 .8rem inherit;margin:2px}
+.btn.primary{background:var(--btn);color:var(--btnInk);border-color:var(--btn)}.btn:disabled{opacity:.5}
 form.row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
 label{display:flex;flex-direction:column;font-size:.8rem;font-weight:600;color:var(--muted);gap:3px}
-input,select,textarea{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+input,select,textarea{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--ink)}
 textarea{min-height:90px;width:100%}
-#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;display:none;z-index:9}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--accentInk);padding:10px 16px;border-radius:10px;display:none;z-index:9}
 .muted{color:var(--muted)}.scroll{overflow-x:auto}
 @media (max-width:640px){main{padding:10px}.alert .k{min-width:0}}
 </style>
@@ -37,7 +40,7 @@ textarea{min-height:90px;width:100%}
 <header>
   <div><h1>Command Center</h1><small id="updated">Loading…</small></div>
   <nav role="tablist" id="tabs"></nav>
-  <button class="btn" id="refresh" type="button">Refresh</button>
+  <span style="display:flex;gap:8px;align-items:center"><label class="themepick">Theme <select id="theme" aria-label="Color theme"><option value="dark">Dark</option><option value="light">Light</option><option value="midnight">Midnight</option><option value="contrast">High contrast</option></select></label><button class="btn" id="refresh" type="button">Refresh</button></span>
 </header>
 <main id="main" aria-live="polite"><p class="muted">Loading your business…</p></main>
 <div id="toast" role="status"></div>
@@ -52,7 +55,10 @@ const day = (iso) => iso ? new Date(iso).toLocaleDateString([], {month:"short", 
 function toast(t){ const el=$("#toast"); el.textContent=t; el.style.display="block"; clearTimeout(toast.t); toast.t=setTimeout(()=>el.style.display="none",3500); }
 function call(fn, ...args){ return new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(e => no(e && e.message || String(e)))[fn](...args)); }
 
-function load(){ $("#updated").textContent = "Loading…"; call("getDashboard").then(d => { D = d; $("#updated").textContent = "Updated " + when(d.generated); render(); }).catch(e => { $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)}</div>`; }); }
+function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); $("#theme").value = t; try{ localStorage.setItem("cc-theme", t); }catch(_){} }
+try{ const t0 = localStorage.getItem("cc-theme"); if (t0) applyTheme(t0); }catch(_){}
+$("#theme").addEventListener("change", e => { applyTheme(e.target.value); call("setTheme", e.target.value).catch(() => {}); });
+function load(){ $("#updated").textContent = "Loading…"; call("getDashboard").then(d => { D = d; if (d.theme) applyTheme(d.theme); $("#updated").textContent = "Updated " + when(d.generated); render(); }).catch(e => { $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)}</div>`; }); }
 function tabsHTML(){ $("#tabs").innerHTML = TABS.map(([id,l]) => `<button role="tab" type="button" data-tab="${id}" aria-selected="${id===tab}">${esc(l)}${id==="today"&&D?` (${D.summary.alerts.length})`:""}</button>`).join(""); }
 function table(cols, rows, empty){ if(!rows.length) return `<p class="muted">${esc(empty||"Nothing here yet.")}</p>`;
   return `<div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${esc(c[0])}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }

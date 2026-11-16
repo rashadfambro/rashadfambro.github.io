@@ -40,7 +40,8 @@ def browser():
         kw = {}
         if os.environ.get("CHROME_PATH"):
             kw["executable_path"] = os.environ["CHROME_PATH"]
-        b = p.chromium.launch(**kw)
+        engine = os.environ.get("BROWSER", "chromium")      # chromium | webkit (Safari engine) | firefox
+        b = getattr(p, engine).launch(**(kw if engine == "chromium" else {}))
         # Never reach the real lead engine (Google Apps Script) from tests: every context gets it blocked.
         # Tests that need a backend answer add their own route, which takes priority over this one.
         _new_context = b.new_context

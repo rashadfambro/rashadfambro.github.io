@@ -22,7 +22,8 @@ class Sheet {
   getDataRange() { const w = Math.max(1, ...this.rows.map(r => r.length)); return new Range(this, 1, 1, this.rows.length, w); }
   setFrozenRows() { return this; } getActiveRange() { return new Range(this, 2, 1); }
 }
-const book = { sheets: {}, getSheetByName(n) { return this.sheets[n] || null; }, insertSheet(n) { return (this.sheets[n] = new Sheet(n)); }, getUrl() { return 'https://docs.google.com/spreadsheets/d/TEST/edit'; } };
+const drive = { folders: [], files: [] };
+const book = { getId: () => 'SHEET1', getName: () => 'Leads - Rashad Fambro Consulting', sheets: {}, getSheetByName(n) { return this.sheets[n] || null; }, insertSheet(n) { return (this.sheets[n] = new Sheet(n)); }, getUrl() { return 'https://docs.google.com/spreadsheets/d/TEST/edit'; } };
 const cache = {};
 const RealDate = Date;
 class FakeDate extends RealDate { constructor(...a) { if (a.length === 0) super(NOW.getTime()); else super(...a); } static now() { return NOW.getTime(); } }
@@ -34,7 +35,7 @@ const ctx = {
   GmailApp: {
     sendEmail(to, subject, body, opts) { sent.push({ kind: 'email', to, subject, body, name: (opts || {}).name || '' }); },
     createDraft(to, subject, body) { sent.push({ kind: 'draft', to, subject, body, name: '' }); return {}; },
-    search() { return []; }, getUserLabelByName() { return { }; }, createLabel() { return {}; }
+    search(q) { return (ctx.__gmail || []).filter(t => t.match(q)).map(t => t.thread); }, getUserLabelByName() { return {}; }, createLabel() { return {}; }
   },
   Utilities: { formatDate(d, tz, f) { d = new RealDate(d); const p = (n) => String(n).padStart(2, '0');
       const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -46,10 +47,15 @@ const ctx = {
   LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
   ScriptApp: { getProjectTriggers: () => [], newTrigger: () => { const t = { timeBased() { return t; }, atHour() { return t; }, everyDays() { return t; }, everyHours() { return t; }, onWeekDay() { return t; }, forSpreadsheet() { return t; }, onEdit() { return t; }, create() {} }; return t; }, WeekDay: {} },
   ContentService: { createTextOutput: (s) => ({ setMimeType: () => s }), MimeType: {} },
+  DriveApp: {
+    getFoldersByName: (n) => { const f = drive.folders.filter(x => x.name === n); let i = 0; return { hasNext: () => i < f.length, next: () => f[i++] }; },
+    createFolder: (n) => { const f = { name: n, files: [], getFiles() { const a = this.files.filter(x => !x.trashed); let i = 0; return { hasNext: () => i < a.length, next: () => a[i++] }; } }; drive.folders.push(f); return f; },
+    getFileById: () => ({ makeCopy: (name, folder) => { const f = { name, created: new RealDate(NOW.getTime() + folder.files.length * 1000), trashed: false, getDateCreated() { return this.created; }, setTrashed(v) { this.trashed = v; } }; folder.files.push(f); return f; } })
+  },
   UrlFetchApp: { fetch: () => ({ getContentText: () => '{}', getResponseCode: () => 200 }) },
 };
 vm.createContext(ctx);
-vm.runInContext(src + '\n;globalThis.__api = { handleLead_, issueTrial_, activateRow_, onLicenseEdit, runLicenses, runFollowUps, weeklyDigest, adminAction_, sheet_, CFG, LICENSE_HEADERS, LEAD_HEADERS };', ctx);
+vm.runInContext(src + '\n;globalThis.__api = { handleLead_, issueTrial_, activateRow_, onLicenseEdit, runLicenses, runFollowUps, weeklyDigest, adminAction_, sheet_, matchPayments, syncPipeline, backupSheet, checkLicense_, CFG, LICENSE_HEADERS, LEAD_HEADERS, ORDER_HEADERS, PROSPECT_HEADERS };', ctx);
 const A = ctx.__api;
 A.CFG.BOOKING_URL = 'https://calendly.com/example/free-workflow-audit';
 A.CFG.CREATE_REPLY_DRAFT = true;
@@ -80,4 +86,45 @@ for (let i = 0; i < 3; i++) { A.runFollowUps(); }
 tag('follow-ups');
 A.weeklyDigest(); tag('weekly digest');
 
-console.log(JSON.stringify(sent));
+
+// 4. Payment matching: one Square email that matches the open order, one PayPal email that matches nothing
+const mkThread = (from, subject, body) => ({ thread: { getMessages: () => [{ getPlainBody: () => body, getSubject: () => subject, getFrom: () => from }], addLabel() {} } });
+const ordersSh = A.sheet_('Orders', A.ORDER_HEADERS);
+const orderRow = ordersSh.rows.findIndex(r => r[5] === 'ana@example.com') + 1;
+ctx.__gmail = [
+  { match: q => /squareup|paypal/.test(q), ...mkThread('Square <noreply@messaging.squareup.com>', 'You received $2,250.00 from Ana Ruiz', 'Payment received\n$2,250.00\nCustomer: Ana Ruiz\nana@example.com\nLaunch Bundle') },
+  { match: q => /squareup|paypal/.test(q), ...mkThread('service@paypal.com', "You've got money", 'Bob Stone sent you $999.00 USD') },
+];
+A.matchPayments(); tag('payments');
+const result = { orderStatus: ordersSh.getRange(orderRow, 3).getValue(), orderKey: ordersSh.getRange(orderRow, 12).getValue() };
+const anaLic = lic.rows.filter(r => r[3] === 'ana@example.com' && r[1] === 'chat,salon' && r[4] === 'Active' && String(r[0]).startsWith('RFL-'));
+result.licenseActive = anaLic.length > 0;
+result.checkActive = A.checkLicense_({ key: result.orderKey });
+
+// 5. Status sync: replies, bookings, proposals, STOP, sent outreach; Lost is never changed
+const pros = A.sheet_('Prospects', A.PROSPECT_HEADERS);
+const P = (biz, email, status) => pros.appendRow(['2026-11-15', biz, '', email, '', 'Las Vegas', 'x', 'x', 'test', status, '', '', '']);
+P('Replied Co', 'reply@example.com', 'Not contacted'); P('Booked Co', 'book@example.com', 'Draft ready'); P('Proposal Co', 'prop@example.com', 'Booked');
+P('Stop Co', 'stop@example.com', 'Contacted'); P('Sent Co', 'sent@example.com', 'Not contacted'); P('Lost Co', 'lost@example.com', 'Lost'); P('Quiet Co', 'quiet@example.com', 'Not contacted');
+ctx.__gmail = [
+  { match: q => q.startsWith('from:reply@example.com -from:me'), thread: {} },
+  { match: q => q.startsWith('from:calendly.com "book@example.com"'), thread: {} },
+  { match: q => q.startsWith('in:sent to:prop@example.com subject:proposal'), thread: {} },
+  { match: q => q.startsWith('from:stop@example.com (STOP'), thread: {} },
+  { match: q => q.startsWith('in:sent to:sent@example.com after'), thread: {} },
+  { match: q => q.indexOf('lost@example.com') >= 0, thread: {} },
+];
+A.syncPipeline();
+result.statuses = Object.fromEntries(pros.rows.slice(1).map(r => [r[1], r[9]]));
+
+// 6. Admin endpoint refuses a bad token and logs it
+result.adminBad = A.adminAction_({ token: 'wrong', action: 'pause', key: result.orderKey });
+const logSh = A.sheet_('Log', ['Time', 'Source', 'Action', 'Target', 'Result']);
+result.adminLogged = logSh.rows.some(r => r[1] === 'admin' && /refused/.test(r[4]));
+
+// 7. Nightly backup keeps the newest 30 copies
+for (let i = 0; i < 32; i++) A.backupSheet();
+const bf = drive.folders.find(f => f.name === 'RF Lead Engine Backups');
+result.backups = { kept: bf.files.filter(f => !f.trashed).length, trashed: bf.files.filter(f => f.trashed).length };
+
+console.log(JSON.stringify({ mails: sent, result }));

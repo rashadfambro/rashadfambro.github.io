@@ -545,6 +545,22 @@ function markFoundingClient() {
   SpreadsheetApp.getUi().alert('Marked as a founding client. The website shows ' + foundingStats_().foundingLeft + ' spot(s) left within a few minutes.');
 }
 
+/* ======================= nightly backup ======================= */
+
+/** Runs nightly: copies the whole Sheet (leads, prospects, licenses, orders, log) into the Drive folder
+ *  "RF Lead Engine Backups" and keeps the newest 30 copies. Restore = open a copy and copy rows back. */
+function backupSheet() {
+  const name = 'RF Lead Engine Backups';
+  const it = DriveApp.getFoldersByName(name);
+  const folder = it.hasNext() ? it.next() : DriveApp.createFolder(name);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  DriveApp.getFileById(ss.getId()).makeCopy(ss.getName() + ' backup ' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HHmm'), folder);
+  const files = [], fi = folder.getFiles();
+  while (fi.hasNext()) files.push(fi.next());
+  files.sort((a, b) => b.getDateCreated() - a.getDateCreated()).slice(30).forEach(f => f.setTrashed(true));
+  log_('backup', ss.getName(), 'ok, ' + Math.min(files.length, 30) + ' kept');
+}
+
 /* ======================= admin actions (Command Center) ======================= */
 
 /** Called only by the private Command Center with the shared ADMIN_TOKEN (Script properties in both
@@ -596,6 +612,7 @@ function onOpen() {
     .addItem('Run license checks now', 'runLicenses')
     .addItem('Match payment emails now', 'matchPayments')
     .addItem('Update lead and prospect statuses now', 'syncPipeline')
+    .addItem('Back up this Sheet now', 'backupSheet')
     .addToUi();
 }
 
@@ -802,6 +819,7 @@ function setup() {
   ScriptApp.newTrigger('weeklyDigest').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(7).create();
   ScriptApp.newTrigger('matchPayments').timeBased().everyHours(2).create();
   ScriptApp.newTrigger('syncPipeline').timeBased().everyHours(2).create();
+  ScriptApp.newTrigger('backupSheet').timeBased().everyDays(1).atHour(2).create();
   const pros = sheet_('Prospects', PROSPECT_HEADERS); pros.setFrozenRows(1);
   ScriptApp.newTrigger('onLicenseEdit').forSpreadsheet(SpreadsheetApp.getActive()).onEdit().create();
   const ord = sheet_('Orders', ORDER_HEADERS); ord.setFrozenRows(1);
