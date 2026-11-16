@@ -183,7 +183,10 @@ function contacts_(d) {
 function isBusinessMail_(from, subject, contacts, cfg) {
   const addr = String((String(from).match(/<([^>]+)>/) || [])[1] || from).trim().toLowerCase();
   const domain = addr.split('@')[1] || '';
-  return cfg.BUSINESS_SENDERS.some(s => domain === s || domain.slice(-(s.length + 1)) === '.' + s) || !!contacts[addr] || cfg.BUSINESS_SUBJECT.test(String(subject));
+  const fromSender = cfg.BUSINESS_SENDERS.some(s => domain === s || domain.slice(-(s.length + 1)) === '.' + s);
+  // Square and PayPal also send marketing and personal statements: from them, only real payment messages count.
+  if (fromSender && /(^|\.)(squareup|paypal)\.com$/.test(domain) && !/received|sent you|payment|paid|invoice|refund|dispute|deposit|payout/i.test(String(subject))) return !!contacts[addr];
+  return fromSender || !!contacts[addr] || cfg.BUSINESS_SUBJECT.test(String(subject));
 }
 /** Unread business email from the last 3 days. Personal mail never appears. */
 function inbox_(contacts) {

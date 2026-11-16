@@ -17,7 +17,7 @@ const props = { LEADS_SHEET_ID: 'SHEET1', LEAD_ENGINE_URL: 'https://script.googl
 const userProps = {};
 const triggers = [];
 const INBOX = [['Family <family@example.com>', 'Dinner Sunday?'], ['Bank <alerts@example.com>', 'Your statement is ready'], ['Calendly <no-reply@example.com>', 'New Event: Glow Studio'],
-  ['Ana Ruiz <ana@example.com>', 'Re: Quick idea'], ['Lead Engine <rashadfambro@gmail.com>', '[Lead] Glow Studio (score 72)'], ['Shop <deals@example.com>', 'Your order has shipped'], ['Square <noreply@messaging.squareup.com>', 'You received $250.00']];
+  ['Ana Ruiz <ana@example.com>', 'Re: Quick idea'], ['Lead Engine <rashadfambro@gmail.com>', '[Lead] Glow Studio (score 72)'], ['Shop <deals@example.com>', 'Your order has shipped'], ['Square <noreply@messaging.squareup.com>', 'You received $250.00'], ['Square <noreply@messaging.squareup.com>', 'Your point of sale is waiting'], ['PayPal <noreply@service.paypal.com>', 'Your October account statement is available']];
 function xfo(m) { if (m == null) throw new Error('Argument cannot be null: mode'); return this; }   // same check as Google
 const ctx = {
   console, JSON, Math, Number, String, Object, Array, RegExp, Error, Date,
