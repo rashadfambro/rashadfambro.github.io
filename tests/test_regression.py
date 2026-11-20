@@ -368,6 +368,12 @@ def test_R20_save_site_button(home):
     assert home.errors == []
 
 
+import sys as _sys
+_sys.path.insert(0, os.path.join(ROOT, "scripts", "generators"))
+from gen_shortlinks import short_items as _short_items
+SHORT_LINK_DIRS = set(_short_items(ROOT))
+
+
 def test_R21_meta_tags_per_environment():
     for f in all_html():
         s = open(f, encoding="utf-8").read()
@@ -375,7 +381,7 @@ def test_R21_meta_tags_per_environment():
         assert '<link rel="canonical"' in s or "noindex" in s, rel
         if rel.startswith("staging" + os.sep):
             assert "noindex" in s and "STAGING" in s, rel
-        elif not rel.startswith("tools"):
+        elif not rel.startswith("tools") and rel.split(os.sep)[0] not in SHORT_LINK_DIRS:   # short links redirect; keep them out of search
             assert "noindex" not in s, rel
 
 

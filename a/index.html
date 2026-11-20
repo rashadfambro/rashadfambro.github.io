@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Opening Your App | Rashad Fambro Consulting</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;background:#0d1a2d;color:#e8eef7;display:grid;place-items:center;min-height:90vh;margin:0;padding:0 20px;text-align:center}a{color:#7cc4ff}</style>
+</head>
+<body>
+<main>
+<h1 style="font:600 22px Georgia,serif">Opening Your App</h1>
+<p id="msg">One moment&hellip;</p>
+</main>
+<script>
+(function () {
+  var API = "https://script.google.com/macros/s/AKfycbzc37BsdGGlGZes-TCeo7p22rJe5USt2oPx0oxrlSA3Iw1FjllEjXwsitP03UXnF8tngw/exec";
+  var key = decodeURIComponent(location.search.slice(1).split("&")[0]).trim().toUpperCase();
+  var env = /\/staging\//.test(location.pathname) ? "staging" : "production";
+  var msg = document.getElementById("msg");
+  function fail(t) { msg.innerHTML = t + ' Reply to the email you received, or contact <a href="../#contact">Rashad Fambro Consulting</a>, and a new link will be sent.'; }
+  if (!/^RFL?-\d{8}-[A-Z0-9]{6}$/.test(key)) { fail("This link looks incomplete."); return; }
+  fetch(API + "?resolve=" + encodeURIComponent(key) + "&env=" + env, { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (j && j.ok && /^https:\/\/rashadfambro\.github\.io\/prototypes\//.test(j.url)) location.replace(j.url);
+      else fail("This link is no longer active.");
+    })
+    .catch(function () { fail("The app could not be opened right now. Please try again in a minute."); });
+})();
+</script>
+</body>
+</html>
