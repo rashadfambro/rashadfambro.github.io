@@ -32,7 +32,7 @@ const CC = {
     'client-success', 'project-manager', 'product-manager', 'mvp-builder', 'qa-engineer', 'release-manager', 'social-media-manager']
 };
 const REQUEST_HEADERS = ['Time', 'Request ID', 'Agent', 'Priority', 'Client / topic', 'Request', 'Status', 'Response', 'Link', 'Updated'];
-const FINANCE_HEADERS = ['Date', 'Type', 'Category', 'Description', 'Amount', 'Client', 'Method', 'Reference'];
+const FINANCE_HEADERS = ['Date', 'Type', 'Category', 'Description', 'Amount', 'Client', 'Method', 'Reference', 'Product', 'Repeats'];
 const PROSPECT_HEADERS = ['Added', 'Business', 'Contact', 'Email', 'Phone', 'City', 'Industry', 'Tools to pitch', 'Source', 'Status', 'Last activity', 'Next step', 'Notes'];
 // Which tab and columns each kind of contact uses (columns are found by header name, so column order can change).
 const KINDS = {
@@ -101,24 +101,49 @@ function getDashboard(env) {
   setEnv_(env);
   const data = {
     leads: values_('Leads'), prospects: values_('Prospects'), licenses: values_('Licenses'), orders: values_('Orders'),
-    finance: values_('Finance', 300), requests: values_('Requests', 150), log: values_('Log', 60).reverse()
+    finance: values_('Finance', 2000), requests: values_('Requests', 150), log: values_('Log', 60).reverse()
   };
   const summary = summarize_(data, new Date().toISOString(), CC);
   return {
     summary: summary,
-    leads: data.leads.slice(-200).reverse(), prospects: data.prospects.slice(-200).reverse(),
-    licenses: data.licenses, orders: data.orders.slice(-100).reverse(), finance: data.finance.slice(-200).reverse(),
+    leads: data.leads.slice(-2000).reverse(), prospects: data.prospects.slice(-2000).reverse(),
+    licenses: data.licenses, orders: data.orders.slice(-1000).reverse(), finance: data.finance.slice(-2000).reverse(),
     requests: data.requests.slice(-100).reverse(), log: data.log,
     agents: CC.AGENTS, generated: new Date().toISOString(), env: ENV_, stages: CC.STAGES,
-    theme: PropertiesService.getUserProperties().getProperty('theme') || 'dark'
+    theme: PropertiesService.getUserProperties().getProperty('theme') || 'dark', settings: getSettings_()
   };
 }
 
 /** The slower parts (Gmail and Calendar), loaded after the dashboard is already on screen. */
-function getExtras(env) {
+function getExtras(env, days) {
   guard_(); setEnv_(env);
   const data = { leads: values_('Leads'), prospects: values_('Prospects'), licenses: values_('Licenses'), orders: values_('Orders', 300) };
-  return { calendar: calendar_(), inbox: inbox_(contacts_(data)) };
+  const c = contacts_(data);
+  return { calendar: calendar_(), inbox: inbox_(c, days), drafts: drafts_(c) };
+}
+
+/* ======================= settings ======================= */
+const SETTING_DEFAULTS = { theme: 'dark', env: 'live', startTab: 'today', refreshMin: 5, inboxDays: 3, bccMe: false, signature: 'Rashad Fambro\nIT Software Consultant, Rashad Fambro Consulting' };
+function getSettings_() {
+  let s = {}; try { s = JSON.parse(PropertiesService.getUserProperties().getProperty('settings') || '{}'); } catch (e) {}
+  return Object.assign({}, SETTING_DEFAULTS, s);
+}
+/** Save Command Center settings (kept per user in Google, so they follow you to any device). */
+function saveSettings(s) {
+  guard_();
+  s = s || {};
+  const out = getSettings_();
+  if (['dark', 'light', 'midnight', 'contrast'].indexOf(s.theme) >= 0) out.theme = s.theme;
+  if (['live', 'test'].indexOf(s.env) >= 0) out.env = s.env;
+  if (['today', 'pipeline', 'emails', 'clients', 'finance', 'agents', 'log'].indexOf(s.startTab) >= 0) out.startTab = s.startTab;
+  if ([0, 5, 15, 30].indexOf(Number(s.refreshMin)) >= 0) out.refreshMin = Number(s.refreshMin);
+  if ([1, 3, 7, 14].indexOf(Number(s.inboxDays)) >= 0) out.inboxDays = Number(s.inboxDays);
+  if (typeof s.bccMe === 'boolean') out.bccMe = s.bccMe;
+  if (typeof s.signature === 'string') out.signature = clip_(s.signature, 400);
+  PropertiesService.getUserProperties().setProperty('settings', JSON.stringify(out));
+  PropertiesService.getUserProperties().setProperty('theme', out.theme);
+  log_('settings:save', '', Object.keys(s).join(', '));
+  return out;
 }
 
 /** Pure function (no Google services), so it can be unit-tested. */
@@ -189,9 +214,10 @@ function isBusinessMail_(from, subject, contacts, cfg) {
   return fromSender || !!contacts[addr] || cfg.BUSINESS_SUBJECT.test(String(subject));
 }
 /** Unread business email from the last 3 days. Personal mail never appears. */
-function inbox_(contacts) {
+function inbox_(contacts, days) {
   try {
-    const out = [], threads = GmailApp.search(CC.ALERT_QUERY, 0, 40);
+    const d = [1, 3, 7, 14].indexOf(Number(days)) >= 0 ? Number(days) : 3;
+    const out = [], threads = GmailApp.search(CC.ALERT_QUERY.replace('newer_than:3d', 'newer_than:' + d + 'd'), 0, 40);
     const msgs = GmailApp.getMessagesForThreads ? GmailApp.getMessagesForThreads(threads) : threads.map(t => t.getMessages());   // one batch call, not one per thread
     threads.forEach((t, i) => {
       const m = msgs[i][msgs[i].length - 1];
@@ -208,7 +234,7 @@ function inbox_(contacts) {
 function setTheme(theme) {
   guard_();
   if (['dark', 'light', 'midnight', 'contrast'].indexOf(theme) < 0) throw new Error('Unknown theme');
-  PropertiesService.getUserProperties().setProperty('theme', theme);
+  saveSettings({ theme: theme });
   return theme;
 }
 
@@ -253,16 +279,25 @@ function plain_(s) {
 function locate_(kind, ref) {
   const k = KINDS[kind]; if (!k) throw new Error('Unknown record type');
   const sh = tab_(k.tab, kind === 'prospect' ? PROSPECT_HEADERS : null); if (!sh) throw new Error('No ' + k.tab + ' tab yet');
-  const h = headerMap_(sh), last = sh.getLastRow(), row = Number(ref && ref.row), email = String(ref && ref.email || '').toLowerCase();
-  const emailAt = (r) => String(sh.getRange(r, h.Email).getValue() || '').toLowerCase();
-  const nameAt = (r) => String(sh.getRange(r, h.Business).getValue() || '');
-  if (row >= 2 && row <= last && (email ? emailAt(row) === email : nameAt(row) === String(ref.business || ''))) return { sh: sh, h: h, row: row, k: k };
-  if (email) for (let r = 2; r <= last; r++) if (emailAt(r) === email) return { sh: sh, h: h, row: r, k: k };
+  const h = headerMap_(sh), last = sh.getLastRow(), row = Number(ref && ref.row);
+  const norm = (v) => String(v == null ? '' : v).trim().toLowerCase().replace(/\s+/g, ' ');
+  const email = norm(ref && ref.email), biz = norm(ref && ref.business);
+  if (!email && !biz) throw new Error('Missing record details. Refresh and try again.');
+  const emailAt = (r) => norm(sh.getRange(r, h.Email).getValue());
+  const nameAt = (r) => norm(sh.getRange(r, h.Business).getValue());
+  // Same row still holds the same person (email when both have one, otherwise business name)
+  const matches = (r) => (email && emailAt(r) === email) || (biz && nameAt(r) === biz && (!email || !emailAt(r)));
+  if (row >= 2 && row <= last && matches(row)) return { sh: sh, h: h, row: row, k: k };
+  // The sheet was sorted or rows were added: find the same person elsewhere
+  const hits = [];
+  for (let r = 2; r <= last; r++) if (matches(r)) hits.push(r);
+  if (hits.length === 1) return { sh: sh, h: h, row: hits[0], k: k };
+  if (hits.length > 1) throw new Error('More than one record matches ' + (ref.business || ref.email) + '. Add an email or a unique name, then try again.');
   throw new Error('That record moved or was deleted. Refresh and try again.');
 }
 function note2_(x, text) {
   const c = x.sh.getRange(x.row, x.h.Notes); const stamp = Utilities.formatDate(new Date(), CC.TIMEZONE, 'yyyy-MM-dd');
-  c.setValue((c.getValue() ? c.getValue() + ' · ' : '') + stamp + ' ' + clip_(text, 500));
+  c.setValue((c.getValue() ? c.getValue() + ' · ' : '') + stamp + ' ' + clip_(String(text).replace(/ · /g, ' - ').replace(/\r?\n/g, ' / '), 4000));
   if (x.h[x.k.activity]) x.sh.getRange(x.row, x.h[x.k.activity]).setValue(new Date());
 }
 
@@ -309,19 +344,24 @@ function addProspect(fields, env) {
 
 /** Email a lead or prospect from your own Gmail: mode 'send' sends now, 'draft' saves it to Gmail Drafts.
  *  In test data, mail goes to you instead, marked [TEST to ...]. Moves New -> Contacted and logs it. */
-function emailContact(kind, ref, subject, body, mode, env) {
+function emailContact(kind, ref, subject, body, mode, env, opts) {
   guard_(); setEnv_(env);
+  opts = opts || {};
+  const list_ = (v) => String(v || '').split(/[,;\s]+/).filter(Boolean).map(cleanEmail_).join(',');
+  const cc = list_(opts.cc), bcc = list_(opts.bcc);
   subject = plain_(subject).replace(/\s+/g, ' ').trim(); body = plain_(body).trim();
   if (!subject || !body) throw new Error('Write a subject and a message');
   const x = locate_(kind, ref);
   let to = cleanEmail_(x.sh.getRange(x.row, x.h.Email).getValue()); if (!to) throw new Error('Add an email address first');
   const status = String(x.sh.getRange(x.row, x.h.Status).getValue() || 'New');
   if (status === 'Do not contact') throw new Error('This contact asked not to be emailed');
-  if (ENV_ === 'test') { subject = '[TEST to ' + to + '] ' + subject; to = CC.OWNER_EMAIL; }
-  if (mode === 'send') GmailApp.sendEmail(to, subject, body, { name: 'Rashad Fambro' });
-  else GmailApp.createDraft(to, subject, body, { name: 'Rashad Fambro' });
+  const o = { name: 'Rashad Fambro' };
+  if (ENV_ === 'test') { subject = '[TEST to ' + to + (cc ? ' cc ' + cc : '') + (bcc ? ' bcc ' + bcc : '') + '] ' + subject; to = CC.OWNER_EMAIL; }
+  else { if (cc) o.cc = cc; if (bcc) o.bcc = bcc; }
+  if (mode === 'send') GmailApp.sendEmail(to, subject, body, o);
+  else GmailApp.createDraft(to, subject, body, o);
   if ((CC.RANK[status] || 0) < 1 && mode === 'send') x.sh.getRange(x.row, x.h.Status).setValue('Contacted');
-  note2_(x, (mode === 'send' ? 'emailed: ' : 'draft saved: ') + subject);
+  note2_(x, (mode === 'send' ? 'emailed: ' : 'draft saved: ') + subject + (cc ? ' (cc ' + cc + ')' : '') + (bcc ? ' (bcc ' + bcc + ')' : ''));
   log_(kind + ':' + (mode === 'send' ? 'email' : 'draft'), x.sh.getRange(x.row, x.h.Business).getValue(), subject);
   return { ok: true, mode: mode === 'send' ? 'send' : 'draft' };
 }
@@ -364,10 +404,84 @@ function addFinance(entry) {
   const amount = Math.abs(Number(entry.amount));
   if (!(amount > 0 && amount < 1e7)) throw new Error('Enter an amount');
   const date = entry.date ? new Date(entry.date + 'T12:00:00') : new Date();
-  tab_('Finance', FINANCE_HEADERS).appendRow([date, type, String(entry.category || '').slice(0, 60), String(entry.description || '').slice(0, 200), type === 'Expense' ? -amount : amount,
-    String(entry.client || '').slice(0, 80), String(entry.method || '').slice(0, 30), String(entry.reference || '').slice(0, 80)]);
+  const repeats = ['Monthly', 'Yearly'].indexOf(entry.repeats) >= 0 ? entry.repeats : '';
+  const sh = tab_('Finance', FINANCE_HEADERS), h = headerMap_(sh), row = new Array(Math.max(FINANCE_HEADERS.length, Object.keys(h).length)).fill('');
+  const put = (k, v) => { const c = h[k] || (FINANCE_HEADERS.indexOf(k) + 1); if (!h[k]) sh.getRange(1, c).setValue(k); row[c - 1] = v; };
+  put('Date', date); put('Type', type); put('Category', clip_(entry.category, 60)); put('Description', clip_(entry.description, 200)); put('Amount', type === 'Expense' ? -amount : amount);
+  put('Client', clip_(entry.client, 80)); put('Method', clip_(entry.method, 30)); put('Reference', clip_(entry.reference, 80)); put('Product', clip_(entry.product, 60)); put('Repeats', repeats);
+  sh.appendRow(row);
   log_('finance:' + type.toLowerCase(), entry.description || '', amount);
   return true;
+}
+
+/** Remove a finance entry entered by mistake (checked by description and amount so the wrong row can't be removed). */
+function deleteFinance(row, description, amount) {
+  guard_();
+  const sh = tab_('Finance', FINANCE_HEADERS), h = headerMap_(sh);
+  row = Number(row);
+  if (!(row >= 2 && row <= sh.getLastRow())) throw new Error('That entry was not found. Refresh and try again.');
+  const d = String(sh.getRange(row, h.Description).getValue()), a = Number(sh.getRange(row, h.Amount).getValue());
+  if (d !== String(description || '') || Math.abs(a - Number(amount)) > 0.001) throw new Error('That entry changed. Refresh and try again.');
+  sh.deleteRow(row);
+  log_('finance:delete', d, a);
+  return true;
+}
+
+/* ======================= drafts & cold emails ======================= */
+
+/** Gmail drafts addressed to your leads, prospects or clients (cold emails and follow-ups). Personal drafts stay out. */
+function drafts_(contacts) {
+  try {
+    return GmailApp.getDrafts().slice(0, 150).map(d => {
+      const m = d.getMessage(), to = String(m.getTo() || '');
+      const addrs = to.split(',').map(a => String((a.match(/<([^>]+)>/) || [])[1] || a).trim().toLowerCase()).filter(Boolean);
+      if (!addrs.some(a => contacts[a])) return null;
+      return { id: d.getId(), to: to, emails: addrs, cc: m.getCc(), bcc: m.getBcc(), subject: m.getSubject(), body: String(m.getPlainBody() || '').slice(0, 6000), date: m.getDate().toISOString() };
+    }).filter(Boolean);
+  } catch (e) { return []; }
+}
+
+/** Send one draft. With edits, the subject/body/cc/bcc are updated first. Marks the matching prospect Contacted and notes it. */
+function sendDraft(id, edits, env) {
+  guard_(); setEnv_(env);
+  if (ENV_ === 'test') throw new Error('Drafts are real Gmail drafts. Switch Data to Live in Settings to send them.');
+  const d = GmailApp.getDraft(String(id || '')); if (!d) throw new Error('That draft no longer exists. Refresh and try again.');
+  const m = d.getMessage(), to = m.getTo();
+  if (edits && (edits.subject || edits.body)) {
+    const list_ = (v) => String(v || '').split(/[,;\s]+/).filter(Boolean).map(cleanEmail_).join(',');
+    const o = { cc: list_(edits.cc), bcc: list_(edits.bcc) };
+    d.update(to, plain_(edits.subject || m.getSubject()).replace(/\s+/g, ' ').trim(), plain_(edits.body || m.getPlainBody()), o);
+  }
+  const sent = d.send();
+  const subject = sent.getSubject();
+  // note it on every matching lead or prospect
+  const addrs = String(to).split(',').map(a => String((a.match(/<([^>]+)>/) || [])[1] || a).trim().toLowerCase());
+  ['prospect', 'lead'].forEach(kind => addrs.forEach(a => { try { const x = locate_(kind, { email: a }); const st = String(x.sh.getRange(x.row, x.h.Status).getValue() || 'New'); if ((CC.RANK[st] || 0) < 1) x.sh.getRange(x.row, x.h.Status).setValue('Contacted'); note2_(x, 'emailed (draft sent): ' + subject); } catch (e) {} }));
+  log_('draft:send', to, subject);
+  return { ok: true };
+}
+
+/** Delete a draft you don't want to send. */
+function discardDraft(id) {
+  guard_();
+  const d = GmailApp.getDraft(String(id || '')); if (!d) return true;
+  const m = d.getMessage(); log_('draft:discard', m.getTo(), m.getSubject());
+  d.deleteDraft();
+  return true;
+}
+
+/* ======================= lead search ======================= */
+
+/** Ask the lead-researcher agent for a new search. The scheduled check picks it up and adds the results to the Prospects tab. */
+function requestLeadSearch(q) {
+  guard_();
+  q = q || {};
+  const industry = clip_(q.industry, 80).trim(), place = clip_(q.place, 120).trim(), count = Math.min(50, Math.max(5, Number(q.count) || 20));
+  if (!industry && !place) throw new Error('Choose an industry or a location');
+  const text = 'LEAD SEARCH | industry: ' + (industry || 'any') + ' | location: ' + (place || 'anywhere in the US') + ' | count: ' + count +
+    (q.signal ? ' | buying signal: ' + clip_(q.signal, 200) : '') + (q.notes ? ' | notes: ' + clip_(q.notes, 400) : '') +
+    ' | Add each prospect to the Prospects tab (Source "Lead search ' + Utilities.formatDate(new Date(), CC.TIMEZONE, 'yyyy-MM-dd') + '") with a specific Next step, skip duplicates, and draft cold emails for the ones with an email address.';
+  return addRequest('lead-researcher', q.priority === 'High' ? 'High' : 'Normal', 'Lead search: ' + (industry || 'any') + ' / ' + (place || 'US'), text);
 }
 
 /* ======================= daily brief & setup ======================= */

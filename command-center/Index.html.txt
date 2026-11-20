@@ -46,44 +46,114 @@ textarea{min-height:90px;width:100%}
 .envpick{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}body.testenv header{box-shadow:inset 0 -4px 0 var(--amber)}
 #envNote{display:none;background:var(--amber);color:#000;font-weight:700;text-align:center;padding:4px;font-size:.85rem}body.testenv #envNote{display:block}
 @media (max-width:640px){main{padding:10px}.alert .k{min-width:0}.fgrid{grid-template-columns:1fr}}
+.linkish{background:none;border:0;padding:0;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;text-align:left}
+.th{background:none;border:0;padding:0;color:inherit;font:inherit;font-weight:700;cursor:pointer}.th:after{content:" \2195";opacity:.5}
+.addr{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.contactline{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:10px 0}
+.toline{margin:0 0 8px;font-size:.92rem}.nextbox{margin-top:10px;padding:10px 12px;border-left:4px solid var(--amber);background:var(--panel2);border-radius:8px}
+.nx{color:var(--amber);font-size:.78rem;font-weight:600}
+.bignote{min-height:180px;width:100%;resize:vertical}.notes li{white-space:pre-wrap}
+.draftrow{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid var(--line);padding:8px 0}
+.cols2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:6px}.cols2 h3{margin:0 0 8px;font-size:1rem}
+.chart{width:100%;height:auto}.chart .inc{fill:var(--mint)}.chart .exp{fill:var(--red)}.chart .ax{fill:var(--muted);font-size:11px}.chart .axl{stroke:var(--line)}
+.legend{font-size:.8rem;color:var(--muted);margin:4px 0 0}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px;vertical-align:middle}.sw.inc{background:var(--mint)}.sw.exp{background:var(--red)}
+.hbars{display:grid;gap:6px}.hb{display:grid;grid-template-columns:minmax(90px,38%) 1fr auto;gap:8px;align-items:center;font-size:.85rem}.hl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ht{background:var(--panel2);border-radius:6px;height:12px;overflow:hidden}.hf{display:block;height:100%;background:var(--red)}.hf.incf{background:var(--mint)}.hv{font-weight:700}
+.neg{color:var(--red)}.pill.exp{border-color:var(--red)}.pill.inc{border-color:var(--mint)}
+label.check{flex-direction:row;align-items:center;color:var(--ink)}
+@media print{header,nav,.toolbar,#finForm,#drawer,#toast,#envNote{display:none!important}body{background:#fff;color:#000}.card,table{border-color:#999}}
 </style>
 </head>
 <body>
 <header>
   <div><h1>Command Center</h1><small id="updated">Loading…</small></div>
   <nav role="tablist" id="tabs"></nav>
-  <span style="display:flex;gap:8px;align-items:center"><label class="envpick">Data <select id="env" aria-label="Which data to show"><option value="live">Live</option><option value="test">Test (staging)</option></select></label><label class="themepick">Theme <select id="theme" aria-label="Color theme"><option value="dark">Dark</option><option value="light">Light</option><option value="midnight">Midnight</option><option value="contrast">High contrast</option></select></label><button class="btn" id="refresh" type="button">Refresh</button></span>
+  <span style="display:flex;gap:8px;align-items:center"><span class="pill" id="envPill" hidden>Test data</span><button class="btn" type="button" id="refresh">Refresh</button></span>
 </header>
 <div id="envNote">Test data: the TEST tabs from the staging site. Emails go to you, never to customers.</div>
 <main id="main" aria-live="polite"><p class="muted">Loading your business…</p></main>
 <div id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="dTitle"><div class="sheet" id="dSheet"></div></div>
 <div id="toast" role="status"></div>
 <script>
-const TABS = [["today","Today"],["pipeline","Prospects & Pipeline"],["clients","Clients & Licenses"],["finance","Finance"],["agents","Agent Team"],["log","Activity Log"]];
-let D = null, tab = "today", ENV = "live", Q = "", SRC = "all", OPEN = null;
+const TABS = [["today","Today"],["pipeline","Prospects & Pipeline"],["emails","Emails"],["clients","Clients & Licenses"],["finance","Finances"],["agents","Agent Team"],["log","Activity Log"],["settings","Settings"]];
+const STAGES = ["New","Not contacted","Draft ready","Contacted","Replied","Booked","Trial","Proposal sent","Ordered","Won","Lost","Do not contact","Spam"];
 const BOARD = [["New",["New","Not contacted","Draft ready"]],["Contacted",["Contacted"]],["Replied",["Replied"]],["Booked",["Booked"]],["Trial",["Trial"]],["Proposal sent",["Proposal sent","Ordered"]],["Client (Won)",["Won"]],["Closed",["Lost","Do not contact","Spam"]]];
+const DEF_SETTINGS = {theme:"dark", env:"live", startTab:"today", refreshMin:5, inboxDays:3, bccMe:false, signature:"Rashad Fambro\nIT Software Consultant, Rashad Fambro Consulting"};
+let D = null, tab = null, ENV = "live", OPEN = null, S = Object.assign({}, DEF_SETTINGS), timer = null;
+const P = {q:"", src:"all", ind:"", loc:"", prod:"", stage:"", has:"", sort:"added", dir:-1, view:"board"};
+const F = {from:"", to:"", type:"", cat:"", prod:"", client:"", q:"", sort:"date", dir:-1, preset:"year"};
+const E = {q:""};
 const $ = (s, r=document) => r.querySelector(s);
 const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const money = (n) => "$" + Math.round(Number(n)||0).toLocaleString("en-US");
+const money = (n) => (Number(n) < 0 ? "-$" : "$") + Math.abs(Math.round(Number(n)||0)).toLocaleString("en-US");
+const num = (v) => Number(String(v == null ? "" : v).replace(/[^\d.-]/g, "")) || 0;
 const when = (iso) => iso ? new Date(iso).toLocaleString([], {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"}) : "";
 const day = (iso) => iso ? new Date(iso).toLocaleDateString([], {month:"short", day:"numeric", year:"numeric"}) : "";
+const ymd = (d) => { const x = new Date(d); return isNaN(x) ? "" : x.getFullYear() + "-" + String(x.getMonth()+1).padStart(2,"0") + "-" + String(x.getDate()).padStart(2,"0"); };
 function toast(t){ const el=$("#toast"); el.textContent=t; el.style.display="block"; clearTimeout(toast.t); toast.t=setTimeout(()=>el.style.display="none",3500); }
 function call(fn, ...args){ return new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(e => no(e && e.message || String(e)))[fn](...args)); }
 
-function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); $("#theme").value = t; try{ localStorage.setItem("cc-theme", t); }catch(_){} }
-try{ const t0 = localStorage.getItem("cc-theme"); if (t0) applyTheme(t0); }catch(_){}
-try{ ENV = localStorage.getItem("cc-env") === "test" ? "test" : "live"; }catch(_){}
-$("#env").value = ENV; document.body.classList.toggle("testenv", ENV === "test");
-$("#env").addEventListener("change", e => { ENV = e.target.value; try{ localStorage.setItem("cc-env", ENV); }catch(_){} document.body.classList.toggle("testenv", ENV === "test"); load(); });
-$("#theme").addEventListener("change", e => { applyTheme(e.target.value); call("setTheme", e.target.value).catch(() => {}); });
-function load(){ $("#updated").textContent = "Loading…"; const t0 = Date.now(), slow = setTimeout(() => { if (!D) $("#main").innerHTML = '<div class="card">Still loading. Google can be slow for a moment. <button class="btn" type="button" id="retry">Try again</button></div>'; }, 15000);
-  call("getDashboard", ENV).then(d => { clearTimeout(slow); const keep = D && D.env === d.env ? {calendar: D.calendar, inbox: D.inbox} : {calendar: null, inbox: null}; D = Object.assign({}, d, keep); if (d.theme) applyTheme(d.theme); $("#updated").textContent = "Updated " + when(d.generated) + (ENV === "test" ? " · TEST DATA" : ""); render(); if (OPEN) openContact(OPEN.kind, OPEN.row, OPEN.email, true);
-    call("getExtras", ENV).then(x => { if (!D) return; D.calendar = x.calendar || []; D.inbox = x.inbox || []; if (tab === "today") render(); }).catch(() => { if (!D) return; D.calendar = D.calendar || []; D.inbox = D.inbox || []; if (tab === "today") render(); });
-  }).catch(e => { clearTimeout(slow); $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)} <button class="btn" type="button" id="retry">Try again</button></div>`; $("#updated").textContent = "Not loaded"; }); }
-function tabsHTML(){ $("#tabs").innerHTML = TABS.map(([id,l]) => `<button role="tab" type="button" data-tab="${id}" aria-selected="${id===tab}">${esc(l)}${id==="today"&&D?` (${D.summary.alerts.length})`:""}</button>`).join(""); }
-function table(cols, rows, empty){ if(!rows.length) return `<p class="muted">${esc(empty||"Nothing here yet.")}</p>`;
-  return `<div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${esc(c[0])}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }
+function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); }
+function applyEnv(){ document.body.classList.toggle("testenv", ENV === "test"); $("#envPill").hidden = ENV !== "test"; }
+try { const s0 = JSON.parse(localStorage.getItem("cc-settings") || "{}"); S = Object.assign({}, DEF_SETTINGS, s0); } catch(_) {}
+ENV = S.env === "test" ? "test" : "live"; applyTheme(S.theme); applyEnv();
+function remember(){ try { localStorage.setItem("cc-settings", JSON.stringify(S)); } catch(_) {} }
+function schedule(){ clearInterval(timer); if (Number(S.refreshMin) > 0) timer = setInterval(() => { if ($("#drawer").hidden) load(); }, Number(S.refreshMin) * 60000); }
 
+function load(){ $("#updated").textContent = "Loading…"; const slow = setTimeout(() => { if (!D) $("#main").innerHTML = '<div class="card">Still loading. Google can be slow for a moment. <button class="btn" type="button" id="retry">Try again</button></div>'; }, 15000);
+  call("getDashboard", ENV).then(d => { clearTimeout(slow);
+    if (d.settings && !load.got) { load.got = true; S = Object.assign({}, DEF_SETTINGS, S, d.settings); ENV = S.env === "test" ? "test" : "live"; applyTheme(S.theme); applyEnv(); remember(); schedule(); if (!tab) tab = S.startTab || "today"; if (d.env !== (ENV === "test" ? "test" : "live")) { load(); return; } }
+    if (!tab) tab = S.startTab || "today";
+    const keep = D && D.env === d.env ? {calendar: D.calendar, inbox: D.inbox, drafts: D.drafts} : {calendar: null, inbox: null, drafts: null};
+    D = Object.assign({}, d, keep);
+    $("#updated").textContent = "Updated " + when(d.generated) + (ENV === "test" ? " · TEST DATA" : ""); render(); if (OPEN && OPEN.kind) openContact(OPEN.kind, OPEN.row, OPEN.email, true, OPEN.business);
+    call("getExtras", ENV, S.inboxDays).then(x => { if (!D) return; D.calendar = x.calendar || []; D.inbox = x.inbox || []; D.drafts = x.drafts || []; if (["today","emails","pipeline"].indexOf(tab) >= 0) { render(); if (OPEN && OPEN.kind) openContact(OPEN.kind, OPEN.row, OPEN.email, true, OPEN.business); } })
+      .catch(() => { if (!D) return; D.calendar = D.calendar || []; D.inbox = D.inbox || []; D.drafts = D.drafts || []; if (tab === "today" || tab === "emails") render(); });
+  }).catch(e => { clearTimeout(slow); $("#main").innerHTML = `<div class="card">Could not load: ${esc(e)} <button class="btn" type="button" id="retry">Try again</button></div>`; $("#updated").textContent = "Not loaded"; }); }
+function tabsHTML(){ $("#tabs").innerHTML = TABS.map(([id,l]) => `<button role="tab" type="button" data-tab="${id}" aria-selected="${id===tab}">${esc(l)}${id==="today"&&D?` (${D.summary.alerts.length})`:""}${id==="emails"&&D&&D.drafts?` (${D.drafts.length})`:""}</button>`).join(""); }
+function table(cols, rows, empty, sortKey){ if(!rows.length) return `<p class="muted">${esc(empty||"Nothing here yet.")}</p>`;
+  return `<div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${c[2]&&sortKey?`<button type="button" class="th" data-sort="${esc(sortKey)}:${esc(c[2])}">${esc(c[0])}</button>`:esc(c[0])}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }
+const opts = (list, cur, all) => `<option value="">${esc(all)}</option>` + list.map(v => `<option${v===cur?" selected":""}>${esc(v)}</option>`).join("");
+const uniq = (a) => Array.from(new Set(a.filter(Boolean))).sort((x, y) => x.localeCompare(y));
+
+/* ---------- contacts (leads + prospects) ---------- */
+function place(city){ city = String(city||"").trim(); if (!city) return ""; const parts = city.split(",").map(x => x.trim()).filter(Boolean);
+  if (parts.length >= 2 && /^[A-Z]{2}$/.test(parts[parts.length-1])) return parts[parts.length-2] + ", " + parts[parts.length-1];
+  return parts[parts.length-1].replace(/^\d.*?\s(?=[A-Z])/, ""); }
+function products(t){ return String(t||"").split(/\s*(?:\+|,|\/|&| and )\s*/).map(x => x.trim()).filter(x => /desk|bundle|website|suite/i.test(x)); }
+function contacts(){
+  const L = (D.leads||[]).map(l => ({kind:"lead", row:l._row, email:String(l.Email||"").trim(), business:l.Business||l.Name||l.Email||"(no name)", person:l.Name||"", phone:l.Phone||"", city:l.City||"", industry:l.Industry||"", tools:l.Package||"", next:l["Next step"]||"", status:l.Status||"New", notes:l.Notes||"", src:"Website · "+(l.Form||"form"), added:l.Time||l.Received||l.Added||"", last:l["Last contact"]||"", r:l}));
+  const Pp = (D.prospects||[]).map(p => ({kind:"prospect", row:p._row, email:String(p.Email||"").trim(), business:p.Business||"(no name)", person:p.Contact||"", phone:p.Phone||"", city:p.City||"", industry:p.Industry||"", tools:p["Tools to pitch"]||"", next:p["Next step"]||"", status:p.Status||"New", notes:p.Notes||"", src:p.Source||"Outbound", added:p.Added||"", last:p["Last activity"]||"", r:p}));
+  return L.concat(Pp).map(c => Object.assign(c, {loc:place(c.city), prods:products(c.tools), hay:[c.business,c.person,c.email,c.phone,c.city,c.industry,c.tools,c.next,c.notes].join(" ").toLowerCase(),
+    drafts:(D.drafts||[]).filter(d => c.email && d.emails.indexOf(c.email.toLowerCase()) >= 0)}));
+}
+function filtered(){
+  const all = contacts();
+  let out = all.filter(c => (P.src==="all" || c.kind===P.src) && (!P.q || c.hay.indexOf(P.q) >= 0) && (!P.ind || c.industry===P.ind) && (!P.loc || c.loc===P.loc)
+    && (!P.prod || c.prods.indexOf(P.prod) >= 0) && (!P.stage || c.status===P.stage)
+    && (!P.has || (P.has==="email" ? !!c.email : P.has==="phone" ? !!c.phone : P.has==="draft" ? c.drafts.length > 0 : P.has==="noemail" ? !c.email : true)));
+  const key = {added:c=>c.added, business:c=>c.business.toLowerCase(), industry:c=>c.industry.toLowerCase(), loc:c=>c.loc.toLowerCase(), stage:c=>STAGES.indexOf(c.status), last:c=>c.last, next:c=>c.next.toLowerCase()}[P.sort] || (c=>c.added);
+  out.sort((a, b) => { const x = key(a), y = key(b); return (x > y ? 1 : x < y ? -1 : 0) * P.dir; });
+  return {all, out};
+}
+function card(c){ return `<button type="button" class="pc ${c.kind}" draggable="true" data-open="${c.kind}" data-row="${esc(c.row)}" data-email="${esc(c.email)}" data-biz="${esc(c.business)}"><b>${esc(c.business)}</b>${c.person?`<span>${esc(c.person)}</span><br>`:""}<span class="muted">${esc([c.loc, c.phone].filter(Boolean).join(" · "))}</span>${c.email?`<br><span class="muted">${esc(c.email)}</span>`:""}${c.next?`<br><span class="nx">Next: ${esc(c.next)}</span>`:""}<br><span class="muted">${esc(c.industry||(c.kind==="lead"?"Website lead":"Prospect"))}${c.tools?" · "+esc(c.tools):""}</span>${c.drafts.length?`<br><span class="pill">Draft ready</span>`:""}</button>`; }
+
+const SITE = ["https:", "", "rashadfambro.github.io", ""].join("/");
+const ME = "Rashad Fambro Consulting";
+const GMAIL_DRAFTS = ["https:", "", "mail.google.com", "mail", "#drafts"].join("/");
+const SLUGS = [["apartment","apartments"],["property","apartments"],["hotel","hotels"],["resort","hotels"],["timeshare","timeshares"],["rental","short-term-rentals"],["salon","salons"],["nail","salons"],["barber","barbers"],["spa","spas"],["clean","cleaning"],["hvac","contractors"],["electric","contractors"],["plumb","contractors"],["contractor","contractors"],["roof","contractors"],["dental","dental"],["dentist","dental"],["gym","gyms"],["fitness","gyms"],["restaurant","restaurants"],["auto","auto-repair"],["law","law-firms"],["tax","tax-firms"],["insurance","insurance"],["real estate","real-estate"],["storage","self-storage"],["venue","event-venues"],["smoke","smoke-shops"]];
+function slugFor(c){ const t = (c.industry + " " + c.business).toLowerCase(); const hit = SLUGS.find(s => t.indexOf(s[0]) >= 0); return hit ? hit[1] : ""; }
+const first = (c) => (c.person||"").split(" ")[0] || "there";
+const sig = () => "\n\n" + (S.signature || ME);
+const TEMPLATES = {
+  intro: c => [`${c.business} + ${ME}: a quick idea`, `Hi ${first(c)},\n\nI'm Rashad Fambro, an IT Software Consultant who builds simple automation for ${c.industry||"local businesses"}. ${c.tools?`I think ${c.tools} could save your team time on the everyday back-and-forth.`:"I help teams cut down on missed messages, manual scheduling and slow follow-up."}\n\nWould you be open to a free 30-minute workflow audit? You'll get a short written summary of what could be automated, whether or not we work together.\n\nExamples: ${SITE}${slugFor(c)}` + sig()],
+  follow: c => [`${c.business} + ${ME}: following up`, `Hi ${first(c)},\n\nJust following up on my last note. If a free workflow audit would help ${c.business}, reply with a time that works and I'll send an invite.` + sig()],
+  book: c => [`${c.business} + ${ME}: booking our call`, `Hi ${first(c)},\n\nThanks for your reply. Here's my booking page for a free 30-minute workflow audit: ${SITE}#audit\n\nIf none of the times work, reply with two options and I'll make one of them work.` + sig()],
+  trial: c => [`${c.business} + ${ME}: your free trial`, `Hi ${first(c)},\n\nWould you like to try ${c.tools||"it"} with your own branding for 14 days? No payment details and no automatic charges. Reply "yes" and I'll send your link within one business day.` + sig()],
+  blank: c => ["", ""]
+};
+
+/* ---------- views ---------- */
 const VIEWS = {
   today(){ const s=D.summary, c=s.counts, f=s.finance;
     return `<div class="grid">
@@ -92,84 +162,208 @@ const VIEWS = {
       <div class="card kpi"><b>${c.activeClients}</b><span>active clients</span></div>
       <div class="card kpi"><b>${money(f.mrrEstimate)}</b><span>est. monthly revenue</span></div>
       <div class="card kpi"><b>${money(f.revenueMonth)}</b><span>revenue this month</span></div>
-      <div class="card kpi"><b>${c.openRequests}</b><span>open agent requests</span></div></div>
+      <div class="card kpi"><b>${D.drafts?D.drafts.length:"…"}</b><span>drafts ready to send</span></div></div>
       <h2>Alerts</h2>${s.alerts.length ? s.alerts.map(a=>`<div class="alert ${esc(a.level)}"><span class="k">${esc(a.kind)}</span><span>${esc(a.text)}</span></div>`).join("") : '<p class="muted">All clear.</p>'}
       <h2>Meetings (Next 7 Days)</h2>${D.calendar===null?'<p class="muted">Loading meetings…</p>':table([["When",e=>esc(when(e.start))],["Meeting",e=>esc(e.title)],["Where",e=>esc(e.where)]], D.calendar||[], "No meetings this week.")}
-      <h2>Business Inbox (Unread, Last 3 Days)</h2><p class="muted">Only business mail: clients, prospects, bookings, payments, orders and the website. Personal email stays out.</p>${D.inbox===null?'<p class="muted">Loading business email…</p>':table([["From",m=>esc(m.from)],["Subject",m=>`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.subject)}</a>`],["Received",m=>esc(when(m.date))]], D.inbox||[], "No unread business email.")}`; },
-  pipeline(){ const all = contacts(), shown = all.filter(c => (SRC==="all" || c.kind===SRC) && (!Q || c.hay.indexOf(Q) >= 0));
+      <h2>Business Inbox (Unread, Last ${esc(S.inboxDays)} Days)</h2><p class="muted">Only business mail: clients, prospects, bookings, payments, orders and the website. Personal email stays out.</p>${inboxTable()}`; },
+  pipeline(){ const {all, out} = filtered();
     const won = all.filter(c => c.status==="Won").length, open = all.filter(c => ["Won","Lost","Do not contact","Spam"].indexOf(c.status) < 0).length;
+    const tools = uniq([].concat(...all.map(c => c.prods)));
+    const sortSel = [["added","Date added"],["business","Business"],["industry","Industry"],["loc","Location"],["stage","Stage"],["last","Last activity"],["next","Next step"]].map(([v,l]) => `<option value="${v}"${P.sort===v?" selected":""}>${l}</option>`).join("");
     return `<div class="grid"><div class="card kpi"><b>${all.length}</b><span>leads + prospects</span></div><div class="card kpi"><b>${open}</b><span>open in the pipeline</span></div><div class="card kpi"><b>${won}</b><span>clients won</span></div><div class="card kpi"><b>${all.length?Math.round(100*won/all.length):0}%</b><span>win rate</span></div></div>
-      <div class="toolbar"><label>Search<input id="pq" type="search" value="${esc(Q)}" placeholder="Business, name, city, phone…"></label>
-        <label>Show<select id="psrc"><option value="all"${SRC==="all"?" selected":""}>Everyone</option><option value="prospect"${SRC==="prospect"?" selected":""}>Outbound prospects</option><option value="lead"${SRC==="lead"?" selected":""}>Website leads</option></select></label>
-        <button class="btn primary" type="button" id="addP">+ Add prospect</button><span class="muted">Drag a card to move it, or open it to email, call, add notes and start a trial. Stages also move on their own every 2 hours.</span></div>
-      <div class="board" role="list">${BOARD.map(([label, sts]) => { const cards = shown.filter(c => sts.indexOf(c.status) >= 0);
-        return `<section class="col" data-drop="${esc(sts[0])}" role="listitem" aria-label="${esc(label)}"><h3><span>${esc(label)}</span><span class="pill">${cards.length}</span></h3>${cards.slice(0,80).map(card).join("") || '<p class="muted" style="margin:4px">None</p>'}</section>`; }).join("")}</div>`; },
+      <div class="toolbar"><label>Search<input id="pq" type="search" value="${esc(P.q)}" placeholder="Business, name, email, phone, notes…"></label>
+        <label>Show<select id="psrc"><option value="all"${P.src==="all"?" selected":""}>Everyone</option><option value="prospect"${P.src==="prospect"?" selected":""}>Outbound prospects</option><option value="lead"${P.src==="lead"?" selected":""}>Website leads</option></select></label>
+        <label>Industry<select id="fInd">${opts(uniq(all.map(c=>c.industry)), P.ind, "All industries")}</select></label>
+        <label>Location<select id="fLoc">${opts(uniq(all.map(c=>c.loc)), P.loc, "All locations")}</select></label>
+        <label>Suggested product<select id="fProd">${opts(tools, P.prod, "All products")}</select></label>
+        <label>Stage<select id="fStage">${opts(STAGES, P.stage, "All stages")}</select></label>
+        <label>Contact info<select id="fHas"><option value="">Any</option><option value="email"${P.has==="email"?" selected":""}>Has email</option><option value="noemail"${P.has==="noemail"?" selected":""}>No email (call / walk in)</option><option value="phone"${P.has==="phone"?" selected":""}>Has phone</option><option value="draft"${P.has==="draft"?" selected":""}>Has a draft ready</option></select></label>
+        <label>Sort by<select id="fSort">${sortSel}</select></label><button class="btn" type="button" id="fDir" aria-label="Reverse sort order">${P.dir<0?"↓ Newest / Z–A":"↑ Oldest / A–Z"}</button>
+        <label>View<select id="fView"><option value="board"${P.view==="board"?" selected":""}>Board</option><option value="table"${P.view==="table"?" selected":""}>Table</option></select></label>
+        <button class="btn" type="button" id="fClear">Clear filters</button></div>
+      <div class="toolbar"><button class="btn primary" type="button" id="addP">+ Add prospect</button><button class="btn primary" type="button" id="leadSearch">Find new leads</button><span class="muted">${out.length} shown. Drag a card to move it, or open it to email, call, add notes and start a trial.</span></div>
+      ${P.view==="table" ? table([["Business",c=>`<button type="button" class="linkish" data-open="${c.kind}" data-row="${esc(c.row)}" data-email="${esc(c.email)}" data-biz="${esc(c.business)}">${esc(c.business)}</button>`,"business"],["Industry",c=>esc(c.industry),"industry"],["Location",c=>esc(c.loc),"loc"],["Email",c=>c.email?esc(c.email):'<span class="muted">none</span>'],["Phone",c=>c.phone?`<a href="tel:${esc(String(c.phone).replace(/[^\d+]/g,""))}">${esc(c.phone)}</a>`:""],["Products",c=>esc(c.tools)],["Stage",c=>`<span class="pill">${esc(c.status)}</span>`,"stage"],["Next step",c=>esc(c.next),"next"],["Drafts",c=>c.drafts.length?String(c.drafts.length):""]], out, "No one matches these filters.", "p")
+        : `<div class="board" role="list">${BOARD.map(([label, sts]) => { const cards = out.filter(c => sts.indexOf(c.status) >= 0);
+        return `<section class="col" data-drop="${esc(sts[0])}" role="listitem" aria-label="${esc(label)}"><h3><span>${esc(label)}</span><span class="pill">${cards.length}</span></h3>${cards.slice(0,150).map(card).join("") || '<p class="muted" style="margin:4px">None</p>'}</section>`; }).join("")}</div>`}`; },
+  emails(){ const ds = (D.drafts||[]).filter(d => !E.q || (d.to + " " + d.subject + " " + d.body).toLowerCase().indexOf(E.q) >= 0), cs = D.drafts ? contacts() : [];
+    const who = (d) => { const c = cs.find(x => x.email && d.emails.indexOf(x.email.toLowerCase()) >= 0); return c ? `<button type="button" class="linkish" data-open="${c.kind}" data-row="${esc(c.row)}" data-email="${esc(c.email)}" data-biz="${esc(c.business)}">${esc(c.business)}</button><br>` : ""; };
+    return `<h2>Drafts Ready to Send</h2><p class="muted">Cold emails and follow-ups in your Gmail Drafts that are addressed to your leads, prospects or clients. Check the recipient, preview or edit, then send. Each draft also appears on that prospect's card.</p>
+      <div class="toolbar"><label>Search drafts<input id="eq" type="search" value="${esc(E.q)}" placeholder="Business, email, subject…"></label></div>
+      ${D.drafts===null?'<p class="muted">Loading drafts…</p>':table([["To",d=>who(d)+`<span class="addr">${esc(d.to)}</span>${d.cc?`<br><span class="muted">Cc ${esc(d.cc)}</span>`:""}${d.bcc?`<br><span class="muted">Bcc ${esc(d.bcc)}</span>`:""}`],["Subject",d=>esc(d.subject)],["Created",d=>esc(day(d.date))],["",d=>`<button class="btn" type="button" data-draft="${esc(d.id)}" data-dact="edit">Preview / edit</button><button class="btn primary" type="button" data-draft="${esc(d.id)}" data-dact="send">Send</button><button class="btn" type="button" data-draft="${esc(d.id)}" data-dact="discard">Discard</button>`]], ds, "No business drafts right now.")}
+      <h2>Business Inbox (Unread, Last ${esc(S.inboxDays)} Days)</h2>${inboxTable()}`; },
   clients(){ const act=(k,a,l)=>`<button class="btn" type="button" data-act="${a}" data-key="${esc(k)}">${l}</button>`;
     return `<p class="muted">Actions run through the lead engine, so clients get the same emails as always. Every action is logged.</p>
-      ${table([["Business",x=>esc(x.Business)],["Tools",x=>esc(x.Tools)],["Status",x=>`<span class="pill">${esc(x.Status)}</span>`],["Plan",x=>esc(x.Plan)],["Ends / paid through",x=>esc(day(x["Ends / paid through"]))],["Last check",x=>esc(when(x["Last check"]))],
+      ${table([["Business",x=>esc(x.Business)],["Email",x=>esc(x.Email)],["Tools",x=>esc(x.Tools)],["Status",x=>`<span class="pill">${esc(x.Status)}</span>`],["Plan",x=>esc(x.Plan)],["Ends / paid through",x=>esc(day(x["Ends / paid through"]))],["Last check",x=>esc(when(x["Last check"]))],
         ["Actions",x=>act(x.Key,"record_payment","Record payment")+act(x.Key,"resend","Resend link")+(x.Status!=="Paused"?act(x.Key,"pause","Pause"):"")+act(x.Key,"cancel","Cancel")+(/founding/i.test(x.Plan)?"":act(x.Key,"mark_founding","Founding"))]], D.licenses, "No trials or clients yet.")}
-      <h2>Orders</h2>${table([["Received",o=>esc(day(o.Received))],["Business",o=>esc(o.Business||o.Name)],["Item",o=>esc(o.Item)],["Amount due",o=>esc(money(o["Amount due"]))],["Plan",o=>esc(o.Plan)],["Method",o=>esc(o.Method)],["Status",o=>`<span class="pill">${esc(o.Status)}</span>`]], D.orders, "No orders yet.")}`; },
-  finance(){ const f=D.summary.finance;
-    return `<div class="grid"><div class="card kpi"><b>${money(f.mrrEstimate)}</b><span>est. monthly revenue (active plans)</span></div><div class="card kpi"><b>${money(f.revenueMonth)}</b><span>revenue this month</span></div><div class="card kpi"><b>${money(f.revenueYear)}</b><span>revenue this year</span></div><div class="card kpi"><b>${money(f.costsYear)}</b><span>costs this year</span></div><div class="card kpi"><b>${money(f.profitYear)}</b><span>profit this year</span></div></div>
-      <h2>Add Income or Expense</h2><form class="row card" id="finForm"><label>Type<select name="type"><option>Expense</option><option>Income</option></select></label><label>Date<input type="date" name="date"></label><label>Amount<input type="number" name="amount" min="0" step="0.01" required></label><label>Category<input name="category" placeholder="Software, ads, travel…"></label><label>Description<input name="description"></label><label>Client<input name="client"></label><button class="btn primary" type="submit">Save</button></form>
-      <h2>Ledger</h2>${table([["Date",x=>esc(day(x.Date))],["Type",x=>esc(x.Type)],["Category",x=>esc(x.Category)],["Description",x=>esc(x.Description)],["Amount",x=>esc(money(x.Amount))],["Client",x=>esc(x.Client)]], D.finance, "Paid orders count automatically; add other income and expenses here.")}`; },
-  agents(){ return `<form class="card" id="reqForm"><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><label>Agent<select name="agent">${D.agents.map(a=>`<option>${esc(a)}</option>`).join("")}</select></label><label>Priority<select name="priority"><option>Normal</option><option>High</option><option>Low</option></select></label><label style="flex:1">Client or topic<input name="topic" placeholder="e.g. Glow Studio launch"></label></div>
+      <h2>Orders</h2>${table([["Received",o=>esc(day(o.Received))],["Business",o=>esc(o.Business||o.Name)],["Email",o=>esc(o.Email)],["Item",o=>esc(o.Item)],["Amount due",o=>esc(money(o["Amount due"]))],["Plan",o=>esc(o.Plan)],["Method",o=>esc(o.Method)],["Status",o=>`<span class="pill">${esc(o.Status)}</span>`]], D.orders, "No orders yet.")}`; },
+  finance(){ return finances(); },
+  agents(){ return `<form class="card" id="reqForm"><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><label>Agent<select name="agent">${D.agents.map(a=>`<option>${esc(a)}</option>`).join("")}</select></label><label>Priority<select name="priority"><option>Normal</option><option>High</option><option>Low</option></select></label><label style="flex:1">Client / topic<input name="topic"></label></div>
       <label style="margin-top:8px">Request<textarea name="text" required placeholder="e.g. Weekly status report for Glow Studio · Release BookDesk update to staging · Draft a proposal from today's audit notes"></textarea></label><button class="btn primary" type="submit" style="margin-top:8px">Send to agent team</button></form>
       <p class="muted">The agent team checks for new requests on its schedule and writes the answer here. Anything customer-facing comes back as a draft for your approval.</p>
-      ${table([["Sent",r=>esc(when(r.Time))],["Agent",r=>esc(r.Agent)],["Priority",r=>esc(r.Priority)],["Topic",r=>esc(r["Client / topic"])],["Request",r=>esc(r.Request)],["Status",r=>`<span class="pill">${esc(r.Status)}</span>`],["Response",r=>esc(r.Response)+(r.Link?` <a href="${esc(r.Link)}" target="_blank" rel="noopener">Open</a>`:"")]], D.requests, "No requests yet.")}`; },
-  log(){ return table([["Time",x=>esc(when(x.Time))],["Source",x=>esc(x.Source)],["Action",x=>esc(x.Action)],["Target",x=>esc(x.Target)],["Result",x=>esc(x.Result)]], D.log, "No activity yet."); }
+      ${table([["Sent",r=>esc(when(r.Time))],["Agent",r=>esc(r.Agent)],["Priority",r=>esc(r.Priority)],["Topic",r=>esc(r["Client / topic"])],["Request",r=>esc(r.Request)],["Status",r=>`<span class="pill">${esc(r.Status)}</span>`],["Response",r=>esc(r.Response)]], D.requests, "No requests yet.")}`; },
+  log(){ return table([["Time",x=>esc(when(x.Time))],["Source",x=>esc(x.Source)],["Action",x=>esc(x.Action)],["Target",x=>esc(x.Target)],["Result",x=>esc(x.Result)]], D.log, "No activity yet."); },
+  settings(){ const o = (v, cur, l) => `<option value="${esc(v)}"${String(v)===String(cur)?" selected":""}>${esc(l)}</option>`;
+    return `<h2>Settings</h2><form class="card" id="setForm"><div class="fgrid">
+      <label>Data<select id="env" name="env">${o("live",S.env,"Live")}${o("test",S.env,"Test (staging)")}</select></label>
+      <label>Theme<select id="theme" name="theme">${o("dark",S.theme,"Dark")}${o("light",S.theme,"Light")}${o("midnight",S.theme,"Midnight")}${o("contrast",S.theme,"High contrast")}</select></label>
+      <label>Open on this page<select name="startTab">${TABS.filter(t=>t[0]!=="settings").map(t=>o(t[0],S.startTab,t[1])).join("")}</select></label>
+      <label>Refresh automatically<select name="refreshMin">${o(0,S.refreshMin,"Off")}${o(5,S.refreshMin,"Every 5 minutes")}${o(15,S.refreshMin,"Every 15 minutes")}${o(30,S.refreshMin,"Every 30 minutes")}</select></label>
+      <label>Business inbox shows<select name="inboxDays">${o(1,S.inboxDays,"Last day")}${o(3,S.inboxDays,"Last 3 days")}${o(7,S.inboxDays,"Last 7 days")}${o(14,S.inboxDays,"Last 14 days")}</select></label>
+      <label class="check"><span><input type="checkbox" name="bccMe"${S.bccMe?" checked":""}> Bcc me on emails I send from here</span></label></div>
+      <label style="margin-top:8px">Email signature<textarea name="signature" style="min-height:70px">${esc(S.signature)}</textarea></label>
+      <button class="btn primary" type="submit" style="margin-top:8px">Save settings</button></form>
+      <p class="muted">Test data shows the TEST tabs written by the staging site; emails sent while it's on go only to you. Settings are saved to your Google account, so they follow you to any device.</p>`; }
 };
-function contacts(){
-  const L = (D.leads||[]).map(l => ({kind:"lead", row:l._row, email:l.Email||"", business:l.Business||l.Name||l.Email||"(no name)", person:l.Name||"", phone:l.Phone||"", city:l.City||"", industry:l.Industry||"", tools:l.Package||"", next:"", status:l.Status||"New", notes:l.Notes||"", src:"Website · "+(l.Form||"form"), r:l}));
-  const P = (D.prospects||[]).map(p => ({kind:"prospect", row:p._row, email:p.Email||"", business:p.Business||"(no name)", person:p.Contact||"", phone:p.Phone||"", city:p.City||"", industry:p.Industry||"", tools:p["Tools to pitch"]||"", next:p["Next step"]||"", status:p.Status||"New", notes:p.Notes||"", src:p.Source||"Outbound", r:p}));
-  return L.concat(P).map(c => Object.assign(c, {hay:[c.business,c.person,c.email,c.phone,c.city,c.industry,c.tools].join(" ").toLowerCase()}));
+function inboxTable(){ return D.inbox===null?'<p class="muted">Loading business email…</p>':table([["From",m=>esc(m.from)],["Subject",m=>`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.subject)}</a>`],["Received",m=>esc(when(m.date))]], D.inbox||[], "No unread business email."); }
+
+/* ---------- finances ---------- */
+function finRows(){
+  const rows = [];
+  const today = new Date();
+  (D.finance||[]).forEach(f => {
+    const base = {src:"Ledger", row:f._row, type:/expense/i.test(f.Type)?"Expense":"Income", cat:f.Category||"", desc:f.Description||"", amount:Math.abs(num(f.Amount)), client:f.Client||"", method:f.Method||"", prod:f.Product||"", repeats:f.Repeats||"", raw:num(f.Amount)};
+    const d0 = new Date(f.Date); if (isNaN(d0)) return;
+    if (!base.repeats) { rows.push(Object.assign({date:ymd(d0)}, base)); return; }
+    const stepM = base.repeats === "Yearly" ? 12 : 1;
+    for (let d = new Date(d0), n = 0; d <= today && n < 120; n++) { rows.push(Object.assign({date:ymd(d), recurring:n>0}, base)); d = new Date(d.getFullYear(), d.getMonth()+stepM, d0.getDate()); }
+  });
+  (D.orders||[]).filter(o => o.Status === "Paid").forEach(o => rows.push({src:"Order", date:ymd(o.Received), type:"Income", cat:"Sales", desc:o.Item||"Order", amount:num(o["Amount due"]), client:o.Business||o.Name||"", method:o.Method||"", prod:(products(o.Item)[0]||o.Item||"").replace(/:.*$/,"")}));
+  return rows;
 }
-function card(c){ return `<button type="button" class="pc ${c.kind}" draggable="true" data-open="${c.kind}" data-row="${esc(c.row)}" data-email="${esc(c.email)}"><b>${esc(c.business)}</b>${c.person?`<span>${esc(c.person)}</span><br>`:""}<span class="muted">${esc([c.city, c.phone].filter(Boolean).join(" · "))}</span>${c.next?`<br><span class="muted">Next: ${esc(c.next)}</span>`:""}<br><span class="muted">${c.kind==="lead"?"Website lead":"Prospect"}${c.tools?" · "+esc(c.tools):""}</span></button>`; }
-const SITE = ["https:", "", "rashadfambro.github.io", ""].join("/");
-const TEMPLATES = {
-  intro: c => [`Quick idea for ${c.business}`, `Hi ${(c.person||"there").split(" ")[0]},\n\nI'm Rashad Fambro, an IT Software Consultant who builds simple automation for ${c.industry||"local businesses"}. ${c.tools?`I think ${c.tools} could save your team time on the everyday back-and-forth.`:"I help teams cut down on missed messages, manual scheduling and slow follow-up."}\n\nWould you be open to a free 30-minute workflow audit? You'll get a short written summary of what could be automated, whether or not we work together.\n\nYou can see examples here: ${SITE}\n\nThanks,\nRashad Fambro\nRashad Fambro Consulting`],
-  follow: c => [`Following up: ${c.business}`, `Hi ${(c.person||"there").split(" ")[0]},\n\nJust following up on my last note. If a free workflow audit would help ${c.business}, reply with a time that works and I'll send an invite.\n\nThanks,\nRashad Fambro`],
-  book: c => [`Booking our call`, `Hi ${(c.person||"there").split(" ")[0]},\n\nThanks for your reply. Here's my booking page for a free 30-minute workflow audit: ${SITE}#audit\n\nIf none of the times work, reply with two options and I'll make one of them work.\n\nThanks,\nRashad Fambro`],
-  blank: c => ["", ""]
-};
-function openContact(kind, row, email, keep){
-  const c = contacts().find(x => x.kind===kind && String(x.row)===String(row) && (!email || x.email===email)) || contacts().find(x => x.kind===kind && email && x.email===email);
-  if (!c) { $("#drawer").hidden = true; OPEN = null; return; }
-  OPEN = {kind:c.kind, row:c.row, email:c.email};
+function finPreset(p){ const t = new Date(), y = t.getFullYear(), m = t.getMonth(), q = Math.floor(m/3)*3;
+  const r = {month:[new Date(y,m,1), t], lastmonth:[new Date(y,m-1,1), new Date(y,m,0)], quarter:[new Date(y,q,1), t], year:[new Date(y,0,1), t], lastyear:[new Date(y-1,0,1), new Date(y-1,11,31)], all:[null,null]}[p];
+  if (!r) return; F.preset = p; F.from = r[0] ? ymd(r[0]) : ""; F.to = r[1] ? ymd(r[1]) : ""; }
+if (!F.from) finPreset("year");
+function finFiltered(){ const all = finRows();
+  let out = all.filter(r => (!F.from || r.date >= F.from) && (!F.to || r.date <= F.to) && (!F.type || r.type===F.type) && (!F.cat || r.cat===F.cat) && (!F.prod || r.prod===F.prod) && (!F.client || r.client===F.client) && (!F.q || (r.desc+" "+r.client+" "+r.cat+" "+r.prod).toLowerCase().indexOf(F.q) >= 0));
+  const key = {date:r=>r.date, type:r=>r.type, cat:r=>r.cat.toLowerCase(), desc:r=>r.desc.toLowerCase(), amount:r=>r.amount, client:r=>r.client.toLowerCase(), prod:r=>r.prod.toLowerCase()}[F.sort] || (r=>r.date);
+  out.sort((a, b) => { const x = key(a), y = key(b); return (x > y ? 1 : x < y ? -1 : 0) * F.dir; });
+  return {all, out};
+}
+function bars(items, fmt){ const max = Math.max(1, ...items.map(i => Math.abs(i[1])));
+  return items.length ? `<div class="hbars">${items.map(([l, v, cls]) => `<div class="hb"><span class="hl">${esc(l)}</span><span class="ht"><span class="hf ${cls||""}" style="width:${Math.max(2, Math.round(100*Math.abs(v)/max))}%"></span></span><span class="hv">${esc(fmt(v))}</span></div>`).join("")}</div>` : '<p class="muted">No data in this range.</p>'; }
+function monthChart(rows){ const by = {};
+  rows.forEach(r => { const k = r.date.slice(0,7); by[k] = by[k] || {inc:0, exp:0}; by[k][r.type==="Income"?"inc":"exp"] += r.amount; });
+  const keys = Object.keys(by).sort().slice(-12); if (!keys.length) return '<p class="muted">No data in this range.</p>';
+  const max = Math.max(1, ...keys.map(k => Math.max(by[k].inc, by[k].exp))), W = 640, H = 200, bw = Math.min(26, Math.floor((W-40)/keys.length/2.6));
+  const bar = (i, j, v, cls) => { const x = 30 + i*((W-40)/keys.length) + j*(bw+2), h = Math.round((H-40)*v/max); return `<rect class="${cls}" x="${x}" y="${H-24-h}" width="${bw}" height="${h}"><title>${esc(money(v))}</title></rect>`; };
+  return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="Income and expenses by month">${keys.map((k,i) => bar(i,0,by[k].inc,"inc") + bar(i,1,by[k].exp,"exp") + `<text x="${30 + i*((W-40)/keys.length)}" y="${H-8}" class="ax">${esc(new Date(k+"-15").toLocaleDateString([], {month:"short"}))}</text>`).join("")}<line x1="28" x2="${W}" y1="${H-24}" y2="${H-24}" class="axl"/></svg><p class="legend"><span class="sw inc"></span>Income <span class="sw exp"></span>Expenses</p>`; }
+function finances(){ const f = D.summary.finance, {all, out} = finFiltered();
+  const inc = out.filter(r => r.type==="Income").reduce((s,r)=>s+r.amount,0), exp = out.filter(r => r.type==="Expense").reduce((s,r)=>s+r.amount,0);
+  const group = (rows, k) => { const g = {}; rows.forEach(r => { const key = r[k] || "(none)"; g[key] = (g[key]||0) + r.amount; }); return Object.entries(g).sort((a,b)=>b[1]-a[1]); };
+  const pre = (p, l) => `<button type="button" class="btn${F.preset===p?" primary":""}" data-fpreset="${p}">${l}</button>`;
+  return `<div class="grid"><div class="card kpi"><b>${money(inc)}</b><span>income in range</span></div><div class="card kpi"><b>${money(exp)}</b><span>expenses in range</span></div><div class="card kpi"><b class="${inc-exp<0?"neg":""}">${money(inc-exp)}</b><span>profit in range</span></div><div class="card kpi"><b>${money(f.mrrEstimate)}</b><span>est. monthly revenue (active plans)</span></div></div>
+    <div class="toolbar">${pre("month","This month")}${pre("lastmonth","Last month")}${pre("quarter","This quarter")}${pre("year","This year")}${pre("lastyear","Last year")}${pre("all","All time")}
+      <label>From<input type="date" id="fFrom" value="${esc(F.from)}"></label><label>To<input type="date" id="fTo" value="${esc(F.to)}"></label></div>
+    <div class="toolbar"><label>Type<select id="fType">${opts(["Income","Expense"], F.type, "Income and expenses")}</select></label>
+      <label>Category<select id="fCat">${opts(uniq(all.map(r=>r.cat)), F.cat, "All categories")}</select></label>
+      <label>Product<select id="fProdF">${opts(uniq(all.map(r=>r.prod)), F.prod, "All products")}</select></label>
+      <label>Client<select id="fClient">${opts(uniq(all.map(r=>r.client)), F.client, "All clients")}</select></label>
+      <label>Search<input type="search" id="fq" value="${esc(F.q)}" placeholder="Description, client…"></label>
+      <button class="btn" type="button" id="finCsv">Download report (CSV)</button><button class="btn" type="button" id="finPrint">Print / save as PDF</button></div>
+    <div class="cols2"><div class="card"><h3>Income vs. Expenses by Month</h3>${monthChart(out)}</div>
+      <div class="card"><h3>Expenses by Category</h3>${bars(group(out.filter(r=>r.type==="Expense"),"cat").slice(0,10), money)}</div>
+      <div class="card"><h3>Income by Product</h3>${bars(group(out.filter(r=>r.type==="Income"),"prod").slice(0,10).map(x=>[x[0],x[1],"incf"]), money)}</div>
+      <div class="card"><h3>Income by Client</h3>${bars(group(out.filter(r=>r.type==="Income"),"client").slice(0,10).map(x=>[x[0],x[1],"incf"]), money)}</div></div>
+    <h2>Add Income or Expense</h2><form class="row card" id="finForm"><label>Type<select name="type"><option>Expense</option><option>Income</option></select></label><label>Date<input type="date" name="date" value="${esc(ymd(new Date()))}"></label><label>Amount<input type="number" name="amount" min="0" step="0.01" required></label>
+      <label>Category<input name="category" list="catList" placeholder="Software, ads, insurance…"></label><datalist id="catList">${uniq(["Software & subscriptions","AI & API usage","Hosting & domains","Advertising","Insurance","Legal & accounting","Business registration","Equipment","Travel & mileage","Meals","Contractors","Payment fees","Phone & internet","Office","Education","Other"].concat(all.map(r=>r.cat))).map(c=>`<option>${esc(c)}</option>`).join("")}</datalist>
+      <label>Description<input name="description" required></label><label>Product<input name="product" list="prodList" placeholder="BookDesk, website…"></label><datalist id="prodList">${uniq(["WorkOrderDesk","ChatDesk","BookDesk","LeadDesk","GuestDesk","HousekeepingDesk","PackageDesk","IntakeDesk","ComplianceDesk","ReviewDesk","SocialDesk","StaffDesk","RewardsDesk","InvoiceDesk","InsightDesk","Websites","Consulting"].concat(all.map(r=>r.prod))).map(c=>`<option>${esc(c)}</option>`).join("")}</datalist>
+      <label>Client<input name="client"></label><label>Repeats<select name="repeats"><option value="">No</option><option>Monthly</option><option>Yearly</option></select></label><button class="btn primary" type="submit">Save</button></form>
+    <h2>Itemized (${out.length})</h2>${table([["Date",r=>esc(day(r.date+"T12:00:00"))+(r.recurring?' <span class="muted">(repeat)</span>':""),"date"],["Type",r=>`<span class="pill ${r.type==="Expense"?"exp":"inc"}">${esc(r.type)}</span>`,"type"],["Category",r=>esc(r.cat),"cat"],["Description",r=>esc(r.desc),"desc"],["Product",r=>esc(r.prod),"prod"],["Client",r=>esc(r.client),"client"],["Amount",r=>`<span class="${r.type==="Expense"?"neg":""}">${esc(money(r.type==="Expense"?-r.amount:r.amount))}</span>`,"amount"],["Source",r=>esc(r.src)+(r.repeats?" · "+esc(r.repeats):"")],["",r=>r.src==="Ledger"&&!r.recurring?`<button class="btn" type="button" data-fdel="${esc(r.row)}" data-fdesc="${esc(r.desc)}" data-famt="${esc(r.raw)}">Delete</button>`:""]], out, "No income or expenses in this range. Paid orders count automatically; add other income and expenses above.", "f")}`; }
+function finCsv(){ const {out} = finFiltered(); const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const lines = [["Date","Type","Category","Description","Product","Client","Amount","Source"].join(",")].concat(out.map(r => [r.date, r.type, r.cat, r.desc, r.prod, r.client, (r.type==="Expense"?-r.amount:r.amount).toFixed(2), r.src + (r.repeats?" ("+r.repeats+")":"")].map(q).join(",")));
+  const inc = out.filter(r => r.type==="Income").reduce((s,r)=>s+r.amount,0), exp = out.filter(r => r.type==="Expense").reduce((s,r)=>s+r.amount,0);
+  lines.push("", q("Income") + "," + inc.toFixed(2), q("Expenses") + "," + (-exp).toFixed(2), q("Profit") + "," + (inc-exp).toFixed(2), q("Range") + "," + q((F.from||"start") + " to " + (F.to||"today")));
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([lines.join("\n")], {type:"text/csv"})); a.download = "finances-" + (F.from||"all") + "-to-" + (F.to||"today") + ".csv"; document.body.appendChild(a); a.click(); a.remove(); }
+
+/* ---------- contact drawer ---------- */
+function findContact(kind, row, email, business){ const cs = contacts();
+  return cs.find(x => x.kind===kind && String(x.row)===String(row) && (email ? x.email===email : x.business===business)) || cs.find(x => x.kind===kind && email && x.email===email) || cs.find(x => x.kind===kind && business && x.business===business); }
+function openContact(kind, row, email, keep, business){
+  const c = findContact(kind, row, email, business);
+  if (!c) { if (!keep) toast("That record moved. Refreshed."); $("#drawer").hidden = true; OPEN = null; return; }
+  const keepVals = keep && $("#mForm") ? {subject: $("#mForm [name=subject]").value, body: $("#mForm [name=body]").value, cc: $("#mForm [name=cc]").value, bcc: $("#mForm [name=bcc]").value, note: $("#nForm [name=note]").value} : null;
+  OPEN = {kind:c.kind, row:c.row, email:c.email, business:c.business};
   const f = (name, label, val, type) => `<label>${esc(label)}<input name="${esc(name)}" type="${type||"text"}" value="${esc(val)}"></label>`;
   const notes = String(c.notes||"").split(" · ").filter(Boolean).reverse();
-  const stages = (D.stages||["New","Not contacted","Draft ready","Contacted","Replied","Booked","Trial","Proposal sent","Ordered","Won","Lost","Do not contact","Spam"]).map(x => `<option${x===c.status?" selected":""}>${esc(x)}</option>`).join("");
-  $("#dSheet").innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><h2 id="dTitle" style="margin:0">${esc(c.business)}</h2><span class="muted">${c.kind==="lead"?"Website lead":"Outbound prospect"} · ${esc(c.src)}</span></div><button class="btn" type="button" id="dClose">Close</button></div>
-    <p style="margin:10px 0">${c.phone?`<a class="btn primary" href="tel:${esc(String(c.phone).replace(/[^\d+]/g,""))}">Call ${esc(c.phone)}</a> <button class="btn" type="button" data-copy="${esc(c.phone)}">Copy phone</button>`:'<span class="muted">No phone yet</span>'}
-      ${c.email?` <button class="btn" type="button" data-copy="${esc(c.email)}">Copy email</button>`:""}</p>
-    <form id="cForm" class="card"><h3 style="margin:0 0 8px">Details &amp; Stage</h3><div class="fgrid">
+  const stages = STAGES.map(x => `<option${x===c.status?" selected":""}>${esc(x)}</option>`).join("");
+  $("#dSheet").innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><h2 id="dTitle" style="margin:0">${esc(c.business)}</h2><span class="muted">${c.kind==="lead"?"Website lead":"Outbound prospect"} · ${esc(c.src)} · ${esc(c.loc)}</span></div><button class="btn" type="button" id="dClose">Close</button></div>
+    <div class="contactline">${c.person?`<span><b>${esc(c.person)}</b></span>`:""}<span>Email: ${c.email?`<b class="addr" id="dEmail">${esc(c.email)}</b> <button class="btn" type="button" data-copy="${esc(c.email)}">Copy</button>`:'<span class="muted">none yet (add one below)</span>'}</span>
+      <span>Phone: ${c.phone?`<a class="btn primary" href="tel:${esc(String(c.phone).replace(/[^\d+]/g,""))}">Call ${esc(c.phone)}</a> <button class="btn" type="button" data-copy="${esc(c.phone)}">Copy</button>`:'<span class="muted">none yet</span>'}</span></div>
+    ${c.next?`<div class="nextbox"><b>Next step:</b> ${esc(c.next)}</div>`:""}
+    ${c.drafts.length?`<div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">Drafts Ready for ${esc(c.business)}</h3>${c.drafts.map(d=>`<div class="draftrow"><div><b>${esc(d.subject)}</b><br><span class="muted">To ${esc(d.to)} · ${esc(day(d.date))}</span></div><div><button class="btn" type="button" data-draft="${esc(d.id)}" data-dact="edit">Preview / edit</button><button class="btn primary" type="button" data-draft="${esc(d.id)}" data-dact="send">Send</button></div></div>`).join("")}</div>`:""}
+    <form id="cForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Details &amp; Stage</h3><div class="fgrid">
       ${c.kind==="lead" ? f("Name","Name",c.person) : f("Contact","Contact name",c.person)}${f("Business","Business",c.business)}${f("Email","Email",c.email,"email")}${f("Phone","Phone",c.phone,"tel")}
-      ${c.kind==="prospect" ? f("City","City",c.city)+f("Tools to pitch","Tools to pitch",c.tools)+f("Next step","Next step",c.next) : ""}${f("Industry","Industry",c.industry)}
-      <label>Stage<select name="Status">${stages}</select></label></div><button class="btn primary" type="submit" style="margin-top:8px">Save changes</button>
+      ${c.kind==="prospect" ? f("City","City / address",c.city)+f("Tools to pitch","Suggested products",c.tools) : ""}${f("Industry","Industry",c.industry)}
+      <label>Stage<select name="Status">${stages}</select></label></div>
+      ${c.kind==="prospect" ? `<label style="margin-top:8px">Next step<textarea name="Next step" style="min-height:60px">${esc(c.next)}</textarea></label>` : ""}
+      <button class="btn primary" type="submit" style="margin-top:8px">Save changes</button>
       <span style="float:right"><button class="btn" type="button" data-stage="Won">Mark as client (Won)</button><button class="btn" type="button" data-stage="Lost">Mark lost</button></span></form>
-    <form id="mForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Email ${esc(c.email||"(add an email above)")}</h3>
-      <label>Template<select id="mTpl"><option value="blank">Blank</option><option value="intro">Introduction</option><option value="follow">Follow-up</option><option value="book">Book the free audit</option></select></label>
-      <label style="margin-top:6px">Subject<input name="subject" required></label><label style="margin-top:6px">Message<textarea name="body" required style="min-height:160px"></textarea></label>
-      <div style="margin-top:8px"><button class="btn primary" type="submit" data-mode="send">Send now</button><button class="btn" type="submit" data-mode="draft">Save as Gmail draft</button>${ENV==="test"?' <span class="muted">Test data: goes to you</span>':""}</div></form>
-    <form id="tForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Start a 14-Day Trial</h3><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><label style="flex:1">Tool(s)<input name="tools" value="${esc(c.tools)}" placeholder="e.g. BookDesk, ChatDesk"></label><button class="btn primary" type="submit">Start trial &amp; email the link</button></div><p class="muted" style="margin:6px 0 0">The lead engine creates the trial and emails the link from the standard template.</p></form>
-    <form id="nForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Notes</h3><div style="display:flex;gap:8px"><input name="note" style="flex:1" placeholder="e.g. Spoke with the owner, call back Tuesday" aria-label="New note"><button class="btn primary" type="submit">Add note</button></div>
-      <ul class="notes">${notes.map(n=>`<li>${esc(n)}</li>`).join("") || '<li class="muted">No notes yet.</li>'}</ul></form>`;
+    <form id="nForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Notes</h3><textarea name="note" class="bignote" placeholder="Record the details: who you spoke with, what they need, objections, prices discussed, follow-up dates…" aria-label="New note"></textarea>
+      <button class="btn primary" type="submit" style="margin-top:6px">Add note</button>
+      <ul class="notes">${notes.map(n=>`<li>${esc(n)}</li>`).join("") || '<li class="muted">No notes yet.</li>'}</ul></form>
+    <form id="mForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Email</h3>
+      <div class="toline">To: ${c.email?`<b class="addr">${esc(c.email)}</b> <span class="muted">(${esc(c.person||c.business)})</span>`:'<span class="muted">no email yet. Add one in Details first.</span>'}</div>
+      <div class="fgrid"><label>Cc<input name="cc" placeholder="name@example.com, …"></label><label>Bcc<input name="bcc" placeholder="name@example.com" value="${S.bccMe?"rashadfambro@gmail.com":""}"></label></div>
+      <label style="margin-top:6px">Template<select id="mTpl"><option value="blank">Blank</option><option value="intro">Introduction</option><option value="follow">Follow-up</option><option value="book">Book the free audit</option><option value="trial">Offer a free trial</option></select></label>
+      <label style="margin-top:6px">Subject<input name="subject" required></label><label style="margin-top:6px">Message<textarea name="body" required style="min-height:180px"></textarea></label>
+      <div style="margin-top:8px"><button class="btn primary" type="submit" data-mode="send"${c.email?"":" disabled"}>Send now</button><button class="btn" type="submit" data-mode="draft"${c.email?"":" disabled"}>Save as Gmail draft</button>${ENV==="test"?' <span class="muted">Test data: goes to you</span>':""}</div></form>
+    <form id="tForm" class="card" style="margin-top:10px"><h3 style="margin:0 0 8px">Start a 14-Day Trial</h3><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><label style="flex:1">Tool(s)<input name="tools" value="${esc(c.tools)}" placeholder="e.g. BookDesk, ChatDesk"></label><button class="btn primary" type="submit"${c.email?"":" disabled"}>Start trial &amp; email the link</button></div><p class="muted" style="margin:6px 0 0">The lead engine creates the trial and emails a short link from the standard template.</p></form>`;
+  if (keepVals) { ["subject","body","cc","bcc"].forEach(k => $("#mForm [name="+k+"]").value = keepVals[k]); $("#nForm [name=note]").value = keepVals.note; }
   $("#drawer").hidden = false; if (!keep) $("#dClose").focus();
 }
-function ref(){ return {row: OPEN.row, email: OPEN.email}; }
+function ref(){ return {row: OPEN.row, email: OPEN.email, business: OPEN.business}; }
 function act(p, okMsg, btn){ if (btn) btn.disabled = true; return p.then(() => { toast(okMsg); load(); return true; }).catch(err => { toast("Failed: " + err); return false; }).finally(() => { if (btn) btn.disabled = false; }); }
 function addProspectForm(){ OPEN = null;
   $("#dSheet").innerHTML = `<div style="display:flex;justify-content:space-between"><h2 id="dTitle" style="margin:0">Add a Prospect</h2><button class="btn" type="button" id="dClose">Close</button></div>
     <form id="aForm" class="card" style="margin-top:10px"><div class="fgrid">${["Business","Contact","Email","Phone","City","Industry","Tools to pitch","Source","Next step"].map(k=>`<label>${esc(k)}${k==="Business"?" (required)":""}<input name="${esc(k)}"${k==="Business"?" required":""}${k==="Email"?' type="email"':""}${k==="Source"?' placeholder="Walk-in, referral, event…"':""}></label>`).join("")}</div>
-    <label style="margin-top:8px">First note<textarea name="Notes" style="min-height:70px"></textarea></label><button class="btn primary" type="submit" style="margin-top:8px">Add prospect</button></form>`;
+    <label style="margin-top:8px">First note<textarea name="Notes" class="bignote"></textarea></label><button class="btn primary" type="submit" style="margin-top:8px">Add prospect</button></form>`;
   $("#drawer").hidden = false; $("#aForm [name=Business]").focus(); }
+function leadSearchForm(){ OPEN = null; const searches = (D.requests||[]).filter(r => /^LEAD SEARCH/.test(String(r.Request))).slice(0, 8);
+  const inds = ["Apartments & property management","Hotels & resorts","Timeshares","Short-term rentals","Nail & hair salons","Barbershops","Spas & med spas","Cleaning companies","HVAC, plumbing & electrical","Roofing & contractors","Dental offices","Gyms & studios","Restaurants","Auto repair","Law firms","Tax & accounting","Insurance agencies","Real estate","Self storage","Event venues"];
+  $("#dSheet").innerHTML = `<div style="display:flex;justify-content:space-between"><h2 id="dTitle" style="margin:0">Find New Leads</h2><button class="btn" type="button" id="dClose">Close</button></div>
+    <p class="muted">Sends a search to the lead-researcher agent. New prospects land in this pipeline with a specific next step, and cold emails are drafted for the ones with an email address. Nothing is sent without you.</p>
+    <form id="lsForm" class="card"><div class="fgrid"><label>Industry<input name="industry" list="indList" placeholder="e.g. Cleaning companies"></label><datalist id="indList">${inds.map(i=>`<option>${esc(i)}</option>`).join("")}</datalist>
+      <label>Location<input name="place" placeholder="City, state, or 'remote US'"></label>
+      <label>How many<select name="count"><option>10</option><option selected>20</option><option>30</option><option>50</option></select></label>
+      <label>Priority<select name="priority"><option>Normal</option><option>High</option></select></label></div>
+      <label style="margin-top:8px">Buying signal (optional)<input name="signal" placeholder="e.g. hiring a front desk / dispatcher, 'call to book' only, slow review replies"></label>
+      <label style="margin-top:8px">Notes (optional)<textarea name="notes" style="min-height:60px"></textarea></label>
+      <button class="btn primary" type="submit" style="margin-top:8px">Start search</button></form>
+    <h3>Recent Searches</h3>${table([["Sent",r=>esc(when(r.Time))],["Search",r=>esc(r["Client / topic"])],["Status",r=>`<span class="pill">${esc(r.Status)}</span>`],["Result",r=>esc(r.Response)]], searches, "No searches yet.")}`;
+  $("#drawer").hidden = false; $("#lsForm [name=industry]").focus(); }
+function draftEditor(id){ const d = (D.drafts||[]).find(x => x.id === id); if (!d) { toast("That draft is gone. Refreshing."); load(); return; }
+  OPEN = {draft:id};
+  $("#dSheet").innerHTML = `<div style="display:flex;justify-content:space-between"><h2 id="dTitle" style="margin:0">Draft Email</h2><button class="btn" type="button" id="dClose">Close</button></div>
+    <form id="dForm" class="card" style="margin-top:10px"><div class="toline">To: <b class="addr">${esc(d.to)}</b></div>
+      <div class="fgrid"><label>Cc<input name="cc" value="${esc(d.cc)}"></label><label>Bcc<input name="bcc" value="${esc(d.bcc || (S.bccMe?"rashadfambro@gmail.com":""))}"></label></div>
+      <label style="margin-top:6px">Subject<input name="subject" value="${esc(d.subject)}" required></label><label style="margin-top:6px">Message<textarea name="body" required style="min-height:260px">${esc(d.body)}</textarea></label>
+      <p class="muted">Sending with no changes keeps the draft exactly as it is in Gmail (formatting and links included). Editing sends your edited text as plain text.</p>
+      <button class="btn primary" type="submit">Send</button> <a class="btn" href="${GMAIL_DRAFTS}" target="_blank" rel="noopener">Open Gmail drafts</a></form>`;
+  $("#dForm").dataset.orig = JSON.stringify({subject:d.subject, body:d.body, cc:d.cc||"", bcc:d.bcc||""});
+  $("#drawer").hidden = false; }
 function render(){ tabsHTML(); $("#main").innerHTML = VIEWS[tab](); }
+function rerender(id){ const el = $("#"+id), pos = el && el.selectionStart; render(); const n = $("#"+id); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch(_) {} } }
 
+/* ---------- events ---------- */
 document.addEventListener("click", e => {
   const t = e.target.closest("[data-tab]"); if (t) { tab = t.dataset.tab; render(); return; }
-  const o = e.target.closest("[data-open]"); if (o) { openContact(o.dataset.open, o.dataset.row, o.dataset.email); return; }
+  if (e.target.id === "retry") { load(); return; }
+  const o = e.target.closest("[data-open]"); if (o) { openContact(o.dataset.open, o.dataset.row, o.dataset.email, false, o.dataset.biz); return; }
   if (e.target.closest("#addP")) { addProspectForm(); return; }
+  if (e.target.closest("#leadSearch")) { leadSearchForm(); return; }
   if (e.target.closest("#dClose") || e.target === $("#drawer")) { $("#drawer").hidden = true; OPEN = null; return; }
+  if (e.target.closest("#fClear")) { Object.assign(P, {q:"", src:"all", ind:"", loc:"", prod:"", stage:"", has:""}); render(); return; }
+  if (e.target.closest("#fDir")) { P.dir = -P.dir; render(); return; }
+  if (e.target.closest("#finCsv")) { finCsv(); return; }
+  if (e.target.closest("#finPrint")) { window.print(); return; }
+  const fp = e.target.closest("[data-fpreset]"); if (fp) { finPreset(fp.dataset.fpreset); render(); return; }
+  const so = e.target.closest("[data-sort]"); if (so) { const [scope, k] = so.dataset.sort.split(":"); const st = scope === "p" ? P : F; if (st.sort === k) st.dir = -st.dir; else { st.sort = k; st.dir = 1; } render(); return; }
+  const fd = e.target.closest("[data-fdel]"); if (fd) { if (!confirm("Delete this entry: " + fd.dataset.fdesc + "?")) return; act(call("deleteFinance", Number(fd.dataset.fdel), fd.dataset.fdesc, Number(fd.dataset.famt)), "Deleted", fd); return; }
+  const dr = e.target.closest("[data-draft]"); if (dr) { const id = dr.dataset.draft, a = dr.dataset.dact, d = (D.drafts||[]).find(x => x.id === id);
+    if (a === "edit") { draftEditor(id); return; }
+    if (a === "send") { if (!d || !confirm("Send this email now?\n\nTo: " + d.to + "\nSubject: " + d.subject)) return; act(call("sendDraft", id, null, ENV), "Sent to " + d.to, dr); return; }
+    if (a === "discard") { if (!d || !confirm("Delete this draft?\n\nTo: " + d.to + "\nSubject: " + d.subject)) return; act(call("discardDraft", id), "Draft deleted", dr); return; } }
   const cp = e.target.closest("[data-copy]"); if (cp) { try { navigator.clipboard.writeText(cp.dataset.copy); toast("Copied"); } catch(_) { toast(cp.dataset.copy); } return; }
   const st = e.target.closest("[data-stage]"); if (st && OPEN) { if (!confirm("Move to " + st.dataset.stage + "?")) return; act(call("saveContact", OPEN.kind, ref(), {Status: st.dataset.stage}, ENV), "Moved to " + st.dataset.stage, st); return; }
   const a = e.target.closest("[data-act]");
@@ -178,31 +372,47 @@ document.addEventListener("click", e => {
     a.disabled = true; call("licenseAction", a.dataset.act, a.dataset.key, ENV).then(() => { toast("Done"); load(); }).catch(err => { a.disabled=false; toast("Failed: " + err); }); }
 });
 $("#refresh").addEventListener("click", load);
-document.addEventListener("click", e => { if (e.target.id === "retry") load(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#drawer").hidden) { $("#drawer").hidden = true; OPEN = null; } });
-document.addEventListener("input", e => { if (e.target.id === "pq") { Q = e.target.value.trim().toLowerCase(); const pos = e.target.selectionStart; render(); const q = $("#pq"); q.focus(); q.setSelectionRange(pos, pos); } });
-document.addEventListener("change", e => {
-  if (e.target.id === "psrc") { SRC = e.target.value; render(); return; }
-  if (e.target.id === "mTpl") { const c = contacts().find(x => x.kind===OPEN.kind && String(x.row)===String(OPEN.row)); const [sub, body] = TEMPLATES[e.target.value](c); $("#mForm [name=subject]").value = sub; $("#mForm [name=body]").value = body; return; } });
-document.addEventListener("dragstart", e => { const c = e.target.closest && e.target.closest(".pc"); if (!c) return; e.dataTransfer.setData("text/plain", JSON.stringify({kind:c.dataset.open, row:c.dataset.row, email:c.dataset.email})); });
+document.addEventListener("input", e => { const id = e.target.id;
+  if (id === "pq") { P.q = e.target.value.trim().toLowerCase(); rerender(id); }
+  else if (id === "fq") { F.q = e.target.value.trim().toLowerCase(); rerender(id); }
+  else if (id === "eq") { E.q = e.target.value.trim().toLowerCase(); rerender(id); } });
+document.addEventListener("change", e => { const id = e.target.id, v = e.target.value;
+  const map = {psrc:["src",P], fInd:["ind",P], fLoc:["loc",P], fProd:["prod",P], fStage:["stage",P], fHas:["has",P], fSort:["sort",P], fView:["view",P], fType:["type",F], fCat:["cat",F], fProdF:["prod",F], fClient:["client",F]};
+  if (map[id]) { map[id][1][map[id][0]] = v; if (id === "fSort") P.dir = (v === "added" || v === "last") ? -1 : 1; render(); return; }
+  if (id === "fFrom" || id === "fTo") { F[id === "fFrom" ? "from" : "to"] = v; F.preset = ""; render(); return; }
+  if (id === "theme") { applyTheme(v); return; }
+  if (id === "mTpl") { const c = findContact(OPEN.kind, OPEN.row, OPEN.email, OPEN.business); const [sub, body] = TEMPLATES[v](c); $("#mForm [name=subject]").value = sub; $("#mForm [name=body]").value = body; return; } });
+document.addEventListener("dragstart", e => { const c = e.target.closest && e.target.closest(".pc"); if (!c) return; e.dataTransfer.setData("text/plain", JSON.stringify({kind:c.dataset.open, row:c.dataset.row, email:c.dataset.email, business:c.dataset.biz})); });
 document.addEventListener("dragover", e => { const col = e.target.closest && e.target.closest("[data-drop]"); if (col) { e.preventDefault(); col.classList.add("over"); } });
 document.addEventListener("dragleave", e => { const col = e.target.closest && e.target.closest("[data-drop]"); if (col) col.classList.remove("over"); });
 document.addEventListener("drop", e => { const col = e.target.closest && e.target.closest("[data-drop]"); if (!col) return; e.preventDefault(); col.classList.remove("over");
   let d; try { d = JSON.parse(e.dataTransfer.getData("text/plain")); } catch(_) { return; }
-  act(call("saveContact", d.kind, {row: Number(d.row), email: d.email}, {Status: col.dataset.drop}, ENV), "Moved to " + col.dataset.drop); });
-document.addEventListener("change", e => { const s = e.target.closest("[data-lead]"); if (!s) return;
-  call("setLeadStatus", Number(s.dataset.lead), s.value).then(() => toast("Status saved")).catch(err => toast("Failed: " + err)); });
-document.addEventListener("submit", e => { e.preventDefault(); const f = e.target, v = Object.fromEntries(new FormData(f));
-  if (f.id === "cForm") return act(call("saveContact", OPEN.kind, ref(), v, ENV), "Saved", f.querySelector("button[type=submit]"));
-  if (f.id === "nForm") { if (!v.note.trim()) return; return act(call("addNote", OPEN.kind, ref(), v.note, ENV), "Note added", f.querySelector("button[type=submit]")); }
-  if (f.id === "aForm") return act(call("addProspect", v, ENV), "Prospect added", f.querySelector("button[type=submit]")).then(ok => { if (ok) $("#drawer").hidden = true; });
-  if (f.id === "tForm") { if (!confirm("Start a 14-day trial and email the trial link to this contact?")) return; return act(call("startTrial", OPEN.kind, ref(), v.tools, ENV), "Trial started; the link is on its way", f.querySelector("button[type=submit]")); }
-  if (f.id === "mForm") { const mode = (e.submitter && e.submitter.dataset.mode) || "draft"; if (mode === "send" && !confirm("Send this email now from your Gmail?")) return;
-    return act(call("emailContact", OPEN.kind, ref(), v.subject, v.body, mode, ENV), mode === "send" ? "Email sent" : "Saved to Gmail Drafts", e.submitter); }
-  const b = f.querySelector("button[type=submit]"); b.disabled = true;
-  const p = f.id === "reqForm" ? call("addRequest", v.agent, v.priority, v.topic, v.text) : call("addFinance", v);
-  p.then(() => { toast("Saved"); f.reset(); load(); }).catch(err => toast("Failed: " + err)).finally(() => b.disabled = false); });
-load(); setInterval(load, 5 * 60 * 1000);
+  act(call("saveContact", d.kind, {row: Number(d.row), email: d.email, business: d.business}, {Status: col.dataset.drop}, ENV), "Moved to " + col.dataset.drop); });
+document.addEventListener("submit", e => { e.preventDefault(); const f = e.target, v = Object.fromEntries(new FormData(f)), btn = f.querySelector("button[type=submit]");
+  if (f.id === "cForm") return act(call("saveContact", OPEN.kind, ref(), v, ENV), "Saved", btn);
+  if (f.id === "nForm") { if (!String(v.note||"").trim()) return; return act(call("addNote", OPEN.kind, ref(), v.note, ENV), "Note added", btn).then(ok => { if (ok) f.querySelector("[name=note]").value = ""; }); }
+  if (f.id === "aForm") return act(call("addProspect", v, ENV), "Prospect added", btn).then(ok => { if (ok) { $("#drawer").hidden = true; OPEN = null; } });
+  if (f.id === "lsForm") return act(call("requestLeadSearch", v), "Search sent to the lead-researcher", btn).then(ok => { if (ok) { $("#drawer").hidden = true; OPEN = null; } });
+  if (f.id === "tForm") { if (!confirm("Start a 14-day trial and email the trial link to " + OPEN.email + "?")) return; return act(call("startTrial", OPEN.kind, ref(), v.tools, ENV), "Trial started; the link is on its way", btn); }
+  if (f.id === "mForm") { const mode = (e.submitter && e.submitter.dataset.mode) || "draft";
+    if (mode === "send" && !confirm("Send this email now from your Gmail?\n\nTo: " + OPEN.email + (v.cc ? "\nCc: " + v.cc : "") + (v.bcc ? "\nBcc: " + v.bcc : "") + "\nSubject: " + v.subject)) return;
+    return act(call("emailContact", OPEN.kind, ref(), v.subject, v.body, mode, ENV, {cc: v.cc, bcc: v.bcc}), mode === "send" ? "Email sent to " + OPEN.email : "Saved to Gmail Drafts", e.submitter).then(ok => { if (ok) { f.querySelector("[name=subject]").value = ""; f.querySelector("[name=body]").value = ""; } }); }
+  if (f.id === "dForm") { const orig = JSON.parse(f.dataset.orig), changed = ["subject","body","cc","bcc"].some(k => (v[k]||"") !== (orig[k]||""));
+    if (!confirm("Send this email now?\n\nTo: " + $("#dForm .addr").textContent + "\nSubject: " + v.subject)) return;
+    return act(call("sendDraft", OPEN.draft, changed ? {subject:v.subject, body:v.body, cc:v.cc, bcc:v.bcc} : null, ENV), "Sent", btn).then(ok => { if (ok) { $("#drawer").hidden = true; OPEN = null; } }); }
+  if (f.id === "setForm") { const ns = {env:v.env, theme:v.theme, startTab:v.startTab, refreshMin:Number(v.refreshMin), inboxDays:Number(v.inboxDays), bccMe:!!v.bccMe, signature:v.signature};
+    const envChanged = ns.env !== S.env; btn.disabled = true;
+    return call("saveSettings", ns).then(saved => { S = Object.assign({}, DEF_SETTINGS, saved && typeof saved === "object" ? saved : ns); ENV = S.env === "test" ? "test" : "live"; applyTheme(S.theme); applyEnv(); remember(); schedule(); toast("Settings saved"); if (envChanged) { D = null; load(); } else render(); })
+      .catch(err => toast("Failed: " + err)).finally(() => { btn.disabled = false; }); }
+  btn.disabled = true;
+  const done = (msg) => () => { toast(msg); f.reset(); btn.disabled = false; load(); };
+  const fail = (err) => { btn.disabled = false; toast("Failed: " + err); };
+  if (f.id === "reqForm") call("addRequest", v.agent, v.priority, v.topic, v.text).then(done("Sent to the agent team")).catch(fail);
+  if (f.id === "finForm") call("addFinance", v).then(done("Saved")).catch(fail);
+});
+schedule();
+load();
 </script>
 </body>
 </html>
