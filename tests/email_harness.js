@@ -145,6 +145,15 @@ result.test = {
   check: JSON.parse(A.doGet({ parameter: { env: 'staging', check: 'trial', key: testLic.rows[1][0] } })).valid,
   checkInProd: JSON.parse(A.doGet({ parameter: { check: 'trial', key: testLic.rows[1][0] } })).status,
 };
+const res = (q) => JSON.parse(A.doGet({ parameter: q }));
+const prodKey = lic.rows.slice(1).map(r => r[0]).find(k => /^RFL?-/.test(String(k)));
+result.short = {
+  testResolve: res({ env: 'staging', resolve: testLic.rows[1][0] }),
+  testInProd: res({ resolve: testLic.rows[1][0] }),
+  prodResolve: res({ resolve: String(prodKey).toLowerCase() }),
+  bad: res({ resolve: 'https://evil.example.com' }),
+  testMailLink: testMails.some(m => m.body.indexOf('https://rashadfambro.github.io/staging/a/?' + testLic.rows[1][0]) >= 0),
+};
 tag('test environment');
 A.clearTestData();
 result.test.cleared = !Object.keys(book.sheets).some(n => n.startsWith('TEST '));

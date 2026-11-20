@@ -170,3 +170,18 @@ def test_LE09_staging_test_environment_is_isolated():
     assert t["prodUnchanged"] and t["allToOwner"] and t["tagged"] >= 3 and t["reminder"]
     assert t["check"] is True and t["checkInProd"] == "Unknown"      # production has no record of test licenses
     assert t["cleared"]
+
+
+def test_LE10_short_links_in_emails():
+    """Trial, license, reminder and resend emails carry a short link (rashadfambro.github.io/a/?KEY) instead of the
+    long app URL; the lead engine resolves a key to its full link only within the same environment."""
+    out = subprocess.run([NODE, str(ROOT / "tests" / "email_harness.js"), str(CODE)], capture_output=True, text=True, check=True).stdout
+    d = json.loads(out); sh = d["result"]["short"]
+    for m in d["mails"]:
+        if m["kind"] == "email":
+            assert "?trial=" not in m["body"] and "?license=" not in m["body"], (m["label"], m["subject"])
+    linked = [m for m in d["mails"] if m["label"] in ("lead: trial", "license: activated", "license: renewed", "license: resend") and m["to"] != "rashadfambro@gmail.com"]
+    assert linked and all(re.search(r"https://rashadfambro\.github\.io/a/\?RFL?-\d{8}-[A-Z0-9]{6}\b", m["body"]) for m in linked), [m["label"] for m in linked]
+    assert sh["testResolve"]["ok"] and sh["testResolve"]["url"].startswith("https://rashadfambro.github.io/prototypes/")
+    assert sh["testInProd"] == {"ok": False, "error": "not found"} and sh["bad"] == {"ok": False, "error": "bad key"}
+    assert sh["prodResolve"]["ok"] and "biz=" in sh["prodResolve"]["url"] and sh["testMailLink"]

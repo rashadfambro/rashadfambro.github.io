@@ -20,6 +20,9 @@ import os, re, shutil, subprocess, sys, datetime, filecmp
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STAGING = os.path.join(ROOT, "staging")
 SITE_ITEMS = ["index.html", "products.html", "privacy.html", "industries", "tools", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png", "prototypes", "images"]
+sys.path.insert(0, os.path.join(ROOT, "scripts", "generators"))
+from gen_shortlinks import short_items          # short links for emails: /cleaning, /a/?KEY ...
+SITE_ITEMS += short_items()
 START, END = "<!--STAGING-START-->", "<!--STAGING-END-->"
 MARKER = (START + '<meta name="robots" content="noindex, nofollow">'
           '<style>.stg-ribbon{position:fixed;right:0;top:50%;z-index:9999;transform:rotate(-90deg) translateY(-100%);transform-origin:right top;background:#ff5a5a;color:#fff;'

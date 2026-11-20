@@ -830,7 +830,7 @@ def test_R57_prices_match_everywhere_and_security(make_page, base_url):
     assert exp + "/mo" in first.replace(".00", ""), first
     assert exp in pg.inner_text("#buyPrice").replace(".00", "")
     due = pg.inner_text("#dueNote")
-    assert "Due at kickoff" in due and "Monthly" in due, due
+    assert ("Due at kickoff" in due or "Due today at checkout" in due) and "Monthly" in due, due
     pg.click("#buyClose")
     # The proposal request shows the same assessment price as the package card
     pg.evaluate("openStart()"); pg.wait_for_timeout(200)
@@ -1381,3 +1381,64 @@ def test_R78_dialog_focus_billing_terms_website_pricing_and_experience(make_page
     tags = pg.evaluate("document.querySelector('.tags').textContent")
     assert "Grocery Stores" in tags and "Quick-Service Restaurant POS" in tags and "Business Media Systems" in tags
     assert not w.errors, w.errors
+
+
+def test_R79_feedback_fixes_square_bundle_insight_demo(make_page, base_url):
+    w = make_page(); pg = w.page
+    pg.goto(base_url + "index.html"); pg.wait_for_timeout(300)
+    if pg.locator('#labPick [data-demo="insight"]').count() == 0:
+        pytest.skip("before v27")
+    html = pg.content()
+    assert "&Amp;" not in html and "Property &amp; Hospitality Tools" in html
+    # the Demo Lab has all 15 tools, and InsightDesk runs
+    assert pg.locator("#labPick [data-demo]").count() == 15
+    pg.click('#labPick [data-demo="insight"]'); pg.wait_for_timeout(100)
+    assert "InsightDesk" in pg.inner_text("#labPick")
+    # cost FAQ separates the free audit from the paid assessment
+    faq = pg.evaluate("[...document.querySelectorAll('details summary')].find(s=>s.textContent.includes('How Much Does a Project Cost')).parentElement.textContent")
+    assert "Free Workflow Audit costs nothing" in faq and "$750" in faq and "from $50 per tool" in faq and "$150/month" in faq
+    # payment is taken at checkout; all three installments add up exactly
+    assert "the first at checkout" in pg.inner_text(".pricenote") and "first at kickoff" not in pg.content()
+    pg.evaluate("openBuy('sitebundle')"); pg.wait_for_timeout(150)
+    pg.check("input[name=plan][value='3 monthly payments']"); pg.wait_for_timeout(100)
+    due = pg.inner_text("#dueNote")
+    setup = pg.evaluate("(()=>{const it=BUYABLE.sitebundle; return saleActive()?saleAmt(it.price):it.price})()")
+    first = -(-setup // 30) * 10; last = setup - 2 * first
+    assert "Due today at checkout" in due and f"${last:,}" in due and f"${setup:,} in total" in due, due
+    pg.keyboard.press("Escape")
+    # bundle cards show the same monthly price as the dialog
+    if pg.evaluate("saleActive()"):
+        offers = pg.inner_text(".offers")
+        assert "$90/mo for the first 12 months (then $100/mo)" in offers and "$100/mo for the first 12 months (then $120/mo)" in offers
+    # the Customer Service Bundle pays online through Square
+    assert pg.evaluate("!BUYABLE.csbundle.invoice")
+    for plan in ("Pay in full", "3 monthly payments"):
+        assert pg.evaluate(f"payLinkFor('csbundle','Square','{plan}')").startswith("https://square.link/u/"), plan
+    assert pg.evaluate("CONFIG.squareLinks['2700']") and pg.evaluate("CONFIG.squareLinks['3000']")
+    assert not w.errors, w.errors
+
+
+def test_R80_short_links_open_the_right_page(make_page, base_url):
+    import os
+    if not os.path.exists(site_file("cleaning/index.html")):
+        pytest.skip("before short links")
+    w = make_page(); pg = w.page
+    # industry short links (and aliases) keep their query string
+    pg.goto(base_url + "cleaning/?ref=email-test"); pg.wait_for_load_state(); pg.wait_for_timeout(300)
+    assert pg.url.endswith("industries/cleaning.html?ref=email-test"), pg.url
+    pg.goto(base_url + "hvac/"); pg.wait_for_load_state(); pg.wait_for_timeout(300)
+    assert pg.url.endswith("industries/contractors.html"), pg.url
+    # trial and license keys open the full app link from the lead engine
+    calls = []
+    def api(route):
+        calls.append(route.request.url)
+        route.fulfill(status=200, content_type="application/json",
+                      body='{"ok":true,"url":"https://rashadfambro.github.io/prototypes/bookings.html?trial=RF-20261120-ABC123&biz=Test"}')
+    pg.route("https://script.google.com/**", api)
+    pg.route("https://rashadfambro.github.io/prototypes/**", lambda r: r.fulfill(status=200, content_type="text/html", body="<h1>App</h1>"))
+    pg.goto(base_url + "a/?RF-20261120-ABC123"); pg.wait_for_timeout(800)
+    assert pg.url.startswith("https://rashadfambro.github.io/prototypes/bookings.html?trial=RF-20261120-ABC123"), pg.url
+    assert "resolve=RF-20261120-ABC123" in calls[0] and ("env=staging" in calls[0]) == ("/staging/" in base_url)
+    # a broken key never calls the lead engine and explains what to do
+    pg.goto(base_url + "a/?not-a-key"); pg.wait_for_timeout(300)
+    assert "looks incomplete" in pg.inner_text("#msg") and len(calls) == 1

@@ -130,6 +130,7 @@ function doGet(e) {
   setEnv_(p.env);
   if (p.check && p.key) return json_(checkLicense_({ kind: p.check, key: p.key }));
   if (p.stats === 'founding') return json_(foundingStats_());
+  if (p.resolve) return json_(resolveLink_(p.resolve));
   return json_({ ok: true, service: CFG.BUSINESS + ' lead engine' });
 }
 
@@ -371,6 +372,21 @@ function appLink_(kind, tools, biz, date, color) {
     (kind === 'trial' ? 'start=' : 'until=') + date, 'tools=' + encodeURIComponent(tools)].join('&');
   return { key: key, url: CFG.PROTOTYPES_URL + page + '?' + q };
 }
+/** Short link for emails: rashadfambro.github.io/a/?KEY opens the full branded link (looked up by resolveLink_). */
+function shortLink_(key) { return CFG.SITE_URL + (isTest_() ? 'staging/' : '') + 'a/?' + key; }
+/** The short-link page asks for the full link of a trial or license key. The key is the same secret the full link carries. */
+function resolveLink_(key) {
+  key = String(key || '').trim().toUpperCase();
+  if (!/^RFL?-\d{8}-[A-Z0-9]{6}$/.test(key)) return { ok: false, error: 'bad key' };
+  const sh = sheet_('Licenses', LICENSE_HEADERS), rows = sh.getDataRange().getValues();
+  for (let r = rows.length - 1; r >= 1; r--) {
+    if (String(rows[r][0]).trim().toUpperCase() !== key) continue;
+    const url = String(rows[r][10] || '');
+    if (url.indexOf(CFG.PROTOTYPES_URL) !== 0) return { ok: false, error: 'no link' };
+    return { ok: true, url: url };
+  }
+  return { ok: false, error: 'not found' };
+}
 function mail_(to, subject, body) {
   send_(to, subject, body, { name: CFG.OWNER_NAME, replyTo: CFG.OWNER_EMAIL });
 }
@@ -385,7 +401,7 @@ function issueTrial_(l) {
   sh.appendRow([link.key, tools, biz, l.email, 'Trial', 'Trial', new Date(), ends, '', 'trial requested', link.url, '#2f7fe0', l.name, '']);
   if (CFG.AUTO_SEND_TRIAL_LINKS) {
     mail_(l.email, 'Your 14-day ' + toolNames_(tools) + ' trial for ' + biz,
-      'Hi ' + first_(l.name) + ',\n\nHere is your free ' + CFG.TRIAL_DAYS + '-day trial of ' + toolNames_(tools) + ', branded for ' + biz + ':\n' + link.url +
+      'Hi ' + first_(l.name) + ',\n\nHere is your free ' + CFG.TRIAL_DAYS + '-day trial of ' + toolNames_(tools) + ', branded for ' + biz + ':\n' + shortLink_(link.key) +
       '\n\nTry it with the sample data or enter your own. It runs in your browser and nothing is sent to your customers. ' +
       'Your trial ends ' + prettyDate_(ends) + ', and nothing is charged automatically. I\'ll send a reminder before it ends.\n\n' +
       'Want help loading your real services, hours and team? ' + (CFG.BOOKING_URL ? 'Book a free 30-minute setup call: ' + CFG.BOOKING_URL : 'Reply with a couple of times for a free 30-minute setup call.') +
@@ -438,7 +454,7 @@ function activateRow_(sh, row, opts) {
   if (CFG.AUTO_SEND_LICENSE_LINKS && email) {
     mail_(email, (opts.renewal ? 'Your renewed ' : 'Your ') + toolNames_(tools) + ' link for ' + biz,
       'Hi ' + first_(contact) + ',\n\n' + (opts.renewal ? 'Thanks for your payment! ' : 'Welcome aboard! ') +
-      'Here is your Starter edition of ' + toolNames_(tools) + ', branded for ' + biz + ':\n' + link.url +
+      'Here is your Starter edition of ' + toolNames_(tools) + ', branded for ' + biz + ':\n' + shortLink_(link.key) +
       '\n\nBookmark it on the computer or tablet your team uses. Your plan is paid through ' + prettyDate_(until) + '.\n' +
       '- Your data is saved on that device. Use "Download backup" weekly; "Restore backup" brings it back on a new device.\n' +
       '- When you approve a message, it\'s copied so you can paste it into your text or email app. Live sending comes with the Connected edition.\n' +
@@ -488,7 +504,7 @@ function runLicenses() {
       if (CFG.TRIAL_REMINDER_DAYS.indexOf(d) >= 0 && n.indexOf('reminder ' + d + 'd') < 0) {
         mail_(email, 'Your ' + toolNames_(tools) + ' trial ends in ' + d + ' day' + (d === 1 ? '' : 's'),
           'Hi ' + first_(contact) + ',\n\nYour free trial for ' + biz + ' ends on ' + prettyDate_(ends) + '. To keep it running, choose a plan here:\n' + CFG.SITE_URL + '#pricing' +
-          '\n\nOr reply with questions. If you let it end, nothing is charged and you can still download what you entered from the app.\n\nYour trial link: ' + link + '\n\nBest,' + signature_());
+          '\n\nOr reply with questions. If you let it end, nothing is charged and you can still download what you entered from the app.\n\nYour trial link: ' + shortLink_(key) + '\n\nBest,' + signature_());
         note_(sh, row, 'reminder ' + d + 'd');
       }
       if (d < 0) {
@@ -609,7 +625,7 @@ function adminAction_(b) {
       result = { status: s };
     }
     else if (act === 'resend') {
-      mail_(email, 'Your ' + toolNames_(tools) + ' link for ' + biz, 'Hi,\n\nHere is your link again:\n' + rows[row - 1][10] + '\n\nBest,' + signature_());
+      mail_(email, 'Your ' + toolNames_(tools) + ' link for ' + biz, 'Hi,\n\nHere is your link again:\n' + shortLink_(rows[row - 1][0]) + '\n\nBest,' + signature_());
       note_(sh, row, 'link re-sent'); result = { sent: true };
     }
     else if (act === 'mark_founding') {
